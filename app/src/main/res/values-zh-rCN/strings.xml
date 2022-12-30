@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Setup -->
+    <string name="setup_mode">选择工作模式</string>
+    <string name="setup_root_title">Root</string>
+    <string name="setup_root_description">使用 Root 用户身份运行</string>
+
+    <!-- Install -->
+    <string name="install_title">安装</string>
+    <string name="install_flashing">正在刷入</string>
+    <string name="install_done">完成</string>
+    <string name="install_failure">失败</string>
+    <string name="install_reboot">重启</string>
+
+    <!-- Page -->
+    <string name="page_modules">模块</string>
+    <string name="page_home">概览</string>
+    <string name="page_settings">设置</string>
+
+
+    <!-- Overview -->
+    <!--  Root Card -->
+    <string name="root_status">ROOT 状态</string>
+    <string name="root_access">Root 权限：%1$s</string>
+    <string name="root_provider">授权应用：%1$s</string>
+    <string name="root_status_granted">已授权</string>
+    <string name="root_status_not_available">不可用</string>
+    <string name="root_status_none">无</string>
+    <!-- Status Card -->
+    <string name="status_magisk_modules_repo">MAGISK 模块仓库</string>
+    <string name="status_load_failed">远程仓库加载失败</string>
+    <string name="status_loading_repo">正在加载远程仓库</string>
+    <string name="status_totals">模块总数：%1$s</string>
+    <string name="status_timestamp">时间戳：%1$s</string>
+    <!-- Device Card -->
+    <string name="device_info">设备信息</string>
+    <string name="device_system_version">系统版本</string>
+    <string name="device_name">设备</string>
+    <string name="device_system_abi">系统架构</string>
+    <!-- About -->
+    <string name="about_source_code">在 %1$s 查看源码</string>
+
+
+    <!-- Modules -->
+    <!-- Modules Title -->
+    <string name="modules_title_updates">更新</string>
+    <string name="modules_title_installed">当前</string>
+    <string name="modules_title_online">在线</string>
+    <!-- Module Card -->
+    <string name="install_from_storage">从本地安装</string>
+    <string name="module_version_author">%1$s，作者 %2$s</string>
+    <string name="module_update">更新</string>
+    <string name="module_remove">移除</string>
+    <string name="module_restore">还原</string>
+    <string name="module_install">安装</string>
+    <string name="module_download">下载</string>
+
+
+    <!-- Dialog-->
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_close">了解</string>
+    <!-- Text Field Dialog -->
+    <string name="dialog_text_field_desc">留空恢复默认值</string>
+
+
+    <!-- Settings-->
+    <string name="settings_system">跟随系统</string>
+    <string name="settings_on">总是开启</string>
+    <string name="settings_off">总是关闭</string>
+    <!-- Normal -->
+    <string name="settings_title_normal">常规</string>
+    <string name="settings_language">语言</string>
+    <!-- App -->
+    <string name="settings_title_app">应用</string>
+    <string name="settings_download_path">下载路径</string>
+    <string name="settings_repo">仓库</string>
+    <string name="settings_custom_repo">自定义仓库(%1$s)</string>
+    <string name="settings_custom_repo_branch">仓库分支</string>
+    <string name="settings_custom_url">自定义网址</string>
+    <string name="settings_custom_url_dialog">数据结构必须符合要求</string>
+    <!-- Other -->
+    <string name="settings_title_other">其他</string>
+    <string name="settings_analytics">数据收集</string>
+    <string name="settings_analytics_desc">允许 Firebase 自动收集崩溃报告和使用情况</string>
+
+    <!-- App Theme -->
+    <string name="settings_app_theme">应用主题</string>
+    <string name="settings_app_theme_desc">更改深色模式和主题调色板</string>
+    <string name="settings_example">示例</string>
+    <string name="settings_theme_palette">主题调色板</string>
+    <string name="settings_dark_theme">深色主题</string>
+    <string name="settings_dark_theme_auto">自动</string>
+    <string name="settings_dark_theme_light">浅色</string>
+    <string name="settings_dark_theme_dark">深色</string>
+
+
+    <!-- Message -->
+    <string name="message_restart_app">重启APP后更改生效</string>
+    <string name="message_download_failed">下载失败：%1$s</string>
+    <string name="message_download_success">下载成功</string>
+    <string name="message_module_upgrade">%1$s可更新</string>
+    <string name="message_modules_upgrade">%1$s等%2$d个模块可更新</string>
+
+
+    <!-- Notification -->
+    <string name="notification_name_download">模块下载</string>
+    <string name="notification_name_update">模块更新</string>
+
+</resources>

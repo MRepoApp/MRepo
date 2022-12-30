@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">MRepo</string>
+
+    <!-- Setup -->
+    <string name="setup_mode">WORKING MODE</string>
+    <string name="setup_root_title">Root</string>
+    <string name="setup_root_description">Run as Root user</string>
+
+    <!-- Install -->
+    <string name="install_title">Install</string>
+    <string name="install_flashing">Flashing</string>
+    <string name="install_done">Done</string>
+    <string name="install_failure">Failed</string>
+    <string name="install_reboot">Reboot</string>
+
+    <!-- Page -->
+    <string name="page_modules">Modules</string>
+    <string name="page_home">Overview</string>
+    <string name="page_settings">Settings</string>
+
+
+    <!-- Overview -->
+    <!--  Root Card -->
+    <string name="root_status">ROOT STATUS</string>
+    <string name="root_access">Root access: %1$s</string>
+    <string name="root_provider">Provider: %1$s</string>
+    <string name="root_status_granted">Granted</string>
+    <string name="root_status_not_available">Not available</string>
+    <string name="root_status_none">None</string>
+    <!-- Status Card -->
+    <string name="status_magisk_modules_repo">MAGISK MODULES REPO</string>
+    <string name="status_load_failed">Failed to load remote repository</string>
+    <string name="status_loading_repo">Loading remote repository</string>
+    <string name="status_totals">Module totals: %1$s</string>
+    <string name="status_timestamp">Timestamp: %1$s</string>
+    <!-- Device Card -->
+    <string name="device_info">DEVICE INFO</string>
+    <string name="device_system_version">System version</string>
+    <string name="device_name">Device</string>
+    <string name="device_system_abi">System ABI</string>
+    <!-- About -->
+    <string name="about_source_code">View source code at %1$s</string>
+
+
+    <!-- Dialog -->
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_close">OK</string>
+    <!-- Text Field Dialog -->
+    <string name="dialog_text_field_desc">Leave empty to restore default</string>
+
+
+    <!-- Modules -->
+    <!-- Modules Title -->
+    <string name="modules_title_updates">Updates</string>
+    <string name="modules_title_installed">Installed</string>
+    <string name="modules_title_online">Online</string>
+    <!-- Module Card -->
+    <string name="install_from_storage">Install from storage</string>
+    <string name="module_version_author">%1$s by %2$s</string>
+    <string name="module_update">Update</string>
+    <string name="module_remove">Remove</string>
+    <string name="module_restore">Restore</string>
+    <string name="module_install">Install</string>
+    <string name="module_download">Download</string>
+
+
+    <!-- Settings -->
+    <string name="settings_system">Follow system</string>
+    <string name="settings_on">Always on</string>
+    <string name="settings_off">Always off</string>
+    <!-- Normal -->
+    <string name="settings_title_normal">Normal</string>
+    <string name="settings_language">Language</string>
+    <!-- App -->
+    <string name="settings_title_app">App</string>
+    <string name="settings_download_path">Download path</string>
+    <string name="settings_repo">Repository</string>
+    <string name="settings_custom_repo">Custom Repo(%1$s)</string>
+    <string name="settings_custom_repo_branch">Repository branch</string>
+    <string name="settings_custom_url">Custom URL</string>
+    <string name="settings_custom_url_dialog">The data structure must meet the requirements</string>
+    <!-- Other -->
+    <string name="settings_title_other">Other</string>
+    <string name="settings_analytics">Data collection</string>
+    <string name="settings_analytics_desc"> Allow Firebase to automatically collect crash reports and usage reports</string>
+
+
+    <!-- App Theme -->
+    <string name="settings_app_theme">App theme</string>
+    <string name="settings_app_theme_desc">Change night mode and theme platte</string>
+    <string name="settings_example">Example</string>
+    <string name="settings_theme_palette">Theme palette</string>
+    <string name="settings_dark_theme">Dark theme</string>
+    <string name="settings_dark_theme_auto">Auto</string>
+    <string name="settings_dark_theme_light">Light</string>
+    <string name="settings_dark_theme_dark">Dark</string>
+
+
+    <!-- Message -->
+    <string name="message_restart_app">Restart APP to make change take effect</string>
+    <string name="message_download_failed">Download failed: %1$s</string>
+    <string name="message_download_success">Download successful</string>
+    <string name="message_module_upgrade">%1$s can be updated</string>
+    <string name="message_modules_upgrade">%1$s etc., and %2$d modules can be updated</string>
+
+
+    <!-- Notification -->
+    <string name="notification_name_download">Module download</string>
+    <string name="notification_name_update">Module update</string>
+
+</resources>
