@@ -1,5 +1,6 @@
 # MRepo
 [![GitHub release](https://img.shields.io/github/v/release/ya0211/MRepo)](https://github.com/ya0211/MRepo/releases) [![License](https://img.shields.io/github/license/ya0211/MRepo?color=blue)](LICENSE)
+
 MRepo (short for `My Repository` or `Modules(Magisk) Repository`) is an Android app that helps manage your own module repository.
 
 MRepo is written with [Jetpack Compose](https://developer.android.com/jetpack/compose).
