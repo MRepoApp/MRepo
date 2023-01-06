@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.component.NormalTitle
 import com.sanmer.mrepo.ui.expansion.navigateBack
-import com.sanmer.mrepo.ui.utils.NavigateUpToolBar
+import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 
 @Composable
 fun AppThemeScreen(
@@ -57,10 +57,8 @@ fun AppThemeScreen(
 private fun AppThemeTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
-) {
-    NavigateUpToolBar(
-        title = R.string.settings_app_theme,
-        scrollBehavior = scrollBehavior,
-        navController = navController
-    )
-}
+) = NavigateUpTopBar(
+    title = R.string.settings_app_theme,
+    scrollBehavior = scrollBehavior,
+    navController = navController
+)

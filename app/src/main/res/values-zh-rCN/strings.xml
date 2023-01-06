@@ -17,7 +17,6 @@
     <string name="page_home">概览</string>
     <string name="page_settings">设置</string>
 
-
     <!-- Overview -->
     <!--  Root Card -->
     <string name="root_status">ROOT 状态</string>
@@ -40,7 +39,6 @@
     <!-- About -->
     <string name="about_source_code">在 %1$s 查看源码</string>
 
-
     <!-- Modules -->
     <!-- Modules Title -->
     <string name="modules_title_updates">更新</string>
@@ -55,22 +53,19 @@
     <string name="module_install">安装</string>
     <string name="module_download">下载</string>
 
-
     <!-- Dialog-->
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">确定</string>
-    <string name="dialog_close">了解</string>
     <!-- Text Field Dialog -->
-    <string name="dialog_text_field_desc">留空恢复默认值</string>
-
+    <string name="dialog_empty_default">留空恢复默认值</string>
 
     <!-- Settings-->
-    <string name="settings_system">跟随系统</string>
-    <string name="settings_on">总是开启</string>
-    <string name="settings_off">总是关闭</string>
     <!-- Normal -->
     <string name="settings_title_normal">常规</string>
-    <string name="settings_language">语言</string>
+    <string name="settings_app_theme">应用主题</string>
+    <string name="settings_app_theme_desc">更改深色模式和主题调色板</string>
+    <string name="settings_log_viewer">日志查看器</string>
+    <string name="settings_log_viewer_desc">查看应用运行时日志</string>
     <!-- App -->
     <string name="settings_title_app">应用</string>
     <string name="settings_download_path">下载路径</string>
@@ -83,10 +78,7 @@
     <string name="settings_title_other">其他</string>
     <string name="settings_analytics">数据收集</string>
     <string name="settings_analytics_desc">允许 Firebase 自动收集崩溃报告和使用情况</string>
-
     <!-- App Theme -->
-    <string name="settings_app_theme">应用主题</string>
-    <string name="settings_app_theme_desc">更改深色模式和主题调色板</string>
     <string name="settings_example">示例</string>
     <string name="settings_theme_palette">主题调色板</string>
     <string name="settings_dark_theme">深色主题</string>
@@ -94,14 +86,12 @@
     <string name="settings_dark_theme_light">浅色</string>
     <string name="settings_dark_theme_dark">深色</string>
 
-
     <!-- Message -->
     <string name="message_restart_app">重启APP后更改生效</string>
     <string name="message_download_failed">下载失败：%1$s</string>
     <string name="message_download_success">下载成功</string>
     <string name="message_module_upgrade">%1$s可更新</string>
     <string name="message_modules_upgrade">%1$s等%2$d个模块可更新</string>
-
 
     <!-- Notification -->
     <string name="notification_name_download">模块下载</string>

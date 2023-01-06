@@ -16,6 +16,7 @@ import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.data.parcelable.Module
 import com.sanmer.mrepo.service.DownloadService
+import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.module.ModuleUtils.disable
 import com.sanmer.mrepo.utils.module.ModuleUtils.enable
@@ -181,7 +182,8 @@ class ModulesViewModel : ViewModel() {
         }
 
         NotificationUtils.notify(context, 1012) {
-            setChannelId(Const.NOTIFICATION_ID_UPGRADE)
+            setChannelId(Const.NOTIFICATION_ID_UPDATE)
+            setContentIntent(NotificationUtils.getActivity(context, MainActivity::class))
             setContentTitle(title)
             setContentText(text)
             setSilent(false)

@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.activity.setup
 
-import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CardDefaults
@@ -12,18 +11,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.provider.FileServer
-import com.sanmer.mrepo.ui.theme.AppTheme
 import com.sanmer.mrepo.utils.MagiskUtils
 import com.sanmer.mrepo.works.Works
 
 @Composable
 fun SetupScreen() {
     val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -74,19 +72,3 @@ fun SetupScreen() {
         }
     }
 }
-
-@Preview(
-    name = "Light Mode",
-    showBackground = true
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true,
-    name = "Dark Mode")
-@Composable
-private fun SetupPreview(){
-    AppTheme {
-        SetupScreen()
-    }
-}
-

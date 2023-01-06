@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.utils
+package com.sanmer.mrepo.utils.module
 
 import android.content.Context
 import android.net.Uri
@@ -10,7 +10,6 @@ import com.sanmer.mrepo.app.status.Event
 import com.sanmer.mrepo.data.Constant
 import com.sanmer.mrepo.utils.MediaStoreUtils.copy
 import com.sanmer.mrepo.utils.MediaStoreUtils.displayName
-import com.sanmer.mrepo.utils.module.ModuleUtils
 import java.io.File
 
 object InstallUtils {

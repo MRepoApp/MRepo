@@ -22,9 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.utils.InstallUtils
 import com.sanmer.mrepo.app.runtime.Status
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
+import com.sanmer.mrepo.utils.module.InstallUtils
 
 @Composable
 fun InstallItem() {
@@ -63,7 +63,7 @@ fun InstallItem() {
             horizontalArrangement = Arrangement.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_cube_scan_outline),
+                painter = painterResource(id = R.drawable.cube_scan_outline),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary
             )

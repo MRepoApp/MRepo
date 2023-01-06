@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.component
 
-import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,10 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sanmer.mrepo.R
-import com.sanmer.mrepo.ui.theme.AppTheme
 
 @Composable
 fun NormalItem(
@@ -87,22 +83,5 @@ fun NormalTitle(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.primary
         )
-    }
-}
-
-@Preview(
-    name = "Light Mode")
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark Mode")
-@Composable
-private fun NormalItemPreview() {
-    AppTheme {
-        NormalItem(
-            iconRes = R.drawable.ic_global_outline,
-            text = "Normal Item Preview",
-            subText = "Normal Item Preview") {
-
-        }
     }
 }

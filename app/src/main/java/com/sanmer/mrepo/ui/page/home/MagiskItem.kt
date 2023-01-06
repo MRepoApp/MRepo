@@ -41,7 +41,7 @@ fun MagiskItem() {
             Icon(
                 modifier = Modifier
                     .size(36.dp),
-                painter = painterResource(id = R.drawable.ic_magisk_outline),
+                painter = painterResource(id = R.drawable.ic_magisk),
                 contentDescription = null
             )
             Spacer(modifier = Modifier.width(12.dp))
@@ -50,6 +50,6 @@ fun MagiskItem() {
         body1 = access,
         body2 = provider,
     ) {
-        MagiskUtils.launchApp(context)
+        MagiskUtils.launchManager(context)
     }
 }

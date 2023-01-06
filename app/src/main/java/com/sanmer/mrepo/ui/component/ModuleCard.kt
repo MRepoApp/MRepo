@@ -1,11 +1,13 @@
 package com.sanmer.mrepo.ui.component
 
-import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,11 +18,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.modify.LinearProgressIndicator
-import com.sanmer.mrepo.ui.theme.AppTheme
 
 @Composable
 fun ModuleCard(
@@ -147,89 +147,4 @@ fun StateIndicator(
         alpha = 0.05f,
         colorFilter = ColorFilter.tint(color)
     )
-}
-
-@Preview(
-    name = "Light Mode")
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark Mode")
-@Composable
-private fun OnlineModuleCardPreview() {
-    AppTheme {
-        ModuleCard(
-            name = "Zygisk - Enhanced mode for Storage Isolation",
-            version = "v28.0.1",
-            author = "Rikka",
-            description = "Enable Enhanced mode for Storage Isolation v7.5.0 or above. This module requires Magisk 24.0+ and Zygisk enabled."
-        ) {
-            TextButton(
-                onClick = { }
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(end = 6.dp),
-                    text = stringResource(id = R.string.module_download)
-                )
-                Icon(
-                    modifier = Modifier
-                        .size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_cloud_connection_outline),
-                    contentDescription = null
-                )
-            }
-
-            TextButton(
-                onClick = { }
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(end = 6.dp),
-                    text = stringResource(id = R.string.module_update)
-                )
-                Icon(
-                    modifier = Modifier
-                        .size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_import_outline),
-                    contentDescription = null
-                )
-            }
-        }
-    }
-}
-
-@Preview(
-    name = "Light Mode")
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark Mode")
-@Composable
-private fun LocalModuleCardPreview() {
-    AppTheme {
-        ModuleCard(
-            name = "Zygisk - Enhanced mode for Storage Isolation",
-            version = "v28.0.1",
-            author = "Rikka",
-            description = "Enable Enhanced mode for Storage Isolation v7.5.0 or above. This module requires Magisk 24.0+ and Zygisk enabled."
-        ) {
-            TextButton(
-                onClick = {}
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(end = 6.dp),
-                    text = stringResource(id =  R.string.module_remove)
-                )
-                Icon(
-                    modifier = Modifier
-                        .size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_trash_outline
-                    ),
-                    contentDescription = null
-                )
-            }
-
-
-        }
-    }
 }

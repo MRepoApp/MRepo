@@ -9,8 +9,8 @@ plugins {
     kotlin("plugin.parcelize")
 }
 
-val verName = "0.9.0"
-val verCode = 90
+val verName = "0.9.1"
+val verCode = 91
 
 android {
     namespace = "com.sanmer.mrepo"

@@ -30,5 +30,5 @@ object Const {
 
     // NOTIFICATION
     const val NOTIFICATION_ID_DOWNLOAD = "module_download"
-    const val NOTIFICATION_ID_UPGRADE = "module_upgrade"
+    const val NOTIFICATION_ID_UPDATE = "module_update"
 }

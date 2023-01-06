@@ -1,11 +1,9 @@
 package com.sanmer.mrepo.ui.utils
 
-import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -16,10 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sanmer.mrepo.R
-import com.sanmer.mrepo.ui.theme.AppTheme
 
 @Composable
 fun Logo(
@@ -41,22 +36,6 @@ fun Logo(
             painter = painterResource(id = iconRes),
             contentDescription = null,
             tint = contentColor
-        )
-    }
-}
-
-@Preview(
-    name = "Light Mode")
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark Mode")
-@Composable
-private fun LogoPreview() {
-    AppTheme {
-        Logo(
-            modifier = Modifier
-                .size(40.dp),
-            iconRes = R.drawable.ic_logo
         )
     }
 }

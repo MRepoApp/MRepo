@@ -28,17 +28,17 @@ private sealed class DarkMode(
 ) {
     object Auto : DarkMode(
         id = 0,
-        icon = R.drawable.ic_auto_brightness_outline,
+        icon = R.drawable.auto_brightness_outline,
         name = R.string.settings_dark_theme_auto
     )
     object Light : DarkMode(
         id = 1,
-        icon = R.drawable.ic_sun_outline,
+        icon = R.drawable.sun_outline,
         name = R.string.settings_dark_theme_light
     )
     object Dark : DarkMode(
         id = 2,
-        icon = R.drawable.ic_moon_outline,
+        icon = R.drawable.moon_outline,
         name = R.string.settings_dark_theme_dark
     )
 }

@@ -50,15 +50,15 @@ fun LocalModuleItem(
         cover = {
             when (module.state) {
                 State.REMOVE -> {
-                    StateIndicator(R.drawable.ic_trash_outline)
+                    StateIndicator(R.drawable.trash_outline)
                 }
                 State.UPDATE  -> {
-                    StateIndicator(R.drawable.ic_import_outline)
+                    StateIndicator(R.drawable.import_outline)
                 }
                 State.ZYGISK_UNLOADED,
                 State.RIRU_DISABLE,
                 State.ZYGISK_DISABLE -> {
-                    StateIndicator(R.drawable.ic_danger_outline)
+                    StateIndicator(R.drawable.danger_outline)
                 }
                 else -> {}
             }
@@ -81,9 +81,9 @@ fun LocalModuleItem(
                 modifier = Modifier
                     .size(22.dp),
                 painter = painterResource(id = if (module.state == State.REMOVE) {
-                    R.drawable.ic_refresh_outline
+                    R.drawable.refresh_outline
                 } else {
-                    R.drawable.ic_trash_outline
+                    R.drawable.trash_outline
                 }),
                 contentDescription = null
             )
@@ -128,7 +128,7 @@ fun OnlineModuleItem(
                 Icon(
                     modifier = Modifier
                         .size(22.dp),
-                    painter = painterResource(id = R.drawable.ic_link_2_outline),
+                    painter = painterResource(id = R.drawable.link_outline),
                     contentDescription = null
                 )
             }
@@ -156,7 +156,7 @@ fun OnlineModuleItem(
             Icon(
                 modifier = Modifier
                     .size(22.dp),
-                painter = painterResource(id = R.drawable.ic_import_outline),
+                painter = painterResource(id = R.drawable.import_outline),
                 contentDescription = null
             )
         }

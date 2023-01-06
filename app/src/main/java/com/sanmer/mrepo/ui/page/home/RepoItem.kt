@@ -24,14 +24,14 @@ fun RepoItem(
     navController: NavController
 ) {
     var title = stringResource(id = R.string.status_loading_repo)
-    var iconRes = R.drawable.ic_information_outline
+    var iconRes = R.drawable.information_outline
     var size = stringResource(id = R.string.root_status_none)
     var timestamp = stringResource(id = R.string.root_status_not_available)
 
     when (Status.Online.event) {
         Event.SUCCEEDED -> {
             title = stringResource(id = R.string.status_magisk_modules_repo)
-            iconRes = R.drawable.ic_verify_outline
+            iconRes = R.drawable.verify_outline
             size = Constant.online.size.toString()
             timestamp = Status.Online.timestamp
         }

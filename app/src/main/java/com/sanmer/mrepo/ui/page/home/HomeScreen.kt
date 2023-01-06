@@ -56,75 +56,71 @@ fun HomeScreen(
 private fun HomeTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     onAbout: () -> Unit
-) {
-    TopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = R.string.app_name),
-                style = MaterialTheme.typography.titleLarge
+) = TopAppBar(
+    title = {
+        Text(
+            text = stringResource(id = R.string.app_name),
+            style = MaterialTheme.typography.titleLarge
+        )
+    },
+    navigationIcon = {
+        Logo(
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .size(32.dp),
+            iconRes = R.drawable.ic_logo
+        )
+    },
+    actions = {
+        IconButton(
+            onClick = onAbout
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.link_square_outline),
+                contentDescription = null
             )
-        },
-        navigationIcon = {
-            Logo(
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .size(32.dp),
-                iconRes = R.drawable.ic_logo
-            )
-        },
-        actions = {
-            IconButton(
-                onClick = onAbout
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_link_square_outline),
-                    contentDescription = null
-                )
-            }
-        },
-        scrollBehavior = scrollBehavior
-    )
-}
+        }
+    },
+    scrollBehavior = scrollBehavior
+)
 
 @Composable
 private fun AboutDialog(
     onClose: () -> Unit
-) {
-    AlertDialog(
-        shape = RoundedCornerShape(15.dp),
-        onDismissRequest = onClose,
-        text = {
-            Row {
+) = AlertDialog(
+    shape = RoundedCornerShape(15.dp),
+    onDismissRequest = onClose,
+    text = {
+        Row {
 
-                Logo(
-                    modifier = Modifier
-                        .size(40.dp),
-                    iconRes = R.drawable.ic_logo
+            Logo(
+                modifier = Modifier
+                    .size(40.dp),
+                iconRes = R.drawable.ic_logo
+            )
+
+            Spacer(modifier = Modifier.width(18.dp))
+
+            Column {
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})",
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
-                Spacer(modifier = Modifier.width(18.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                Column {
-                    Text(
-                        text = stringResource(id = R.string.app_name),
-                        style = MaterialTheme.typography.titleMedium
+                HtmlText(
+                    text = stringResource(
+                        id = R.string.about_source_code,
+                        "<b><a href=\"https://github.com/ya0211/MRepo\">GitHub</a></b>"
                     )
-                    Text(
-                        text = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    HtmlText(
-                        text = stringResource(
-                            id = R.string.about_source_code,
-                            "<b><a href=\"https://github.com/ya0211/MRepo\">GitHub</a></b>"
-                        )
-                    )
-                }
+                )
             }
-        },
-        confirmButton = { }
-    )
-}
+        }
+    },
+    confirmButton = { }
+)

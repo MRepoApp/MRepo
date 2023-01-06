@@ -26,7 +26,7 @@ object NotificationUtils {
                 context.getString(R.string.notification_name_download),
                 NotificationManager.IMPORTANCE_HIGH
             ),
-            NotificationChannel(Const.NOTIFICATION_ID_UPGRADE,
+            NotificationChannel(Const.NOTIFICATION_ID_UPDATE,
                 context.getString(R.string.notification_name_update),
                 NotificationManager.IMPORTANCE_HIGH
             )
@@ -52,7 +52,6 @@ object NotificationUtils {
         channelId: String
     ) = NotificationCompat.Builder(context, channelId)
         .setSmallIcon(R.drawable.ic_logo)
-        //.setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
         .setSilent(true)
 
     fun notify(id: Int, notification: Notification) = manager.notify(id, notification)
@@ -64,7 +63,7 @@ object NotificationUtils {
         notify(id, notification.build())
     }
 
-    inline fun <reified T : Activity>pendingIntent(context: Context, cls: KClass<T>): PendingIntent? {
+    inline fun <reified T : Activity>getActivity(context: Context, cls: KClass<T>): PendingIntent? {
         val intent = Intent(context, cls.java)
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     }

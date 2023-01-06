@@ -22,20 +22,20 @@ sealed class MainGraph(
     object Home : MainGraph(
         route = "homeGraph",
         label = R.string.page_home,
-        icon = R.drawable.ic_home_outline,
-        iconSelected = R.drawable.ic_home_bold
+        icon = R.drawable.home_outline,
+        iconSelected = R.drawable.home_bold
     )
     object Modules : MainGraph(
         route = "modulesGraph",
         label = R.string.page_modules,
-        icon = R.drawable.ic_box_outline,
-        iconSelected = R.drawable.ic_box_bold
+        icon = R.drawable.box_outline,
+        iconSelected = R.drawable.box_bold
     )
     object Settings : MainGraph(
         route = "settingsGraph",
         label = R.string.page_settings,
-        icon = R.drawable.ic_setting_outline,
-        iconSelected = R.drawable.ic_setting_bold
+        icon = R.drawable.setting_outline,
+        iconSelected = R.drawable.setting_bold
     )
 }
 

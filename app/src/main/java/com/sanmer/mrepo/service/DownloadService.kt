@@ -13,9 +13,9 @@ import com.sanmer.mrepo.data.parcelable.Module
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
-import com.sanmer.mrepo.utils.InstallUtils
 import com.sanmer.mrepo.utils.MediaStoreUtils.toFile
 import com.sanmer.mrepo.utils.NotificationUtils
+import com.sanmer.mrepo.utils.module.InstallUtils
 import com.sanmer.mrepo.utils.parcelable
 import timber.log.Timber
 
@@ -77,7 +77,7 @@ class DownloadService : LifecycleService() {
         val notification = NotificationUtils
             .buildNotification(context, Const.NOTIFICATION_ID_DOWNLOAD)
             .setContentTitle(module.name)
-            .setContentIntent(NotificationUtils.pendingIntent(context, MainActivity::class))
+            .setContentIntent(NotificationUtils.getActivity(context, MainActivity::class))
             .setGroup(GROUP_KEY)
 
         HttpUtils.downloader(
@@ -101,7 +101,7 @@ class DownloadService : LifecycleService() {
                 }
             },
             onSuccess = {
-                val message = this.getString(R.string.message_download_success)
+                val message = getString(R.string.message_download_success)
                 notifyByManager(
                     id = notificationIdFinish,
                     name = module.name,
@@ -118,7 +118,7 @@ class DownloadService : LifecycleService() {
                 }
             },
             onFail = {
-                val message = this.getString(R.string.message_download_failed, it)
+                val message = getString(R.string.message_download_failed, it)
                 notifyByManager(
                     id = notificationIdFinish,
                     name = module.name,
@@ -136,7 +136,7 @@ class DownloadService : LifecycleService() {
         startForeground(Process.myPid(),
             NotificationUtils.buildNotification(context, Const.NOTIFICATION_ID_DOWNLOAD)
                 .setSilent(true)
-                .setContentIntent(NotificationUtils.pendingIntent(context, MainActivity::class))
+                .setContentIntent(NotificationUtils.getActivity(context, MainActivity::class))
                 .setGroup(GROUP_KEY)
                 .setGroupSummary(true)
                 .build()
@@ -153,7 +153,7 @@ class DownloadService : LifecycleService() {
         setContentTitle(name)
         setContentText(message)
         setSilent(silent)
-        setContentIntent(NotificationUtils.pendingIntent(context, MainActivity::class))
+        setContentIntent(NotificationUtils.getActivity(context, MainActivity::class))
         setGroup(GROUP_KEY)
         build()
     }

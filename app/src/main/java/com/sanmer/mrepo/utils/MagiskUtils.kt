@@ -16,6 +16,9 @@ import java.io.File
 object MagiskUtils {
     var packageName: String? = null
         private set
+    var isManagerInstalled = true
+        private set
+
     private val packageNames = listOf(
         "com.topjohnwu.magisk",
         "io.github.vvb2060.magisk",
@@ -63,11 +66,11 @@ object MagiskUtils {
         return Const.isZygiskEnabled
     }
 
-    private fun getStub(context: Context): File {
-        val stub = context.cacheDir.resolve("stub.apk")
+    private fun Context.getStub(): File {
+        val stub = cacheDir.resolve("stub.apk")
 
         if (!stub.exists()) {
-            val input = context.assets.open("stub.apk")
+            val input = assets.open("stub.apk")
             stub.outputStream().use {
                 input.copyTo(it)
             }
@@ -76,50 +79,37 @@ object MagiskUtils {
         return stub
     }
 
-    private fun getStubInfo(context: Context): PackageInfo? {
-        val stub = getStub(context)
-        return context.packageManager.packageArchiveInfo(stub.absolutePath, flags)
-    }
-
-    private fun getPI(context: Context, packageName: String): PackageInfo {
-        return context.packageManager.packageInfo(packageName)
-    }
-
-    private fun getPIHided(context: Context): PackageInfo? {
-        val stubInfo = getStubInfo(context)!!
-        val pm = context.packageManager
+    private fun PackageManager.getPackageInfo(stubInfo: PackageInfo): PackageInfo? {
         val intent = Intent(Intent.ACTION_MAIN)
         var hidePackageInfo: PackageInfo? = null
 
-        for (pkg in pm.queryActivities(intent, PackageManager.MATCH_ALL)) {
-            runCatching {
-                val pi = pm.packageInfo(pkg.activityInfo.packageName, flags)
-                val applicationInfo = pi.applicationInfo
-                val apkFile = File(applicationInfo.sourceDir)
-                val apkSize = apkFile.length() / 1024
+        for (pkg in queryActivities(intent, PackageManager.MATCH_ALL)) {
+            val pi = packageInfo(pkg.activityInfo.packageName, flags)
+            val applicationInfo = pi.applicationInfo
+            val apkFile = File(applicationInfo.sourceDir)
+            val apkSize = apkFile.length() / 1024
 
-                if (apkSize !in 20..40 && apkSize !in 9 * 1024..20 * 1024) return@runCatching
-                if (applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) return@runCatching
-                if (pi.activities.size != stubInfo.activities.size) return@runCatching
-                if (pi.services.size != stubInfo.services.size) return@runCatching
-                if (pi.receivers.size != stubInfo.receivers.size) return@runCatching
-                if (pi.providers.size != stubInfo.providers.size) return@runCatching
+            if (apkSize !in 20..40 && apkSize !in 9 * 1024..20 * 1024) continue
+            if (applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0) continue
+            if (pi.activities.size != stubInfo.activities.size) continue
+            if (pi.services.size != stubInfo.services.size) continue
+            if (pi.receivers.size != stubInfo.receivers.size) continue
+            if (pi.providers.size != stubInfo.providers.size) continue
 
-                val pPermissionSet = pi.requestedPermissions.toSet()
-                val stubPermissionSet = stubInfo.requestedPermissions.toMutableSet()
-                stubPermissionSet.remove("com.android.launcher.permission.INSTALL_SHORTCUT")
-                if (!pPermissionSet.containsAll(stubPermissionSet)) return@runCatching
-                hidePackageInfo = pi
-            }
+            val pPermissionSet = pi.requestedPermissions.toSet()
+            val stubPermissionSet = stubInfo.requestedPermissions.toMutableSet()
+            stubPermissionSet.remove("com.android.launcher.permission.INSTALL_SHORTCUT")
+            if (!pPermissionSet.containsAll(stubPermissionSet)) continue
+            hidePackageInfo = pi
         }
 
         return hidePackageInfo
     }
 
-    fun getApp(context: Context): String? {
+    fun getManager(context: Context): String? {
         for (p in packageNames) {
             try {
-                packageName = getPI(context, p).packageName
+                packageName = context.packageManager.packageInfo(p).packageName
                 break
             } catch (e: Exception) {
                 Timber.d("No Magisk manager($p) found!")
@@ -127,21 +117,28 @@ object MagiskUtils {
         }
 
         try {
-            packageName = getPIHided(context)?.packageName
+            val stub = context.getStub()
+            val stubInfo = context.packageManager.packageArchiveInfo(stub.absolutePath, flags)!!
+            packageName = context.packageManager.getPackageInfo(stubInfo)?.packageName
         } catch (e: Exception) {
             Timber.d("No hided Magisk manager found!")
+            isManagerInstalled = false
         }
 
         return packageName
     }
 
-    fun launchApp(context: Context) = try {
-        packageName?.let {
-            val intent = context.packageManager.getLaunchIntentForPackage(it)
-            context.startActivity(intent)
+    fun launchManager(context: Context) {
+        if (!isManagerInstalled) return
+
+        try {
+            packageName?.let {
+                val intent = context.packageManager.getLaunchIntentForPackage(it)
+                context.startActivity(intent)
+            }
+        } catch (e: Exception) {
+            Timber.d("Failed to launch Magisk manager!")
+            getManager(context)
         }
-    } catch (e: Exception) {
-        Timber.d("Failed to launch Magisk manager!")
-        getApp(context)
     }
 }

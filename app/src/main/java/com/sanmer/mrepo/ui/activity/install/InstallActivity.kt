@@ -17,9 +17,9 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.core.view.WindowCompat
 import com.sanmer.mrepo.app.runtime.Configure
-import com.sanmer.mrepo.utils.InstallUtils
 import com.sanmer.mrepo.app.status.Event
 import com.sanmer.mrepo.ui.theme.AppTheme
+import com.sanmer.mrepo.utils.module.InstallUtils
 
 class InstallActivity : ComponentActivity() {
     val utils: InstallUtils = InstallUtils

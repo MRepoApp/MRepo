@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.ui.page.modules
 
-import android.os.Build
+import android.content.Context
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,7 +22,6 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.runtime.Status
 import com.sanmer.mrepo.data.Constant
 import com.sanmer.mrepo.ui.modify.LinearProgressIndicator
-import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.module.ModuleLoader
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
@@ -34,10 +33,6 @@ fun ModulesScreen(
     val owner = LocalLifecycleOwner.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        NotificationUtils.PermissionState()
-    }
-
     viewModel.isUpdatable.observe(owner) {
         it?.let { if (it) viewModel.notifyUpdatable(context) }
     }
@@ -47,7 +42,6 @@ fun ModulesScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             ModulesTopBar(
-                viewModel = viewModel,
                 scrollBehavior = scrollBehavior
             )
         }
@@ -150,33 +144,29 @@ private fun ModulesList(
 
 @Composable
 private fun ModulesTopBar(
-    viewModel: ModulesViewModel = viewModel(),
+    context: Context = LocalContext.current,
     scrollBehavior: TopAppBarScrollBehavior
-) {
-    val context = LocalContext.current
-
-    TopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = R.string.page_modules),
-                style = MaterialTheme.typography.titleLarge
-            )
-        },
-        actions = {
-            IconButton(
-                onClick = {
-                    ModuleLoader.getAll(context)
-                }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_3d_rotate_outline),
-                    contentDescription = null
-                )
+) = TopAppBar(
+    title = {
+        Text(
+            text = stringResource(id = R.string.page_modules),
+            style = MaterialTheme.typography.titleLarge
+        )
+    },
+    actions = {
+        IconButton(
+            onClick = {
+                ModuleLoader.getAll(context)
             }
-        },
-        scrollBehavior = scrollBehavior
-    )
-}
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.rotate_outline),
+                contentDescription = null
+            )
+        }
+    },
+    scrollBehavior = scrollBehavior
+)
 
 @Composable
 private fun ItemTitle(
@@ -214,7 +204,7 @@ private fun Loading() {
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_box_outline),
+                painter = painterResource(id = R.drawable.box_outline),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier

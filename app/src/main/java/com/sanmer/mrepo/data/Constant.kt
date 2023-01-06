@@ -85,36 +85,4 @@ object Constant {
             getOnlineAll()
         }
     }
-
-    fun filterLocal(key: String) {
-        coroutineScope.launch(Dispatchers.IO) {
-            val list = withContext(Dispatchers.IO) {
-                localModuleDao.getAll()
-            }
-
-            local.clear()
-            local.addAll(
-                list.filter {
-                    val target = it.name + it.author + it.description
-                    key.lowercase() in target.lowercase()
-                }.map { it.toModule() }
-            )
-        }
-    }
-
-    fun filterOnline(key: String) {
-        coroutineScope.launch(Dispatchers.IO) {
-            val list = withContext(Dispatchers.IO) {
-                onlineModuleDao.getAll()
-            }
-
-            online.clear()
-            online.addAll(
-                list.filter {
-                    val target = it.name + it.author + it.description
-                    key.lowercase() in target.lowercase()
-                }.map { it.toModule() }
-            )
-        }
-    }
 }
