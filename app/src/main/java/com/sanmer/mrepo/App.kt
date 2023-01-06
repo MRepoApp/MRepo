@@ -1,9 +1,6 @@
 package com.sanmer.mrepo
 
 import android.app.Application
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.data.Constant
 import com.sanmer.mrepo.provider.FileServer
@@ -31,10 +28,6 @@ class App : Application() {
         Works.init(this)
         MediaStoreUtils.init(this)
         NotificationUtils.init(this)
-
-        Firebase.crashlytics.setCrashlyticsCollectionEnabled(Config.ANALYTICS_COLLECTION)
-        Firebase.analytics.setAnalyticsCollectionEnabled(Config.ANALYTICS_COLLECTION)
-        Timber.i("Firebase data collection: ${Config.ANALYTICS_COLLECTION}")
 
         if (Config.WORKING_MODE == Config.MODE_ROOT) {
             FileServer.init(this)

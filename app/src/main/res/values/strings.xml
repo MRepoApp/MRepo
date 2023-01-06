@@ -76,10 +76,6 @@
     <string name="settings_custom_repo_branch">Repository branch</string>
     <string name="settings_custom_url">Custom URL</string>
     <string name="settings_custom_url_dialog">The data structure must meet the requirements</string>
-    <!-- Other -->
-    <string name="settings_title_other">Other</string>
-    <string name="settings_analytics">Data collection</string>
-    <string name="settings_analytics_desc"> Allow Firebase to automatically collect crash reports and usage reports</string>
     <!-- App Theme -->
     <string name="settings_example">Example</string>
     <string name="settings_theme_palette">Theme palette</string>
@@ -89,7 +85,6 @@
     <string name="settings_dark_theme_dark">Dark</string>
 
     <!-- Message -->
-    <string name="message_restart_app">Restart APP to make change take effect</string>
     <string name="message_download_failed">Download failed: %1$s</string>
     <string name="message_download_success">Download successful</string>
     <string name="message_module_upgrade">%1$s can be updated</string>

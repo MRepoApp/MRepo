@@ -18,8 +18,6 @@ object Configure {
     private var REPO_BRANCH by mutableStateOf(Config.REPO_BRANCH)
     private var REPO_URL by mutableStateOf(Config.REPO_URL)
 
-    private var ANALYTICS_COLLECTION by mutableStateOf(Config.ANALYTICS_COLLECTION)
-
     var themeColor: Int
         get() = THEME_COLOR
         set(value) {
@@ -67,13 +65,6 @@ object Configure {
         set(value) {
             REPO_URL = value
             Config.REPO_URL = value
-        }
-
-    var analyticsCollection: Boolean
-        get() = ANALYTICS_COLLECTION
-        set(value) {
-            ANALYTICS_COLLECTION = value
-            Config.ANALYTICS_COLLECTION = value
         }
 
     @Composable

@@ -74,10 +74,6 @@
     <string name="settings_custom_repo_branch">仓库分支</string>
     <string name="settings_custom_url">自定义网址</string>
     <string name="settings_custom_url_dialog">数据结构必须符合要求</string>
-    <!-- Other -->
-    <string name="settings_title_other">其他</string>
-    <string name="settings_analytics">数据收集</string>
-    <string name="settings_analytics_desc">允许 Firebase 自动收集崩溃报告和使用情况</string>
     <!-- App Theme -->
     <string name="settings_example">示例</string>
     <string name="settings_theme_palette">主题调色板</string>
@@ -87,7 +83,6 @@
     <string name="settings_dark_theme_dark">深色</string>
 
     <!-- Message -->
-    <string name="message_restart_app">重启APP后更改生效</string>
     <string name="message_download_failed">下载失败：%1$s</string>
     <string name="message_download_success">下载成功</string>
     <string name="message_module_upgrade">%1$s可更新</string>

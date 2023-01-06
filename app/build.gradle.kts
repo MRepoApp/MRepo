@@ -3,8 +3,6 @@
 plugins {
     id("com.android.application")
     id("com.google.devtools.ksp")
-    id("com.google.firebase.crashlytics")
-    id("com.google.gms.google-services")
     kotlin("android")
     kotlin("plugin.parcelize")
 }
@@ -114,10 +112,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0-alpha01")
     implementation("androidx.lifecycle:lifecycle-service:2.5.1")
     implementation("com.google.android.material:material:1.8.0-beta01")
-
-    implementation(platform("com.google.firebase:firebase-bom:31.1.1"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
 
     implementation("androidx.activity:activity-compose:1.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")

@@ -70,10 +70,4 @@ object Config {
     var REPO_URL: String
         get() = kv.decodeString(REPO_URL_KEY, "${Const.REPO_URL}json/modules.json")!!
         set(value) { kv.encode(REPO_URL_KEY, value) }
-
-    // ANALYTICS_COLLECTION
-    private const val ANALYTICS_COLLECTION_KEY = "ANALYTICS_COLLECTION"
-    var ANALYTICS_COLLECTION: Boolean
-        get() = kv.decodeBool(ANALYTICS_COLLECTION_KEY, !BuildConfig.DEBUG)
-        set(value) { kv.encode(ANALYTICS_COLLECTION_KEY, value) }
 }
