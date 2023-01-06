@@ -14,7 +14,6 @@ android {
     namespace = "com.sanmer.mrepo"
     compileSdk = 33
     buildToolsVersion = "33.0.1"
-    ndkVersion = "25.1.8937393"
 
     signingConfigs {
         create("release") {
@@ -31,10 +30,6 @@ android {
         versionName = verName
         resourceConfigurations += arrayOf("en", "zh-rCN")
         multiDexEnabled = true
-
-        ndk {
-            abiFilters += arrayOf("armeabi-v7a", "arm64-v8a", "x86_64", "x86")
-        }
     }
 
     dependenciesInfo.includeInApk = false
@@ -83,12 +78,6 @@ android {
     }
 
     setProperty("archivesBaseName", "mrepo-$verName")
-    splits {
-        abi {
-            isEnable = true
-            isUniversalApk = true
-        }
-    }
 
     ksp {
         arg("room.incremental", "true")
@@ -144,5 +133,4 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:${vRetrofit}")
 
     implementation("com.jakewharton.timber:timber:5.0.1")
-    implementation("com.tencent:mmkv:1.2.14")
 }

@@ -111,7 +111,7 @@ private fun RepoItem() {
                 Text(text = stringResource(id = R.string.settings_custom_url_dialog))
             }
         ) {
-            Configure.repoUrl = it
+            Configure.repoUrl = it.ifEmpty { Const.JSON_URL }
         }
     }
 }

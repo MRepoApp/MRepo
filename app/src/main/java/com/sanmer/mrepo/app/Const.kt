@@ -20,6 +20,7 @@ object Const {
     const val REPO_GITHUB = "ya0211/magisk-modules-repo"
     const val REPO_BRANCH = "main"
     val REPO_URL get() = "$GITHUB_RAW_URL/${Config.REPO_GITHUB}/${Config.REPO_BRANCH}/"
+    val JSON_URL get() = "${REPO_URL}json/modules.json"
 
     // DIR
     val DIR_PUBLIC_DOWNLOADS: File = Environment

@@ -7,10 +7,10 @@ import com.sanmer.mrepo.provider.FileServer
 import com.sanmer.mrepo.utils.MagiskUtils
 import com.sanmer.mrepo.utils.MediaStoreUtils
 import com.sanmer.mrepo.utils.NotificationUtils
+import com.sanmer.mrepo.utils.SPUtils
 import com.sanmer.mrepo.utils.timber.DebugTree
 import com.sanmer.mrepo.utils.timber.ReleaseTree
 import com.sanmer.mrepo.works.Works
-import com.tencent.mmkv.MMKV
 import timber.log.Timber
 
 class App : Application() {
@@ -23,9 +23,9 @@ class App : Application() {
             Timber.plant(ReleaseTree())
         }
 
-        MMKV.initialize(this)
         Constant.init(this)
         Works.init(this)
+        SPUtils.init(this)
         MediaStoreUtils.init(this)
         NotificationUtils.init(this)
 
