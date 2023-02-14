@@ -2,14 +2,7 @@ package com.sanmer.mrepo.ui.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.expansion.navigatePopUpTo
 
@@ -39,66 +32,6 @@ sealed class MainGraph(
     )
 }
 
-private val mainGraph = listOf(
-    MainGraph.Modules,
-    MainGraph.Home,
-    MainGraph.Settings
-)
-
-private val homeGraph = listOf(
-    HomeGraph.Home.route
-)
-
-private val modulesGraph = listOf(
-    ModulesGraph.Modules.route
-)
-
-private val settingsGraph = listOf(
-    SettingsGraph.Settings.route,
-    SettingsGraph.AppTheme.route
-)
-
-@Composable
-fun BottomNavigation(
-    navController: NavController
-) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-
-    NavigationBar {
-        mainGraph.forEach { screen ->
-            val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
-            val enable = when(screen) {
-                is MainGraph.Home -> currentDestination?.route !in homeGraph
-                is MainGraph.Modules -> currentDestination?.route !in modulesGraph
-                is MainGraph.Settings -> currentDestination?.route !in settingsGraph
-            }
-
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        painter = painterResource(id = if (selected) {
-                            screen.iconSelected
-                        } else {
-                            screen.icon
-                        }),
-                        contentDescription = null,
-                    )
-                },
-                label = {
-                    Text(
-                        text = stringResource(id = screen.label),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                },
-                alwaysShowLabel = true,
-                selected = selected,
-                onClick = {
-                    if (enable) {
-                        navController.navigatePopUpTo(screen.route)
-                    }
-                }
-            )
-        }
-    }
-}
+fun NavController.navigateToHome() = navigatePopUpTo(MainGraph.Home.route)
+fun NavController.navigateToModules() = navigatePopUpTo(MainGraph.Modules.route)
+fun NavController.navigateToSettings() = navigatePopUpTo(MainGraph.Settings.route)

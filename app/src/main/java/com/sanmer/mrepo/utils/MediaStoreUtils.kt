@@ -6,12 +6,15 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import com.sanmer.mrepo.provider.FileServer
+import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.provider.FileProvider
 import java.io.File
+import java.io.IOException
+import java.io.OutputStream
 
 object MediaStoreUtils {
     private lateinit var cr: ContentResolver
-    private val fs = FileServer
+    private val fs = FileProvider
 
     fun init(context: Context) {
         cr = context.contentResolver
@@ -32,30 +35,25 @@ object MediaStoreUtils {
         return this.toString()
     }
 
-    fun Uri.copy(new: File) {
-        if (new.exists()) new.delete()
-        cr.openInputStream(this)?.let { input ->
-            cr.openOutputStream(new.toUri())?.let { output ->
-                output.write(input.readBytes())
-                output.flush()
-                output.close()
+    fun Uri.copyTo(new: File) {
+        cr.openInputStream(this)?.use { input ->
+            cr.openOutputStream(new.toUri())?.use { output ->
+                input.copyTo(output)
             }
-            input.close()
         }
     }
 
-    fun File.copy(new: File) {
-        if (new.exists()) new.delete()
-        val input = fs.getFile(absolutePath).newInputStream()
-        val output = fs.getFile(new.absolutePath).newOutputStream()
-        output.write(input.readBytes())
-        output.flush()
-        output.close()
-        input.close()
-    }
+    fun File.copyTo(new: File) = toUri().copyTo(new)
 
-    fun File.parent(): File {
-        return File(parent!!)
+    @Throws(IOException::class)
+    fun File.newOutputStream(): OutputStream? = try {
+        cr.openOutputStream(toUri())
+    } catch (e: Exception) {
+        if (Status.Provider.isSucceeded) {
+            fs.getFile(this).newOutputStream()
+        } else {
+            throw IOException(e)
+        }
     }
 
     fun String.toFile(): File? {
@@ -64,5 +62,20 @@ object MediaStoreUtils {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun Context.toFileDir(input: String?, name: String): File {
+        val out = filesDir.resolve(name)
+        out.parentFile?.let {
+            if (!it.exists()) {
+                it.mkdirs()
+            }
+        }
+
+        val output = out.outputStream()
+        output.write(input?.toByteArray())
+        output.close()
+
+        return out
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.service.LogcatService
+import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.utils.log.LogItem
 
@@ -123,7 +124,7 @@ private fun LogItem(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = when(value.priority) {
+                text = when (value.priority) {
                     Log.VERBOSE -> "V"
                     Log.DEBUG -> "D"
                     Log.INFO -> "I"
@@ -135,7 +136,7 @@ private fun LogItem(
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                color = when(value.priority) {
+                color = when (value.priority) {
                     Log.VERBOSE -> Color(0xFF000000)
                     Log.DEBUG -> Color(0xFFE9F5E6)
                     Log.INFO -> Color(0xFFBBBBBB)
@@ -161,7 +162,7 @@ private fun LogItem(
             Text(
                 text = value.message,
                 style = MaterialTheme.typography.bodyMedium,
-                color = when(value.priority) {
+                color = when (value.priority) {
                     Log.WARN -> Color(0xFFBBB529)
                     Log.ERROR -> Color(0xFFCF5B56)
                     else -> Color.Unspecified
@@ -183,22 +184,19 @@ private fun PrioritySelect(
     selected: String,
     onClose: () -> Unit,
     onClick: (String) -> Unit,
+) = DropdownMenu(
+    expanded = expanded,
+    onDismissRequest = onClose,
+    offset = DpOffset(15.dp, 0.dp),
+    shape = RoundedCornerShape(15.dp)
 ) {
-    CustomShape {
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = onClose,
-            offset = DpOffset(15.dp, 0.dp)
+    priorities.forEach {
+        MenuItem(
+            value = it,
+            selected = selected
         ) {
-            priorities.forEach {
-                MenuItem(
-                    value = it,
-                    selected = selected
-                ) {
-                    if (it != selected) onClick(it)
-                    onClose()
-                }
-            }
+            if (it != selected) onClick(it)
+            onClose()
         }
     }
 }
@@ -219,12 +217,4 @@ private fun MenuItem(
         ),
     text = { Text(text = value) },
     onClick = onClick
-)
-
-@Composable
-private fun CustomShape(
-    content: @Composable () -> Unit
-) = MaterialTheme(
-    shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(12.dp)),
-    content = content
 )

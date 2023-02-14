@@ -4,9 +4,9 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,9 +18,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.ui.modify.LinearProgressIndicator
 
 @Composable
 fun ModuleCard(
@@ -29,16 +29,18 @@ fun ModuleCard(
     author: String,
     description: String,
     modifier: Modifier = Modifier,
-    progress: Float = 0f,
     alpha: Float = 1f,
     decoration: TextDecoration = TextDecoration.None,
+    progress: Float = 0f,
     switch: @Composable (() -> Unit?)? = null,
-    cover: @Composable () -> Unit = {},
+    indicator: @Composable (() -> Unit?)? = null,
     buttons: @Composable RowScope.() -> Unit,
 ) {
-    Card(
+    Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(15.dp)
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 1.dp,
+        shape = RoundedCornerShape(20.dp)
     ) {
         Box(
             modifier = Modifier
@@ -51,20 +53,22 @@ fun ModuleCard(
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp, bottom = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
                         modifier = Modifier
                             .alpha(alpha = alpha)
-                            .fillMaxWidth(if (switch == null) 1f else 0.82f)
+                            .weight(1f)
                     ) {
                         Text(
                             text = name,
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
                             maxLines = 2,
-                            textDecoration = decoration
+                            textDecoration = decoration,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = stringResource(
@@ -75,19 +79,8 @@ fun ModuleCard(
                         )
                     }
 
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 10.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End,
-                    ) {
-                        switch?.let { it() }
-                    }
-
+                    switch?.invoke()
                 }
-
-                Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
                     modifier = Modifier
@@ -120,25 +113,25 @@ fun ModuleCard(
 
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 10.dp)
+                        .padding(horizontal = 4.dp)
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End,
-                    content = buttons
-                )
-
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    buttons()
+                }
             }
 
-            cover()
+            indicator?.invoke()
         }
     }
 }
 
 @Composable
-fun StateIndicator(
+fun stateIndicator(
     @DrawableRes id: Int,
     color: Color = MaterialTheme.colorScheme.onSurfaceVariant
-) {
+) = @Composable {
     Image(
         modifier = Modifier
             .fillMaxSize(),

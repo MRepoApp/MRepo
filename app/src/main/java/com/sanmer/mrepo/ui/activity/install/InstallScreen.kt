@@ -19,9 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.status.Event
+import com.sanmer.mrepo.data.provider.local.InstallUtils
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.utils.SvcPower
-import com.sanmer.mrepo.utils.module.InstallUtils
 
 @Composable
 fun InstallScreen(
@@ -35,7 +35,7 @@ fun InstallScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { NavigateUpTopBar(
             title = R.string.install_title,
-            subtitle = when(utils.event) {
+            subtitle = when (utils.event) {
                 Event.LOADING -> R.string.install_flashing
                 Event.FAILED -> R.string.install_failure
                 else -> R.string.install_done
@@ -43,7 +43,7 @@ fun InstallScreen(
             scrollBehavior = scrollBehavior
         ) },
         floatingActionButton = {
-            if (utils.isSuccess) {
+            if (utils.isSucceeded) {
                 RebootButton()
             }
         },
@@ -62,7 +62,7 @@ private fun RebootButton() = ExtendedFloatingActionButton(
         SvcPower.reboot()
     },
     text = {
-        Text(text = stringResource(id = R.string.install_reboot),)
+        Text(text = stringResource(id = R.string.install_reboot))
     },
     icon = {
         Icon(

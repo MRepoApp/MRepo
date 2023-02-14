@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.sanmer.mrepo.BuildConfig
 
+/**
+ * From [LibChecker](https://github.com/LibChecker/LibChecker.git)
+ */
 object SPUtils {
     private const val SP_NAME = "${BuildConfig.APPLICATION_ID}_preferences"
     private lateinit var sp: SharedPreferences

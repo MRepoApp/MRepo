@@ -39,7 +39,7 @@ class SystemLogcat(
                         .filter { it != "" }
 
                     LogItem(
-                        priority = when(item[4]) {
+                        priority = when (item[4]) {
                             "V" -> Log.VERBOSE
                             "D" -> Log.DEBUG
                             "I" -> Log.INFO

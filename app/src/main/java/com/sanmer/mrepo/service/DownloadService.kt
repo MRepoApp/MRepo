@@ -7,46 +7,48 @@ import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.data.parcelable.Module
+import com.sanmer.mrepo.data.provider.local.InstallUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.MediaStoreUtils.toFile
 import com.sanmer.mrepo.utils.NotificationUtils
-import com.sanmer.mrepo.utils.module.InstallUtils
-import com.sanmer.mrepo.utils.parcelable
+import com.sanmer.mrepo.utils.expansion.parcelable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class DownloadService : LifecycleService() {
-    private data class Item(
+    private data class DownloadItem(
         val id: Int = System.currentTimeMillis().toInt(),
         val value: Module,
-        val isInstall: Boolean
+        val install: Boolean
     )
-    private val list = mutableListOf<Item>()
-    private val context = this
+    private val list = mutableListOf<DownloadItem>()
 
     override fun onCreate() {
         super.onCreate()
-        Timber.d("onCreate")
+        Timber.d("DownloadService onCreate")
         setForeground()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Timber.d("onStartCommand")
-
-        val isInstall = intent?.getBooleanExtra(INSTALL_KEY, false) == true
+        val install = intent?.getBooleanExtra(INSTALL_KEY, false) == true
         val module = intent?.parcelable<Module>(MODULE_KEY)
 
-        if (module == null) {
-            Timber.w("MODULE_KEY: null")
-            stopIt()
-        } else {
-            val new = addItem(Item(value = module, isInstall = isInstall))
-            Timber.d("new: $new")
-            if (new) downloader(list.last())
+        module?.let {
+            Timber.i("DownloadService: ${module.name}")
+
+            val isNew = addToList(DownloadItem(value = module, install = install))
+            if (isNew) {
+                downloader(list.last())
+            } else {
+                Timber.i("DownloadService: ${module.name} is downloading!")
+            }
         }
 
         return super.onStartCommand(intent, flags, startId)
@@ -54,12 +56,18 @@ class DownloadService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.d("onDestroy")
+        Timber.d("DownloadService onDestroy")
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
     }
 
-    private fun stopIt() = list.isEmpty().let { if (it) stopSelf() }
-    private fun addItem(value: Item): Boolean =
+    private fun stopIt() = list.isEmpty().let {
+        if (it) lifecycleScope.launch {
+            delay(5000)
+            if (list.isEmpty()) stopSelf()
+        }
+    }
+
+    private fun addToList(value: DownloadItem): Boolean =
         if (value.value in list.map { it.value }) {
             false
         } else {
@@ -67,65 +75,78 @@ class DownloadService : LifecycleService() {
         }
 
     private fun downloader(
-        item: Item
+        item: DownloadItem
     ) {
         val module = item.value
         val notificationId = item.id
-        val notificationIdFinish = item.id + 1
+        val notificationIdFinish = notificationId + 1
+        var last = 0
 
         val path = module.path.toFile() ?: Const.DOWNLOAD_PATH.resolve("${module.name}.zip")
         val notification = NotificationUtils
-            .buildNotification(context, Const.NOTIFICATION_ID_DOWNLOAD)
+            .buildNotification(this, Const.NOTIFICATION_ID_DOWNLOAD)
             .setContentTitle(module.name)
-            .setContentIntent(NotificationUtils.getActivity(context, MainActivity::class))
+            .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
+            .setProgress(0, 0 , false)
+            .setOngoing(true)
             .setGroup(GROUP_KEY)
+
+        val progress: (Float) -> Unit = {
+            val value = (it * 100).toInt()
+
+            if (value != last) {
+                NotificationUtils.notify(
+                    notificationId,
+                    notification.setContentText("${value}%")
+                        .setProgress(100, value, false)
+                        .build()
+                )
+                broadcast(it, module)
+            }
+
+            if (value == 100) {
+                NotificationUtils.cancel(notificationId)
+                broadcast(0f, module)
+                last = 0
+            }
+        }
+
+        val succeeded: () -> Unit = {
+            val message = getString(R.string.message_download_success)
+            notifyFinish(
+                id = notificationIdFinish,
+                name = module.name,
+                message = message,
+                silent = true
+            )
+
+            if (item.install) {
+                InstallUtils.install(this, path)
+
+                val intent = Intent(this, InstallActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+        }
+
+        val failed: (String?) -> Unit = {
+            broadcast(0f, module)
+
+            val message = getString(R.string.message_download_failed, it)
+            notifyFinish(
+                id = notificationIdFinish,
+                name = module.name,
+                message = message
+            )
+        }
 
         HttpUtils.downloader(
             url = module.url,
             path = path,
-            onProgress = {
-                val progress = (it * 100).toInt()
-
-                NotificationUtils.notify(notificationId,
-                    notification.setContentText("${progress}%")
-                    .setProgress(100, progress, false)
-                    .setOngoing(progress != 100)
-                    .build()
-                )
-
-                if (progress == 100) {
-                    NotificationUtils.cancel(notificationId)
-                    broadcast(0f, module)
-                } else {
-                    broadcast(it, module)
-                }
-            },
-            onSuccess = {
-                val message = getString(R.string.message_download_success)
-                notifyByManager(
-                    id = notificationIdFinish,
-                    name = module.name,
-                    message = message,
-                    silent = true
-                )
-
-                if (item.isInstall) {
-                    InstallUtils.install(context, path)
-
-                    val intent = Intent(context, InstallActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                }
-            },
-            onFail = {
-                val message = getString(R.string.message_download_failed, it)
-                notifyByManager(
-                    id = notificationIdFinish,
-                    name = module.name,
-                    message = message
-                )
-            },
-            onFinish = {
+            onProgress = progress,
+            onSucceeded = succeeded,
+            onFailed = failed,
+            onFinished = {
                 list.remove(item)
                 stopIt()
             }
@@ -134,26 +155,26 @@ class DownloadService : LifecycleService() {
 
     private fun setForeground() {
         startForeground(Process.myPid(),
-            NotificationUtils.buildNotification(context, Const.NOTIFICATION_ID_DOWNLOAD)
+            NotificationUtils.buildNotification(this, Const.NOTIFICATION_ID_DOWNLOAD)
                 .setSilent(true)
-                .setContentIntent(NotificationUtils.getActivity(context, MainActivity::class))
+                .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
                 .setGroup(GROUP_KEY)
                 .setGroupSummary(true)
                 .build()
         )
     }
 
-    private fun notifyByManager(
+    private fun notifyFinish(
         id: Int,
         name: String,
         message: String,
         silent: Boolean = false
-    ) = NotificationUtils.notify(context, id) {
+    ) = NotificationUtils.notify(this, id) {
         setChannelId(Const.NOTIFICATION_ID_DOWNLOAD)
         setContentTitle(name)
         setContentText(message)
         setSilent(silent)
-        setContentIntent(NotificationUtils.getActivity(context, MainActivity::class))
+        setContentIntent(NotificationUtils.getActivity(MainActivity::class))
         setGroup(GROUP_KEY)
         build()
     }
@@ -161,7 +182,7 @@ class DownloadService : LifecycleService() {
     companion object {
         const val MODULE_KEY = "ONLINE_MODULE"
         const val INSTALL_KEY = "INSTALL_MODULE"
-        const val GROUP_KEY = "com.sanmer.mrepo.service.DOWNLOAD_GROUP_KEY"
+        const val GROUP_KEY = "DOWNLOAD_SERVICE_GROUP_KEY"
 
         private val progressBroadcast = MutableLiveData<Pair<Float, Module>?>()
 
@@ -180,13 +201,12 @@ class DownloadService : LifecycleService() {
         fun start(
             context: Context,
             module: Module,
-            isInstall: Boolean
+            install: Boolean
         ) {
             val intent = Intent(context, DownloadService::class.java)
             intent.putExtra(MODULE_KEY, module)
-            intent.putExtra(INSTALL_KEY, isInstall)
+            intent.putExtra(INSTALL_KEY, install)
             context.startService(intent)
         }
     }
-
 }

@@ -5,7 +5,7 @@ import timber.log.Timber
 
 class DebugTree : Timber.DebugTree() {
     override fun isLoggable(tag: String?, priority: Int): Boolean {
-        return when(priority) {
+        return when (priority) {
             Log.VERBOSE -> true
             Log.DEBUG -> true
             Log.INFO -> true

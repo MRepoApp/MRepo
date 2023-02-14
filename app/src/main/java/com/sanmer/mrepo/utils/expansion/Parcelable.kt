@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.utils
+package com.sanmer.mrepo.utils.expansion
 
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT

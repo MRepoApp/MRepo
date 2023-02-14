@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -9,18 +10,19 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.sanmer.mrepo.App
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import kotlin.reflect.KClass
 
 object NotificationUtils {
-    private lateinit var manager: NotificationManager
+    val context = App.context
+    private val notificationManager by lazy { NotificationManagerCompat.from(context) }
 
     fun init(context: Context) {
-        manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
         val channels = listOf(
             NotificationChannel(Const.NOTIFICATION_ID_DOWNLOAD,
                 context.getString(R.string.notification_name_download),
@@ -32,7 +34,8 @@ object NotificationUtils {
             )
         )
 
-        manager.createNotificationChannels(channels)
+        NotificationManagerCompat.from(context)
+            .createNotificationChannels(channels)
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -54,16 +57,34 @@ object NotificationUtils {
         .setSmallIcon(R.drawable.ic_logo)
         .setSilent(true)
 
-    fun notify(id: Int, notification: Notification) = manager.notify(id, notification)
-    fun cancel(id: Int) = manager.cancel(id)
+    fun buildNotification(channelId: String) = buildNotification(context, channelId)
 
-    fun notify(context: Context, id: Int, build: NotificationCompat.Builder.() -> Unit) {
+    @SuppressLint("MissingPermission")
+    fun notify(
+        context: Context,
+        notificationId: Int,
+        build: NotificationCompat.Builder.() -> Unit
+    ) {
         val notification = buildNotification(context, "NULL")
         build(notification)
-        notify(id, notification.build())
+        notificationManager.notify(notificationId, notification.build())
     }
 
-    inline fun <reified T : Activity>getActivity(context: Context, cls: KClass<T>): PendingIntent? {
+    @SuppressLint("MissingPermission")
+    fun notify(notificationId: Int, notification: Notification) {
+        notificationManager.notify(notificationId, notification)
+    }
+
+    fun notify(
+        notificationId: Int,
+        build: NotificationCompat.Builder.() -> Unit
+    ) = notify(context, notificationId, build)
+
+    fun cancel(notificationId: Int) {
+        notificationManager.cancel(notificationId)
+    }
+
+    inline fun <reified T : Activity>getActivity(cls: KClass<T>): PendingIntent {
         val intent = Intent(context, cls.java)
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     }

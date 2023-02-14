@@ -7,13 +7,13 @@ plugins {
     kotlin("plugin.parcelize")
 }
 
-val verName = "1.0.0"
-val verCode = 100
+val verName = "1.0.1-alpha"
+val verCode = 101
 
 android {
     namespace = "com.sanmer.mrepo"
     compileSdk = 33
-    buildToolsVersion = "33.0.1"
+    buildToolsVersion = "33.0.2"
 
     signingConfigs {
         create("release") {
@@ -60,7 +60,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0-alpha02"
+        kotlinCompilerExtensionVersion = "1.4.0"
     }
 
     packagingOptions {
@@ -78,59 +78,70 @@ android {
     }
 
     setProperty("archivesBaseName", "mrepo-$verName")
+}
 
-    ksp {
-        arg("room.incremental", "true")
-        arg("room.schemaLocation", "$projectDir/schemas")
+kotlin {
+    jvmToolchain(11)
+
+    sourceSets.all {
+        languageSettings {
+            optIn("androidx.compose.material3.ExperimentalMaterial3Api")
+            optIn("androidx.compose.ui.ExperimentalComposeUiApi")
+            optIn("androidx.compose.animation.ExperimentalAnimationApi")
+            optIn("androidx.compose.foundation.ExperimentalFoundationApi")
+            optIn("com.google.accompanist.permissions.ExperimentalPermissionsApi")
+            optIn("kotlin.ExperimentalStdlibApi")
+        }
     }
 }
 
-kotlin.sourceSets.all {
-    languageSettings {
-        optIn("androidx.compose.material3.ExperimentalMaterial3Api")
-        optIn("androidx.compose.ui.ExperimentalComposeUiApi")
-        optIn("androidx.compose.animation.ExperimentalAnimationApi")
-        optIn("androidx.compose.foundation.ExperimentalFoundationApi")
-        optIn("com.google.accompanist.permissions.ExperimentalPermissionsApi")
-    }
+ksp {
+    arg("room.incremental", "true")
+    arg("room.expandProjection", "true")
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.work:work-runtime-ktx:2.7.1")
-    implementation("androidx.appcompat:appcompat:1.7.0-alpha01")
+    implementation("androidx.work:work-runtime-ktx:2.8.0")
+    implementation("androidx.appcompat:appcompat:1.7.0-alpha02")
     implementation("androidx.lifecycle:lifecycle-service:2.5.1")
-    implementation("com.google.android.material:material:1.8.0-beta01")
+    implementation("com.google.android.material:material:1.9.0-alpha01")
 
     implementation("androidx.activity:activity-compose:1.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha03")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha06")
 
-    val vCompose = "1.4.0-alpha03"
+    val vCompose = "1.4.0-alpha04"
     implementation("androidx.compose.ui:ui:${vCompose}")
     implementation("androidx.compose.ui:ui-tooling-preview:${vCompose}")
     debugImplementation("androidx.compose.ui:ui-tooling:${vCompose}")
     debugImplementation("androidx.compose.ui:ui-test-manifest:${vCompose}")
 
-    val vAccompanist = "0.28.0"
+    val vAccompanist = "0.29.1-alpha"
     implementation("com.google.accompanist:accompanist-systemuicontroller:${vAccompanist}")
     implementation("com.google.accompanist:accompanist-navigation-animation:${vAccompanist}")
     implementation("com.google.accompanist:accompanist-permissions:${vAccompanist}")
 
-    val vRoom = "2.4.3"
+    val vRoom = "2.5.0"
     implementation("androidx.room:room-runtime:${vRoom}")
     implementation("androidx.room:room-ktx:${vRoom}")
     ksp("androidx.room:room-compiler:${vRoom}")
 
-    val vLibsu = "5.0.3"
+    val vLibsu = "5.0.4"
     implementation("com.github.topjohnwu.libsu:core:${vLibsu}")
-    implementation("com.github.topjohnwu.libsu:service:${vLibsu}")
     implementation("com.github.topjohnwu.libsu:nio:${vLibsu}")
+    implementation("com.github.topjohnwu.libsu:service:${vLibsu}")
 
     val vRetrofit = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:${vRetrofit}")
-    implementation("com.squareup.retrofit2:converter-gson:${vRetrofit}")
+    implementation("com.squareup.retrofit2:converter-moshi:${vRetrofit}")
+
+    val vMoshi = "1.14.0"
+    implementation("com.squareup.moshi:moshi:${vMoshi}")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:${vMoshi}")
 
     implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation("io.noties.markwon:core:4.6.2")
 }

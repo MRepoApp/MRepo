@@ -16,10 +16,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.core.view.WindowCompat
-import com.sanmer.mrepo.app.runtime.Configure
+import com.sanmer.mrepo.app.Config.State
 import com.sanmer.mrepo.app.status.Event
+import com.sanmer.mrepo.data.provider.local.InstallUtils
 import com.sanmer.mrepo.ui.theme.AppTheme
-import com.sanmer.mrepo.utils.module.InstallUtils
 
 class InstallActivity : ComponentActivity() {
     val utils: InstallUtils = InstallUtils
@@ -29,8 +29,8 @@ class InstallActivity : ComponentActivity() {
 
         setContent {
             AppTheme(
-                darkTheme = Configure.isDarkTheme(),
-                themeColor = Configure.themeColor
+                darkTheme = State.isDarkTheme(),
+                themeColor = State.themeColor
             ) {
                 val focusRequester = remember { FocusRequester() }
 
@@ -56,7 +56,6 @@ class InstallActivity : ComponentActivity() {
                         }
                         .focusRequester(focusRequester)
                         .focusable(),
-
                     color = MaterialTheme.colorScheme.background
                 ) {
                     InstallScreen(

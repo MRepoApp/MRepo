@@ -1,8 +1,13 @@
 package com.sanmer.mrepo.app
 
-import com.sanmer.mrepo.BuildConfig
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.ui.theme.Colors
 import com.sanmer.mrepo.utils.SPUtils
+import java.util.concurrent.TimeUnit
 
 object Config {
     private val sp = SPUtils
@@ -11,63 +16,90 @@ object Config {
     const val FIRST_SETUP = 0
     const val MODE_ROOT = 1
     private const val WORKING_MODE_KEY = "WORKING_MODE"
-
-    var WORKING_MODE: Int
+    var workingMode: Int
         get() = sp.getValue(WORKING_MODE_KEY, FIRST_SETUP)
         set(value) { sp.putValue(WORKING_MODE_KEY, value) }
 
-    // PREFERENCE
-    private const val FOLLOW_SYSTEM = 0
-    const val ALWAYS_OFF = 1
-    const val ALWAYS_ON = 2
-
     // THEME_COLOR
     private const val THEME_COLOR_KEY = "THEME_COLOR"
-    var THEME_COLOR: Int
-        get() = sp.getValue(
-            THEME_COLOR_KEY,
+    var themeColor: Int
+        get() = sp.getValue(THEME_COLOR_KEY,
             if (Const.atLeastS) Colors.Dynamic.id else Colors.Sakura.id
         )
         set(value) { sp.putValue(THEME_COLOR_KEY, value) }
 
     // DARK_MODE
+    private const val FOLLOW_SYSTEM = 0
+    const val ALWAYS_OFF = 1
+    const val ALWAYS_ON = 2
     private const val DARK_MODE_KEY = "DARK_MODE"
-    var DARK_MODE: Int
+    var darkMode: Int
         get() = sp.getValue(DARK_MODE_KEY, FOLLOW_SYSTEM)
         set(value) { sp.putValue(DARK_MODE_KEY, value) }
 
     // DOWNLOAD
     private const val DOWNLOAD_PATH_KEY = "DOWNLOAD_PATH"
-    var DOWNLOAD_PATH: String
+    var downloadPath: String
         get() = sp.getValue(DOWNLOAD_PATH_KEY, Const.DIR_PUBLIC_DOWNLOADS.absolutePath)
         set(value) { sp.putValue(DOWNLOAD_PATH_KEY, value) }
 
-    // REPO
-    val REPO_LIST = listOf("Github", "URL")
-    const val REPO_GITHUB_TAG = 0
-    const val REPO_URL_TAG = 1
-    val displayRepoName get() = REPO_LIST[REPO_TAG]
+    // CHECK_MODULES_UPDATE
+    private const val CHECK_MODULES_UPDATE_KEY = "CHECK_MODULES_UPDATE"
+    var checkModulesUpdate: Boolean
+        get() = sp.getValue(CHECK_MODULES_UPDATE_KEY, true)
+        set(value) { sp.putValue(CHECK_MODULES_UPDATE_KEY, value) }
 
-    // REPO_TAG
-    private const val REPO_TAG_KEY = "REPO_TAG"
-    var REPO_TAG: Int
-        get() = sp.getValue(REPO_TAG_KEY, REPO_GITHUB_TAG)
-        set(value) { sp.putValue(REPO_TAG_KEY, value) }
+    // TASKS_PERIOD
+    private const val TASKS_PERIOD_UNIT_KEY = "TASKS_PERIOD_UNIT"
+    var tasksPeriodUnit: TimeUnit
+        get() = TimeUnit.valueOf(sp.getValue(TASKS_PERIOD_UNIT_KEY, TimeUnit.HOURS.toString()))
+        set(value) { sp.putValue(TASKS_PERIOD_UNIT_KEY, value.toString()) }
 
-    // REPO_GITHUB
-    private const val REPO_GITHUB_KEY = "REPO_GITHUB"
-    var REPO_GITHUB: String
-        get() = sp.getValue(REPO_GITHUB_KEY, Const.REPO_GITHUB)
-        set(value) { sp.putValue(REPO_GITHUB_KEY, value) }
+    private const val TASKS_PERIOD_COUNT_KEY = "TASKS_PERIOD_COUNT"
+    var tasksPeriodCount: Long
+        get() = sp.getValue(TASKS_PERIOD_COUNT_KEY, 12)
+        set(value) { sp.putValue(TASKS_PERIOD_COUNT_KEY, value) }
 
-    private const val REPO_BRANCH_KEY = "REPO_BRANCH"
-    var REPO_BRANCH: String
-        get() = sp.getValue(REPO_BRANCH_KEY, if (BuildConfig.DEBUG) "dev" else Const.REPO_BRANCH )
-        set(value) { sp.putValue(REPO_BRANCH_KEY, value) }
+    object State {
+        private var themeColorSate by mutableStateOf(Config.themeColor)
+        private var darkModeSate by mutableStateOf(Config.darkMode)
 
-    // REPO_URL
-    private const val REPO_URL_KEY = "REPO_URL"
-    var REPO_URL: String
-        get() = sp.getValue(REPO_URL_KEY, Const.JSON_URL)
-        set(value) { sp.putValue(REPO_URL_KEY, value) }
+        private var downloadPathSate by mutableStateOf(Config.downloadPath)
+        private var checkModulesUpdateSate by mutableStateOf(checkModulesUpdate)
+
+        var themeColor: Int
+            get() = themeColorSate
+            set(value) {
+                themeColorSate = value
+                Config.themeColor = value
+            }
+
+        var darkMode: Int
+            get() = darkModeSate
+            set(value) {
+                darkModeSate = value
+                Config.darkMode = value
+            }
+
+        var downloadPath: String
+            get() = downloadPathSate
+            set(value) {
+                downloadPathSate = value
+                Config.downloadPath = value
+            }
+
+        var isChackModulesUpdate: Boolean
+            get() = checkModulesUpdateSate
+            set(value) {
+                checkModulesUpdateSate = value
+                checkModulesUpdate = value
+            }
+
+        @Composable
+        fun isDarkTheme() = when (darkMode) {
+            ALWAYS_ON -> true
+            ALWAYS_OFF -> false
+            else -> isSystemInDarkTheme()
+        }
+    }
 }

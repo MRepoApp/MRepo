@@ -3,9 +3,9 @@
     <string name="app_name" translatable="false">MRepo</string>
 
     <!-- Setup -->
-    <string name="setup_mode">WORKING MODE</string>
+    <string name="setup_mode">Working Mode</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_description">Run as Root user</string>
+    <string name="setup_root_desc">Run as Root user</string>
 
     <!-- Install -->
     <string name="install_title">Install</string>
@@ -18,80 +18,122 @@
     <string name="page_modules">Modules</string>
     <string name="page_home">Overview</string>
     <string name="page_settings">Settings</string>
+    <string name="page_app_theme">@string/settings_app_theme</string>
+    <string name="page_repository">@string/settings_repo</string>
+    <string name="page_view_module">View Module</string>
 
     <!-- Overview -->
-    <!--  Root Card -->
-    <string name="root_status">ROOT STATUS</string>
-    <string name="root_access">Root access: %1$s</string>
-    <string name="root_provider">Provider: %1$s</string>
+    <!-- Root Card -->
+    <string name="root_status_access">Root Access: %1$s</string>
+    <string name="root_status_provider">Provider: %1$s</string>
     <string name="root_status_granted">Granted</string>
     <string name="root_status_not_available">Not available</string>
     <string name="root_status_none">None</string>
-    <!-- Status Card -->
-    <string name="status_magisk_modules_repo">MAGISK MODULES REPO</string>
-    <string name="status_load_failed">Failed to load remote repository</string>
-    <string name="status_loading_repo">Loading remote repository</string>
-    <string name="status_totals">Module totals: %1$s</string>
-    <string name="status_timestamp">Timestamp: %1$s</string>
-    <!-- Device Card -->
-    <string name="device_info">DEVICE INFO</string>
-    <string name="device_system_version">System version</string>
-    <string name="device_name">Device</string>
+    <!-- Info Card -->
+    <string name="modules_status_repo">Enabled Repositories / All Repositories</string>
+    <string name="modules_status_module">Modules in Local / Modules in  Cloud</string>
+    <string name="device_system_version">System Version</string>
     <string name="device_system_abi">System ABI</string>
+    <string name="device_fingerprint">Fingerprint</string>
+    <string name="device_security_patch">Security Patch</string>
     <!-- About -->
     <string name="about_source_code">View source code at %1$s</string>
 
-    <!-- Dialog -->
-    <string name="dialog_cancel">Cancel</string>
-    <string name="dialog_ok">OK</string>
-    <!-- Text Field Dialog -->
-    <string name="dialog_empty_default">Leave empty to restore default</string>
-
     <!-- Modules -->
     <!-- Modules Title -->
+    <string name="modules_title_cloud">Cloud</string>
     <string name="modules_title_updates">Updates</string>
     <string name="modules_title_installed">Installed</string>
-    <string name="modules_title_online">Online</string>
+    <!-- Modules Menu -->
+    <string name="modules_menu_cloud">Cloud</string>
+    <string name="modules_menu_local">Local</string>
     <!-- Module Card -->
-    <string name="install_from_storage">Install from storage</string>
+    <string name="install_from_storage">Install from Storage</string>
     <string name="module_version_author">%1$s by %2$s</string>
+    <string name="module_author">by %1$s</string>
     <string name="module_update">Update</string>
     <string name="module_remove">Remove</string>
     <string name="module_restore">Restore</string>
     <string name="module_install">Install</string>
     <string name="module_download">Download</string>
+    <!-- Modules Page -->
+    <string name="modules_page_cloud_empty">Repositories is empty</string>
+    <string name="modules_page_installed_empty">No modules found</string>
+    <string name="modules_page_updates_empty">All up to date</string>
+    <string name="modules_page_search_empty">Empty list</string>
+    <string name="modules_page_search_placeholder">Search…</string>
+    <!-- View Module -->
+    <string name="view_module_loading">Loading…</string>
+    <string name="view_module_versions">Versions</string>
+    <string name="view_module_provided">Provided by %1$s</string>
+    <string name="view_module_changelog">Changelog</string>
+    <string name="view_module_version_dialog_desc">Do you want to install (download) this version of the module?</string>
 
     <!-- Settings -->
     <!-- Normal -->
     <string name="settings_title_normal">Normal</string>
-    <string name="settings_app_theme">App theme</string>
+    <string name="settings_app_theme">App Theme</string>
     <string name="settings_app_theme_desc">Change night mode and theme platte</string>
-    <string name="settings_log_viewer">Log viewer</string>
+    <string name="settings_log_viewer">Log Viewer</string>
     <string name="settings_log_viewer_desc">View application runtime logs</string>
+    <string name="settings_translate">Participate in Translation</string>
+    <string name="settings_translate_desc">Help us translate MRepo into your language</string>
     <!-- App -->
     <string name="settings_title_app">App</string>
-    <string name="settings_download_path">Download path</string>
+    <string name="settings_download_path">Download Path</string>
     <string name="settings_repo">Repository</string>
-    <string name="settings_custom_repo">Custom Repo(%1$s)</string>
-    <string name="settings_custom_repo_branch">Repository branch</string>
-    <string name="settings_custom_url">Custom URL</string>
-    <string name="settings_custom_url_dialog">The data structure must meet the requirements</string>
+    <string name="settings_repo_desc">Manage Magisk modules repository</string>
+    <string name="settings_check_modules_updates">Check Updates for Modules</string>
+    <string name="settings_check_modules_updates_desc">Periodic task controlled by WorkManager, this may be unstable in some custom ROMs.</string>
+    <string name="settings_tasks_period">Period of Tasks</string>
+    <string name="settings_tasks_period_desc">The current task period is %1$s (%2$s)</string>
+    <string name="settings_tasks_period_dialog_desc1">The task period can not be shorter than 15 minutes!</string>
+    <string name="settings_tasks_period_dialog_desc2">Don not set the check period too small, this will increase the burden on the system.</string>
     <!-- App Theme -->
-    <string name="settings_example">Example</string>
-    <string name="settings_theme_palette">Theme palette</string>
-    <string name="settings_dark_theme">Dark theme</string>
-    <string name="settings_dark_theme_auto">Auto</string>
-    <string name="settings_dark_theme_light">Light</string>
-    <string name="settings_dark_theme_dark">Dark</string>
+    <string name="app_theme_example">Example</string>
+    <string name="app_theme_palette">Theme Palette</string>
+    <string name="app_theme_dark_theme">Dark Theme</string>
+    <string name="app_theme_dark_theme_auto">Auto</string>
+    <string name="app_theme_dark_theme_light">Light</string>
+    <string name="app_theme_dark_theme_dark">Dark</string>
+    <!-- Repo -->
+    <string name="repo_empty">@string/modules_page_cloud_empty</string>
+    <string name="repo_modules">%1$d modules</string>
+    <string name="repo_last_update">Last update: %1$s</string>
+    <string name="repo_options_update">Update</string>
+    <string name="repo_options_share">Share</string>
+    <string name="repo_options_delete">Delete</string>
+    <string name="repo_options_delete_dialog_desc1">Are you sure to delete %1$s?</string>
+    <string name="repo_options_delete_dialog_desc2">Tip: All installed modules will remain on your device.</string>
+    <string name="repo_add_dialog_title">Add repository</string>
+    <string name="repo_add_dialog_label">URL</string>
+    <string name="repo_add_dialog_label_support">You can refer to %1$s.</string>
+    <string name="repo_add_dialog_add">Add</string>
+    <string name="repo_update_dialog_failure">Update failed: %1$s</string>
+
+    <!-- Dialog -->
+    <string name="dialog_title_attention">Attention</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_ok">OK</string>
+    <!-- Text Field Dialog -->
+    <string name="dialog_empty_default">Leave empty to restore default</string>
 
     <!-- Message -->
     <string name="message_download_failed">Download failed: %1$s</string>
     <string name="message_download_success">Download successful</string>
-    <string name="message_module_upgrade">%1$s can be updated</string>
-    <string name="message_modules_upgrade">%1$s etc., and %2$d modules can be updated</string>
+    <string name="message_module_updated">%1$s can be updated</string>
+    <string name="message_modules_updated">%1$s etc., and %2$d modules can be updated</string>
 
     <!-- Notification -->
     <string name="notification_name_download">Module Download</string>
     <string name="notification_name_update">Module Update</string>
+
+    <!-- Other -->
+    <string name="unknown_error">Unknown error</string>
+
+    <!-- Time Unit -->
+    <string name="time_unit_minute">Minute</string>
+    <string name="time_unit_hour">Hour</string>
+    <string name="time_unit_day">Day</string>
 
 </resources>

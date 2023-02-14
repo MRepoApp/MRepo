@@ -1,90 +1,145 @@
 package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sanmer.mrepo.App
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.Constant
+import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.module.LocalModule
-import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.data.parcelable.Module
+import com.sanmer.mrepo.data.provider.local.ModuleUtils.disable
+import com.sanmer.mrepo.data.provider.local.ModuleUtils.enable
+import com.sanmer.mrepo.data.provider.local.ModuleUtils.remove
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.NotificationUtils
-import com.sanmer.mrepo.utils.module.ModuleUtils.disable
-import com.sanmer.mrepo.utils.module.ModuleUtils.enable
-import com.sanmer.mrepo.utils.module.ModuleUtils.remove
+import com.sanmer.mrepo.utils.expansion.update
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 class ModulesViewModel : ViewModel() {
+    val context = App.context
 
-    // MODULES_DATA
-    val updatable = mutableStateListOf<OnlineModule>()
-    val local = mutableStateListOf<LocalModule>()
-    val online = mutableStateListOf<OnlineModule>()
+    // UPDATA STATE
+    private val updataState = object : Status.Events() {
+        override fun setLoading(value: Any?) {
+            Timber.d("ModulesViewModel updata")
+            super.setLoading(value)
+        }
 
-    private var updatableLast = listOf<OnlineModule>()
-    var isUpdatable = MutableLiveData<Boolean?>(null)
-        private set
+        override fun setSucceeded(value: Any?) {
+            Timber.d("updata is succeeded")
+            super.setSucceeded(value)
+        }
 
-    fun update() {
-        clear()
+        override fun setFailed(value: Any?) {
+            Timber.e("updata: $value")
+            super.setFailed(value)
+        }
+    }
 
-        updatable.addAll(Constant.online.filter { item ->
-            item.versionCode > (Constant.local
-                .firstOrNull {
-                    item.id == it.id
+    // MODULES DATA
+    fun getUpdatable() = if (isSearch) _updatable else updatable
+    fun getLocal() = if (isSearch) _local else local
+    fun getOnline() = if (isSearch) _online else online
+
+    private val updatable = mutableStateListOf<OnlineModule>()
+    private val local = mutableStateListOf<LocalModule>()
+    private val online = mutableStateListOf<OnlineModule>()
+
+    // SEARCH
+    var isSearch by mutableStateOf(false)
+    var key by mutableStateOf("")
+    private val _updatable by derivedStateOf {
+        updatable.filter {
+            if (key.isBlank()) return@filter true
+            key.uppercase() in "${it.name}${it.author}".uppercase()
+        }
+    }
+    private val _local by derivedStateOf {
+        local.filter {
+            if (key.isBlank()) return@filter true
+            key.uppercase() in "${it.name}${it.author}".uppercase()
+        }
+    }
+    private val _online by derivedStateOf {
+        online.filter {
+            if (key.isBlank()) return@filter true
+            key.uppercase() in "${it.name}${it.author}".uppercase()
+        }
+    }
+    fun close() {
+        isSearch = false
+        key = ""
+    }
+
+    fun updata() = runCatching {
+        if (updataState.isLoading) {
+            Timber.w("updata is already loading!")
+            return@runCatching
+        } else {
+            updataState.setLoading()
+        }
+
+        Constant.online.forEach { module ->
+            val isUpdatable = module.versionCode > (Constant.local
+                .find {
+                    module.id == it.id
                 }?.versionCode ?: Int.MAX_VALUE)
-        })
 
-        local.addAll(Constant.local.filter { item ->
-            item.id !in updatable.map { it.id }
-        })
-
-        online.addAll(Constant.online.filter { item ->
-            item.id !in Constant.local.map { it.id }
-        })
-
-        if (updatable.isNotEmpty()) {
-            val now = updatable.toList()
-            if (now != updatableLast) {
-                updatableLast = updatable.toList()
-                isUpdatable.postValue(true)
-                //notifyUpdatable(context, updatable)
+            if (isUpdatable) {
+                updatable.update(module)
             } else {
-                isUpdatable.postValue(false)
+                if (module in updatable) updatable.remove(module)
             }
         }
 
+        local.forEach {
+            if (it !in Constant.local) local.remove(it)
+        }
+        val updatableId = updatable.map { it.id }
+        Constant.local.forEach {
+            if (it.id !in updatableId) {
+                local.update(it)
+            }
+        }
+
+        online.forEach {
+            if (it !in Constant.online) online.remove(it)
+        }
+        Constant.online.forEach {
+            online.update(it)
+        }
+
+        if (updatable.isNotEmpty()) {
+            notifyUpdatable(context = context)
+        }
+
+        updataState.setSucceeded()
         sortBy()
+    }.onFailure {
+        updataState.setFailed(it)
     }
 
-    fun clear() {
-        updatable.clear()
-        local.clear()
-        online.clear()
-    }
-
-    fun sortBy() {
+    private fun sortBy() {
         updatable.sortBy { it.name }
         local.sortBy { it.name }
         online.sortBy { it.name }
     }
 
-
-    //LOCAL_MODULE
-    fun getModuleUIState(
+    //LOCAL MODULE
+    fun updateModuleState(
         module: LocalModule
-    ): UIState {
+    ): ModuleState {
         var alpha = 1f
         var decoration = TextDecoration.None
         var onChecked: (Boolean) -> Unit = {}
@@ -113,7 +168,7 @@ class ModulesViewModel : ViewModel() {
             State.UPDATE -> {}
         }
 
-        return UIState(
+        return ModuleState(
             alpha = alpha,
             decoration = decoration,
             onChecked = onChecked,
@@ -121,7 +176,7 @@ class ModulesViewModel : ViewModel() {
         )
     }
 
-    //ONLINE_MODULE
+    //ONLINE MODULE
     fun observeProgress(
         owner: LifecycleOwner,
         value: OnlineModule,
@@ -132,8 +187,8 @@ class ModulesViewModel : ViewModel() {
         }
     }
 
-    private fun getPath(module: OnlineModule) = Const.DOWNLOAD_PATH.resolve(
-        "${module.name}_${module.version}.zip"
+    val OnlineModule.path get() = Const.DOWNLOAD_PATH.resolve(
+        "${name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")
     )
@@ -145,10 +200,10 @@ class ModulesViewModel : ViewModel() {
         context = context,
         module = Module(
             name = module.name,
-            path = getPath(module).absolutePath,
+            path = module.path.absolutePath,
             url = module.states.zipUrl
         ),
-        isInstall = false
+        install = false
     )
 
     fun installer(
@@ -158,32 +213,31 @@ class ModulesViewModel : ViewModel() {
         context = context,
         module = Module(
             name = module.name,
-            path = getPath(module).absolutePath,
+            path = module.path.absolutePath,
             url = module.states.zipUrl
         ),
-        isInstall = true
+        install = true
     )
 
     // NOTIFICATION
-    fun notifyUpdatable(
+    private fun notifyUpdatable(
         context: Context
     ) {
-        isUpdatable.postValue(null)
         val title = context.getString(R.string.notification_name_update)
         val text = when (updatable.size) {
             1 -> {
-                context.getString(R.string.message_module_upgrade,
+                context.getString(R.string.message_module_updated,
                     updatable.first().name)
             }
             else -> {
-                context.getString(R.string.message_modules_upgrade,
+                context.getString(R.string.message_modules_updated,
                     updatable.first().name, updatable.size)
             }
         }
 
         NotificationUtils.notify(context, 1012) {
             setChannelId(Const.NOTIFICATION_ID_UPDATE)
-            setContentIntent(NotificationUtils.getActivity(context, MainActivity::class))
+            setContentIntent(NotificationUtils.getActivity(MainActivity::class))
             setContentTitle(title)
             setContentText(text)
             setSilent(false)
@@ -193,14 +247,18 @@ class ModulesViewModel : ViewModel() {
     init {
         Timber.d("ModulesViewModel init")
 
+        snapshotFlow { Constant.cloud.toList() }
+            .onEach { updata() }
+            .launchIn(viewModelScope)
+
         snapshotFlow { Constant.local.toList() }
-            .onEach { update() }
+            .onEach { updata() }
             .launchIn(viewModelScope)
     }
 
     companion object {
 
-        data class UIState(
+        data class ModuleState(
             val alpha: Float = 1f,
             val decoration: TextDecoration = TextDecoration.None,
             val onChecked: (Boolean) -> Unit = {},

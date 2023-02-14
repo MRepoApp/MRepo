@@ -15,23 +15,23 @@ import kotlinx.coroutines.launch
 
 class LogcatService : LifecycleService() {
 
-    override fun onCreate() {
-        super.onCreate()
-        console.clear()
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val logcat = SystemLogcat(applicationInfo.uid)
-        lifecycleScope.launch(Dispatchers.IO) {
-            console.addAll(
-                logcat.dumpCrash()
-                    .map { it.toLogItem() }
-            )
-
+        lifecycleScope.launch(Dispatchers.Default) {
             while (isActive) {
-                val texts = logcat.dumpCrash()
-                val log = texts.last().toLogItem()
-                if (log !in console) console.add(log)
+                val texts = logcat.dumpCrash().map { it.split(": ", limit = 2) }
+                val tags = texts.map { it.first() }.distinct()
+                val logs = tags.map { tag ->
+                    val message = texts.filter {
+                        it.first() == tag
+                    }.map { it.last() }.reduceOrNull { b, e ->
+                        "$b\n$e"
+                    }
+                    tag.toLogItem().copy(message = message ?: "")
+                }
+                console.addAll(
+                    logs.filter { it !in console }
+                )
 
                 delay(1000)
             }

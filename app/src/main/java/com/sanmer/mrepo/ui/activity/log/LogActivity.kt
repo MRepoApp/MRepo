@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.sanmer.mrepo.app.runtime.Configure
+import com.sanmer.mrepo.app.Config.State
 import com.sanmer.mrepo.service.LogcatService
 import com.sanmer.mrepo.ui.theme.AppTheme
 
@@ -21,8 +21,8 @@ class LogActivity : ComponentActivity() {
 
         setContent {
             AppTheme(
-                darkTheme = Configure.isDarkTheme(),
-                themeColor = Configure.themeColor
+                darkTheme = State.isDarkTheme(),
+                themeColor = State.themeColor
             ) {
 
                 Surface(
