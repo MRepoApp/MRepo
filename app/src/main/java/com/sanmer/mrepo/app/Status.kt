@@ -63,7 +63,7 @@ object Status {
         }
     }
 
-    object Env : State()
+    object Env : State(initialState = Event.LOADING)
 
     object Provider : State()
 

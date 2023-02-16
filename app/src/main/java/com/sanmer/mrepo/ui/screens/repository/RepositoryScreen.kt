@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.data.Repository
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.provider.repo.RepoLoader
@@ -33,9 +35,9 @@ import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.component.PageIndicator
-import com.sanmer.mrepo.ui.expansion.navigateBack
 import com.sanmer.mrepo.ui.utils.HtmlText
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
+import com.sanmer.mrepo.utils.expansion.navigateBack
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -51,15 +53,32 @@ fun RepositoryScreen(
     BackHandler { navController.navigateBack() }
 
     var progress by remember { mutableStateOf(false) }
+    var failure by remember { mutableStateOf(false) }
+
+    var repo = Repo(url = Const.REPO_URL)
+    var message: String? by remember { mutableStateOf(null) }
+
+    if (failure) {
+        FailureDialog(
+            onClose = { failure = false },
+            repo = repo,
+            message = message
+        )
+    }
+
     var add by remember { mutableStateOf(false) }
     if (add) {
         AddDialog(
             onClose = { add = false }
         ) {
             scope.launch(Dispatchers.IO) {
-                val repo = Repo(url = it)
+                repo = Repo(url = it)
                 Repository.insert(repo)
                 RepoLoader.getRepo(context = context, repo = repo)
+                    .onFailure {
+                        failure = true
+                        message = it.message
+                    }
             }
         }
     }
@@ -80,27 +99,17 @@ fun RepositoryScreen(
         Box(
             modifier = Modifier.padding(innerPadding)
         ) {
-            if (list.isEmpty()){
+            if (list.isEmpty()) {
                 PageIndicator(
                     icon = R.drawable.hierarchy_outline,
                     text = R.string.repo_empty
                 )
             } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    items(
-                        items = list,
-                        key = { it.id }
-                    ) { repo ->
-                        RepoItem(
-                            repo = repo,
-                            onStart = { progress = true },
-                            onStop = { progress = false }
-                        )
-                    }
-                }
+                RepoList(
+                    onStart = { progress = true },
+                    onStop = { progress = false },
+                    list = list
+                )
             }
 
             AnimatedVisibility(
@@ -113,6 +122,60 @@ fun RepositoryScreen(
                         .fillMaxWidth()
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun RepoList(
+    onStart: () -> Unit = {},
+    onStop: () -> Unit = {},
+    list: List<Repo>
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        item {
+            InfoItem()
+        }
+        items(
+            items = list,
+            key = { it.id }
+        ) { repo ->
+            RepoItem(
+                repo = repo,
+                onStart = onStart,
+                onStop = onStop
+            )
+        }
+    }
+}
+
+@Composable
+private fun InfoItem() {
+    Surface(
+        modifier = Modifier
+            .padding(all = 16.dp),
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 2.dp,
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.information_outline),
+                contentDescription = null
+            )
+            Text(
+                text = stringResource(id = R.string.repo_notification_desc),
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -144,7 +207,7 @@ private fun AddDialog(
                 textStyle = MaterialTheme.typography.bodyLarge,
                 value = url,
                 onValueChange = { url = it },
-                label = { Text(text = stringResource(id = R.string.repo_add_dialog_label)) },
+                placeholder = { Text(text = stringResource(id = R.string.repo_add_dialog_label)) },
                 singleLine = false,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
@@ -161,6 +224,12 @@ private fun AddDialog(
                             id = R.string.repo_add_dialog_label_support,
                             "<b><a href=\"https://github.com/ya0211/magisk-modules-repo-util\">magisk-modules-repo-util</a></b>"
                         )
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.link_outline),
+                        contentDescription = null
                     )
                 }
             )

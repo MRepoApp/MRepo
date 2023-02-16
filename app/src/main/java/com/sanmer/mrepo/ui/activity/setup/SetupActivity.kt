@@ -25,7 +25,7 @@ class SetupActivity : ComponentActivity() {
 
         FileProvider.init(this)
         EnvProvider.init()
-        Works.setTasks()
+        Works.start()
 
         super.finish()
     }

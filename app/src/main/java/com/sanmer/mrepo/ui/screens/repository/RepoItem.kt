@@ -85,7 +85,10 @@ fun RepoItem(
     var message: String? by remember { mutableStateOf(null) }
     if (failure) {
         FailureDialog(
-            onClose = { failure = false },
+            onClose = {
+                failure = false
+                message = null
+            },
             repo = repo,
             message = message
         )
@@ -276,7 +279,7 @@ private fun DeleteDialog(
 )
 
 @Composable
-private fun FailureDialog(
+fun FailureDialog(
     onClose: () -> Unit,
     repo: Repo,
     message: String?

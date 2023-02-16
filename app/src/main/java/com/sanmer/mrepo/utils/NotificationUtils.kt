@@ -1,14 +1,15 @@
 package com.sanmer.mrepo.utils
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.accompanist.permissions.isGranted
@@ -24,11 +25,11 @@ object NotificationUtils {
 
     fun init(context: Context) {
         val channels = listOf(
-            NotificationChannel(Const.NOTIFICATION_ID_DOWNLOAD,
+            NotificationChannel(Const.CHANNEL_ID_DOWNLOAD,
                 context.getString(R.string.notification_name_download),
                 NotificationManager.IMPORTANCE_HIGH
             ),
-            NotificationChannel(Const.NOTIFICATION_ID_UPDATE,
+            NotificationChannel(Const.CHANNEL_ID_UPDATE,
                 context.getString(R.string.notification_name_update),
                 NotificationManager.IMPORTANCE_HIGH
             )
@@ -59,19 +60,31 @@ object NotificationUtils {
 
     fun buildNotification(channelId: String) = buildNotification(context, channelId)
 
-    @SuppressLint("MissingPermission")
     fun notify(
         context: Context,
         notificationId: Int,
         build: NotificationCompat.Builder.() -> Unit
     ) {
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
         val notification = buildNotification(context, "NULL")
         build(notification)
         notificationManager.notify(notificationId, notification.build())
     }
 
-    @SuppressLint("MissingPermission")
     fun notify(notificationId: Int, notification: Notification) {
+        if (ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
         notificationManager.notify(notificationId, notification)
     }
 
@@ -88,5 +101,4 @@ object NotificationUtils {
         val intent = Intent(context, cls.java)
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
     }
-
 }

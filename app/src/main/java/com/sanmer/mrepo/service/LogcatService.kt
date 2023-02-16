@@ -2,7 +2,10 @@ package com.sanmer.mrepo.service
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.utils.log.LogItem
@@ -14,6 +17,10 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class LogcatService : LifecycleService() {
+    override fun onCreate() {
+        super.onCreate()
+        isActive =  true
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val logcat = SystemLogcat(applicationInfo.uid)
@@ -42,11 +49,13 @@ class LogcatService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        console.clear()
+        isActive = false
     }
 
     companion object {
         val console = mutableStateListOf<LogItem>()
+        var isActive by mutableStateOf(false)
+            private set
 
         fun start(
             context: Context,

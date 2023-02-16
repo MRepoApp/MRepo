@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.component.TitleItemForSetting
-import com.sanmer.mrepo.ui.expansion.navigateBack
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
+import com.sanmer.mrepo.utils.expansion.navigateBack
 
 @Composable
 fun AppThemeScreen(

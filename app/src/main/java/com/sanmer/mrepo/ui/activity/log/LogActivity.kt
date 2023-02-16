@@ -17,13 +17,15 @@ class LogActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        LogcatService.start(this)
-
         setContent {
             AppTheme(
                 darkTheme = State.isDarkTheme(),
                 themeColor = State.themeColor
             ) {
+
+                if (!LogcatService.isActive) {
+                    LogcatService.start(this)
+                }
 
                 Surface(
                     modifier = Modifier

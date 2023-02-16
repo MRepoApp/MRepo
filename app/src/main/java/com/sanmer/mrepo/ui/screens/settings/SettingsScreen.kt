@@ -2,33 +2,29 @@ package com.sanmer.mrepo.ui.screens.settings
 
 import android.content.Intent
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.sanmer.mrepo.App.Companion.openUrl
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Config.State
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.EditItemForSetting
 import com.sanmer.mrepo.ui.component.NormalItemForSetting
-import com.sanmer.mrepo.ui.component.SwitchItem
 import com.sanmer.mrepo.ui.component.TitleItemForSetting
-import com.sanmer.mrepo.ui.expansion.navigatePopUpTo
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
 import com.sanmer.mrepo.ui.navigation.navigateToHome
-import com.sanmer.mrepo.works.Works
+import com.sanmer.mrepo.utils.expansion.navigatePopUpTo
 
 @Composable
 fun SettingsScreen(
@@ -54,6 +50,7 @@ fun SettingsScreen(
                 .padding(innerPadding)
         ) {
             TitleItemForSetting(text = stringResource(id = R.string.settings_title_normal))
+
             NormalItemForSetting(
                 iconRes = R.drawable.brush_outline,
                 text = stringResource(id = R.string.settings_app_theme),
@@ -62,6 +59,7 @@ fun SettingsScreen(
                     navController.navigatePopUpTo(SettingsGraph.AppTheme.route)
                 }
             )
+
             NormalItemForSetting(
                 iconRes = R.drawable.health_outline,
                 text = stringResource(id = R.string.settings_log_viewer),
@@ -71,6 +69,30 @@ fun SettingsScreen(
                     context.startActivity(intent)
                 }
             )
+
+            TitleItemForSetting(text = stringResource(id = R.string.settings_title_app))
+
+            EditItemForSetting(
+                iconRes = R.drawable.cube_scan_outline,
+                title = stringResource(id = R.string.settings_download_path),
+                text = State.downloadPath,
+                supportingText = { Text(text = stringResource(id = R.string.dialog_empty_default)) },
+                onChange = {
+                    State.downloadPath = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
+                }
+            )
+
+            NormalItemForSetting(
+                iconRes = R.drawable.hierarchy_outline,
+                text = stringResource(id = R.string.settings_repo),
+                subText = stringResource(id = R.string.settings_repo_desc),
+                onClick = {
+                    navController.navigatePopUpTo(SettingsGraph.Repo.route)
+                }
+            )
+
+            TitleItemForSetting(text = stringResource(id = R.string.settings_title_others))
+
             NormalItemForSetting(
                 iconRes = R.drawable.translate_outline,
                 text = stringResource(id = R.string.settings_translate),
@@ -81,57 +103,14 @@ fun SettingsScreen(
                 }
             )
 
-            TitleItemForSetting(text = stringResource(id = R.string.settings_title_app))
-            EditItemForSetting(
-                iconRes = R.drawable.cube_scan_outline,
-                title = stringResource(id = R.string.settings_download_path),
-                text = State.downloadPath,
-                supportingText = { Text(text = stringResource(id = R.string.dialog_empty_default)) },
-                onChange = {
-                    State.downloadPath = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
-                }
-            )
             NormalItemForSetting(
-                iconRes = R.drawable.hierarchy_outline,
-                text = stringResource(id = R.string.settings_repo),
-                subText = stringResource(id = R.string.settings_repo_desc),
+                iconRes = R.drawable.flag_outline,
+                text = stringResource(id = R.string.settings_bug_tracker),
+                subText = Const.ISSUES_URL,
                 onClick = {
-                    navController.navigatePopUpTo(SettingsGraph.Repo.route)
+                    context.openUrl(Const.ISSUES_URL)
                 }
             )
-
-            SwitchItem(
-                iconRes = R.drawable.timer_outline,
-                text = stringResource(id = R.string.settings_check_modules_updates),
-                subText = stringResource(id = R.string.settings_check_modules_updates_desc),
-                checked = State.isChackModulesUpdate,
-                onChange = {
-                    State.isChackModulesUpdate = it
-                    if (State.isChackModulesUpdate) {
-                        Works.setPeriodTasks()
-                    } else {
-                        Works.cancelPeriodTasks()
-                    }
-                }
-            )
-
-            var period by remember { mutableStateOf(false) }
-            if (period) TasksPeriodDialog { period = false }
-            AnimatedVisibility(
-                visible = State.isChackModulesUpdate,
-                enter = fadeIn(tween(400)) + expandVertically(tween(400)),
-                exit = fadeOut(tween(400)) + shrinkVertically(tween(400))
-            ) {
-                val count = Config.tasksPeriodCount
-                val unit = getMTimeUnits(Config.tasksPeriodUnit).label
-                NormalItemForSetting(
-                    iconRes = R.drawable.calendar_edit_outline,
-                    text = stringResource(id = R.string.settings_tasks_period),
-                    subText = stringResource(id = R.string.settings_tasks_period_desc,
-                        count, stringResource(id = unit)),
-                    onClick = { period = true }
-                )
-            }
         }
     }
 }

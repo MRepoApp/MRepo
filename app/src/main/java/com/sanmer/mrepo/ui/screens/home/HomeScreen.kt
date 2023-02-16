@@ -59,6 +59,21 @@ private fun HomeTopBar(
         )
     },
     actions = {
+        var expanded by remember { mutableStateOf(false) }
+        IconButton(
+            onClick = { expanded = true }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.refresh_outline),
+                contentDescription = null
+            )
+
+            MenuItem(
+                expanded = expanded,
+                onClose = { expanded = false }
+            )
+        }
+
         var about by remember { mutableStateOf(false) }
         if (about) AboutDialog { about = false }
         IconButton(

@@ -153,20 +153,18 @@ private fun ModulesNormalTopBar(
 
         var expanded by remember { mutableStateOf(false) }
         IconButton(
-            onClick = {
-                expanded = true
-            }
+            onClick = { expanded = true }
         ) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
                 contentDescription = null
             )
-        }
 
-        MenuItem(
-            expanded = expanded,
-            onClose = { expanded = false }
-        )
+            MenuItem(
+                expanded = expanded,
+                onClose = { expanded = false }
+            )
+        }
     },
     scrollBehavior = scrollBehavior
 )

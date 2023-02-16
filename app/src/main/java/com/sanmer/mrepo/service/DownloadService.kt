@@ -32,7 +32,7 @@ class DownloadService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        Timber.d("DownloadService onCreate")
+        Timber.d("DownloadService start")
         setForeground()
     }
 
@@ -56,7 +56,7 @@ class DownloadService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.d("DownloadService onDestroy")
+        Timber.d("DownloadService stop")
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
     }
 
@@ -84,7 +84,7 @@ class DownloadService : LifecycleService() {
 
         val path = module.path.toFile() ?: Const.DOWNLOAD_PATH.resolve("${module.name}.zip")
         val notification = NotificationUtils
-            .buildNotification(this, Const.NOTIFICATION_ID_DOWNLOAD)
+            .buildNotification(this, Const.CHANNEL_ID_DOWNLOAD)
             .setContentTitle(module.name)
             .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
             .setProgress(0, 0 , false)
@@ -155,7 +155,7 @@ class DownloadService : LifecycleService() {
 
     private fun setForeground() {
         startForeground(Process.myPid(),
-            NotificationUtils.buildNotification(this, Const.NOTIFICATION_ID_DOWNLOAD)
+            NotificationUtils.buildNotification(this, Const.CHANNEL_ID_DOWNLOAD)
                 .setSilent(true)
                 .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
                 .setGroup(GROUP_KEY)
@@ -170,7 +170,7 @@ class DownloadService : LifecycleService() {
         message: String,
         silent: Boolean = false
     ) = NotificationUtils.notify(this, id) {
-        setChannelId(Const.NOTIFICATION_ID_DOWNLOAD)
+        setChannelId(Const.CHANNEL_ID_DOWNLOAD)
         setContentTitle(name)
         setContentText(message)
         setSilent(silent)

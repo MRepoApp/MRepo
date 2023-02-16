@@ -142,7 +142,7 @@ object RepoLoader {
         }
     }
 
-    private fun Long.toDir() = "repos/${this}.json"
+    private fun Long.toDir() = "repositories/${this}.json"
 
     private fun Context.getRepo(id: Long): Modules? {
         val json = filesDir.resolve(id.toDir())

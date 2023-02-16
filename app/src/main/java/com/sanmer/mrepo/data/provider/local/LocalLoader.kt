@@ -6,6 +6,7 @@ import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.Constant
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.provider.FileProvider
 import com.sanmer.mrepo.provider.api.MagiskApi
 import com.topjohnwu.superuser.Shell
@@ -24,31 +25,42 @@ object LocalLoader {
         context: Context,
         onFinished: (Boolean) -> Unit = {}
     ) = runCatching {
-        if (Status.Provider.isFailed) FileProvider.init(context)
+        if (Status.Provider.isFailed) {
+            FileProvider.init(context)
+        }
 
-        coroutineScope.launch(Dispatchers.Default) {
-            getLocalAll()
+        coroutineScope.launch {
+            getLocalAll().onFailure {
+                Timber.e("getLocal: ${it.message}")
+            }
             onFinished(Status.Local.isSucceeded)
         }
     }.onFailure {
         Timber.e("getLocal: ${it.message}")
-        Status.Local.setFailed()
     }
 
     suspend fun getLocalAll() = withContext(Dispatchers.Default) {
         if (Status.Local.isLoading) {
-            Timber.w("getLocal is already loading!")
-            return@withContext
+            return@withContext Result.failure(RuntimeException("getLocal is already loading!"))
         } else {
             Status.Local.setLoading()
         }
 
-        Timber.i("getLocal: ${Const.MODULES_PATH}")
         if (!Status.Provider.isSucceeded) {
             Status.Local.setFailed()
             throw RuntimeException("FileProvider is not ready!")
         }
 
+        if (!Status.Env.isSucceeded) {
+            if (!Status.Env.isLoading) {
+                EnvProvider.init()
+            }
+
+            Status.Local.setFailed()
+            throw RuntimeException("EnvProvider is not ready!")
+        }
+
+        Timber.i("getLocal: ${Const.MODULES_PATH}")
         runCatching {
             val result = mutableListOf<LocalModule>()
             fs.getFile(Const.MODULES_PATH).listFiles().orEmpty()

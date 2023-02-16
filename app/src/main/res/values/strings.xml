@@ -38,6 +38,13 @@
     <string name="device_security_patch">Security Patch</string>
     <!-- About -->
     <string name="about_source_code">View source code at %1$s</string>
+    <!-- Menu -->
+    <string name="menu_reboot">Reboot</string>
+    <string name="menu_reboot_userspace">Soft Reboot</string>
+    <string name="menu_reboot_recovery">Reboot to Recovery</string>
+    <string name="menu_reboot_bootloader">Reboot to Bootloader</string>
+    <string name="menu_reboot_download">Reboot to Download</string>
+    <string name="menu_reboot_edl">Reboot to EDL</string>
 
     <!-- Modules -->
     <!-- Modules Title -->
@@ -76,19 +83,16 @@
     <string name="settings_app_theme_desc">Change night mode and theme platte</string>
     <string name="settings_log_viewer">Log Viewer</string>
     <string name="settings_log_viewer_desc">View application runtime logs</string>
-    <string name="settings_translate">Participate in Translation</string>
-    <string name="settings_translate_desc">Help us translate MRepo into your language</string>
     <!-- App -->
     <string name="settings_title_app">App</string>
     <string name="settings_download_path">Download Path</string>
     <string name="settings_repo">Repository</string>
     <string name="settings_repo_desc">Manage Magisk modules repository</string>
-    <string name="settings_check_modules_updates">Check Updates for Modules</string>
-    <string name="settings_check_modules_updates_desc">Periodic task controlled by WorkManager, this may be unstable in some custom ROMs.</string>
-    <string name="settings_tasks_period">Period of Tasks</string>
-    <string name="settings_tasks_period_desc">The current task period is %1$s (%2$s)</string>
-    <string name="settings_tasks_period_dialog_desc1">The task period can not be shorter than 15 minutes!</string>
-    <string name="settings_tasks_period_dialog_desc2">Don not set the check period too small, this will increase the burden on the system.</string>
+    <!-- Others -->
+    <string name="settings_title_others">Others</string>
+    <string name="settings_translate">Participate in Translation</string>
+    <string name="settings_translate_desc">Help us translate MRepo into your language</string>
+    <string name="settings_bug_tracker">Bug Tracker</string>
     <!-- App Theme -->
     <string name="app_theme_example">Example</string>
     <string name="app_theme_palette">Theme Palette</string>
@@ -110,6 +114,7 @@
     <string name="repo_add_dialog_label_support">You can refer to %1$s.</string>
     <string name="repo_add_dialog_add">Add</string>
     <string name="repo_update_dialog_failure">Update failed: %1$s</string>
+    <string name="repo_notification_desc">Content review of modules is the responsibility of the repository owner. For any issues about this repository, please contact its owner.</string>
 
     <!-- Dialog -->
     <string name="dialog_title_attention">Attention</string>

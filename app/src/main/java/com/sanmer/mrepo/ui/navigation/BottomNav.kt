@@ -10,10 +10,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sanmer.mrepo.ui.expansion.navigatePopUpTo
 import com.sanmer.mrepo.ui.navigation.graph.HomeGraph
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
+import com.sanmer.mrepo.utils.expansion.navigatePopUpTo
 
 private val mainGraph = listOf(
     MainGraph.Modules,

@@ -82,6 +82,7 @@ class ModulesViewModel : ViewModel() {
         key = ""
     }
 
+    @Synchronized
     fun updata() = runCatching {
         if (updataState.isLoading) {
             Timber.w("updata is already loading!")
@@ -235,8 +236,8 @@ class ModulesViewModel : ViewModel() {
             }
         }
 
-        NotificationUtils.notify(context, 1012) {
-            setChannelId(Const.NOTIFICATION_ID_UPDATE)
+        NotificationUtils.notify(context, Const.NOTIFICATION_ID_1) {
+            setChannelId(Const.CHANNEL_ID_UPDATE)
             setContentIntent(NotificationUtils.getActivity(MainActivity::class))
             setContentTitle(title)
             setContentText(text)

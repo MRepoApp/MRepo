@@ -3,6 +3,7 @@ package com.sanmer.mrepo.provider
 import android.content.Context
 import com.sanmer.mrepo.provider.fs.LibSuService
 import com.topjohnwu.superuser.nio.FileSystemManager
+import timber.log.Timber
 import java.io.File
 
 object FileProvider {
@@ -12,6 +13,7 @@ object FileProvider {
     }
 
     fun init(context: Context) {
+        Timber.d("FileProvider init")
         EnvProvider.onRoot { LibSuService.start(context) }
     }
 

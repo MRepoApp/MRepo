@@ -3,6 +3,7 @@ package com.sanmer.mrepo.app
 import android.os.Build
 import android.os.Environment
 import com.sanmer.mrepo.utils.MediaStoreUtils.toFile
+import com.sanmer.mrepo.viewmodel.ModulesViewModel
 import java.io.File
 
 object Const {
@@ -24,6 +25,12 @@ object Const {
     val DOWNLOAD_PATH: File get() = Config.downloadPath.toFile() ?: DIR_PUBLIC_DOWNLOADS
 
     // NOTIFICATION
-    const val NOTIFICATION_ID_DOWNLOAD = "module_download"
-    const val NOTIFICATION_ID_UPDATE = "module_update"
+    const val CHANNEL_ID_DOWNLOAD = "module_download"
+    const val CHANNEL_ID_UPDATE = "module_update"
+
+    /** Used in [ModulesViewModel] */
+    const val NOTIFICATION_ID_1 = 1011
+
+    // GITHUB
+    const val ISSUES_URL = "https://github.com/ya0211/MRepo/issues"
 }

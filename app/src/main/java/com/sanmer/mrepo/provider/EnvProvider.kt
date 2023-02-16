@@ -2,6 +2,7 @@ package com.sanmer.mrepo.provider
 
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.provider.api.MagiskApi
+import timber.log.Timber
 
 object EnvProvider {
     val isSetup get() = Config.workingMode == Config.FIRST_SETUP
@@ -13,6 +14,7 @@ object EnvProvider {
     }
 
     fun init() {
+        Timber.d("EnvProvider init")
         onRoot { MagiskApi.init() }
     }
 

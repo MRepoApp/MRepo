@@ -33,8 +33,11 @@ fun LogScreen() {
 
     val console by remember {
         derivedStateOf {
-            LogcatService.console.asReversed()
-                .filter { it.priority >= priorities.indexOf(priority) + 2 }
+            LogcatService.console
+                .asReversed()
+                .filter {
+                    it.priority >= priorities.indexOf(priority) + 2
+                }
         }
     }
 
@@ -51,12 +54,13 @@ fun LogScreen() {
         }
     ) {
         LazyColumn(
-            modifier = Modifier
-                .padding(it),
-            contentPadding = PaddingValues(horizontal = 1.dp)
+            contentPadding = it
         ) {
             items(console) { value ->
-                Column {
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 1.dp)
+                ) {
                     LogItem(value)
                     Divider()
                 }
@@ -83,14 +87,14 @@ private fun LogTopBar(
                     painter = painterResource(id = R.drawable.sort_outline),
                     contentDescription = null
                 )
-            }
 
-            PrioritySelect(
-                expanded = expanded,
-                selected = priority,
-                onClose = { expanded = false },
-                onClick = onClick
-            )
+                PrioritySelect(
+                    expanded = expanded,
+                    selected = priority,
+                    onClose = { expanded = false },
+                    onClick = onClick
+                )
+            }
         },
         scrollBehavior = scrollBehavior
     )
@@ -187,7 +191,7 @@ private fun PrioritySelect(
 ) = DropdownMenu(
     expanded = expanded,
     onDismissRequest = onClose,
-    offset = DpOffset(15.dp, 0.dp),
+    offset = DpOffset(0.dp, 5.dp),
     shape = RoundedCornerShape(15.dp)
 ) {
     priorities.forEach {

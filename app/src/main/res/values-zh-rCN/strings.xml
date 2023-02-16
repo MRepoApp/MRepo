@@ -35,6 +35,13 @@
     <string name="device_security_patch">安全补丁</string>
     <!-- About -->
     <string name="about_source_code">在 %1$s 查看源码</string>
+    <!-- Menu -->
+    <string name="menu_reboot">重启</string>
+    <string name="menu_reboot_userspace">软重启</string>
+    <string name="menu_reboot_recovery">重启到 Recovery</string>
+    <string name="menu_reboot_bootloader">重启到 BootLoader</string>
+    <string name="menu_reboot_download">重启到 Download</string>
+    <string name="menu_reboot_edl">重启到 EDL</string>
 
     <!-- Modules -->
     <!-- Modules Title -->
@@ -73,19 +80,16 @@
     <string name="settings_app_theme_desc">更改深色模式和主题调色板</string>
     <string name="settings_log_viewer">日志查看器</string>
     <string name="settings_log_viewer_desc">查看应用运行时日志</string>
-    <string name="settings_translate">参与翻译</string>
-    <string name="settings_translate_desc">帮助我们把 MRepo 翻译到你的语言</string>
     <!-- App -->
     <string name="settings_title_app">应用</string>
     <string name="settings_download_path">下载路径</string>
     <string name="settings_repo">存储库</string>
     <string name="settings_repo_desc">管理 Magisk 模块存储库</string>
-    <string name="settings_check_modules_updates">检查模块更新</string>
-    <string name="settings_check_modules_updates_desc">由 WorkManager 控制的周期任务，这在某些定制ROM中可能不稳定。</string>
-    <string name="settings_tasks_period">任务周期</string>
-    <string name="settings_tasks_period_desc">当前任务周期为 %1$s (%2$s)</string>
-    <string name="settings_tasks_period_dialog_desc1">任务周期不能短于 15 分钟！</string>
-    <string name="settings_tasks_period_dialog_desc2">不要把检查周期设置得太小，这会增加系统的负担。</string>
+    <!-- Others -->
+    <string name="settings_title_others">其他</string>
+    <string name="settings_translate">参与翻译</string>
+    <string name="settings_translate_desc">帮助我们把 MRepo 翻译到你的语言</string>
+    <string name="settings_bug_tracker">错误追踪</string>
     <!-- App Theme -->
     <string name="app_theme_example">示例</string>
     <string name="app_theme_palette">主题调色板</string>
@@ -106,6 +110,7 @@
     <string name="repo_add_dialog_label_support">你可以参考 %1$s。</string>
     <string name="repo_add_dialog_add">添加</string>
     <string name="repo_update_dialog_failure">更新失败：%1$s</string>
+    <string name="repo_notification_desc">模块的内容审查由存储库所有者负责。关于该存储库的任何问题，请联系其所有者。</string>
 
     <!-- Dialog-->
     <string name="dialog_title_attention">注意</string>

@@ -48,7 +48,7 @@ fun MenuItem(
 ) = DropdownMenu(
     expanded = expanded,
     onDismissRequest = onClose,
-    offset = DpOffset(15.dp, 0.dp),
+    offset = DpOffset(0.dp, 5.dp),
     shape = RoundedCornerShape(15.dp)
 ) {
     options.forEach {

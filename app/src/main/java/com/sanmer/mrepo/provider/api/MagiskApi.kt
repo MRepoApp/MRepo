@@ -23,8 +23,8 @@ object MagiskApi {
                 isZygiskEnabled = isZygisk()
                 Status.Env.setSucceeded()
             } else {
-                Status.Env.setFailed()
                 Timber.e("initMagisk: $output")
+                Status.Env.setFailed()
             }
         }
     }

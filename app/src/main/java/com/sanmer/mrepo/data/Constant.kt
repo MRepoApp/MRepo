@@ -84,16 +84,19 @@ object Constant {
         it.id == moduleId
     }
 
+    @Synchronized
     fun insertLocal(value: LocalModule) = coroutineScope.launch(Dispatchers.IO) {
         local.add(value)
         localModuleDao.insert(value.toEntity())
     }
 
+    @Synchronized
     fun updateLocal(value: LocalModule) = coroutineScope.launch(Dispatchers.IO) {
         local.update(value)
         localModuleDao.update(value.toEntity())
     }
 
+    @Synchronized
     fun insertLocal(list: List<LocalModule>) = coroutineScope.launch(Dispatchers.IO) {
         if (local.isEmpty()) {
             local.addAll(list)
@@ -124,6 +127,7 @@ object Constant {
         }
     }
 
+    @Synchronized
     fun updateCloud(
         context: Context,
         id: Long,
@@ -133,6 +137,7 @@ object Constant {
         context.updateRepo(id, value)
     }
 
+    @Synchronized
     fun deleteCloud(
         context: Context,
         id: Long

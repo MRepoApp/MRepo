@@ -35,7 +35,13 @@ android {
     dependenciesInfo.includeInApk = false
 
     buildTypes {
-        getByName("release") {
+        debug {
+            versionNameSuffix = ".dev"
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
+
+        release {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true

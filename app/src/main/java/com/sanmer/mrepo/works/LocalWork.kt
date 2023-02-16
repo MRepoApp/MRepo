@@ -3,7 +3,6 @@ package com.sanmer.mrepo.works
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.provider.local.LocalLoader
 import timber.log.Timber
 
@@ -20,7 +19,6 @@ class LocalWork(
             Result.success()
         } catch (e: Exception) {
             Timber.e(e.message)
-            Status.Local.setFailed()
             Result.retry()
         }
     }

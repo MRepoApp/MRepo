@@ -23,8 +23,8 @@ import com.sanmer.mrepo.app.status.Event
 import com.sanmer.mrepo.ui.component.CircularProgressIndicator
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.component.PageIndicator
-import com.sanmer.mrepo.ui.expansion.navigateBack
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
+import com.sanmer.mrepo.utils.expansion.navigateBack
 import com.sanmer.mrepo.viewmodel.DetailViewModel
 import kotlinx.coroutines.launch
 

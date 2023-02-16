@@ -22,8 +22,8 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
-import com.sanmer.mrepo.ui.expansion.navigatePopUpTo
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
+import com.sanmer.mrepo.utils.expansion.navigatePopUpTo
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
@@ -48,7 +48,6 @@ fun CloudPage(
 
 @Composable
 private fun ModulesList(
-    viewModel: ModulesViewModel = viewModel(),
     list: List<OnlineModule>,
     navController: NavController
 ) {
