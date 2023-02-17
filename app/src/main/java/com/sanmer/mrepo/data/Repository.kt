@@ -40,7 +40,7 @@ object Repository {
                 repo.addAll(this)
             } else {
                 if (EnvProvider.isSetup) {
-                    insert(Repo(url = Const.REPO_URL))
+                    insert(Repo(url = Const.MY_REPO_URL))
                 }
             }
         }

@@ -114,7 +114,9 @@ fun UpdateItemSelect(
             )
         }
     ) {
-        viewModel.versions.forEach {
+        viewModel.versions
+            .filter { it.changelog.isNotBlank() }
+            .forEach {
             MenuItem(
                 value = it,
                 versionCode = versionCode

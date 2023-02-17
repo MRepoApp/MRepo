@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,7 +65,8 @@ fun TabsItem(
 
     Row(
         modifier = modifier
-            .width(IntrinsicSize.Max),
+            .width(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -75,13 +75,13 @@ fun TabsItem(
             TabItem(
                 modifier = Modifier
                     .width(IntrinsicSize.Max)
-                    .clip(CircleShape)
                     .background(
-                        if (selected) {
+                        color = if (selected) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             Color.Unspecified
-                        }
+                        },
+                        shape = CircleShape
                     ),
                 selected = selected,
                 text = {
@@ -94,6 +94,7 @@ fun TabsItem(
                             painter = painterResource(id = page.icon),
                             contentDescription = null
                         )
+
                         if (selected) {
                             Text(
                                 text = stringResource(id = page.label).toUpperCase(Locale.current)
@@ -136,7 +137,11 @@ private fun TabItem(
                 role = Role.Tab,
                 interactionSource = interactionSource,
                 indication = if (!selected) {
-                    rememberRipple(bounded = true, color = MaterialTheme.colorScheme.primary)
+                    rememberRipple(
+                        bounded = true,
+                        color = MaterialTheme.colorScheme.primary,
+                        radius = 18.dp
+                    )
                 } else {
                     null
                 }

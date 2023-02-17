@@ -106,8 +106,6 @@ class DetailViewModel(
                     Timber.d("getChangelog: $it")
                 }
             )
-        } else {
-            changelog = "No Changelog"
         }
     }
 

@@ -49,7 +49,7 @@ object RepoLoader {
         }
 
         if (Status.Cloud.isSucceeded) {
-            Constant.updateOnline()
+            Constant.getOnline()
         }
 
         onFinished(Status.Cloud.isSucceeded)

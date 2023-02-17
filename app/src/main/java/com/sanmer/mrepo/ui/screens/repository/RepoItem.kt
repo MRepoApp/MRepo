@@ -95,7 +95,7 @@ fun RepoItem(
     }
 
     val onUpdate: () -> Unit = {
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             onStart()
             RepoLoader.getRepo(context = context, repo = repo)
                 .onSuccess { onStop() }

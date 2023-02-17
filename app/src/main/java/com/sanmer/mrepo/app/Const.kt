@@ -2,8 +2,9 @@ package com.sanmer.mrepo.app
 
 import android.os.Build
 import android.os.Environment
+import com.sanmer.mrepo.data.provider.local.LocalLoader
+import com.sanmer.mrepo.data.provider.local.ModuleUtils
 import com.sanmer.mrepo.utils.MediaStoreUtils.toFile
-import com.sanmer.mrepo.viewmodel.ModulesViewModel
 import java.io.File
 
 object Const {
@@ -12,10 +13,12 @@ object Const {
 
     // MAGISK
     lateinit var MAGISK_PATH: String
-    val MODULES_PATH get() = "$MAGISK_PATH/modules"
 
-    // REPO
-    const val REPO_URL = "https://raw.githubusercontent.com/ya0211/magisk-modules-repo/main/"
+    /** Used in [LocalLoader] */
+    val MODULES_MOUNT_PATH get() = "$MAGISK_PATH/modules"
+
+    /** Used in [ModuleUtils] */
+    const val MODULES_PATH = "/data/adb/modules"
 
     // DIR
     val DIR_PUBLIC_DOWNLOADS: File = Environment
@@ -26,11 +29,10 @@ object Const {
 
     // NOTIFICATION
     const val CHANNEL_ID_DOWNLOAD = "module_download"
-    const val CHANNEL_ID_UPDATE = "module_update"
-
-    /** Used in [ModulesViewModel] */
-    const val NOTIFICATION_ID_1 = 1011
 
     // GITHUB
     const val ISSUES_URL = "https://github.com/ya0211/MRepo/issues"
+
+    // REPO
+    const val MY_REPO_URL = "https://raw.githubusercontent.com/ya0211/magisk-modules-repo/main/"
 }

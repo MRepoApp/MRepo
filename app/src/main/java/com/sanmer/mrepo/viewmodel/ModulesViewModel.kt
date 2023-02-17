@@ -1,15 +1,14 @@
 package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.*
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.App
-import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.Constant
 import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.module.LocalModule
@@ -19,42 +18,35 @@ import com.sanmer.mrepo.data.provider.local.ModuleUtils.disable
 import com.sanmer.mrepo.data.provider.local.ModuleUtils.enable
 import com.sanmer.mrepo.data.provider.local.ModuleUtils.remove
 import com.sanmer.mrepo.service.DownloadService
-import com.sanmer.mrepo.ui.activity.main.MainActivity
-import com.sanmer.mrepo.utils.NotificationUtils
-import com.sanmer.mrepo.utils.expansion.update
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 class ModulesViewModel : ViewModel() {
-    val context = App.context
-
-    // UPDATA STATE
-    private val updataState = object : Status.Events() {
-        override fun setLoading(value: Any?) {
-            Timber.d("ModulesViewModel updata")
-            super.setLoading(value)
-        }
-
-        override fun setSucceeded(value: Any?) {
-            Timber.d("updata is succeeded")
-            super.setSucceeded(value)
-        }
-
-        override fun setFailed(value: Any?) {
-            Timber.e("updata: $value")
-            super.setFailed(value)
-        }
-    }
-
     // MODULES DATA
+    @JvmName("getUpdatableValue")
     fun getUpdatable() = if (isSearch) _updatable else updatable
+
+    @JvmName("getLocalValue")
     fun getLocal() = if (isSearch) _local else local
+
+    @JvmName("getOnlineValue")
     fun getOnline() = if (isSearch) _online else online
 
-    private val updatable = mutableStateListOf<OnlineModule>()
-    private val local = mutableStateListOf<LocalModule>()
-    private val online = mutableStateListOf<OnlineModule>()
+    private val updatable by derivedStateOf {
+        Constant.online.filter { module ->
+            module.versionCode > (Constant.local
+                .find {
+                    module.id == it.id
+                }?.versionCode ?: Int.MAX_VALUE)
+        }
+    }
+    private val local by derivedStateOf {
+        Constant.local.filter { module ->
+            module.id !in updatable.map { it.id }
+        }
+    }
+    private val online by derivedStateOf {
+        Constant.online.toList()
+    }
 
     // SEARCH
     var isSearch by mutableStateOf(false)
@@ -77,64 +69,10 @@ class ModulesViewModel : ViewModel() {
             key.uppercase() in "${it.name}${it.author}".uppercase()
         }
     }
+
     fun close() {
         isSearch = false
         key = ""
-    }
-
-    @Synchronized
-    fun updata() = runCatching {
-        if (updataState.isLoading) {
-            Timber.w("updata is already loading!")
-            return@runCatching
-        } else {
-            updataState.setLoading()
-        }
-
-        Constant.online.forEach { module ->
-            val isUpdatable = module.versionCode > (Constant.local
-                .find {
-                    module.id == it.id
-                }?.versionCode ?: Int.MAX_VALUE)
-
-            if (isUpdatable) {
-                updatable.update(module)
-            } else {
-                if (module in updatable) updatable.remove(module)
-            }
-        }
-
-        local.forEach {
-            if (it !in Constant.local) local.remove(it)
-        }
-        val updatableId = updatable.map { it.id }
-        Constant.local.forEach {
-            if (it.id !in updatableId) {
-                local.update(it)
-            }
-        }
-
-        online.forEach {
-            if (it !in Constant.online) online.remove(it)
-        }
-        Constant.online.forEach {
-            online.update(it)
-        }
-
-        if (updatable.isNotEmpty()) {
-            notifyUpdatable(context = context)
-        }
-
-        updataState.setSucceeded()
-        sortBy()
-    }.onFailure {
-        updataState.setFailed(it)
-    }
-
-    private fun sortBy() {
-        updatable.sortBy { it.name }
-        local.sortBy { it.name }
-        online.sortBy { it.name }
     }
 
     //LOCAL MODULE
@@ -220,41 +158,8 @@ class ModulesViewModel : ViewModel() {
         install = true
     )
 
-    // NOTIFICATION
-    private fun notifyUpdatable(
-        context: Context
-    ) {
-        val title = context.getString(R.string.notification_name_update)
-        val text = when (updatable.size) {
-            1 -> {
-                context.getString(R.string.message_module_updated,
-                    updatable.first().name)
-            }
-            else -> {
-                context.getString(R.string.message_modules_updated,
-                    updatable.first().name, updatable.size)
-            }
-        }
-
-        NotificationUtils.notify(context, Const.NOTIFICATION_ID_1) {
-            setChannelId(Const.CHANNEL_ID_UPDATE)
-            setContentIntent(NotificationUtils.getActivity(MainActivity::class))
-            setContentTitle(title)
-            setContentText(text)
-            setSilent(false)
-        }
-    }
-
     init {
         Timber.d("ModulesViewModel init")
-
-        snapshotFlow { Constant.cloud.toList() }
-            .onEach { updata() }
-            .launchIn(viewModelScope)
-
-        snapshotFlow { Constant.local.toList() }
-            .onEach { updata() }
-            .launchIn(viewModelScope)
     }
 
     companion object {

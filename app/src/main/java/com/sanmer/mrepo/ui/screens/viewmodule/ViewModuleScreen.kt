@@ -26,6 +26,7 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.utils.expansion.navigateBack
 import com.sanmer.mrepo.viewmodel.DetailViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -124,7 +125,7 @@ private fun ViewModuleTopBar(
         val scope = rememberCoroutineScope()
         IconButton(
             onClick = {
-                scope.launch {
+                scope.launch(Dispatchers.IO) {
                     viewModel.state.setLoading()
                     viewModel.getUpdates()
                 }

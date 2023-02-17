@@ -26,6 +26,7 @@ fun UpdatesPage(
     viewModel: ModulesViewModel = viewModel()
 ) {
     val list = viewModel.getUpdatable()
+        .sortedBy { it.name }
 
     if (list.isEmpty()) {
         PageIndicator(
@@ -74,28 +75,32 @@ private fun OnlineModuleItem(
         version = module.version,
         author = module.author,
         description = module.description,
-        progress = progress
-    ) {
-        TextButton(
-            onClick = {
-                viewModel.installer(
-                    context = context,
-                    module = module
+        progress = progress,
+        message = {
+
+        },
+        buttons = {
+            TextButton(
+                onClick = {
+                    viewModel.installer(
+                        context = context,
+                        module = module
+                    )
+                },
+                enabled = Status.Provider.isSucceeded
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(end = 6.dp),
+                    text = stringResource(id = R.string.module_update)
                 )
-            },
-            enabled = Status.Provider.isSucceeded
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(end = 6.dp),
-                text = stringResource(id = R.string.module_update)
-            )
-            Icon(
-                modifier = Modifier
-                    .size(22.dp),
-                painter = painterResource(id = R.drawable.import_outline),
-                contentDescription = null
-            )
+                Icon(
+                    modifier = Modifier
+                        .size(22.dp),
+                    painter = painterResource(id = R.drawable.import_outline),
+                    contentDescription = null
+                )
+            }
         }
-    }
+    )
 }

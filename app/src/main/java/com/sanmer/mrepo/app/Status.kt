@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.app.status.Event
-import timber.log.Timber
 
 object Status {
     open class State(
@@ -67,22 +66,7 @@ object Status {
 
     object Provider : State()
 
-    object Local : State() {
-        override fun setFailed(value: Any?) {
-            Timber.d("setFailed")
-            super.setFailed(value)
-        }
-
-        override fun setLoading(value: Any?) {
-            Timber.d("setLoading")
-            super.setLoading(value)
-        }
-
-        override fun setSucceeded(value: Any?) {
-            Timber.d("setSucceeded")
-            super.setSucceeded(value)
-        }
-    }
+    object Local : State()
 
     object Cloud : State()
 }

@@ -15,12 +15,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.data.provider.local.LocalLoader
 import com.sanmer.mrepo.data.provider.repo.RepoLoader
 import com.sanmer.mrepo.ui.component.DropdownMenu
-import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 private sealed class Menu(
     @StringRes val label: Int,
@@ -61,7 +59,6 @@ fun MenuItem(
 
 @Composable
 private fun MenuItem(
-    viewModel: ModulesViewModel = viewModel(),
     context: Context = LocalContext.current,
     value: Menu,
     onClose: () -> Unit
@@ -77,14 +74,10 @@ private fun MenuItem(
     onClick = {
         when (value) {
             Menu.Cloud -> {
-                RepoLoader.getRepoAll(context) {
-                    if (it) viewModel.updata()
-                }
+                RepoLoader.getRepoAll(context)
             }
             Menu.Local -> {
-                LocalLoader.getLocalAll(context) {
-                    if (it) viewModel.updata()
-                }
+                LocalLoader.getLocalAll(context)
             }
         }
         onClose()

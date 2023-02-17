@@ -34,6 +34,7 @@ fun ModuleCard(
     progress: Float = 0f,
     switch: @Composable (() -> Unit?)? = null,
     indicator: @Composable (() -> Unit?)? = null,
+    message: @Composable (BoxScope.() -> Unit)? = null,
     buttons: @Composable RowScope.() -> Unit,
 ) {
     Surface(
@@ -117,7 +118,14 @@ fun ModuleCard(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Spacer(modifier = Modifier.weight(1f))
+                    if (message != null) {
+                        Box(
+                            modifier = Modifier.weight(1f),
+                            content = message
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
                     buttons()
                 }
             }

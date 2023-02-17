@@ -8,7 +8,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,21 +28,21 @@ fun InstalledPage(
     viewModel: ModulesViewModel = viewModel(),
 ) {
     val list = viewModel.getLocal()
+        .sortedBy { it.name }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize()
     ) {
-        ModulesList(
-            list = list
-        )
-
         if (list.isEmpty()) {
             PageIndicator(
                 icon = R.drawable.mobile_outline,
                 text = if (viewModel.isSearch) R.string.modules_page_search_empty else R.string.modules_page_installed_empty,
             )
         }
+
+        ModulesList(
+            list = list
+        )
     }
 }
 
@@ -112,31 +111,35 @@ private fun LocalModuleItem(
                 stateIndicator(R.drawable.danger_outline)
             }
             else -> null
+        },
+        message = {
+
+        },
+        buttons = {
+            TextButton(
+                onClick = state.onClick,
+                enabled = Status.Provider.isSucceeded
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(end = 6.dp),
+                    text = stringResource(id = if (module.state == State.REMOVE) {
+                        R.string.module_restore
+                    }else {
+                        R.string.module_remove
+                    })
+                )
+                Icon(
+                    modifier = Modifier
+                        .size(22.dp),
+                    painter = painterResource(id = if (module.state == State.REMOVE) {
+                        R.drawable.refresh_outline
+                    } else {
+                        R.drawable.trash_outline
+                    }),
+                    contentDescription = null
+                )
+            }
         }
-    ) {
-        TextButton(
-            onClick = state.onClick,
-            enabled = Status.Provider.isSucceeded
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(end = 6.dp),
-                text = stringResource(id = if (module.state == State.REMOVE) {
-                    R.string.module_restore
-                }else {
-                    R.string.module_remove
-                })
-            )
-            Icon(
-                modifier = Modifier
-                    .size(22.dp),
-                painter = painterResource(id = if (module.state == State.REMOVE) {
-                    R.drawable.refresh_outline
-                } else {
-                    R.drawable.trash_outline
-                }),
-                contentDescription = null
-            )
-        }
-    }
+    )
 }

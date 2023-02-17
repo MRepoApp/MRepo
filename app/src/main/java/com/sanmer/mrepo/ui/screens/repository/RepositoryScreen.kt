@@ -27,7 +27,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.data.Repository
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.provider.repo.RepoLoader
@@ -55,7 +54,7 @@ fun RepositoryScreen(
     var progress by remember { mutableStateOf(false) }
     var failure by remember { mutableStateOf(false) }
 
-    var repo = Repo(url = Const.REPO_URL)
+    var repo = Repo(url = "NULL")
     var message: String? by remember { mutableStateOf(null) }
 
     if (failure) {
@@ -104,13 +103,13 @@ fun RepositoryScreen(
                     icon = R.drawable.hierarchy_outline,
                     text = R.string.repo_empty
                 )
-            } else {
-                RepoList(
-                    onStart = { progress = true },
-                    onStop = { progress = false },
-                    list = list
-                )
             }
+
+            RepoList(
+                onStart = { progress = true },
+                onStop = { progress = false },
+                list = list
+            )
 
             AnimatedVisibility(
                 visible = progress,

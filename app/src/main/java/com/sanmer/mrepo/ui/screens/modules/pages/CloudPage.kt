@@ -32,6 +32,7 @@ fun CloudPage(
     navController: NavController
 ) {
     val list = viewModel.getOnline()
+        .sortedBy { it.name }
 
     if (list.isEmpty()) {
         PageIndicator(

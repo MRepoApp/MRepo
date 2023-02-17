@@ -122,8 +122,6 @@
     <!-- Message -->
     <string name="message_download_failed">下载失败：%1$s</string>
     <string name="message_download_success">下载成功</string>
-    <string name="message_module_updated">%1$s 可更新</string>
-    <string name="message_modules_updated">%1$s 等%2$d个模块可更新</string>
 
     <!-- Notification -->
     <string name="notification_name_download">模块下载</string>

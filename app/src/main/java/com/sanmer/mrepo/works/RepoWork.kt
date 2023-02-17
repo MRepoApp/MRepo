@@ -43,7 +43,7 @@ class RepoWork(
         }
 
         if (Status.Cloud.isSucceeded) {
-            Constant.updateOnline()
+            Constant.getOnline()
         }
 
         return result

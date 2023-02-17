@@ -10,7 +10,6 @@ import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.SPUtils
 import com.sanmer.mrepo.utils.timber.DebugTree
 import com.sanmer.mrepo.utils.timber.ReleaseTree
-import com.sanmer.mrepo.viewmodel.ModulesViewModel
 import com.sanmer.mrepo.works.Works
 import timber.log.Timber
 
@@ -39,7 +38,7 @@ class App : Application() {
     companion object {
         private lateinit var app: App
 
-        /** Used in [NotificationUtils], [ModulesViewModel] */
+        /** Used in [NotificationUtils] */
         val context get() = app
 
         fun Context.openUrl(url: String) {

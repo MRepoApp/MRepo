@@ -20,17 +20,13 @@ import com.sanmer.mrepo.app.Const
 import kotlin.reflect.KClass
 
 object NotificationUtils {
-    val context = App.context
+    val context by lazy { App.context }
     private val notificationManager by lazy { NotificationManagerCompat.from(context) }
 
     fun init(context: Context) {
         val channels = listOf(
             NotificationChannel(Const.CHANNEL_ID_DOWNLOAD,
                 context.getString(R.string.notification_name_download),
-                NotificationManager.IMPORTANCE_HIGH
-            ),
-            NotificationChannel(Const.CHANNEL_ID_UPDATE,
-                context.getString(R.string.notification_name_update),
                 NotificationManager.IMPORTANCE_HIGH
             )
         )

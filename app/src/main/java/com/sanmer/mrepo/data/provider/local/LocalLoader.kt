@@ -29,7 +29,7 @@ object LocalLoader {
             FileProvider.init(context)
         }
 
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.IO) {
             getLocalAll().onFailure {
                 Timber.e("getLocal: ${it.message}")
             }
@@ -60,10 +60,10 @@ object LocalLoader {
             throw RuntimeException("EnvProvider is not ready!")
         }
 
-        Timber.i("getLocal: ${Const.MODULES_PATH}")
+        Timber.i("getLocal: ${Const.MODULES_MOUNT_PATH}")
         runCatching {
             val result = mutableListOf<LocalModule>()
-            fs.getFile(Const.MODULES_PATH).listFiles().orEmpty()
+            fs.getFile(Const.MODULES_MOUNT_PATH).listFiles().orEmpty()
                 .filter { !it.isFile && !it.isHidden }
                 .forEach { path ->
                     getLocal(

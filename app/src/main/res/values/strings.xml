@@ -126,8 +126,6 @@
     <!-- Message -->
     <string name="message_download_failed">Download failed: %1$s</string>
     <string name="message_download_success">Download successful</string>
-    <string name="message_module_updated">%1$s can be updated</string>
-    <string name="message_modules_updated">%1$s etc., and %2$d modules can be updated</string>
 
     <!-- Notification -->
     <string name="notification_name_download">Module Download</string>

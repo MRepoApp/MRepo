@@ -7,8 +7,8 @@ plugins {
     kotlin("plugin.parcelize")
 }
 
-val verName = "1.0.1-alpha"
-val verCode = 101
+val verName = "1.1.0-beta"
+val verCode = 110
 
 android {
     namespace = "com.sanmer.mrepo"
