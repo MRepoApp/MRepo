@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.data
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateListOf
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.database.AppDatabase
 import com.sanmer.mrepo.data.database.entity.toEntity
@@ -22,13 +23,12 @@ object Constant {
     private lateinit var db: AppDatabase
     private val localModuleDao get() = db.localModuleDao()
 
-    val local = mutableListOf<LocalModule>()
+    val local = mutableStateListOf<LocalModule>()
     val localSize get() = local.size
-    val online = mutableListOf<OnlineModule>()
+    val online = mutableStateListOf<OnlineModule>()
     val onlineSize get() = online.size
 
-    val cloud = mutableListOf<Modules>()
-
+    private val cloud = mutableListOf<Modules>()
     val isReady get() = local.isNotEmpty() || Status.Local.isFinished &&
             cloud.isNotEmpty() || Status.Cloud.isFinished
 
@@ -37,13 +37,18 @@ object Constant {
         coroutineScope.launch {
             getLocalAll()
             getCloudAll(context)
-            updateOnline()
+            getOnline()
         }
 
         return db
     }
 
-    suspend fun updateOnline() = withContext(Dispatchers.Default) {
+    @JvmName("getOnlineValue")
+    suspend fun getOnline() = withContext(Dispatchers.Default) {
+        if (online.isNotEmpty()) {
+            online.clear()
+        }
+
         val list = mutableListOf<OnlineModule>()
 
         cloud.forEach { json ->
@@ -67,11 +72,8 @@ object Constant {
             }
         }
 
-        online.forEach {
-            if (it !in list) online.remove(it)
-        }
-        list.forEach {
-            online.update(it)
+        list.apply {
+            online.addAll(this)
         }
     }
 
@@ -98,32 +100,22 @@ object Constant {
 
     @Synchronized
     fun insertLocal(list: List<LocalModule>) = coroutineScope.launch(Dispatchers.IO) {
-        if (local.isEmpty()) {
-            local.addAll(list)
-        } else {
-            local.forEach {
-                if (it !in list) local.remove(it)
-            }
-            list.forEach {
-                local.update(it)
-            }
+        if (local.isNotEmpty()) {
+            local.clear()
         }
+
+        local.addAll(list)
         localModuleDao.deleteAll()
         localModuleDao.insert(list.map { it.toEntity() })
     }
 
     private suspend fun getLocalAll() = withContext(Dispatchers.IO) {
+        if (local.isNotEmpty()) {
+            local.clear()
+        }
+
         localModuleDao.getAll().map { it.toModule() }.apply {
-            if (local.isEmpty()) {
-                local.addAll(this)
-            } else {
-                local.forEach {
-                    if (!contains(it)) local.remove(it)
-                }
-                forEach {
-                    local.update(it)
-                }
-            }
+            local.addAll(this)
         }
     }
 
@@ -142,26 +134,17 @@ object Constant {
         context: Context,
         id: Long
     ) = coroutineScope.launch(Dispatchers.IO) {
-        cloud.find {
-            it.repoId == id
-        }?.let {
-            cloud.remove(it)
-        }
+        cloud.removeIf { it.repoId == id }
         context.deleteRepo(id)
     }
 
     private suspend fun getCloudAll(context: Context) = withContext(Dispatchers.IO) {
+        if (cloud.isNotEmpty()) {
+            cloud.clear()
+        }
+
         context.getAllRepo().apply {
-            if (cloud.isEmpty()) {
-                cloud.addAll(this)
-            } else {
-                cloud.forEach {
-                    if (!contains(it)) cloud.remove(it)
-                }
-                forEach {
-                    cloud.update(it)
-                }
-            }
+            cloud.addAll(this)
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.data.database.RepoDatabase
 import com.sanmer.mrepo.data.database.entity.Repo
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.utils.expansion.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,7 @@ object Repository {
 
     fun init(context: Context) {
         db = RepoDatabase.getDatabase(context)
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.IO) {
             getAll()
         }
     }
@@ -30,16 +31,17 @@ object Repository {
     fun getById(id: Long) = repo.find { it.id == id }
 
     suspend fun getAll() = withContext(Dispatchers.IO) {
+        if (repo.isNotEmpty()) {
+            repo.clear()
+        }
+
         repoDao.getAll().apply {
             if (isNotEmpty()) {
-                repo.forEach {
-                    if (!contains(it)) repo.remove(it)
-                }
-                forEach {
-                    repo.update(it)
-                }
+                repo.addAll(this)
             } else {
-                insert(Repo(url = Const.REPO_URL))
+                if (EnvProvider.isSetup) {
+                    insert(Repo(url = Const.REPO_URL))
+                }
             }
         }
     }
