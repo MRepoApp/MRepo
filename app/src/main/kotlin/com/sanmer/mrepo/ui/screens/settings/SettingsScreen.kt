@@ -111,6 +111,15 @@ fun SettingsScreen(
                     context.openUrl(Const.ISSUES_URL)
                 }
             )
+
+            NormalItemForSetting(
+                iconRes = R.drawable.star_outline,
+                text = stringResource(id = R.string.settings_follow_updates),
+                subText = stringResource(id = R.string.settings_follow_updates_desc),
+                onClick = {
+                    context.openUrl(Const.TELEGRAM_CHANNEL_URL)
+                }
+            )
         }
     }
 }

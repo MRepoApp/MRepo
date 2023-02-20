@@ -90,6 +90,8 @@
     <string name="settings_translate">参与翻译</string>
     <string name="settings_translate_desc">帮助我们把 MRepo 翻译到你的语言</string>
     <string name="settings_bug_tracker">错误追踪</string>
+    <string name="settings_follow_updates">关注更新</string>
+    <string name="settings_follow_updates_desc">加入我们的 Telegram 频道</string>
     <!-- App Theme -->
     <string name="app_theme_example">示例</string>
     <string name="app_theme_palette">主题调色板</string>
@@ -129,10 +131,5 @@
 
     <!-- Other -->
     <string name="unknown_error">未知错误</string>
-
-    <!-- Time Unit -->
-    <string name="time_unit_minute">分</string>
-    <string name="time_unit_hour">时</string>
-    <string name="time_unit_day">天</string>
 
 </resources>

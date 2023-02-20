@@ -35,4 +35,7 @@ object Const {
 
     // REPO
     const val MY_REPO_URL = "https://raw.githubusercontent.com/ya0211/magisk-modules-repo/main/"
+
+    // TELEGRAM
+    const val TELEGRAM_CHANNEL_URL = "https://t.me/mrepo_news"
 }

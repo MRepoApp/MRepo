@@ -93,6 +93,8 @@
     <string name="settings_translate">Participate in Translation</string>
     <string name="settings_translate_desc">Help us translate MRepo into your language</string>
     <string name="settings_bug_tracker">Bug Tracker</string>
+    <string name="settings_follow_updates">Follow Updates</string>
+    <string name="settings_follow_updates_desc">Join our Telegram channel</string>
     <!-- App Theme -->
     <string name="app_theme_example">Example</string>
     <string name="app_theme_palette">Theme Palette</string>
@@ -133,10 +135,5 @@
 
     <!-- Other -->
     <string name="unknown_error">Unknown error</string>
-
-    <!-- Time Unit -->
-    <string name="time_unit_minute">Minute</string>
-    <string name="time_unit_hour">Hour</string>
-    <string name="time_unit_day">Day</string>
 
 </resources>
