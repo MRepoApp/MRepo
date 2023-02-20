@@ -1,5 +1,5 @@
 # MRepo
-[![GitHub release](https://img.shields.io/github/v/release/ya0211/MRepo)](https://github.com/ya0211/MRepo/releases) [![License](https://img.shields.io/github/license/ya0211/MRepo?color=blue)](LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/ya0211/MRepo)](https://github.com/ya0211/MRepo/releases) [![Total](https://shields.io/github/downloads/ya0211/MRepo/total?logoColor=blue&color=blue)](https://github.com/ya0211/MRepo/releases) [![License](https://img.shields.io/github/license/ya0211/MRepo?color=blue)](LICENSE)
 
 MRepo (short for `My Repository` or `Modules(Magisk) Repository`) is an Android app that helps manage your own module repository.
 
