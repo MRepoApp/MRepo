@@ -57,6 +57,10 @@ fun ModulesScreen(
         }
     }
 
+    DisposableEffect(viewModel) {
+        onDispose { viewModel.close() }
+    }
+
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),

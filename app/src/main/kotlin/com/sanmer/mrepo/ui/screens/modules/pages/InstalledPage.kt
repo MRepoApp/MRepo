@@ -17,6 +17,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
+import com.sanmer.mrepo.provider.local.ModuleUtils
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.stateIndicator
@@ -76,10 +77,9 @@ private fun ModulesList(
 
 @Composable
 private fun LocalModuleItem(
-    viewModel: ModulesViewModel = viewModel(),
     module: LocalModule
 ) {
-    val state = viewModel.updateModuleState(module)
+    val state = ModuleUtils.updateState(module)
 
     ModuleCard(
         name = module.name,
@@ -112,9 +112,7 @@ private fun LocalModuleItem(
             }
             else -> null
         },
-        message = {
-
-        },
+        message = {},
         buttons = {
             TextButton(
                 onClick = state.onClick,

@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.provider.local
 
 import android.content.Context
+import androidx.compose.ui.text.style.TextDecoration
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
@@ -50,7 +51,7 @@ object ModuleUtils {
             onFinished()
         }
 
-    fun LocalModule.enable() {
+    private fun LocalModule.enable() {
         val path = "${Const.MODULES_PATH}/$id"
         when (state) {
             State.REMOVE -> {
@@ -64,13 +65,13 @@ object ModuleUtils {
         state = State.ENABLE
     }
 
-    fun LocalModule.disable() {
+    private fun LocalModule.disable() {
         val path = "${Const.MODULES_PATH}/$id"
         fs.getFile(path, "disable").createNewFile()
         state = State.DISABLE
     }
 
-    fun LocalModule.remove() {
+    private fun LocalModule.remove() {
         val path = "${Const.MODULES_PATH}/$id"
         when (state) {
             State.ENABLE -> {
@@ -83,5 +84,51 @@ object ModuleUtils {
             else -> {}
         }
         state = State.REMOVE
+    }
+
+    data class ModuleState(
+        val alpha: Float = 1f,
+        val decoration: TextDecoration = TextDecoration.None,
+        val onChecked: (Boolean) -> Unit = {},
+        val onClick: () -> Unit = {},
+    )
+
+    fun updateState(
+        module: LocalModule
+    ): ModuleState {
+        var alpha = 1f
+        var decoration = TextDecoration.None
+        var onChecked: (Boolean) -> Unit = {}
+        var onClick = {}
+
+        when (module.state) {
+            State.ENABLE -> {
+                onChecked = { module.disable() }
+                onClick = { module.remove() }
+            }
+            State.DISABLE -> {
+                alpha = 0.5f
+                onChecked = { module.enable() }
+                onClick = { module.remove() }
+            }
+            State.REMOVE -> {
+                alpha = 0.5f
+                decoration = TextDecoration.LineThrough
+                onClick = { module.enable() }
+            }
+            State.ZYGISK_UNLOADED,
+            State.RIRU_DISABLE,
+            State.ZYGISK_DISABLE -> {
+                alpha = 0.5f
+            }
+            State.UPDATE -> {}
+        }
+
+        return ModuleState(
+            alpha = alpha,
+            decoration = decoration,
+            onChecked = onChecked,
+            onClick = onClick
+        )
     }
 }
