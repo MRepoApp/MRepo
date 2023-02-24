@@ -34,3 +34,9 @@ data class States(
     val zipUrl: String = "",
     val changelog: String = "",
 )
+
+val OnlineModule.versionDisplay get() = if ("(${versionCode})" in version) {
+    version
+} else {
+    "$version (${versionCode})"
+}

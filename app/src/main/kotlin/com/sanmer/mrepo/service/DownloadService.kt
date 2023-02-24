@@ -80,7 +80,6 @@ class DownloadService : LifecycleService() {
         val module = item.value
         val notificationId = item.id
         val notificationIdFinish = notificationId + 1
-        var last = 0
 
         val path = module.path.toFile() ?: Const.DOWNLOAD_PATH.resolve("${module.name}.zip")
         val notification = NotificationUtils
@@ -94,20 +93,17 @@ class DownloadService : LifecycleService() {
         val progress: (Float) -> Unit = {
             val value = (it * 100).toInt()
 
-            if (value != last) {
-                NotificationUtils.notify(
-                    notificationId,
-                    notification.setContentText("${value}%")
-                        .setProgress(100, value, false)
-                        .build()
-                )
-                broadcast(it, module)
-            }
+            NotificationUtils.notify(
+                notificationId,
+                notification.setContentText("${value}%")
+                    .setProgress(100, value, false)
+                    .build()
+            )
+            broadcast(it, module)
 
             if (value == 100) {
                 NotificationUtils.cancel(notificationId)
                 broadcast(0f, module)
-                last = 0
             }
         }
 

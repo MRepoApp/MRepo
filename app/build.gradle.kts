@@ -32,8 +32,6 @@ android {
         multiDexEnabled = true
     }
 
-    dependenciesInfo.includeInApk = false
-
     buildTypes {
         debug {
             versionNameSuffix = ".dev"

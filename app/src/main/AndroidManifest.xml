@@ -38,9 +38,15 @@
             android:launchMode="singleTop"/>
 
         <activity android:name=".ui.activity.install.InstallActivity"
+            android:label="@string/install_title"
             android:exported="false" />
 
         <activity android:name=".ui.activity.log.LogActivity"
+            android:label="@string/page_log_viewer"
+            android:exported="true" />
+
+        <activity android:name=".ui.activity.license.LicenseActivity"
+            android:label="@string/license_title"
             android:exported="true" />
 
         <service android:name=".service.DownloadService"

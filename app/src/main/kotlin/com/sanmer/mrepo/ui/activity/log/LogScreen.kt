@@ -78,7 +78,7 @@ private fun LogTopBar(
     var expanded by remember { mutableStateOf(false) }
 
     NavigateUpTopBar(
-        title = R.string.settings_log_viewer,
+        title = R.string.page_log_viewer,
         actions = {
             IconButton(
                 onClick = { expanded = true }

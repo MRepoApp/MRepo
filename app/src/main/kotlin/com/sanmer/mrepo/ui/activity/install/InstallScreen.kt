@@ -1,5 +1,8 @@
 package com.sanmer.mrepo.ui.activity.install
 
+import android.view.KeyEvent
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,8 +12,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,23 +30,37 @@ import com.sanmer.mrepo.utils.SvcPower
 
 @Composable
 fun InstallScreen(
-    utils: InstallUtils = InstallUtils,
-    list: SnapshotStateList<String>
+    utils: InstallUtils = InstallUtils
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(focusRequester) {
+        focusRequester.requestFocus()
+    }
+
+    BackHandler(
+        enabled = utils.event == Event.LOADING,
+        onBack = {}
+    )
+
     Scaffold(
         modifier = Modifier
+            .onKeyEvent {
+                when (it.nativeKeyEvent.keyCode) {
+                    KeyEvent.KEYCODE_VOLUME_UP -> true
+                    KeyEvent.KEYCODE_VOLUME_DOWN -> true
+                    else -> false
+                }
+            }
+            .focusRequester(focusRequester)
+            .focusable()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { NavigateUpTopBar(
-            title = R.string.install_title,
-            subtitle = when (utils.event) {
-                Event.LOADING -> R.string.install_flashing
-                Event.FAILED -> R.string.install_failure
-                else -> R.string.install_done
-            },
-            scrollBehavior = scrollBehavior
-        ) },
+        topBar = {
+            InstallTopBar(
+                scrollBehavior = scrollBehavior
+            )
+        },
         floatingActionButton = {
             if (utils.isSucceeded) {
                 RebootButton()
@@ -47,11 +68,25 @@ fun InstallScreen(
         },
     ) {
         ConsoleList(
-            list = list,
+            list = utils.console,
             contentPadding = it
         )
     }
 }
+
+@Composable
+private fun InstallTopBar(
+    utils: InstallUtils = InstallUtils,
+    scrollBehavior: TopAppBarScrollBehavior
+) = NavigateUpTopBar(
+    title = R.string.install_title,
+    subtitle = when (utils.event) {
+        Event.LOADING -> R.string.install_flashing
+        Event.FAILED -> R.string.install_failure
+        else -> R.string.install_done
+    },
+    scrollBehavior = scrollBehavior
+)
 
 @Composable
 private fun RebootButton() = ExtendedFloatingActionButton(

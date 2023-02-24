@@ -19,4 +19,8 @@ data class UpdateItem(
     val repoId: Long = 0
 )
 
-val UpdateItem.versionDisplay  get() = "$version (${versionCode})"
+val UpdateItem.versionDisplay get() = if ("(${versionCode})" in version) {
+    version
+} else {
+    "$version (${versionCode})"
+}
