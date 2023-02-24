@@ -23,8 +23,7 @@ object RepoLoader {
     private val adapter = moshi.adapter<Modules>()
 
     fun getRepoAll(
-        context: Context,
-        onFinished: (Boolean) -> Unit = {}
+        context: Context
     ) = coroutineScope.launch(Dispatchers.IO) {
         if (Status.Cloud.isLoading) {
             Timber.w("getRepo is already loading!")
@@ -51,8 +50,6 @@ object RepoLoader {
         if (Status.Cloud.isSucceeded) {
             Constant.getOnline()
         }
-
-        onFinished(Status.Cloud.isSucceeded)
     }
 
     suspend fun getRepo(context: Context, repo: Repo) = getRepo(repo)

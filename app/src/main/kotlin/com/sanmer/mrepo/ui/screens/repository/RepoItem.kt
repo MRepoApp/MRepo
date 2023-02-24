@@ -71,10 +71,8 @@ fun RepoItem(
             onConfirm = {
                 scope.launch(Dispatchers.IO) {
                     Repository.delete(repo)
-                    Constant.deleteCloud(
-                        context = context,
-                        id = repo.id
-                    )
+                    Constant.deleteCloud(context = context, id = repo.id)
+                    Constant.getOnline()
                 }
             },
             repo = repo
@@ -98,7 +96,10 @@ fun RepoItem(
         scope.launch {
             onStart()
             RepoLoader.getRepo(context = context, repo = repo)
-                .onSuccess { onStop() }
+                .onSuccess {
+                    onStop()
+                    Constant.getOnline()
+                }
                 .onFailure {
                     onStop()
                     failure = true

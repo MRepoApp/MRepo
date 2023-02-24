@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.data.Constant
 import com.sanmer.mrepo.data.Repository
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.provider.repo.RepoLoader
@@ -74,6 +75,9 @@ fun RepositoryScreen(
                 repo = Repo(url = it)
                 Repository.insert(repo)
                 RepoLoader.getRepo(context = context, repo = repo)
+                    .onSuccess {
+                        Constant.getOnline()
+                    }
                     .onFailure {
                         failure = true
                         message = it.message

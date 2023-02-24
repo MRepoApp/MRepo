@@ -22,8 +22,7 @@ object LocalLoader {
     private val fs = FileProvider
 
     fun getLocalAll(
-        context: Context,
-        onFinished: (Boolean) -> Unit = {}
+        context: Context
     ) = runCatching {
         if (Status.Provider.isFailed) {
             FileProvider.init(context)
@@ -33,7 +32,6 @@ object LocalLoader {
             getLocalAll().onFailure {
                 Timber.e("getLocal: ${it.message}")
             }
-            onFinished(Status.Local.isSucceeded)
         }
     }.onFailure {
         Timber.e("getLocal: ${it.message}")
