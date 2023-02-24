@@ -12,6 +12,12 @@
     <string name="install_failure">失败</string>
     <string name="install_reboot">重启</string>
 
+    <!-- License -->
+    <string name="license_title">查看许可证</string>
+    <string name="license_deprecated">已弃用</string>
+    <string name="license_osi_approved">OSI 获批</string>
+    <string name="license_fsf_libre">FSF 自由</string>
+
     <!-- Page -->
     <string name="page_modules">模块</string>
     <string name="page_home">概览</string>
@@ -60,18 +66,19 @@
     <string name="module_restore">还原</string>
     <string name="module_install">安装</string>
     <string name="module_download">下载</string>
+    <string name="module_view">查看</string>
+    <string name="module_new_version">新版本：%1$s</string>
     <!-- Modules Page -->
     <string name="modules_page_cloud_empty">存储库为空</string>
     <string name="modules_page_installed_empty">没找到任何模块</string>
     <string name="modules_page_updates_empty">所有模块已是最新</string>
     <string name="modules_page_search_empty">空列表</string>
     <string name="modules_page_search_placeholder">搜索…</string>
+    <string name="modules_version_dialog_desc">是否%1$s或下载该版本的模块？</string>
     <!-- View Module -->
-    <string name="view_module_loading">加载中…</string>
     <string name="view_module_versions">版本</string>
     <string name="view_module_provided">由 %1$s 提供</string>
     <string name="view_module_changelog">更新日志</string>
-    <string name="view_module_version_dialog_desc">是否安装/下载该版本的模块？</string>
 
     <!-- Settings-->
     <!-- Normal -->
@@ -124,6 +131,7 @@
     <!-- Message -->
     <string name="message_download_failed">下载失败：%1$s</string>
     <string name="message_download_success">下载成功</string>
+    <string name="message_loading">加载中…</string>
 
     <!-- Notification -->
     <string name="notification_name_download">模块下载</string>

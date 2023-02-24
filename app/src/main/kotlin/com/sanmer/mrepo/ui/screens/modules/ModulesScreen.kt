@@ -91,7 +91,7 @@ fun ModulesScreen(
                     when (it) {
                         Pages.Cloud.id -> CloudPage(navController = navController)
                         Pages.Installed.id -> InstalledPage()
-                        Pages.Updates.id -> UpdatesPage()
+                        Pages.Updates.id -> UpdatesPage(navController = navController)
                     }
                 }
             }

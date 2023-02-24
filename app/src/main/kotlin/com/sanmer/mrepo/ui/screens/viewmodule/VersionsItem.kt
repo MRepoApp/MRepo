@@ -8,6 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
@@ -53,14 +55,14 @@ private fun UpdateItem(
     repoName: String?,
     value: UpdateItem
 ) {
-    var dialog by remember { mutableStateOf(false) }
-    if (dialog) UpdateItemDialog(value = value) { dialog = false }
+    var update by remember { mutableStateOf(false) }
+    if (update) UpdateItemDialog(value = value) { update = false }
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp,
         shape = RoundedCornerShape(15.dp),
-        onClick = { dialog = true }
+        onClick = { update = true }
     ) {
         Row(
             modifier = Modifier
@@ -122,7 +124,8 @@ private fun UpdateItemDialog(
 
             Text(
                 modifier = Modifier.padding(bottom = 24.dp),
-                text = stringResource(id = R.string.view_module_version_dialog_desc),
+                text = stringResource(id = R.string.modules_version_dialog_desc,
+                    stringResource(id = R.string.module_install).toLowerCase(Locale.current)),
                 color = AlertDialogDefaults.textContentColor,
                 style = MaterialTheme.typography.bodyMedium
             )

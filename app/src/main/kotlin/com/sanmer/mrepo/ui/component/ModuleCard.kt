@@ -4,10 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -114,15 +111,17 @@ fun ModuleCard(
 
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 4.dp)
+                        .padding(start = 16.dp,end = 4.dp)
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (message != null) {
-                        Box(
-                            modifier = Modifier.weight(1f),
-                            content = message
-                        )
+                        ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
+                            Box(
+                                modifier = Modifier.weight(1f),
+                                content = message
+                            )
+                        }
                     } else {
                         Spacer(modifier = Modifier.weight(1f))
                     }

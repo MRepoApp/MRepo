@@ -3,11 +3,8 @@ package com.sanmer.mrepo.ui.screens.modules.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -15,6 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.data.Constant
+import com.sanmer.mrepo.data.json.OnlineModule
+import com.sanmer.mrepo.data.json.versionDisplay
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.provider.local.ModuleUtils
@@ -80,6 +80,13 @@ private fun LocalModuleItem(
     module: LocalModule
 ) {
     val state = ModuleUtils.updateState(module)
+    var update: OnlineModule? by remember { mutableStateOf(null) }
+
+    LaunchedEffect(state) {
+        update = Constant.online.find {
+            it.id == module.id && it.versionCode > module.versionCode
+        }
+    }
 
     ModuleCard(
         name = module.name,
@@ -99,20 +106,21 @@ private fun LocalModuleItem(
             )
         },
         indicator = when (module.state) {
-            State.REMOVE -> {
-                stateIndicator(R.drawable.trash_outline)
-            }
-            State.UPDATE  -> {
-                stateIndicator(R.drawable.import_outline)
-            }
+            State.REMOVE -> stateIndicator(R.drawable.trash_outline)
+            State.UPDATE -> stateIndicator(R.drawable.import_outline)
             State.ZYGISK_UNLOADED,
             State.RIRU_DISABLE,
-            State.ZYGISK_DISABLE -> {
-                stateIndicator(R.drawable.danger_outline)
-            }
+            State.ZYGISK_DISABLE -> stateIndicator(R.drawable.danger_outline)
             else -> null
         },
-        message = {},
+        message = {
+            update?.let {
+                Text(
+                    text = stringResource(id = R.string.module_new_version, it.versionDisplay),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
         buttons = {
             TextButton(
                 onClick = state.onClick,
@@ -123,7 +131,7 @@ private fun LocalModuleItem(
                         .padding(end = 6.dp),
                     text = stringResource(id = if (module.state == State.REMOVE) {
                         R.string.module_restore
-                    }else {
+                    } else {
                         R.string.module_remove
                     })
                 )

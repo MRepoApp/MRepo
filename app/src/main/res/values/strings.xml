@@ -14,11 +14,18 @@
     <string name="install_failure">Failed</string>
     <string name="install_reboot">Reboot</string>
 
+    <!-- License -->
+    <string name="license_title">View License</string>
+    <string name="license_deprecated">Deprecated</string>
+    <string name="license_osi_approved">OSI Approved</string>
+    <string name="license_fsf_libre">FSF Libre</string>
+
     <!-- Page -->
     <string name="page_modules">Modules</string>
     <string name="page_home">Overview</string>
     <string name="page_settings">Settings</string>
     <string name="page_app_theme">@string/settings_app_theme</string>
+    <string name="page_log_viewer">@string/settings_log_viewer</string>
     <string name="page_repository">@string/settings_repo</string>
     <string name="page_view_module">View Module</string>
 
@@ -63,18 +70,19 @@
     <string name="module_restore">Restore</string>
     <string name="module_install">Install</string>
     <string name="module_download">Download</string>
+    <string name="module_view">View</string>
+    <string name="module_new_version">New version: %1$s</string>
     <!-- Modules Page -->
     <string name="modules_page_cloud_empty">Repositories is empty</string>
     <string name="modules_page_installed_empty">No modules found</string>
     <string name="modules_page_updates_empty">All up to date</string>
     <string name="modules_page_search_empty">Empty list</string>
     <string name="modules_page_search_placeholder">Search…</string>
+    <string name="modules_version_dialog_desc">Do you want to %1$s or download this version of the module?</string>
     <!-- View Module -->
-    <string name="view_module_loading">Loading…</string>
     <string name="view_module_versions">Versions</string>
     <string name="view_module_provided">Provided by %1$s</string>
     <string name="view_module_changelog">Changelog</string>
-    <string name="view_module_version_dialog_desc">Do you want to install (download) this version of the module?</string>
 
     <!-- Settings -->
     <!-- Normal -->
@@ -128,6 +136,7 @@
     <!-- Message -->
     <string name="message_download_failed">Download failed: %1$s</string>
     <string name="message_download_success">Download successful</string>
+    <string name="message_loading">Loading…</string>
 
     <!-- Notification -->
     <string name="notification_name_download">Module Download</string>

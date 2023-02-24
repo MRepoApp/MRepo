@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.ui.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
@@ -20,7 +22,9 @@ fun NormalChip(
     text: String,
     modifier: Modifier = Modifier,
     maxLines: Int = 1,
-    shape: Shape = RoundedCornerShape(10.dp)
+    shape: Shape = RoundedCornerShape(10.dp),
+    enabled: Boolean = false,
+    onClick: () -> Unit = {}
 ) = NormalChip(
     modifier = modifier,
     leadingIcon = {
@@ -38,7 +42,9 @@ fun NormalChip(
             overflow = TextOverflow.Ellipsis
         )
     },
-    shape = shape
+    shape = shape,
+    onClick = onClick,
+    enabled = enabled
 )
 
 @Composable
@@ -47,15 +53,20 @@ fun NormalChip(
     label: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = Color.Transparent,
-    shape: Shape = RoundedCornerShape(10.dp)
+    shape: Shape = RoundedCornerShape(10.dp),
+    enabled: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
     Surface(
         modifier = modifier
-            .width(IntrinsicSize.Max)
-            .height(IntrinsicSize.Min),
+            .clip(shape)
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            ),
         shape = shape,
         color = containerColor,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
     ) {
         Row(
             modifier = Modifier
@@ -71,7 +82,7 @@ fun NormalChip(
             Spacer(modifier = Modifier.width(8.dp))
 
             ProvideTextStyle(
-                value = MaterialTheme.typography.labelSmall,
+                value = MaterialTheme.typography.labelMedium,
                 content = label
             )
         }

@@ -171,7 +171,7 @@ private fun Loading() = PageIndicator(
     },
     text = {
         Text(
-            text = stringResource(id = R.string.view_module_loading),
+            text = stringResource(id = R.string.message_loading),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline
         )

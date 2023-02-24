@@ -25,7 +25,7 @@ class ModulesViewModel : ViewModel() {
     @JvmName("getOnlineValue")
     fun getOnline() = if (isSearch) _online else online
 
-    private val updatable by derivedStateOf {
+    val updatable by derivedStateOf {
         Constant.online.filter { module ->
             module.versionCode > (Constant.local
                 .find {
@@ -34,9 +34,7 @@ class ModulesViewModel : ViewModel() {
         }
     }
     private val local by derivedStateOf {
-        Constant.local.filter { module ->
-            module.id !in updatable.map { it.id }
-        }
+        Constant.local.toList()
     }
     private val online by derivedStateOf {
         Constant.online.toList()

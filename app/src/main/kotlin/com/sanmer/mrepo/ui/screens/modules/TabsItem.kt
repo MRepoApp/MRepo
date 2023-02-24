@@ -23,7 +23,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.viewmodel.ModulesViewModel
 import kotlinx.coroutines.launch
 
 sealed class Pages(
@@ -31,8 +33,6 @@ sealed class Pages(
     @StringRes val label: Int,
     @DrawableRes val icon: Int
 ) {
-    val start = 1
-
     object Cloud : Pages(
         id = 0,
         label = R.string.modules_title_cloud,
@@ -59,7 +59,8 @@ val pages = listOf(
 @Composable
 fun TabsItem(
     state: PagerState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ModulesViewModel = viewModel(),
 ) {
     val scope = rememberCoroutineScope()
 
@@ -89,11 +90,27 @@ fun TabsItem(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Icon(
-                            modifier = Modifier.size(22.dp),
-                            painter = painterResource(id = page.icon),
-                            contentDescription = null
-                        )
+                        BadgedBox(
+                            badge = {
+                                if (!selected &&
+                                    page is Pages.Updates &&
+                                    viewModel.updatable.isNotEmpty()
+                                ) {
+                                    Badge(
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary
+                                    ) {
+                                        Text(text = "${viewModel.updatable.size}")
+                                    }
+                                }
+                            }
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(22.dp),
+                                painter = painterResource(id = page.icon),
+                                contentDescription = null
+                            )
+                        }
 
                         if (selected) {
                             Text(
