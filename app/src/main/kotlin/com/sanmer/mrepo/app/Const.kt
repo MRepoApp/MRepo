@@ -38,4 +38,7 @@ object Const {
 
     // TELEGRAM
     const val TELEGRAM_CHANNEL_URL = "https://t.me/mrepo_news"
+
+    // SPDX
+    const val SPDX_URL = "https://spdx.org/licenses/"
 }
