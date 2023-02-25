@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.provider.local.LocalLoader
 import com.sanmer.mrepo.provider.repo.RepoLoader
 import com.sanmer.mrepo.ui.component.DropdownMenu
@@ -73,13 +74,14 @@ private fun MenuItem(
     text = { Text(text = stringResource(id = value.label)) },
     onClick = {
         when (value) {
-            Menu.Cloud -> {
+            is Menu.Cloud -> {
                 RepoLoader.getRepoAll(context)
             }
-            Menu.Local -> {
+            is Menu.Local -> {
                 LocalLoader.getLocalAll(context)
             }
         }
         onClose()
-    }
+    },
+    enabled = if (value is Menu.Local) EnvProvider.isRoot else true
 )

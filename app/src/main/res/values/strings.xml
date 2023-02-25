@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">MRepo</string>
-
     <!-- Setup -->
     <string name="setup_mode">Working Mode</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc">Run as Root user</string>
+    <string name="setup_root_desc1">Require Root access from Magisk</string>
+    <string name="setup_root_desc2">Available: full functionality</string>
+    <string name="setup_non_root_title">Non-Root</string>
+    <string name="setup_non_root_desc1">Does not require Root access</string>
+    <string name="setup_non_root_desc2">Available: download module</string>
 
     <!-- Install -->
     <string name="install_title">Install</string>
@@ -16,7 +18,6 @@
 
     <!-- License -->
     <string name="license_title">View License</string>
-    <string name="license_deprecated">Deprecated</string>
     <string name="license_osi_approved">OSI Approved</string>
     <string name="license_fsf_libre">FSF Libre</string>
 
@@ -24,9 +25,6 @@
     <string name="page_modules">Modules</string>
     <string name="page_home">Overview</string>
     <string name="page_settings">Settings</string>
-    <string name="page_app_theme">@string/settings_app_theme</string>
-    <string name="page_log_viewer">@string/settings_log_viewer</string>
-    <string name="page_repository">@string/settings_repo</string>
     <string name="page_view_module">View Module</string>
 
     <!-- Overview -->
@@ -36,6 +34,8 @@
     <string name="root_status_granted">Granted</string>
     <string name="root_status_not_available">Not available</string>
     <string name="root_status_none">None</string>
+    <!-- Non Root Card -->
+    <string name="non_root_desc">Functionality is limited</string>
     <!-- Info Card -->
     <string name="modules_status_repo">Enabled Repositories / All Repositories</string>
     <string name="modules_status_module">Modules in Local / Modules in  Cloud</string>
@@ -111,7 +111,6 @@
     <string name="app_theme_dark_theme_light">Light</string>
     <string name="app_theme_dark_theme_dark">Dark</string>
     <!-- Repo -->
-    <string name="repo_empty">@string/modules_page_cloud_empty</string>
     <string name="repo_modules">%1$d modules</string>
     <string name="repo_last_update">Last update: %1$s</string>
     <string name="repo_options_update">Update</string>
@@ -140,7 +139,6 @@
 
     <!-- Notification -->
     <string name="notification_name_download">Module Download</string>
-    <string name="notification_name_update">Module Update</string>
 
     <!-- Other -->
     <string name="unknown_error">Unknown error</string>

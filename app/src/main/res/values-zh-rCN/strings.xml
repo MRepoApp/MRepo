@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Setup -->
-    <string name="setup_mode">选择工作模式</string>
+    <string name="setup_mode">工作模式</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc">使用 Root 用户身份运行</string>
+    <string name="setup_root_desc1">需要由 Magisk 提供 Root 权限</string>
+    <string name="setup_root_desc2">可用：完整功能</string>
+    <string name="setup_non_root_title">免 Root</string>
+    <string name="setup_non_root_desc1">不需要 Root 权限</string>
+    <string name="setup_non_root_desc2">可用：下载模块</string>
 
     <!-- Install -->
     <string name="install_title">安装</string>
@@ -14,7 +18,6 @@
 
     <!-- License -->
     <string name="license_title">查看许可证</string>
-    <string name="license_deprecated">已弃用</string>
     <string name="license_osi_approved">OSI 获批</string>
     <string name="license_fsf_libre">FSF 自由</string>
 
@@ -31,10 +34,11 @@
     <string name="root_status_granted">已授权</string>
     <string name="root_status_not_available">不可用</string>
     <string name="root_status_none">无</string>
-    <!-- Modules Card -->
+    <!-- Non Root Card -->
+    <string name="non_root_desc">功能受到限制</string>
+    <!-- Info Card -->
     <string name="modules_status_repo">已启用 / 存储库</string>
     <string name="modules_status_module">本地模块 / 云端模块</string>
-    <!-- Device Card -->
     <string name="device_system_version">系统版本</string>
     <string name="device_system_abi">系统架构</string>
     <string name="device_fingerprint">系统指纹</string>
@@ -135,7 +139,6 @@
 
     <!-- Notification -->
     <string name="notification_name_download">模块下载</string>
-    <string name="notification_name_update">模块更新</string>
 
     <!-- Other -->
     <string name="unknown_error">未知错误</string>

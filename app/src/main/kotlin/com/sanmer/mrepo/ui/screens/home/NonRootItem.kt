@@ -13,62 +13,41 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.provider.EnvProvider
 
 @Composable
-fun RootItem() = Surface(
+fun NonRootItem() = Surface(
     shape = RoundedCornerShape(20.dp),
     color = MaterialTheme.colorScheme.surface,
     tonalElevation = 2.dp,
-    onClick = {
-        if (Status.Env.isFailed) {
-            EnvProvider.init()
-        }
-    }
+    onClick = {}
 ) {
     Row(
         modifier = Modifier
-            .padding(vertical = 20.dp, horizontal = 14.dp)
+            .padding(vertical = 20.dp, horizontal = 20.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
         Icon(
             modifier = Modifier
-                .size(36.dp),
-            painter = painterResource(id = R.drawable.ic_magisk),
+                .size(28.dp),
+            painter = painterResource(id = R.drawable.slash_outline),
             contentDescription = null
         )
 
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(16.dp))
 
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = if (Status.Env.isSucceeded) {
-                    stringResource(id = R.string.root_status_access,
-                        stringResource(id = R.string.root_status_granted)
-                    )
-                } else {
-                    stringResource(id = R.string.root_status_access,
-                        stringResource(id = R.string.root_status_none)
-                    )
-                },
+                text = stringResource(id = R.string.non_root_title),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = if (Status.Env.isSucceeded) {
-                    stringResource(id = R.string.root_status_provider,
-                        EnvProvider.version)
-                } else {
-                    stringResource(id = R.string.root_status_provider,
-                        stringResource(id = R.string.root_status_not_available)
-                    )
-                },
+                text = stringResource(id = R.string.non_root_desc),
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

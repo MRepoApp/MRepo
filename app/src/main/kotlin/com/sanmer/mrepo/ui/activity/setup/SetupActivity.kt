@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.sanmer.mrepo.app.Config.State
+import com.sanmer.mrepo.data.Constant
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.provider.FileProvider
 import com.sanmer.mrepo.ui.activity.main.MainActivity
@@ -26,6 +27,14 @@ class SetupActivity : ComponentActivity() {
         FileProvider.init(this)
         EnvProvider.init()
         Works.start()
+
+        EnvProvider.onNonRoot {
+            Constant.apply {
+                if (local.isNotEmpty()) {
+                    deleteLocalAll()
+                }
+            }
+        }
 
         super.finish()
     }

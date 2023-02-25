@@ -109,6 +109,12 @@ object Constant {
         localModuleDao.insert(list.map { it.toEntity() })
     }
 
+    @Synchronized
+    fun deleteLocalAll() = coroutineScope.launch(Dispatchers.IO) {
+        local.clear()
+        localModuleDao.deleteAll()
+    }
+
     private suspend fun getLocalAll() = withContext(Dispatchers.IO) {
         if (local.isNotEmpty()) {
             local.clear()

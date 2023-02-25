@@ -18,8 +18,11 @@ import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Config.State
 import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.activity.log.LogActivity
+import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.ui.component.EditItemForSetting
+import com.sanmer.mrepo.ui.component.MenuItemForSetting
 import com.sanmer.mrepo.ui.component.NormalItemForSetting
 import com.sanmer.mrepo.ui.component.TitleItemForSetting
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
@@ -31,6 +34,7 @@ fun SettingsScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
+    val that = context as MainActivity
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     BackHandler { navController.navigateToHome() }
@@ -88,6 +92,20 @@ fun SettingsScreen(
                 subText = stringResource(id = R.string.settings_repo_desc),
                 onClick = {
                     navController.navigatePopUpTo(SettingsGraph.Repo.route)
+                }
+            )
+
+            MenuItemForSetting(
+                iconRes = R.drawable.main_component_outline,
+                title = stringResource(id = R.string.settings_mode),
+                itemList = listOf(
+                    stringResource(id = R.string.settings_mode_root),
+                    stringResource(id = R.string.settings_mode_non_root)
+                ),
+                selected = EnvProvider.index,
+                onChange = { index, _ ->
+                    EnvProvider.setMode(index)
+                    that.setup()
                 }
             )
 

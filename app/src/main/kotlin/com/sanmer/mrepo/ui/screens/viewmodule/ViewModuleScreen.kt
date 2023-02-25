@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.status.Event
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.component.CircularProgressIndicator
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.component.PageIndicator
@@ -152,7 +153,8 @@ private fun InstallButton(
     contentPadding = PaddingValues(vertical = 12.dp),
     onClick = {
         viewModel.installer(context)
-    }
+    },
+    enabled = EnvProvider.isRoot
 ) {
     Text(
         text = stringResource(id = R.string.module_install),

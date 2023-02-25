@@ -275,7 +275,7 @@ private fun RepositoryTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController,
 ) = NavigateUpTopBar(
-    title = R.string.settings_repo,
+    title = R.string.page_repository,
     scrollBehavior = scrollBehavior,
     navController = navController,
     actions = {

@@ -15,6 +15,7 @@ object Config {
     // WORKING_MODE
     const val FIRST_SETUP = 0
     const val MODE_ROOT = 1
+    const val MODE_NON_ROOT = 2
     private const val WORKING_MODE_KEY = "WORKING_MODE"
     var workingMode: Int
         get() = sp.getValue(WORKING_MODE_KEY, FIRST_SETUP)

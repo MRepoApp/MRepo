@@ -16,6 +16,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.data.Repository
 import com.sanmer.mrepo.data.json.UpdateItem
 import com.sanmer.mrepo.data.json.versionDisplay
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.component.ExpandableItem
 import com.sanmer.mrepo.utils.expansion.toDate
 import com.sanmer.mrepo.viewmodel.DetailViewModel
@@ -154,7 +155,8 @@ private fun UpdateItemDialog(
                     onClick = {
                         viewModel.installer(context = context, item = value)
                         onClose()
-                    }
+                    },
+                    enabled = EnvProvider.isRoot
                 ) {
                     Text(text = stringResource(id = R.string.module_install))
                 }

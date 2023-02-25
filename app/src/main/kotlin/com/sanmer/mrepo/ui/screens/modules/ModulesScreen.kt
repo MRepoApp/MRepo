@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.Constant
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
@@ -47,7 +48,13 @@ fun ModulesScreen(
     navController: NavController
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val state = rememberPagerState(initialPage = Pages.Installed.id)
+    val state = rememberPagerState(
+        initialPage = if (EnvProvider.isRoot) {
+            Pages.Installed.id
+        } else {
+            Pages.Cloud.id
+        }
+    )
 
     BackHandler {
         if (viewModel.isSearch) {
@@ -86,7 +93,7 @@ fun ModulesScreen(
                         state = state,
                         pagerSnapDistance = PagerSnapDistance.atMost(0)
                     ),
-                    userScrollEnabled = !viewModel.isSearch
+                    userScrollEnabled = if (viewModel.isSearch) false else EnvProvider.isRoot
                 ) {
                     when (it) {
                         Pages.Cloud.id -> CloudPage(navController = navController)

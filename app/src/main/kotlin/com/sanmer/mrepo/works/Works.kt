@@ -2,6 +2,7 @@ package com.sanmer.mrepo.works
 
 import android.content.Context
 import androidx.work.*
+import com.sanmer.mrepo.provider.EnvProvider
 import java.util.concurrent.TimeUnit
 
 object Works {
@@ -25,6 +26,10 @@ object Works {
     }
 
     fun start() {
-        workManager.enqueue(listOf(RepoOneTimeWork, LocalOneTimeWork))
+        EnvProvider.onRoot {
+            workManager.enqueue(listOf(RepoOneTimeWork, LocalOneTimeWork))
+        }.onNonRoot {
+            workManager.enqueue(RepoOneTimeWork)
+        }
     }
 }

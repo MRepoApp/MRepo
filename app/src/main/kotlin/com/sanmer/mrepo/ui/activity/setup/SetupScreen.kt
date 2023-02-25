@@ -1,7 +1,6 @@
 package com.sanmer.mrepo.ui.activity.setup
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -33,13 +32,25 @@ fun SetupScreen() {
             color = MaterialTheme.colorScheme.onBackground
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         ModeItem(
             title = stringResource(id = R.string.setup_root_title),
-            text = stringResource(id = R.string.setup_root_desc)
+            desc1 = stringResource(id = R.string.setup_root_desc1),
+            desc2 = stringResource(id = R.string.setup_root_desc2)
         ) {
             Config.workingMode = Config.MODE_ROOT
+            that.finish()
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        ModeItem(
+            title = stringResource(id = R.string.setup_non_root_title),
+            desc1 = stringResource(id = R.string.setup_non_root_desc1),
+            desc2 = stringResource(id = R.string.setup_non_root_desc2)
+        ) {
+            Config.workingMode = Config.MODE_NON_ROOT
             that.finish()
         }
     }
@@ -48,13 +59,12 @@ fun SetupScreen() {
 @Composable
 private fun ModeItem(
     title: String,
-    text: String,
+    desc1: String,
+    desc2: String,
     onClick: () -> Unit
 ) = OutlinedCard(
     onClick = onClick,
-    modifier = Modifier
-        .fillMaxWidth(0.65f),
-    colors = CardDefaults.cardColors(),
+    modifier = Modifier.fillMaxWidth(0.65f),
 ) {
     Column(
         modifier = Modifier
@@ -62,16 +72,24 @@ private fun ModeItem(
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         Text(
-            text = text,
-            style = MaterialTheme.typography.bodyMedium
+            text = desc1,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = desc2,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }

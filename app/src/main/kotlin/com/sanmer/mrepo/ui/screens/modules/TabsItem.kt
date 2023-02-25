@@ -25,6 +25,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 import kotlinx.coroutines.launch
 
@@ -125,7 +126,8 @@ fun TabsItem(
                     }
                 },
                 selectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                enabled = if (page !is Pages.Cloud) EnvProvider.isRoot else true
             )
         }
     }

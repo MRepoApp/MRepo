@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.utils.HtmlText
 import com.sanmer.mrepo.ui.utils.Logo
 
@@ -34,7 +35,8 @@ fun HomeScreen() {
                 .padding(all = 20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            RootItem()
+            if (EnvProvider.isRoot) RootItem()
+            if (EnvProvider.isNonRoot) NonRootItem()
             InfoItem()
         }
     }
@@ -61,7 +63,8 @@ private fun HomeTopBar(
     actions = {
         var expanded by remember { mutableStateOf(false) }
         IconButton(
-            onClick = { expanded = true }
+            onClick = { expanded = true },
+            enabled = EnvProvider.isRoot
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.refresh_outline),
