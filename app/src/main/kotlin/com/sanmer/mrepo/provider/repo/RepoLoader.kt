@@ -22,6 +22,7 @@ object RepoLoader {
     private val moshi = Moshi.Builder().build()
     private val adapter = moshi.adapter<Modules>()
 
+    @Synchronized
     fun getRepoAll(
         context: Context
     ) = coroutineScope.launch(Dispatchers.IO) {
@@ -60,8 +61,7 @@ object RepoLoader {
                 size = it.modules.size,
                 timestamp = it.timestamp
             ))
-        }
-        .onFailure {
+        }.onFailure {
             Timber.e("getRepo: ${it.message}")
         }
 

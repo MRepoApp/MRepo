@@ -10,7 +10,10 @@ import com.sanmer.mrepo.utils.expansion.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 object Repository {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -23,7 +26,7 @@ object Repository {
 
     fun init(context: Context) {
         db = RepoDatabase.getDatabase(context)
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch {
             getAll()
         }
     }
@@ -31,16 +34,20 @@ object Repository {
     fun getById(id: Long) = repo.find { it.id == id }
 
     suspend fun getAll() = withContext(Dispatchers.IO) {
-        if (repo.isNotEmpty()) {
-            repo.clear()
-        }
+        return@withContext Mutex().withLock {
+            if (repo.isNotEmpty()) {
+                repo.clear()
+            }
 
-        repoDao.getAll().apply {
-            if (isNotEmpty()) {
-                repo.addAll(this)
-            } else {
-                if (EnvProvider.isSetup) {
-                    insert(Repo(url = Const.MY_REPO_URL))
+            repoDao.getAll().apply {
+                if (isNotEmpty()) {
+                    repo.addAll(this)
+                } else {
+                    Timber.d("${EnvProvider.index}")
+                    if (EnvProvider.isSetup) {
+                        Timber.d("isSetup")
+                        insert(Repo(url = Const.MY_REPO_URL))
+                    }
                 }
             }
         }

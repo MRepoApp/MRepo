@@ -21,6 +21,7 @@ object LocalLoader {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val fs = FileProvider
 
+    @Synchronized
     fun getLocalAll(
         context: Context
     ) = runCatching {
