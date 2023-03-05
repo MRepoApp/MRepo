@@ -5,45 +5,33 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateListOf
 import androidx.core.net.toUri
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.Constant
+import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.utils.MediaStoreUtils.copyTo
 import com.sanmer.mrepo.utils.MediaStoreUtils.displayName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 object InstallUtils : Status.State() {
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     val console = mutableStateListOf<String>()
+
+    /** Since the data is held by the ViewModel,
+     * it is necessary to use the Local fake update to
+     * notify the ViewModel to update the data */
+    override fun setLoading(value: Any?) {
+        super.setLoading(value)
+        Status.Local.setLoading()
+    }
+    override fun setSucceeded(value: Any?) {
+        super.setSucceeded(value)
+        Status.Local.setSucceeded()
+    }
 
     fun clear() {
         console.clear()
         setNon()
-    }
-
-    private fun install(
-        context: Context,
-        path: File,
-        name: String
-    ) {
-        setLoading()
-
-        console.add("- Installing $name")
-        ModuleUtils.install(
-            context = context,
-            zipFile = path,
-            onConsole = {
-                console.add(it)
-            },
-            onSucceeded = { module ->
-                if (module in Constant.local) {
-                    Constant.updateLocal(module)
-                } else {
-                    Constant.insertLocal(module)
-                }
-                setSucceeded()
-            },
-            onFailed = {
-                setFailed()
-            }
-        )
     }
 
     fun install(
@@ -58,15 +46,28 @@ object InstallUtils : Status.State() {
         context: Context,
         path: Uri
     ) {
+        setLoading()
+
         val file = context.cacheDir.resolve("install.zip")
-
-        console.add("- Copying zip to temp directory")
         path.copyTo(file)
+        console.add("- Copying zip to temp directory")
+        console.add("- Installing ${path.displayName}")
 
-        install(
+        ModuleUtils.install(
             context = context,
-            path = file,
-            name = path.displayName
+            zipFile = file,
+            onConsole = {
+                console.add(it)
+            },
+            onSucceeded = { module ->
+                coroutineScope.launch {
+                    ModuleManager.insertLocal(module)
+                    setSucceeded()
+                }
+            },
+            onFailed = {
+                setFailed()
+            }
         )
     }
 }

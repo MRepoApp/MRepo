@@ -3,7 +3,7 @@ package com.sanmer.mrepo.works
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.sanmer.mrepo.provider.local.LocalLoader
+import com.sanmer.mrepo.provider.local.LocalProvider
 import timber.log.Timber
 
 class LocalWork(
@@ -15,7 +15,7 @@ class LocalWork(
 ) {
     override suspend fun doWork(): Result {
         return try {
-            LocalLoader.getLocalAll()
+            LocalProvider.getLocalAll()
             Result.success()
         } catch (e: Exception) {
             Timber.e(e.message)

@@ -1,31 +1,22 @@
 package com.sanmer.mrepo.provider.repo
 
-import android.content.Context
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.Constant
-import com.sanmer.mrepo.data.Repository
+import com.sanmer.mrepo.data.CloudManager
+import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.data.json.Modules
 import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.json.Update
-import com.sanmer.mrepo.utils.MediaStoreUtils.toFileDir
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.adapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-object RepoLoader {
+object RepoProvider {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val moshi = Moshi.Builder().build()
-    private val adapter = moshi.adapter<Modules>()
 
     @Synchronized
-    fun getRepoAll(
-        context: Context
-    ) = coroutineScope.launch(Dispatchers.IO) {
+    fun getRepoAll() = coroutineScope.launch(Dispatchers.IO) {
         if (Status.Cloud.isLoading) {
             Timber.w("getRepo is already loading!")
             return@launch
@@ -33,9 +24,9 @@ object RepoLoader {
             Status.Cloud.setLoading()
         }
 
-        Timber.i("getRepo: ${Repository.enabledRepoSize}/${Repository.repoSize}")
-        val out = Repository.getAll().map { repo ->
-            getRepo(context, repo)
+        Timber.i("getRepo: ${RepoManger.enabled}/${RepoManger.all}")
+        val out = RepoManger.getAll().map { repo ->
+            getRepo(repo)
         }
 
         if (out.all { it.isSuccess }) {
@@ -47,16 +38,16 @@ object RepoLoader {
                 Status.Cloud.setSucceeded()
             }
         }
-
-        if (Status.Cloud.isSucceeded) {
-            Constant.getOnline()
-        }
     }
 
-    suspend fun getRepo(context: Context, repo: Repo) = getRepo(repo)
-        .onSuccess {
-            Constant.updateCloud(context, repo.id, it.copy(repoId = repo.id))
-            Repository.update(repo.copy(
+    suspend fun getRepo(repo: Repo) = if (repo.enable) {
+        getRepo(repo.url).onSuccess {
+            CloudManager.updateById(
+                id = repo.id,
+                value = it.copy(repoId = repo.id)
+            )
+
+            RepoManger.update(repo.copy(
                 name = it.name,
                 size = it.modules.size,
                 timestamp = it.timestamp
@@ -64,9 +55,6 @@ object RepoLoader {
         }.onFailure {
             Timber.e("getRepo: ${it.message}")
         }
-
-    private suspend fun getRepo(repo: Repo) = if (repo.enable) {
-        getRepo(repo.url)
     } else {
         Result.failure(Exception("${repo.name} is disabled!"))
     }
@@ -99,7 +87,7 @@ object RepoLoader {
             return Result.failure(Exception("The repoId is empty!"))
         } else {
             val result = module.repoId.map { id ->
-                val repo = Repository.repo.first { it.id == id }
+                val repo = RepoManger.getById(id)!!
                 getUpdate(
                     repo = repo,
                     id = module.id
@@ -136,40 +124,6 @@ object RepoLoader {
             }
         } catch (e: Exception) {
             return@withContext Result.failure(e)
-        }
-    }
-
-    private fun Long.toDir() = "repositories/${this}.json"
-
-    private fun Context.getRepo(id: Long): Modules? {
-        val json = filesDir.resolve(id.toDir())
-
-        return if (json.exists()) {
-            adapter.fromJson(json.readText())
-        } else {
-            null
-        }
-    }
-
-    fun Context.updateRepo(
-        id: Long,
-        value: Modules
-    ) = toFileDir(adapter.toJson(value), id.toDir())
-
-    fun Context.deleteRepo(id: Long) {
-        val json = filesDir.resolve(id.toDir())
-        json.delete()
-    }
-
-    suspend fun Context.getAllRepo() = withContext(Dispatchers.Default) {
-        mutableListOf<Modules>().apply {
-            Repository.getAll().forEach { repo ->
-                if (repo.enable) {
-                    getRepo(repo.id)?.let {
-                        add(it.copy(repoId = repo.id))
-                    }
-                }
-            }
         }
     }
 }

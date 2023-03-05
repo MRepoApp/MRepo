@@ -25,11 +25,9 @@ object Works {
         workManager = WorkManager.getInstance(context)
     }
 
-    fun start() {
-        EnvProvider.onRoot {
-            workManager.enqueue(listOf(RepoOneTimeWork, LocalOneTimeWork))
-        }.onNonRoot {
-            workManager.enqueue(RepoOneTimeWork)
-        }
+    fun start() = when {
+        EnvProvider.isRoot -> workManager.enqueue(listOf(RepoOneTimeWork, LocalOneTimeWork))
+        EnvProvider.isNonRoot -> workManager.enqueue(RepoOneTimeWork)
+        else -> null
     }
 }

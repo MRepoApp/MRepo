@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.Constant
-import com.sanmer.mrepo.data.Repository
-import com.sanmer.mrepo.provider.repo.RepoLoader
+import com.sanmer.mrepo.data.RepoManger
+import com.sanmer.mrepo.provider.repo.RepoProvider
 import timber.log.Timber
 
 class RepoWork(
@@ -24,9 +23,9 @@ class RepoWork(
             Status.Cloud.setLoading()
         }
 
-        Timber.i("getRepo: ${Repository.enabledRepoSize}/${Repository.repoSize}")
-        val out = Repository.getAll().map { repo ->
-            RepoLoader.getRepo(applicationContext, repo)
+        Timber.i("getRepo: ${RepoManger.enabled}/${RepoManger.all}")
+        val out = RepoManger.getAll().map { repo ->
+            RepoProvider.getRepo(repo)
         }
 
         val result = if (out.all { it.isSuccess }) {
@@ -40,10 +39,6 @@ class RepoWork(
                 Status.Cloud.setSucceeded()
                 Result.failure()
             }
-        }
-
-        if (Status.Cloud.isSucceeded) {
-            Constant.getOnline()
         }
 
         return result
