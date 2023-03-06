@@ -85,7 +85,7 @@ object Ksu : Api() {
         onFailed = onFailed,
         onFinished = onFinished,
         zipFile = zipFile,
-        cmd = "$ksud install ${zipFile.absolutePath}"
+        cmd = "$ksud module install ${zipFile.absolutePath}"
     )
 
     private fun getLocal(obj: JSONObject) = LocalModule(
