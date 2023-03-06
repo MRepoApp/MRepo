@@ -39,7 +39,7 @@ fun SetupScreen() {
             desc1 = stringResource(id = R.string.setup_root_desc1),
             desc2 = stringResource(id = R.string.setup_root_desc2)
         ) {
-            Config.workingMode = Config.MODE_ROOT
+            Config.WORKING_MODE = Config.MODE_ROOT
             that.finish()
         }
 
@@ -50,7 +50,7 @@ fun SetupScreen() {
             desc1 = stringResource(id = R.string.setup_non_root_desc1),
             desc2 = stringResource(id = R.string.setup_non_root_desc2)
         ) {
-            Config.workingMode = Config.MODE_NON_ROOT
+            Config.WORKING_MODE = Config.MODE_NON_ROOT
             that.finish()
         }
     }

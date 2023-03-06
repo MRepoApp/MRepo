@@ -56,7 +56,7 @@ object RepoProvider {
             Timber.e("getRepo: ${it.message}")
         }
     } else {
-        Result.failure(Exception("${repo.name} is disabled!"))
+        Result.failure(RuntimeException("${repo.name} is disabled!"))
     }
 
     private suspend fun getRepo(repoUrl: String) = withContext(Dispatchers.IO) {
@@ -69,7 +69,7 @@ object RepoProvider {
                 return@withContext if (data != null) {
                     Result.success(data)
                 }else {
-                    Result.failure(Exception("The data is null!"))
+                    Result.failure(IllegalArgumentException("The data is null!"))
                 }
             } else {
                 val errorBody = response.errorBody()
@@ -84,7 +84,7 @@ object RepoProvider {
 
     suspend fun getUpdate(module: OnlineModule): Result<List<Update?>> {
         if (module.repoId.isEmpty()) {
-            return Result.failure(Exception("The repoId is empty!"))
+            return Result.failure(IllegalArgumentException("The repoId is empty!"))
         } else {
             val result = module.repoId.map { id ->
                 val repo = RepoManger.getById(id)!!
@@ -114,13 +114,13 @@ object RepoProvider {
                 return@withContext if (data != null) {
                     Result.success(data.copy(repoId = repo.id))
                 }else {
-                    Result.failure(Exception("The data is null!"))
+                    Result.failure(IllegalArgumentException("The data is null!"))
                 }
             } else {
                 val errorBody = response.errorBody()
                 val error = errorBody?.string()
 
-                return@withContext Result.failure(Exception(error))
+                return@withContext Result.failure(RuntimeException(error))
             }
         } catch (e: Exception) {
             return@withContext Result.failure(e)

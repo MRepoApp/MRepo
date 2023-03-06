@@ -5,7 +5,7 @@ import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.provider.FileProvider
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.provider.api.Ksu
 import com.sanmer.mrepo.provider.api.Magisk
 import com.topjohnwu.superuser.Shell
@@ -24,7 +24,7 @@ object LocalProvider {
         context: Context
     ) = runCatching {
         if (Status.Provider.isFailed) {
-            FileProvider.init(context)
+            SuProvider.init(context)
         }
 
         coroutineScope.launch(Dispatchers.IO) {
@@ -45,7 +45,7 @@ object LocalProvider {
 
         if (!Status.Provider.isSucceeded) {
             Status.Local.setFailed()
-            throw RuntimeException("FileProvider is not ready!")
+            throw RuntimeException("SuProvider is not ready!")
         }
 
         if (!Status.Env.isSucceeded) {

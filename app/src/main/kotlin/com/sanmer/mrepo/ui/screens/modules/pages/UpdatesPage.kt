@@ -19,7 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.Repository
+import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.json.versionDisplay
 import com.sanmer.mrepo.ui.component.ModuleCard
@@ -33,7 +33,7 @@ fun UpdatesPage(
     viewModel: ModulesViewModel = viewModel(),
     navController: NavController
 ) {
-    val list = viewModel.getUpdatable()
+    val list = viewModel.updatableValue
         .sortedBy { it.name }
 
     if (list.isEmpty()) {
@@ -83,7 +83,7 @@ private fun OnlineModuleItem(
 
     var repoName: String? by remember { mutableStateOf(null) }
     LaunchedEffect(module) {
-        repoName = Repository.getById(module.repoId.first())?.name
+        repoName = RepoManger.getById(module.repoId.first())?.name
     }
 
     var update by remember { mutableStateOf(false) }

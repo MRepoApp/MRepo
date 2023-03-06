@@ -3,7 +3,7 @@
     <!-- Setup -->
     <string name="setup_mode">工作模式</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">需要由 Magisk 提供 Root 权限</string>
+    <string name="setup_root_desc1">需要由 Magisk 或 KernelSU 提供 Root 权限</string>
     <string name="setup_root_desc2">可用：完整功能</string>
     <string name="setup_non_root_title">免 Root</string>
     <string name="setup_non_root_desc1">不需要 Root 权限</string>

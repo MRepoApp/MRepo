@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,21 +28,32 @@ fun RootItem() = Surface(
         }
     }
 ) {
+    LaunchedEffect(Status.Env.event, Status.Provider.event) {
+        if (Status.Env.isFailed && Status.Provider.isSucceeded) {
+            EnvProvider.init()
+        }
+    }
+
     Row(
         modifier = Modifier
-            .padding(vertical = 20.dp, horizontal = 14.dp)
+            .padding(all = 20.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
         Icon(
             modifier = Modifier
-                .size(36.dp),
-            painter = painterResource(id = R.drawable.ic_magisk),
+                .size(28.dp),
+            painter = painterResource(id =
+            if (Status.Env.isSucceeded) {
+                R.drawable.tick_circle_outline
+            } else {
+                R.drawable.slash_outline
+            }),
             contentDescription = null
         )
 
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(16.dp))
 
         Column(
             modifier = Modifier.fillMaxWidth(),

@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.Constant
-import com.sanmer.mrepo.data.Repository
+import com.sanmer.mrepo.data.ModuleManager
+import com.sanmer.mrepo.data.RepoManger
 
 @Composable
 fun InfoItem() = OutlinedCard(
@@ -30,12 +30,12 @@ fun InfoItem() = OutlinedCard(
     ) {
         InfoItem(
             key = stringResource(id = R.string.modules_status_repo),
-            value = "${Repository.enabledRepoSize} / ${Repository.repoSize}"
+            value = "${RepoManger.enabled} / ${RepoManger.all}"
         )
 
         InfoItem(
             key = stringResource(id = R.string.modules_status_module),
-            value = "${Constant.localSize} / ${Constant.onlineSize}"
+            value = "${ModuleManager.local} / ${ModuleManager.online}"
         )
 
         InfoItem(

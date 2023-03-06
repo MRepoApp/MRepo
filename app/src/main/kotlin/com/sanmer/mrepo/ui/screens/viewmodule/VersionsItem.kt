@@ -13,7 +13,8 @@ import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.Repository
+import com.sanmer.mrepo.data.RepoManger
+import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.json.UpdateItem
 import com.sanmer.mrepo.data.json.versionDisplay
 import com.sanmer.mrepo.provider.EnvProvider
@@ -42,10 +43,7 @@ fun VersionsItem(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             viewModel.versions.forEach {
-                UpdateItem(
-                    repoName = Repository.getById(it.repoId)?.name,
-                    value = it
-                )
+                UpdateItem(value = it)
             }
         }
     }
@@ -53,9 +51,13 @@ fun VersionsItem(
 
 @Composable
 private fun UpdateItem(
-    repoName: String?,
     value: UpdateItem
 ) {
+    var repo: Repo? by remember { mutableStateOf(null) }
+    LaunchedEffect(value) {
+        repo = RepoManger.getById(value.repoId)
+    }
+
     var update by remember { mutableStateOf(false) }
     if (update) UpdateItemDialog(value = value) { update = false }
 
@@ -81,9 +83,9 @@ private fun UpdateItem(
                     style = MaterialTheme.typography.bodyMedium,
                 )
 
-                repoName?.let {
+                repo?.let {
                     Text(
-                        text = stringResource(id = R.string.view_module_provided, repoName),
+                        text = stringResource(id = R.string.view_module_provided, it.name),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.primary
                     )

@@ -95,13 +95,13 @@ fun TabsItem(
                             badge = {
                                 if (!selected &&
                                     page is Pages.Updates &&
-                                    viewModel.updatable.isNotEmpty()
+                                    viewModel.updatableValue.isNotEmpty()
                                 ) {
                                     Badge(
                                         containerColor = MaterialTheme.colorScheme.primary,
                                         contentColor = MaterialTheme.colorScheme.onPrimary
                                     ) {
-                                        Text(text = "${viewModel.updatable.size}")
+                                        Text(text = "${viewModel.updatableValue.size}")
                                     }
                                 }
                             }

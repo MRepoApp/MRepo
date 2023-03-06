@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.Constant
+import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.json.versionDisplay
 import com.sanmer.mrepo.data.module.LocalModule
@@ -23,12 +23,14 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.stateIndicator
 import com.sanmer.mrepo.ui.screens.modules.InstallItem
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun InstalledPage(
     viewModel: ModulesViewModel = viewModel(),
 ) {
-    val list = viewModel.getLocal()
+    val list = viewModel.localValue
         .sortedBy { it.name }
 
     Box(
@@ -79,12 +81,15 @@ private fun ModulesList(
 private fun LocalModuleItem(
     module: LocalModule
 ) {
-    val state = ModuleUtils.updateState(module)
+    val state = ModuleUtils.updateUIState(module)
     var update: OnlineModule? by remember { mutableStateOf(null) }
 
     LaunchedEffect(state) {
-        update = Constant.online.find {
-            it.id == module.id && it.versionCode > module.versionCode
+        launch(Dispatchers.Default) {
+            update = ModuleManager.getOnlineAll()
+                .find {
+                    it.id == module.id && it.versionCode > module.versionCode
+                }
         }
     }
 

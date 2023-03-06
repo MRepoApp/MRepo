@@ -22,7 +22,7 @@ object SPUtils {
             is Int -> getInt(name, default)
             is Boolean -> getBoolean(name, default)
             is Float -> getFloat(name, default)
-            else -> throw java.lang.IllegalArgumentException()
+            else -> throw IllegalArgumentException()
         }
         @Suppress("UNCHECKED_CAST")
         res as T

@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config.State
+import com.sanmer.mrepo.app.Config
 
 private sealed class DarkMode(
     val id: Int,
@@ -27,37 +27,42 @@ private sealed class DarkMode(
     val name: Int
 ) {
     object Auto : DarkMode(
-        id = 0,
+        id = Config.FOLLOW_SYSTEM,
         icon = R.drawable.auto_brightness_outline,
         name = R.string.app_theme_dark_theme_auto
     )
     object Light : DarkMode(
-        id = 1,
+        id = Config.ALWAYS_OFF,
         icon = R.drawable.sun_outline,
         name = R.string.app_theme_dark_theme_light
     )
     object Dark : DarkMode(
-        id = 2,
+        id = Config.ALWAYS_ON,
         icon = R.drawable.moon_outline,
         name = R.string.app_theme_dark_theme_dark
     )
 }
 
+private val modes = listOf(
+    DarkMode.Auto,
+    DarkMode.Light,
+    DarkMode.Dark
+)
+
 @Composable
 fun DarkModeItem() {
-    val list = listOf(DarkMode.Auto, DarkMode.Light, DarkMode.Dark)
     LazyRow(
         contentPadding = PaddingValues(horizontal = 18.dp, vertical = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         items(
-            items = list,
+            items = modes,
             key = { it.id }
         ) {
             DarkModeItem(
                 item = it
             ) { id ->
-                State.darkMode = id
+                Config.DARK_MODE = id
             }
         }
     }
@@ -68,7 +73,7 @@ private fun DarkModeItem(
     item: DarkMode,
     onClick: (Int) -> Unit
 ) {
-    val selected = item.id == State.darkMode
+    val selected = item.id == Config.DARK_MODE
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))

@@ -1,9 +1,12 @@
 package com.sanmer.mrepo.ui.component
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -77,8 +80,8 @@ fun ExpandableItem(
 
         AnimatedVisibility(
             visible = expanded,
-            enter = fadeIn(tween(200)) + expandVertically(tween(400)),
-            exit = fadeOut(tween(200)) + shrinkVertically(tween(400)),
+            enter = fadeIn(tween(300)),
+            exit = fadeOut(tween(300)),
             content = content
         )
     }

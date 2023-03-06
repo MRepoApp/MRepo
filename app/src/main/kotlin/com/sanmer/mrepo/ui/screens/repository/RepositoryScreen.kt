@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.repository
 
-import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -25,12 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.Constant
-import com.sanmer.mrepo.data.Repository
 import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.provider.repo.RepoLoader
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
@@ -38,30 +34,29 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.HtmlText
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.utils.expansion.navigateBack
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
 fun RepositoryScreen(
+    viewModel: RepositoryViewModel = viewModel(),
     navController: NavController
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val list by remember { derivedStateOf { Repository.repo } }
 
     BackHandler { navController.navigateBack() }
 
-    var progress by remember { mutableStateOf(false) }
-    var failure by remember { mutableStateOf(false) }
+    DisposableEffect(viewModel){
+        onDispose { viewModel.onDestroy() }
+    }
 
-    var repo = Repo(url = "NULL")
+    var value = Repo(url = "")
     var message: String? by remember { mutableStateOf(null) }
 
+    var failure by remember { mutableStateOf(false) }
     if (failure) {
         FailureDialog(
             onClose = { failure = false },
-            repo = repo,
+            repo = value,
             message = message
         )
     }
@@ -71,17 +66,10 @@ fun RepositoryScreen(
         AddDialog(
             onClose = { add = false }
         ) {
-            scope.launch(Dispatchers.IO) {
-                repo = Repo(url = it)
-                Repository.insert(repo)
-                RepoLoader.getRepo(context = context, repo = repo)
-                    .onSuccess {
-                        Constant.getOnline()
-                    }
-                    .onFailure {
-                        failure = true
-                        message = it.message
-                    }
+            viewModel.insert(it) { repo, e ->
+                value = repo
+                failure = true
+                message = e.message
             }
         }
     }
@@ -102,21 +90,17 @@ fun RepositoryScreen(
         Box(
             modifier = Modifier.padding(innerPadding)
         ) {
-            if (list.isEmpty()) {
+            if (viewModel.all.isEmpty()) {
                 PageIndicator(
                     icon = R.drawable.hierarchy_outline,
                     text = R.string.repo_empty
                 )
             }
 
-            RepoList(
-                onStart = { progress = true },
-                onStop = { progress = false },
-                list = list
-            )
+            RepoList(list = viewModel.all)
 
             AnimatedVisibility(
-                visible = progress,
+                visible = viewModel.progress,
                 enter = SlideIn.topToBottom,
                 exit = SlideOut.bottomToTop
             ) {
@@ -131,8 +115,6 @@ fun RepositoryScreen(
 
 @Composable
 private fun RepoList(
-    onStart: () -> Unit = {},
-    onStop: () -> Unit = {},
     list: List<Repo>
 ) {
     LazyColumn(
@@ -146,11 +128,7 @@ private fun RepoList(
             items = list,
             key = { it.id }
         ) { repo ->
-            RepoItem(
-                repo = repo,
-                onStart = onStart,
-                onStop = onStop
-            )
+            RepoItem(repo = repo)
         }
     }
 }
@@ -169,7 +147,7 @@ private fun InfoItem() {
                 .fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.information_outline),
@@ -271,7 +249,7 @@ private fun AddDialog(
 
 @Composable
 private fun RepositoryTopBar(
-    context: Context = LocalContext.current,
+    viewModel: RepositoryViewModel = viewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController,
 ) = NavigateUpTopBar(
@@ -279,13 +257,9 @@ private fun RepositoryTopBar(
     scrollBehavior = scrollBehavior,
     navController = navController,
     actions = {
-        val scope = rememberCoroutineScope()
         IconButton(
             onClick = {
-                scope.launch(Dispatchers.IO) {
-                    Repository.getAll()
-                    RepoLoader.getRepoAll(context)
-                }
+                viewModel.getAll()
             }
         ) {
             Icon(

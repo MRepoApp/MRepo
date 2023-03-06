@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config.State
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.ui.theme.Colors
 import com.sanmer.mrepo.ui.theme.getColor
@@ -40,7 +40,7 @@ fun ThemePaletteItem() {
             ThemeColorItem(
                 id = it
             ) { id ->
-                State.themeColor = id
+                Config.THEME_COLOR = id
             }
         }
     }
@@ -53,8 +53,8 @@ private fun ThemeColorItem(
 ) {
     val context = LocalContext.current
     val color = getColor(context = context, id = id)
-    val colorScheme = if (State.isDarkTheme()) color.darkColorScheme else color.lightColorScheme
-    val selected = id == State.themeColor
+    val colorScheme = if (Config.isDarkTheme()) color.darkColorScheme else color.lightColorScheme
+    val selected = id == Config.THEME_COLOR
 
     Box(
         modifier = Modifier
@@ -118,6 +118,6 @@ private fun LazyListScope.dynamicColorItem() = item(Colors.Dynamic.id) {
     ThemeColorItem(
         id = Colors.Dynamic.id,
     ) {
-        State.themeColor = it
+        Config.THEME_COLOR = it
     }
 }

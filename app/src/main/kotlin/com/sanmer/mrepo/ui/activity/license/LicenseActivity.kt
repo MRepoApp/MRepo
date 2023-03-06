@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.sanmer.mrepo.app.Config.State
 import com.sanmer.mrepo.ui.theme.AppTheme
 
 class LicenseActivity : ComponentActivity() {
@@ -21,10 +20,7 @@ class LicenseActivity : ComponentActivity() {
         val licenseId = intent.getStringExtra(LICENSE_ID) ?: "UNKNOWN"
 
         setContent {
-            AppTheme(
-                darkTheme = State.isDarkTheme(),
-                themeColor = State.themeColor
-            ) {
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

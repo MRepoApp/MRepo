@@ -3,7 +3,7 @@
     <!-- Setup -->
     <string name="setup_mode">Working Mode</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Require Root access from Magisk</string>
+    <string name="setup_root_desc1">Require Root access from Magisk or KernelSU(KSU), </string>
     <string name="setup_root_desc2">Available: full functionality</string>
     <string name="setup_non_root_title">Non-Root</string>
     <string name="setup_non_root_desc1">Does not require Root access</string>

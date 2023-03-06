@@ -3,7 +3,7 @@ package com.sanmer.mrepo.provider.spdx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-object LicenseLoader {
+object LicenseProvider {
     private val api by lazy { SpdxService.create() }
 
     suspend fun getLicense(id: String) = withContext(Dispatchers.IO) {

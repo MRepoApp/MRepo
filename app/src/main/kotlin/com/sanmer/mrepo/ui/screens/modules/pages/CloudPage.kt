@@ -31,7 +31,7 @@ fun CloudPage(
     viewModel: ModulesViewModel = viewModel(),
     navController: NavController
 ) {
-    val list = viewModel.getOnline()
+    val list = viewModel.onlineValue
         .sortedBy { it.name }
 
     if (list.isEmpty()) {

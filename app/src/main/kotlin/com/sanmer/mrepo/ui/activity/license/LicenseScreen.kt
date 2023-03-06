@@ -14,10 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.app.status.Event
 import com.sanmer.mrepo.data.json.License
-import com.sanmer.mrepo.provider.spdx.LicenseLoader
+import com.sanmer.mrepo.provider.spdx.LicenseProvider
 import com.sanmer.mrepo.ui.component.CircularProgressIndicator
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
@@ -46,11 +46,10 @@ fun LicenseScreen(
     }
 
     LaunchedEffect(licenseId) {
-        LicenseLoader.getLicense(licenseId)
+        LicenseProvider.getLicense(licenseId)
             .onSuccess {
                 state.setSucceeded(it)
-            }
-            .onFailure {
+            }.onFailure {
                 state.setFailed(it)
             }
     }

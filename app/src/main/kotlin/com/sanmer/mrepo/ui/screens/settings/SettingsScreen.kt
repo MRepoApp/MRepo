@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.settings
 
-import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -13,10 +12,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.sanmer.mrepo.App.Companion.openUrl
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config.State
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.activity.log.LogActivity
@@ -28,6 +26,7 @@ import com.sanmer.mrepo.ui.component.TitleItemForSetting
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
 import com.sanmer.mrepo.ui.navigation.navigateToHome
 import com.sanmer.mrepo.utils.expansion.navigatePopUpTo
+import com.sanmer.mrepo.utils.expansion.openUrl
 
 @Composable
 fun SettingsScreen(
@@ -69,8 +68,7 @@ fun SettingsScreen(
                 text = stringResource(id = R.string.settings_log_viewer),
                 subText = stringResource(id = R.string.settings_log_viewer_desc),
                 onClick = {
-                    val intent = Intent(context, LogActivity::class.java)
-                    context.startActivity(intent)
+                    LogActivity.start(context)
                 }
             )
 
@@ -79,10 +77,10 @@ fun SettingsScreen(
             EditItemForSetting(
                 iconRes = R.drawable.cube_scan_outline,
                 title = stringResource(id = R.string.settings_download_path),
-                text = State.downloadPath,
+                text = Config.DOWNLOAD_PATH,
                 supportingText = { Text(text = stringResource(id = R.string.dialog_empty_default)) },
                 onChange = {
-                    State.downloadPath = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
+                    Config.DOWNLOAD_PATH = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
                 }
             )
 

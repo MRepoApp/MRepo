@@ -23,7 +23,7 @@ fun NonRootItem() = Surface(
 ) {
     Row(
         modifier = Modifier
-            .padding(vertical = 20.dp, horizontal = 20.dp)
+            .padding(all = 20.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start

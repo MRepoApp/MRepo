@@ -18,17 +18,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ShareCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.Constant
-import com.sanmer.mrepo.data.Repository
 import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.provider.repo.RepoLoader
 import com.sanmer.mrepo.ui.component.Checkbox
 import com.sanmer.mrepo.ui.component.DropdownMenu
+import com.sanmer.mrepo.utils.expansion.shareText
 import com.sanmer.mrepo.utils.expansion.toDateTime
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 private sealed class Menu(
     @StringRes val label: Int,
@@ -56,12 +53,10 @@ private val options = listOf(
 
 @Composable
 fun RepoItem(
+    viewModel: RepositoryViewModel = viewModel(),
     repo: Repo,
-    onStart: () -> Unit = {},
-    onStop: () -> Unit = {},
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(false) }
 
     var delete by remember { mutableStateOf(false) }
@@ -69,11 +64,7 @@ fun RepoItem(
         DeleteDialog(
             onClose = { delete = false },
             onConfirm = {
-                scope.launch(Dispatchers.IO) {
-                    Repository.delete(repo)
-                    Constant.deleteCloud(context = context, id = repo.id)
-                    Constant.getOnline()
-                }
+                viewModel.delete(repo)
             },
             repo = repo
         )
@@ -93,18 +84,9 @@ fun RepoItem(
     }
 
     val onUpdate: () -> Unit = {
-        scope.launch {
-            onStart()
-            RepoLoader.getRepo(context = context, repo = repo)
-                .onSuccess {
-                    onStop()
-                    Constant.getOnline()
-                }
-                .onFailure {
-                    onStop()
-                    failure = true
-                    message = it.message
-                }
+        viewModel.getUpdate(repo) {
+            failure = true
+            message = it.message
         }
     }
 
@@ -117,11 +99,9 @@ fun RepoItem(
         surface = {
             RepoItem(
                 repo = repo,
-                onClick = {
-                    repo.setEnable(it)
-                    scope.launch(Dispatchers.IO) {
-                        Repository.update(repo)
-                    }
+                onChange = {
+                    repo.isEnable = it
+                    viewModel.update(repo)
                 },
                 onLongClick = { expanded = true },
                 onIconClick = { expanded = true }
@@ -133,14 +113,9 @@ fun RepoItem(
                 value = option,
                 onClose = { expanded = false },
                 onDelete = { delete = true },
-                onShare = {
-                    ShareCompat.IntentBuilder(context)
-                        .setType("text/plain")
-                        .setText(repo.url)
-                        .startChooser()
-                },
+                onShare = { context.shareText(repo.url) },
                 onUpdate = onUpdate,
-                enabled = repo.enable
+                updatable = repo.enable
             )
         }
     }
@@ -149,7 +124,7 @@ fun RepoItem(
 @Composable
 private fun RepoItem(
     repo: Repo,
-    onClick: (Boolean) -> Unit,
+    onChange: (Boolean) -> Unit,
     onLongClick: () -> Unit,
     onIconClick: () -> Unit
 ) {
@@ -157,7 +132,7 @@ private fun RepoItem(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .combinedClickable(
-                onClick = { onClick(!repo.enable) },
+                onClick = { onChange(!repo.enable) },
                 onLongClick = onLongClick,
                 role = Role.Checkbox
             )
@@ -169,6 +144,7 @@ private fun RepoItem(
             checked = repo.isEnable,
             onCheckedChange = null
         )
+
         Spacer(modifier = Modifier.width(16.dp))
 
         Column(
@@ -211,7 +187,7 @@ private fun MenuItem(
     onDelete: () -> Unit,
     onShare: () -> Unit,
     onUpdate: () -> Unit,
-    enabled: Boolean = true
+    updatable: Boolean = true
 ) = DropdownMenuItem(
     leadingIcon = {
         Icon(
@@ -223,15 +199,14 @@ private fun MenuItem(
     text = { Text(text = stringResource(id = value.label)) },
     onClick = {
         when (value) {
-            Menu.Delete -> { onDelete() }
-            Menu.Share -> { onShare() }
-            Menu.Update -> { onUpdate() }
+            Menu.Delete -> onDelete()
+            Menu.Share -> onShare()
+            Menu.Update -> onUpdate()
         }
-
         onClose()
     },
     enabled = when (value) {
-        Menu.Update -> enabled
+        Menu.Update -> updatable
         else -> true
     }
 )

@@ -1,9 +1,6 @@
 package com.sanmer.mrepo.provider
 
-import android.content.Context
-import com.sanmer.mrepo.app.Status
 import com.topjohnwu.superuser.nio.FileSystemManager
-import timber.log.Timber
 import java.io.File
 
 object FileProvider {
@@ -16,16 +13,6 @@ object FileProvider {
     private val fs get() = when {
         EnvProvider.isRoot -> fileSystemManager
         else -> FileSystemManager.getLocal()
-    }
-
-    fun init(context: Context) {
-        Timber.d("FileProvider init")
-
-        if (EnvProvider.isRoot) {
-            SuProvider.init(context)
-        } else {
-            Status.Provider.setFailed()
-        }
     }
 
     fun getFile(path: File) = run { fs.getFile(path.absolutePath) }

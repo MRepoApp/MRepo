@@ -10,29 +10,28 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.sanmer.mrepo.app.Config.State
-import com.sanmer.mrepo.data.Constant
+import androidx.lifecycle.lifecycleScope
+import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.provider.FileProvider
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.ui.theme.AppTheme
 import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.works.Works
+import kotlinx.coroutines.launch
 
 class SetupActivity : ComponentActivity() {
     override fun finish() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
 
-        FileProvider.init(this)
+        SuProvider.init(this)
         EnvProvider.init()
         Works.start()
 
-        EnvProvider.onNonRoot {
-            Constant.apply {
-                if (local.isNotEmpty()) {
-                    deleteLocalAll()
-                }
+        if (EnvProvider.isNonRoot && ModuleManager.local != 0) {
+            lifecycleScope.launch {
+                ModuleManager.deleteLocalAll()
             }
         }
 
@@ -50,10 +49,7 @@ class SetupActivity : ComponentActivity() {
                 NotificationUtils.PermissionState()
             }
 
-            AppTheme(
-                darkTheme = State.isDarkTheme(),
-                themeColor = State.themeColor
-            ) {
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

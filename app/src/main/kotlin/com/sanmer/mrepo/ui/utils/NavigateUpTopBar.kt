@@ -23,6 +23,7 @@ fun NavigateUpTopBar(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
     context: Context = LocalContext.current,
     navController: NavController? = null,
+    enable: Boolean = true
 ) = NavigateUpTopBar(
     title = {
         Column(
@@ -44,7 +45,8 @@ fun NavigateUpTopBar(
     actions = actions,
     scrollBehavior = scrollBehavior,
     context = context,
-    navController = navController
+    navController = navController,
+    enable = enable
 )
 
 @Composable
@@ -55,6 +57,7 @@ fun NavigateUpTopBar(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
     context: Context = LocalContext.current,
     navController: NavController? = null,
+    enable: Boolean = true
 ) = NavigateUpTopBar(
     title = {
         Column(
@@ -76,7 +79,8 @@ fun NavigateUpTopBar(
     actions = actions,
     scrollBehavior = scrollBehavior,
     context = context,
-    navController = navController
+    navController = navController,
+    enable = enable
 )
 
 @Composable
@@ -86,11 +90,14 @@ fun NavigateUpTopBar(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
     context: Context = LocalContext.current,
     navController: NavController? = null,
+    enable: Boolean = true,
 ) = TopAppBar(
     title = title,
     navigationIcon = {
         IconButton(
             onClick = {
+                if (!enable) return@IconButton
+
                 if (navController != null) {
                     navController.navigateBack()
                 } else {

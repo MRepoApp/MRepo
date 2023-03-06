@@ -68,7 +68,7 @@ object NotificationUtils {
             return
         }
 
-        val notification = buildNotification(context, "NULL")
+        val notification = buildNotification(context, "")
         build(notification)
         notificationManager.notify(notificationId, notification.build())
     }

@@ -7,13 +7,14 @@ plugins {
     kotlin("plugin.parcelize")
 }
 
-val verName = "1.1.1"
-val verCode = 111
+val verName = "1.2.1-beta02"
+val verCode = 121
 
 android {
     namespace = "com.sanmer.mrepo"
     compileSdk = 33
     buildToolsVersion = "33.0.2"
+    ndkVersion = "25.2.9519653"
 
     signingConfigs {
         create("release") {
@@ -30,6 +31,25 @@ android {
         versionName = verName
         resourceConfigurations += arrayOf("en", "zh-rCN")
         multiDexEnabled = true
+
+        ndk {
+            abiFilters += arrayOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+        }
+
+        externalNativeBuild {
+            cmake {
+                arguments += "-DANDROID_STL=c++_static"
+            }
+        }
+    }
+
+    //https://github.com/android/ndk/issues/243
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
 
     buildTypes {
@@ -82,6 +102,12 @@ android {
     }
 
     setProperty("archivesBaseName", "mrepo-$verName")
+    splits {
+        abi {
+            isEnable = true
+            isUniversalApk = true
+        }
+    }
 }
 
 kotlin {
@@ -115,9 +141,9 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha06") // No 1.1.0-alpha07
+    implementation("androidx.compose.material3:material3:1.1.0-alpha07")
 
-    val vCompose = "1.4.0-alpha05"
+    val vCompose = "1.4.0-beta02"
     implementation("androidx.compose.ui:ui:${vCompose}")
     implementation("androidx.compose.ui:ui-tooling-preview:${vCompose}")
     debugImplementation("androidx.compose.ui:ui-tooling:${vCompose}")

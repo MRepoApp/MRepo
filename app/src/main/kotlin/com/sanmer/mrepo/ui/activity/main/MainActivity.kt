@@ -10,18 +10,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.sanmer.mrepo.app.Config.State
 import com.sanmer.mrepo.ui.activity.setup.SetupActivity
 import com.sanmer.mrepo.ui.theme.AppTheme
 import com.sanmer.mrepo.utils.NotificationUtils
 
 class MainActivity : ComponentActivity() {
-
     fun setup() {
         val intent = Intent(this, SetupActivity::class.java)
         startActivity(intent)
         finish()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -31,10 +30,7 @@ class MainActivity : ComponentActivity() {
                 NotificationUtils.PermissionState()
             }
 
-            AppTheme(
-                darkTheme = State.isDarkTheme(),
-                themeColor = State.themeColor
-            ) {
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

@@ -32,10 +32,12 @@ object SuProvider {
     }
 
     fun init(context: Context) {
-        val intent = Intent(context, SuService::class.java).apply {
-            addCategory(RootService.CATEGORY_DAEMON_MODE)
+        if (EnvProvider.isRoot) {
+            val intent = Intent(context, SuService::class.java)
+            RootService.bind(intent, Connection)
+        } else {
+            Status.Provider.setFailed()
         }
-        RootService.bind(intent, Connection)
     }
 
     fun close(context: Context) {

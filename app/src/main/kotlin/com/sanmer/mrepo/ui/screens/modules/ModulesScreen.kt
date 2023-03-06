@@ -30,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.Constant
+import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
@@ -58,14 +58,14 @@ fun ModulesScreen(
 
     BackHandler {
         if (viewModel.isSearch) {
-            viewModel.close()
+            viewModel.closeSearch()
         } else {
             navController.navigateToHome()
         }
     }
 
     DisposableEffect(viewModel) {
-        onDispose { viewModel.close() }
+        onDispose { viewModel.closeSearch() }
     }
 
     Scaffold(
@@ -82,7 +82,7 @@ fun ModulesScreen(
             modifier = Modifier.padding(innerPadding)
         ) {
             AnimatedVisibility(
-                visible = Constant.isReady,
+                visible = ModuleManager.isReady,
                 enter = fadeIn(animationSpec = tween(400)),
                 exit = fadeOut(animationSpec = tween(400))
             ) {
@@ -105,7 +105,7 @@ fun ModulesScreen(
 
             if (Status.Cloud.isLoading || Status.Local.isLoading) {
                 AnimatedVisibility(
-                    visible = Constant.isReady,
+                    visible = ModuleManager.isReady,
                     enter = SlideIn.topToBottom,
                     exit = SlideOut.bottomToTop
                 ) {
@@ -116,7 +116,7 @@ fun ModulesScreen(
                 }
 
                 AnimatedVisibility(
-                    visible = !Constant.isReady,
+                    visible = !ModuleManager.isReady,
                     enter = fadeIn(animationSpec = tween(400)),
                     exit = fadeOut(animationSpec = tween(400))
                 ) {
@@ -188,7 +188,7 @@ private fun ModulesSearchTopBar(
     navigationIcon = {
         IconButton(
             onClick = {
-                viewModel.close()
+                viewModel.closeSearch()
             }
         ) {
             Icon(
