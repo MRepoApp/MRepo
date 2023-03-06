@@ -1,46 +1,38 @@
 package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.data.Constant
+import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.json.OnlineModule
+import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.parcelable.Module
 import com.sanmer.mrepo.service.DownloadService
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ModulesViewModel : ViewModel() {
-    // MODULES DATA
-    @JvmName("getUpdatableValue")
-    fun getUpdatable() = if (isSearch) _updatable else updatable
+    val updatableValue get() = if (isSearch) _updatable else updatable
+    val localValue get() = if (isSearch) _local else local
+    val onlineValue get() = if (isSearch) _online else online
 
-    @JvmName("getLocalValue")
-    fun getLocal() = if (isSearch) _local else local
-
-    @JvmName("getOnlineValue")
-    fun getOnline() = if (isSearch) _online else online
-
-    val updatable by derivedStateOf {
-        Constant.online.filter { module ->
-            module.versionCode > (Constant.local
+    private val local = mutableStateListOf<LocalModule>()
+    private val online = mutableStateListOf<OnlineModule>()
+    private val updatable by derivedStateOf {
+        online.filter { module ->
+            module.versionCode > (local
                 .find {
                     module.id == it.id
                 }?.versionCode ?: Int.MAX_VALUE)
         }
     }
-    private val local by derivedStateOf {
-        Constant.local.toList()
-    }
-    private val online by derivedStateOf {
-        Constant.online.toList()
-    }
 
-    // SEARCH
     var isSearch by mutableStateOf(false)
     var key by mutableStateOf("")
     private val _updatable by derivedStateOf {
@@ -62,12 +54,62 @@ class ModulesViewModel : ViewModel() {
         }
     }
 
-    fun close() {
+    private var localUpdating = false
+    private var onlineUpdating = false
+
+    init {
+        Timber.d("ModulesViewModel init")
+        updateLocal()
+        updateOnline()
+
+        snapshotFlow { Status.Cloud.isSucceeded }
+            .onEach { if (it) updateOnline() }
+            .launchIn(viewModelScope)
+
+        snapshotFlow { Status.Local.isSucceeded }
+            .onEach { if (it) updateLocal() }
+            .launchIn(viewModelScope)
+    }
+
+    private fun updateLocal() = viewModelScope.launch {
+        if (localUpdating) {
+            Timber.d("local is updating!")
+            return@launch
+        }
+
+        Timber.i("updateLocal")
+        localUpdating = true
+        if (local.isNotEmpty()) {
+            local.clear()
+        }
+
+        val list = ModuleManager.getLocalAll()
+        local.addAll(list)
+        localUpdating = false
+    }
+
+    private fun updateOnline() = viewModelScope.launch {
+        if (onlineUpdating) {
+            Timber.d("online is updating!")
+            return@launch
+        }
+
+        Timber.i("updateOnline")
+        onlineUpdating = true
+        if (online.isNotEmpty()) {
+            online.clear()
+        }
+
+        val list = ModuleManager.getOnlineAll()
+        online.addAll(list)
+        onlineUpdating = false
+    }
+
+    fun closeSearch() {
         isSearch = false
         key = ""
     }
 
-    //ONLINE MODULE
     fun observeProgress(
         owner: LifecycleOwner,
         value: OnlineModule,
@@ -109,8 +151,4 @@ class ModulesViewModel : ViewModel() {
         ),
         install = true
     )
-
-    init {
-        Timber.d("ModulesViewModel init")
-    }
 }

@@ -1,28 +1,28 @@
 package com.sanmer.mrepo.data
 
 import android.content.Context
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.data.database.RepoDatabase
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.utils.expansion.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
-object Repository {
+object RepoManger {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private lateinit var db: RepoDatabase
     private val repoDao get() = db.repoDao()
 
-    val repo = mutableStateListOf<Repo>()
-    val repoSize get() = repo.size
-    val enabledRepoSize get() = repo.filter { it.enable }.size
+    var all by mutableStateOf(0)
+        private set
+
+    var enabled by mutableStateOf(0)
+        private set
 
     fun init(context: Context) {
         db = RepoDatabase.getDatabase(context)
@@ -31,40 +31,30 @@ object Repository {
         }
     }
 
-    fun getById(id: Long) = repo.find { it.id == id }
-
     suspend fun getAll() = withContext(Dispatchers.IO) {
-        return@withContext Mutex().withLock {
-            if (repo.isNotEmpty()) {
-                repo.clear()
+        repoDao.getAll().apply {
+            if (isEmpty() && EnvProvider.isSetup) {
+                insert(Repo(url = Const.MY_REPO_URL))
             }
 
-            repoDao.getAll().apply {
-                if (isNotEmpty()) {
-                    repo.addAll(this)
-                } else {
-                    Timber.d("${EnvProvider.index}")
-                    if (EnvProvider.isSetup) {
-                        Timber.d("isSetup")
-                        insert(Repo(url = Const.MY_REPO_URL))
-                    }
-                }
-            }
+            all = size
+            enabled = filter { it.enable }.size
         }
     }
 
+    suspend fun getById(id: Long) = withContext(Dispatchers.IO) {
+        repoDao.getById(id)
+    }
+
     suspend fun insert(value: Repo) = withContext(Dispatchers.IO) {
-        repo.add(value)
         repoDao.insert(value)
     }
 
     suspend fun update(value: Repo) = withContext(Dispatchers.IO) {
-        repo.update(value)
         repoDao.update(value)
     }
 
     suspend fun delete(value: Repo) = withContext(Dispatchers.IO) {
-        repo.remove(value)
         repoDao.delete(value)
     }
 }

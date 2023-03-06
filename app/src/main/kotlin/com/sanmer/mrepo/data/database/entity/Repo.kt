@@ -1,11 +1,12 @@
 package com.sanmer.mrepo.data.database.entity
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import kotlin.reflect.KProperty
 
 @Entity(tableName = "repo")
 data class Repo(
@@ -18,12 +19,11 @@ data class Repo(
 ) {
     @get:Ignore
     @set:JvmName("state")
-    var isEnable by mutableStateOf(enable)
+    var isEnable: Boolean by mutableStateOf(enable)
 
-    @JvmName("setState")
-    fun setEnable(value: Boolean) {
+    private operator fun MutableState<Boolean>.setValue(thisObj: Any?, property: KProperty<*>, value: Boolean) {
+        this.value = value
         enable = value
-        isEnable = value
     }
 
     override fun equals(other: Any?): Boolean {

@@ -8,6 +8,9 @@ interface RepoDao {
     @Query("SELECT * FROM repo")
     fun getAll(): List<Repo>
 
+    @Query("SELECT * FROM repo WHERE id LIKE :id LIMIT 1")
+    fun getById(id: Long): Repo?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: Repo)
 
