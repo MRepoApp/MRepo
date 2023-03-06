@@ -22,15 +22,16 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.status.Event
-import com.sanmer.mrepo.provider.local.InstallUtils
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.utils.SvcPower
+import com.sanmer.mrepo.viewmodel.InstallViewModel
 
 @Composable
 fun InstallScreen(
-    utils: InstallUtils = InstallUtils
+    viewModel: InstallViewModel = viewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -40,7 +41,7 @@ fun InstallScreen(
     }
 
     BackHandler(
-        enabled = utils.event == Event.LOADING,
+        enabled = viewModel.state.isLoading,
         onBack = {}
     )
 
@@ -48,8 +49,8 @@ fun InstallScreen(
         modifier = Modifier
             .onKeyEvent {
                 when (it.nativeKeyEvent.keyCode) {
-                    KeyEvent.KEYCODE_VOLUME_UP -> true
-                    KeyEvent.KEYCODE_VOLUME_DOWN -> true
+                    KeyEvent.KEYCODE_VOLUME_UP -> viewModel.state.isLoading
+                    KeyEvent.KEYCODE_VOLUME_DOWN -> viewModel.state.isLoading
                     else -> false
                 }
             }
@@ -62,13 +63,13 @@ fun InstallScreen(
             )
         },
         floatingActionButton = {
-            if (utils.isSucceeded) {
+            if (viewModel.state.isSucceeded) {
                 RebootButton()
             }
         },
     ) {
         ConsoleList(
-            list = utils.console,
+            list = viewModel.console,
             contentPadding = it
         )
     }
@@ -76,16 +77,17 @@ fun InstallScreen(
 
 @Composable
 private fun InstallTopBar(
-    utils: InstallUtils = InstallUtils,
+    viewModel: InstallViewModel = viewModel(),
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
     title = R.string.install_title,
-    subtitle = when (utils.event) {
+    subtitle = when (viewModel.state.event) {
         Event.LOADING -> R.string.install_flashing
         Event.FAILED -> R.string.install_failure
         else -> R.string.install_done
     },
-    scrollBehavior = scrollBehavior
+    scrollBehavior = scrollBehavior,
+    enable = viewModel.state.isSucceeded
 )
 
 @Composable

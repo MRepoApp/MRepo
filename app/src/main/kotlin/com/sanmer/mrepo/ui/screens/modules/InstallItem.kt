@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.modules
 
-import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -26,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.provider.local.InstallUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 
 @Composable
@@ -36,9 +34,7 @@ fun InstallItem() {
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
 
-        val intent = Intent(context, InstallActivity::class.java)
-        InstallUtils.install(context, uri)
-        context.startActivity(intent)
+        InstallActivity.start(context = context, uri = uri)
     }
 
     LaunchedEffect(interactionSource) {

@@ -39,7 +39,13 @@
 
         <activity android:name=".ui.activity.install.InstallActivity"
             android:label="@string/install_title"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/zip"/>
+            </intent-filter>
+        </activity>
 
         <activity android:name=".ui.activity.log.LogActivity"
             android:label="@string/page_log_viewer"

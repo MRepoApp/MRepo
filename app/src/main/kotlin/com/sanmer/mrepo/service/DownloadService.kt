@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.data.parcelable.Module
-import com.sanmer.mrepo.provider.local.InstallUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
@@ -116,13 +115,7 @@ class DownloadService : LifecycleService() {
                 silent = true
             )
 
-            if (item.install) {
-                InstallUtils.install(this, path)
-
-                val intent = Intent(this, InstallActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
-            }
+            if (item.install) InstallActivity.start(context = this, path = path)
         }
 
         val failed: (String?) -> Unit = {
