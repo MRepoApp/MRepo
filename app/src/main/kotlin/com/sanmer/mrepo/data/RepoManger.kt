@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 object RepoManger {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -27,16 +28,16 @@ object RepoManger {
     fun init(context: Context) {
         db = RepoDatabase.getDatabase(context)
         coroutineScope.launch {
-            getAll()
+            val list = getAll()
+            if (list.isEmpty() && EnvProvider.isSetup) {
+                Timber.d("add default repository")
+                insert(Repo(url = Const.MY_REPO_URL))
+            }
         }
     }
 
     suspend fun getAll() = withContext(Dispatchers.IO) {
         repoDao.getAll().apply {
-            if (isEmpty() && EnvProvider.isSetup) {
-                insert(Repo(url = Const.MY_REPO_URL))
-            }
-
             all = size
             enabled = filter { it.enable }.size
         }
