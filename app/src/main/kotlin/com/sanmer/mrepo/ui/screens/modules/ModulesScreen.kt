@@ -1,10 +1,14 @@
 package com.sanmer.mrepo.ui.screens.modules
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +24,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,6 +37,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
@@ -76,30 +82,29 @@ fun ModulesScreen(
                 scrollBehavior = scrollBehavior,
                 state = state
             )
+        },
+        floatingActionButton = {
+            if (EnvProvider.isRoot && !viewModel.isSearch) {
+                InstallFloatingButton()
+            }
         }
     ) { innerPadding ->
         Box(
             modifier = Modifier.padding(innerPadding)
         ) {
-            AnimatedVisibility(
-                visible = ModuleManager.isReady,
-                enter = fadeIn(animationSpec = tween(400)),
-                exit = fadeOut(animationSpec = tween(400))
-            ) {
-                HorizontalPager(
-                    pageCount = pages.size,
+            HorizontalPager(
+                pageCount = pages.size,
+                state = state,
+                flingBehavior = PagerDefaults.flingBehavior(
                     state = state,
-                    flingBehavior = PagerDefaults.flingBehavior(
-                        state = state,
-                        pagerSnapDistance = PagerSnapDistance.atMost(0)
-                    ),
-                    userScrollEnabled = if (viewModel.isSearch) false else EnvProvider.isRoot
-                ) {
-                    when (it) {
-                        Pages.Cloud.id -> CloudPage(navController = navController)
-                        Pages.Installed.id -> InstalledPage()
-                        Pages.Updates.id -> UpdatesPage(navController = navController)
-                    }
+                    pagerSnapDistance = PagerSnapDistance.atMost(0)
+                ),
+                userScrollEnabled = if (viewModel.isSearch) false else EnvProvider.isRoot
+            ) {
+                when (it) {
+                    Pages.Cloud.id -> CloudPage(navController = navController)
+                    Pages.Installed.id -> InstalledPage()
+                    Pages.Updates.id -> UpdatesPage(navController = navController)
                 }
             }
 
@@ -113,14 +118,6 @@ fun ModulesScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                     )
-                }
-
-                AnimatedVisibility(
-                    visible = !ModuleManager.isReady,
-                    enter = fadeIn(animationSpec = tween(400)),
-                    exit = fadeOut(animationSpec = tween(400))
-                ) {
-                    Loading()
                 }
             }
         }
@@ -258,39 +255,37 @@ private fun ModulesSearchTopBar(
 )
 
 @Composable
-private fun Loading() {
-    val transition = rememberInfiniteTransition()
-    val animateZ by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            tween(
-                durationMillis = 2000,
-                easing = FastOutSlowInEasing
-            ),
-            RepeatMode.Reverse
-        )
-    )
+private fun InstallFloatingButton() {
+    val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
 
-    PageIndicator(
+        InstallActivity.start(context = context, uri = uri)
+    }
+
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            if (interaction is PressInteraction.Release) {
+                launcher.launch("application/zip")
+            }
+        }
+    }
+
+    ExtendedFloatingActionButton(
+        interactionSource = interactionSource,
+        onClick = {},
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        containerColor = MaterialTheme.colorScheme.primary,
         icon = {
             Icon(
-                painter = painterResource(id = R.drawable.box_outline),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .size(80.dp)
-                    .graphicsLayer {
-                        rotationZ = animateZ
-                    }
+                modifier = Modifier.size(28.dp),
+                painter = painterResource(id = R.drawable.add_outline),
+                contentDescription = null
             )
         },
         text = {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .width(140.dp)
-                    .height(5.dp)
-            )
+            Text(text = stringResource(id = R.string.module_install))
         }
     )
 }
