@@ -8,37 +8,36 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.sanmer.mrepo.utils.log.LogItem
-import com.sanmer.mrepo.utils.log.SystemLogcat
-import com.sanmer.mrepo.utils.log.SystemLogcat.Companion.toLogItem
+import com.sanmer.mrepo.utils.log.LogText
+import com.sanmer.mrepo.utils.log.Logcat
+import com.sanmer.mrepo.utils.log.Logcat.toLogTextList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class LogcatService : LifecycleService() {
+    private val uid by lazy { applicationInfo.uid }
+
     override fun onCreate() {
         super.onCreate()
         isActive =  true
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val logcat = SystemLogcat(applicationInfo.uid)
         lifecycleScope.launch(Dispatchers.Default) {
+            val old = Logcat.readLogs()
+            console.addAll(
+                old.filter { it !in console }
+            )
+
             while (isActive) {
-                val texts = logcat.dumpCrash().map { it.split(": ", limit = 2) }
-                val tags = texts.map { it.first() }.distinct()
-                val logs = tags.map { tag ->
-                    val message = texts.filter {
-                        it.first() == tag
-                    }.map { it.last() }.reduceOrNull { b, e ->
-                        "$b\n$e"
-                    }
-                    tag.toLogItem().copy(message = message ?: "")
+                val logs = Logcat.getCurrent().toLogTextList()
+                val new = logs.filter { it !in console }
+                console.addAll(new)
+                new.forEach {
+                    Logcat.writeLog(it)
                 }
-                console.addAll(
-                    logs.filter { it !in console }
-                )
 
                 delay(1000)
             }
@@ -53,7 +52,7 @@ class LogcatService : LifecycleService() {
     }
 
     companion object {
-        val console = mutableStateListOf<LogItem>()
+        val console = mutableStateListOf<LogText>()
         var isActive by mutableStateOf(false)
             private set
 

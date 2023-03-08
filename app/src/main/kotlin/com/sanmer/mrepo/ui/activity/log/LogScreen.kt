@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -22,7 +23,9 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.service.LogcatService
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
-import com.sanmer.mrepo.utils.log.LogItem
+import com.sanmer.mrepo.utils.log.LogText
+import com.sanmer.mrepo.utils.log.Logcat
+import com.sanmer.mrepo.utils.log.Logcat.toTextPriority
 
 private val priorities = listOf("VERBOSE", "DEBUG", "INFO", "WARN", "ERROR")
 
@@ -74,35 +77,42 @@ private fun LogTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     priority: String,
     onClick: (String) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
+) = NavigateUpTopBar(
+    title = R.string.page_log_viewer,
+    actions = {
+        val context = LocalContext.current
+        IconButton(
+            onClick = { Logcat.shareLogs(context) }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.send_outline),
+                contentDescription = null
+            )
+        }
 
-    NavigateUpTopBar(
-        title = R.string.page_log_viewer,
-        actions = {
-            IconButton(
-                onClick = { expanded = true }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.sort_outline),
-                    contentDescription = null
-                )
+        var expanded by remember { mutableStateOf(false) }
+        IconButton(
+            onClick = { expanded = true }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.sort_outline),
+                contentDescription = null
+            )
 
-                PrioritySelect(
-                    expanded = expanded,
-                    selected = priority,
-                    onClose = { expanded = false },
-                    onClick = onClick
-                )
-            }
-        },
-        scrollBehavior = scrollBehavior
-    )
-}
+            PrioritySelect(
+                expanded = expanded,
+                selected = priority,
+                onClose = { expanded = false },
+                onClick = onClick
+            )
+        }
+    },
+    scrollBehavior = scrollBehavior
+)
 
 @Composable
 private fun LogItem(
-    value: LogItem
+    value: LogText
 ) {
     Row(
         modifier = Modifier
@@ -128,14 +138,7 @@ private fun LogItem(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = when (value.priority) {
-                    Log.VERBOSE -> "V"
-                    Log.DEBUG -> "D"
-                    Log.INFO -> "I"
-                    Log.WARN -> "W"
-                    Log.ERROR -> "E"
-                    else -> "N"
-                },
+                text = value.priority.toTextPriority(),
                 fontFamily = FontFamily.Monospace,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyMedium,
