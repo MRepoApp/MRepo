@@ -29,6 +29,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="${applicationId}.shortcut.modules" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="${applicationId}.shortcut.settings" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -38,12 +46,13 @@
             android:launchMode="singleTop"/>
 
         <activity android:name=".ui.activity.install.InstallActivity"
-            android:label="@string/install_title"
+            android:label="@string/activity_install_label"
             android:exported="true">
-            <intent-filter tools:ignore="AppLinkUrlError">
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="application/zip"/>
+                <data android:scheme="content" />
             </intent-filter>
         </activity>
 
@@ -61,5 +70,16 @@
         <service android:name=".service.LogcatService"
             android:exported="false" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths">
+            </meta-data>
+        </provider>
+        
     </application>
 </manifest>

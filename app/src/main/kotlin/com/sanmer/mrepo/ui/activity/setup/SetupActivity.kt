@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
+import com.sanmer.mrepo.app.Shortcut
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.provider.SuProvider
@@ -22,7 +23,9 @@ import kotlinx.coroutines.launch
 
 class SetupActivity : ComponentActivity() {
     override fun finish() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java).apply {
+            action = intent.action
+        }
         startActivity(intent)
 
         SuProvider.init(this)
@@ -42,6 +45,7 @@ class SetupActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        Shortcut.push()
         if (!EnvProvider.isSetup) finish()
 
         setContent {
