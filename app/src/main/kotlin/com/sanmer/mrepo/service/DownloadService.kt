@@ -14,13 +14,17 @@ import com.sanmer.mrepo.data.parcelable.Module
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
-import com.sanmer.mrepo.utils.MediaStoreUtils.toFile
 import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.expansion.parcelable
+import com.sanmer.mrepo.utils.expansion.toFile
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@OptIn(FlowPreview::class)
 class DownloadService : LifecycleService() {
     private data class DownloadItem(
         val id: Int = System.currentTimeMillis().toInt(),
@@ -28,36 +32,6 @@ class DownloadService : LifecycleService() {
         val install: Boolean
     )
     private val list = mutableListOf<DownloadItem>()
-
-    override fun onCreate() {
-        super.onCreate()
-        Timber.d("DownloadService start")
-        setForeground()
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val install = intent?.getBooleanExtra(INSTALL_KEY, false) == true
-        val module = intent?.parcelable<Module>(MODULE_KEY)
-
-        module?.let {
-            Timber.i("DownloadService: ${module.name}")
-
-            val isNew = addToList(DownloadItem(value = module, install = install))
-            if (isNew) {
-                downloader(list.last())
-            } else {
-                Timber.i("DownloadService: ${module.name} is downloading!")
-            }
-        }
-
-        return super.onStartCommand(intent, flags, startId)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Timber.d("DownloadService stop")
-        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
-    }
 
     private fun stopIt() = list.isEmpty().let {
         if (it) lifecycleScope.launch {
@@ -73,6 +47,36 @@ class DownloadService : LifecycleService() {
             list.add(value)
         }
 
+    override fun onCreate() {
+        super.onCreate()
+        Timber.d("DownloadService start")
+        setForeground()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val install = intent?.getBooleanExtra(INSTALL_KEY, false) == true
+        val module = intent?.parcelable<Module>(MODULE_KEY)
+
+        module?.let {
+            Timber.i("download: ${module.name}")
+
+            val new = addToList(DownloadItem(value = module, install = install))
+            if (new) {
+                downloader(list.last())
+            } else {
+                Timber.i("${module.name} is downloading!")
+            }
+        }
+
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.d("DownloadService stop")
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+    }
+
     private fun downloader(
         item: DownloadItem
     ) {
@@ -81,6 +85,8 @@ class DownloadService : LifecycleService() {
         val notificationIdFinish = notificationId + 1
 
         val path = module.path.toFile() ?: Const.DOWNLOAD_PATH.resolve("${module.name}.zip")
+        Timber.d("download to ${path.absolutePath}")
+
         val notification = NotificationUtils
             .buildNotification(this, Const.CHANNEL_ID_DOWNLOAD)
             .setContentTitle(module.name)
@@ -89,22 +95,22 @@ class DownloadService : LifecycleService() {
             .setOngoing(true)
             .setGroup(GROUP_KEY)
 
-        val progress: (Float) -> Unit = {
-            val value = (it * 100).toInt()
+        val progressFlow = MutableStateFlow(0)
+        progressFlow.sample(500)
+            .flowOn(Dispatchers.IO)
+            .onEach {
+                if (it == 100) {
+                    NotificationUtils.cancel(notificationId)
+                    broadcast(0f, module)
+                    return@onEach
+                }
 
-            NotificationUtils.notify(
-                notificationId,
-                notification.setContentText("${value}%")
-                    .setProgress(100, value, false)
-                    .build()
-            )
-            broadcast(it, module)
-
-            if (value == 100) {
-                NotificationUtils.cancel(notificationId)
-                broadcast(0f, module)
-            }
-        }
+                NotificationUtils.notify(
+                    notificationId,
+                    notification.setProgress(100, it, false)
+                        .build()
+                )
+            }.launchIn(lifecycleScope)
 
         val succeeded: () -> Unit = {
             val message = getString(R.string.message_download_success)
@@ -115,7 +121,9 @@ class DownloadService : LifecycleService() {
                 silent = true
             )
 
-            if (item.install) InstallActivity.start(context = this, path = path)
+            if (item.install) {
+                InstallActivity.start(context = this, path = path)
+            }
         }
 
         val failed: (String?) -> Unit = {
@@ -132,7 +140,10 @@ class DownloadService : LifecycleService() {
         HttpUtils.downloader(
             url = module.url,
             path = path,
-            onProgress = progress,
+            onProgress = {
+                broadcast(it, module)
+                progressFlow.value = (it * 100).toInt()
+            },
             onSucceeded = succeeded,
             onFailed = failed,
             onFinished = {
@@ -169,9 +180,9 @@ class DownloadService : LifecycleService() {
     }
 
     companion object {
-        const val MODULE_KEY = "ONLINE_MODULE"
-        const val INSTALL_KEY = "INSTALL_MODULE"
-        const val GROUP_KEY = "DOWNLOAD_SERVICE_GROUP_KEY"
+        private const val MODULE_KEY = "ONLINE_MODULE"
+        private const val INSTALL_KEY = "INSTALL_MODULE"
+        private const val GROUP_KEY = "DOWNLOAD_SERVICE_GROUP_KEY"
 
         private val progressBroadcast = MutableLiveData<Pair<Float, Module>?>()
 
@@ -192,9 +203,10 @@ class DownloadService : LifecycleService() {
             module: Module,
             install: Boolean
         ) {
-            val intent = Intent(context, DownloadService::class.java)
-            intent.putExtra(MODULE_KEY, module)
-            intent.putExtra(INSTALL_KEY, install)
+            val intent = Intent(context, DownloadService::class.java).apply {
+                putExtra(MODULE_KEY, module)
+                putExtra(INSTALL_KEY, install)
+            }
             context.startService(intent)
         }
     }

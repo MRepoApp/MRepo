@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.navigation.graph
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
@@ -12,7 +11,7 @@ sealed class HomeGraph(val route: String) {
 }
 
 fun NavGraphBuilder.homeGraph(
-    navController: NavController
+    //navController: NavController
 ) = navigation(
     startDestination = HomeGraph.Home.route,
     route = MainGraph.Home.route

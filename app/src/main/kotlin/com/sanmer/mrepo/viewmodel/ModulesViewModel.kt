@@ -72,10 +72,7 @@ class ModulesViewModel : ViewModel() {
     }
 
     private fun updateLocal() = viewModelScope.launch {
-        if (localUpdating) {
-            Timber.d("local is updating!")
-            return@launch
-        }
+        if (localUpdating) return@launch
 
         Timber.i("updateLocal")
         localUpdating = true
@@ -89,10 +86,7 @@ class ModulesViewModel : ViewModel() {
     }
 
     private fun updateOnline() = viewModelScope.launch {
-        if (onlineUpdating) {
-            Timber.d("online is updating!")
-            return@launch
-        }
+        if (onlineUpdating) return@launch
 
         Timber.i("updateOnline")
         onlineUpdating = true

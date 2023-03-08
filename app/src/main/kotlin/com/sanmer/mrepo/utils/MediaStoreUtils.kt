@@ -43,8 +43,6 @@ object MediaStoreUtils {
         }
     }
 
-    fun File.copyTo(new: File) = toUri().copyTo(new)
-
     @Throws(IOException::class)
     fun File.newOutputStream(): OutputStream? = try {
         cr.openOutputStream(toUri())
@@ -54,28 +52,5 @@ object MediaStoreUtils {
         } else {
             throw IOException(e)
         }
-    }
-
-    fun String.toFile(): File? {
-        return try {
-            File(this)
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    fun Context.toFileDir(input: String?, name: String): File {
-        val out = filesDir.resolve(name)
-        out.parentFile?.let {
-            if (!it.exists()) {
-                it.mkdirs()
-            }
-        }
-
-        val output = out.outputStream()
-        output.write(input?.toByteArray())
-        output.close()
-
-        return out
     }
 }

@@ -33,6 +33,7 @@ import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.HtmlText
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
+import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.utils.expansion.navigateBack
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
@@ -118,8 +119,8 @@ private fun RepoList(
     list: List<Repo>
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = fabPadding()
     ) {
         item {
             InfoItem()
@@ -274,7 +275,9 @@ private fun RepositoryTopBar(
 private fun RepositoryFloatingButton(
     onClick: () -> Unit,
 ) = FloatingActionButton(
-    onClick = onClick
+    onClick = onClick,
+    contentColor = MaterialTheme.colorScheme.onPrimary,
+    containerColor = MaterialTheme.colorScheme.primary
 ) {
     Icon(
         modifier = Modifier.size(28.dp),

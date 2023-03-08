@@ -14,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.RepoManger
+import com.sanmer.mrepo.provider.SELinux
 
 @Composable
 fun InfoItem() = OutlinedCard(
@@ -53,14 +55,25 @@ fun InfoItem() = OutlinedCard(
         )
 
         InfoItem(
-            key = stringResource(R.string.device_fingerprint),
+            key = stringResource(id = R.string.device_fingerprint),
             value = Build.FINGERPRINT
         )
 
         InfoItem(
-            key = stringResource(R.string.device_security_patch),
+            key = stringResource(id = R.string.device_security_patch),
             value = Build.VERSION.SECURITY_PATCH
         )
+
+        if (Status.Provider.isSucceeded) {
+            InfoItem(
+                key = stringResource(id = R.string.device_selinux_status),
+                value = when (SELinux.Root.enforce) {
+                    0 -> stringResource(id = R.string.selinux_status_permissive)
+                    1 -> stringResource(id = R.string.selinux_status_enforcing)
+                    else -> stringResource(id = R.string.selinux_status_disabled)
+                }
+            )
+        }
     }
 }
 

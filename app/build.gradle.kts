@@ -7,7 +7,7 @@ plugins {
     kotlin("plugin.parcelize")
 }
 
-val verName = "1.2.1-beta02"
+val verName = "1.2.1-beta03"
 val verCode = 121
 
 android {
@@ -42,8 +42,6 @@ android {
             }
         }
     }
-
-    //https://github.com/android/ndk/issues/243
 
     externalNativeBuild {
         cmake {
@@ -174,4 +172,5 @@ dependencies {
 
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("io.noties.markwon:core:4.6.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 }

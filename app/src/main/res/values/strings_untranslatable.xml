@@ -19,5 +19,8 @@
     <!-- Repo -->
     <string name="repo_empty" translatable="false">@string/modules_page_cloud_empty</string>
 
+    <!-- Shortcut -->
+    <string name="shortcut_modules_label" translatable="false">@string/page_modules</string>
+    <string name="shortcut_settings_label" translatable="false">@string/page_settings</string>
 
 </resources>

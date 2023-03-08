@@ -1,7 +1,6 @@
 package com.sanmer.mrepo
 
 import android.app.Application
-import com.sanmer.mrepo.data.CloudManager
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.utils.MediaStoreUtils
@@ -36,8 +35,6 @@ class App : Application() {
 
     companion object {
         private lateinit var app: App
-
-        /** Used in [NotificationUtils], [CloudManager] */
         val context get() = app
     }
 }

@@ -10,6 +10,7 @@
     <string name="setup_non_root_desc2">可用：下载模块</string>
 
     <!-- Install -->
+    <string name="activity_install_label">模块安装器</string>
     <string name="install_title">安装</string>
     <string name="install_flashing">正在刷入</string>
     <string name="install_done">完成</string>
@@ -43,6 +44,10 @@
     <string name="device_system_abi">系统架构</string>
     <string name="device_fingerprint">系统指纹</string>
     <string name="device_security_patch">安全补丁</string>
+    <string name="device_selinux_status">SELinux 状态</string>
+    <string name="selinux_status_disabled">被禁用</string>
+    <string name="selinux_status_enforcing">强制执行</string>
+    <string name="selinux_status_permissive">宽容模式</string>
     <!-- About -->
     <string name="about_source_code">在 %1$s 查看源码</string>
     <!-- Menu -->
@@ -62,7 +67,6 @@
     <string name="modules_menu_cloud">云端</string>
     <string name="modules_menu_local">本地</string>
     <!-- Module Card -->
-    <string name="install_from_storage">从本地安装</string>
     <string name="module_version_author">%1$s，作者 %2$s</string>
     <string name="module_author">作者 %1$s</string>
     <string name="module_update">更新</string>
@@ -139,6 +143,9 @@
 
     <!-- Notification -->
     <string name="notification_name_download">模块下载</string>
+
+    <!-- Shortcut -->
+    <string name="shortcut_log_label">日志</string>
 
     <!-- Other -->
     <string name="unknown_error">未知错误</string>

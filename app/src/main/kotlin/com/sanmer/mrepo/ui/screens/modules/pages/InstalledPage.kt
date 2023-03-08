@@ -1,6 +1,9 @@
 package com.sanmer.mrepo.ui.screens.modules.pages
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
@@ -21,7 +24,7 @@ import com.sanmer.mrepo.provider.local.ModuleUtils
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.stateIndicator
-import com.sanmer.mrepo.ui.screens.modules.InstallItem
+import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,16 +36,12 @@ fun InstalledPage(
     val list = viewModel.localValue
         .sortedBy { it.name }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        if (list.isEmpty()) {
-            PageIndicator(
-                icon = R.drawable.mobile_outline,
-                text = if (viewModel.isSearch) R.string.modules_page_search_empty else R.string.modules_page_installed_empty,
-            )
-        }
-
+    if (list.isEmpty()) {
+        PageIndicator(
+            icon = R.drawable.mobile_outline,
+            text = if (viewModel.isSearch) R.string.modules_page_search_empty else R.string.modules_page_installed_empty,
+        )
+    } else {
         ModulesList(
             list = list
         )
@@ -51,28 +50,18 @@ fun InstalledPage(
 
 @Composable
 private fun ModulesList(
-    viewModel: ModulesViewModel = viewModel(),
     list: List<LocalModule>
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentPadding = PaddingValues(all = 20.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = fabPadding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        if (!viewModel.isSearch) {
-            item {
-                InstallItem()
-            }
-        }
-
-        if (list.isNotEmpty()) {
-            items(
-                items = list,
-                key = { it.id }
-            ) { module ->
-                LocalModuleItem(module = module)
-            }
+        items(
+            items = list,
+            key = { it.id }
+        ) { module ->
+            LocalModuleItem(module = module)
         }
     }
 }
