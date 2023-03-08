@@ -15,7 +15,8 @@ import com.topjohnwu.superuser.nio.FileSystemManager
 import timber.log.Timber
 
 object SuProvider {
-    lateinit var Root: ISuProvider
+    private lateinit var provider: ISuProvider
+    val Root get() = provider
 
     init {
         Shell.enableVerboseLogging = BuildConfig.DEBUG
@@ -48,7 +49,7 @@ object SuProvider {
     private object Connection : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             Timber.i("SuProvider init")
-            Root = ISuProvider.Stub.asInterface(binder)
+            provider = ISuProvider.Stub.asInterface(binder)
             Status.Provider.setSucceeded()
         }
 
@@ -62,11 +63,10 @@ object SuProvider {
         private object Provider : ISuProvider.Stub() {
             override fun getPid(): Int = Process.myPid()
             override fun getContext(): String = SELinux.context
+            override fun getEnforce(): Int = SELinux.enforce
             override fun isSelinuxEnabled(): Boolean = SELinux.isSelinuxEnabled()
-            override fun getEnforce(): Boolean = SELinux.getEnforce()
             override fun getContextByPid(pid: Int) = SELinux.getContextByPid(pid)
             override fun getFileSystemService(): IBinder = FileSystemManager.getService()
-
             override fun getKsuVersionCode(): Int = Ksu.versionCode
         }
 

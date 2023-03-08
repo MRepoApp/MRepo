@@ -1,8 +1,8 @@
 #include <selinux/selinux.h>
 #include <jni.h>
 #include <cstring>
-#include <unistd.h>
-#include <cerrno>
+#include <sys/prctl.h>
+#include <linux/seccomp.h>
 #include "logging.h"
 
 extern "C"
@@ -17,27 +17,18 @@ Java_com_sanmer_mrepo_provider_SELinux_getContext(JNIEnv *env, jobject thiz) {
 }
 
 extern "C"
+JNIEXPORT jint JNICALL
+Java_com_sanmer_mrepo_provider_SELinux_getEnforce(JNIEnv *env, jobject thiz) {
+    int enforce = security_getenforce();
+    return enforce;
+}
+
+extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_sanmer_mrepo_provider_SELinux_isSelinuxEnabled(JNIEnv *env, jobject thiz) {
     int enabled = is_selinux_enabled();
     auto javaEnabled = (jboolean) (enabled ? JNI_TRUE : JNI_FALSE);
     return javaEnabled;
-}
-
-extern "C"
-JNIEXPORT jboolean JNICALL
-Java_com_sanmer_mrepo_provider_SELinux_getEnforce(JNIEnv *env, jobject thiz) {
-    int enforce = TEMP_FAILURE_RETRY(security_getenforce());
-    if (enforce == -1 && !errno) {
-        errno = EIO;
-    }
-    if (errno) {
-        jclass e_cls = env->FindClass("java/io/IOException");
-        env->ThrowNew(e_cls, "Permission denied");
-    }
-    LOGD("enforce=%i", enforce);
-    auto javaEnforce = (jboolean) (enforce ? JNI_TRUE : JNI_FALSE);
-    return javaEnforce;
 }
 
 extern "C"

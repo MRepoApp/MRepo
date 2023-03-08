@@ -1,7 +1,5 @@
 package com.sanmer.mrepo.provider
 
-import java.io.IOException
-
 object SELinux {
     init {
         System.loadLibrary("selinux-jni")
@@ -14,16 +12,16 @@ object SELinux {
             SELinux.context
         }
 
+        val enforce: Int get() = try {
+            SuProvider.Root.enforce
+        } catch (e: Exception) {
+            SELinux.enforce
+        }
+
         val isSelinuxEnabled: Boolean get() = try {
             SuProvider.Root.isSelinuxEnabled
         } catch (e: Exception) {
             isSelinuxEnabled()
-        }
-
-        val enforce: Boolean get() = try {
-            SuProvider.Root.enforce
-        } catch (e: Exception) {
-            getEnforce()
         }
 
         fun getContextByPid(pid: Int): String = try {
@@ -36,10 +34,10 @@ object SELinux {
     val context: String
         external get
 
-    external fun isSelinuxEnabled(): Boolean
+    val enforce: Int
+        external get
 
-    @Throws(IOException::class)
-    external fun getEnforce(): Boolean
+    external fun isSelinuxEnabled(): Boolean
 
     external fun getContextByPid(pid: Int): String
 }

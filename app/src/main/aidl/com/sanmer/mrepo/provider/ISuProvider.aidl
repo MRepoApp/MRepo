@@ -2,9 +2,9 @@ package com.sanmer.mrepo.provider;
 
 interface ISuProvider {
     int getPid();
-    boolean isSelinuxEnabled();
-    boolean getEnforce();
     String getContext();
+    int getEnforce();
+    boolean isSelinuxEnabled();
     String getContextByPid(int pid);
     IBinder getFileSystemService();
     int getKsuVersionCode();
