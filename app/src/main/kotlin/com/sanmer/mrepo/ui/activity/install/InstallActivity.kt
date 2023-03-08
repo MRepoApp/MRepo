@@ -87,12 +87,6 @@ class InstallActivity : ComponentActivity() {
             context.startActivity(intent)
         }
 
-        fun start(context: Context, path: File) {
-            val intent = Intent(context, InstallActivity::class.java).apply {
-                flags =  Intent.FLAG_ACTIVITY_NEW_TASK
-                data = path.toUri()
-            }
-            context.startActivity(intent)
-        }
+        fun start(context: Context, path: File) = start(context, path.toUri())
     }
 }

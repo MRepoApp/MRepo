@@ -4,7 +4,9 @@ import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,6 +21,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -26,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
+import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.utils.SvcPower
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 
@@ -87,7 +91,21 @@ private fun InstallTopBar(
         else -> R.string.install_done
     },
     scrollBehavior = scrollBehavior,
-    enable = viewModel.state.isSucceeded
+    enable = viewModel.state.isSucceeded,
+    actions = {
+        val context = LocalContext.current
+
+        if (viewModel.state.isFinished) {
+            IconButton(
+                onClick = { viewModel.shareConsole(context) }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.send_outline),
+                    contentDescription = null
+                )
+            }
+        }
+    }
 )
 
 @Composable
@@ -120,19 +138,12 @@ private fun ConsoleList(
         state = state,
         modifier = Modifier
             .horizontalScroll(rememberScrollState())
-            .fillMaxWidth(),
-        contentPadding = contentPadding,
+            .fillMaxWidth()
+            .padding(contentPadding),
+        contentPadding = fabPadding(2.dp),
     ) {
-        item {
-            Spacer(modifier = Modifier.height(2.dp))
-        }
-
         items(list) {
             ConsoleItem(text = it)
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(82.dp))
         }
     }
 }
@@ -144,7 +155,6 @@ private fun ConsoleItem(
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.padding(horizontal = 4.dp)
+        color = MaterialTheme.colorScheme.onSurface
     )
 }
