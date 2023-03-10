@@ -94,7 +94,7 @@
     <string name="settings_app_theme">Thème de l\’application</string>
     <string name="settings_app_theme_desc">Changer le mode nuit et le thème platte</string>
     <string name="settings_log_viewer">Journal</string>
-    <string name="settings_log_viewer_desc">Afficher les journeaux du fonctionnement de l\’application</string>
+    <string name="settings_log_viewer_desc">Afficher les journaux du fonctionnement de l\’application</string>
     <!-- App -->
     <string name="settings_title_app">Application</string>
     <string name="settings_download_path">Emplacement des téléchargements</string>
@@ -145,7 +145,7 @@
     <string name="notification_name_download">téléchargement du module</string>
 
     <!-- Shortcut -->
-    <string name="shortcut_log_label">Journeaux</string>
+    <string name="shortcut_log_label">Journaux</string>
 
     <!-- Other -->
     <string name="unknown_error">Erreur inconnue</string>
