@@ -22,9 +22,7 @@
 
         <activity
             android:name=".ui.activity.setup.SetupActivity"
-            android:configChanges="orientation"
-            android:exported="true"
-            android:launchMode="singleTop">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -42,8 +40,7 @@
         <activity
             android:name=".ui.activity.main.MainActivity"
             android:exported="false"
-            android:configChanges="orientation"
-            android:launchMode="singleTop"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity android:name=".ui.activity.install.InstallActivity"
             android:label="@string/activity_install_label"

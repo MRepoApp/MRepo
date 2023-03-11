@@ -15,13 +15,10 @@ object LicenseProvider {
                 return@withContext if (data != null) {
                     Result.success(data)
                 }else {
-                    Result.failure(Exception("The data is null!"))
+                    Result.failure(NullPointerException("The data is null!"))
                 }
             } else {
-                val errorBody = response.errorBody()
-                val error = errorBody?.string()
-
-                return@withContext Result.failure(Exception(error))
+                return@withContext Result.failure(RuntimeException("The specified key does not exist!"))
             }
         } catch (e: Exception) {
             return@withContext Result.failure(e)

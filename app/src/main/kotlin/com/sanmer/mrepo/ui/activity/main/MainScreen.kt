@@ -6,11 +6,15 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.sanmer.mrepo.app.Shortcut
+import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.ui.navigation.BottomNav
 import com.sanmer.mrepo.ui.navigation.MainGraph
 import com.sanmer.mrepo.ui.navigation.graph.homeGraph
@@ -22,7 +26,7 @@ fun MainScreen() {
     val navController = rememberAnimatedNavController()
     val that = LocalContext.current as MainActivity
 
-    val startDestination =  when (that.intent.action) {
+    val startDestination = when (that.intent.action) {
         Shortcut.ACTION_MODULES -> MainGraph.Modules.route
         Shortcut.ACTION_SETTINGS -> MainGraph.Settings.route
         else -> MainGraph.Home.route

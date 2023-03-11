@@ -18,8 +18,7 @@ import com.sanmer.mrepo.R
 fun NonRootItem() = Surface(
     shape = RoundedCornerShape(20.dp),
     color = MaterialTheme.colorScheme.surface,
-    tonalElevation = 2.dp,
-    onClick = {}
+    tonalElevation = 2.dp
 ) {
     Row(
         modifier = Modifier

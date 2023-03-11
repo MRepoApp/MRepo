@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.provider.repo
 
+import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.data.json.Modules
 import com.sanmer.mrepo.data.json.Update
 import retrofit2.Call
@@ -18,7 +19,7 @@ interface RepoService {
 
     companion object {
         fun create(repoUrl: String): RepoService {
-            Timber.d("RepoService.create: $repoUrl")
+            if (BuildConfig.DEBUG) Timber.d("RepoService.create: $repoUrl")
 
             return Retrofit.Builder()
                 .baseUrl(repoUrl)

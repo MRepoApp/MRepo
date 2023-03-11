@@ -69,13 +69,13 @@ object RepoProvider {
                 return@withContext if (data != null) {
                     Result.success(data)
                 }else {
-                    Result.failure(IllegalArgumentException("The data is null!"))
+                    Result.failure(NullPointerException("The data is null!"))
                 }
             } else {
                 val errorBody = response.errorBody()
                 val error = errorBody?.string()
 
-                return@withContext Result.failure(Exception(error))
+                return@withContext Result.failure(RuntimeException(error))
             }
         } catch (e: Exception) {
             return@withContext Result.failure(e)
@@ -84,7 +84,7 @@ object RepoProvider {
 
     suspend fun getUpdate(module: OnlineModule): Result<List<Update?>> {
         if (module.repoId.isEmpty()) {
-            return Result.failure(IllegalArgumentException("The repoId is empty!"))
+            return Result.failure(NoSuchElementException("The repoId is empty!"))
         } else {
             val result = module.repoId.map { id ->
                 val repo = RepoManger.getById(id)!!
@@ -114,7 +114,7 @@ object RepoProvider {
                 return@withContext if (data != null) {
                     Result.success(data.copy(repoId = repo.id))
                 }else {
-                    Result.failure(IllegalArgumentException("The data is null!"))
+                    Result.failure(NullPointerException("The data is null!"))
                 }
             } else {
                 val errorBody = response.errorBody()

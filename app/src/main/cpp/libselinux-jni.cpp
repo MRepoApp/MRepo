@@ -11,7 +11,6 @@ Java_com_sanmer_mrepo_provider_SELinux_getContext(JNIEnv *env, jobject thiz) {
     char *context = nullptr;
     int ok = getcon(&context) == 0;
     context = ok ? context : strdup("unknown");
-    LOGD("context=%s, ok=%i ", context, ok);
     freecon(context);
     return env->NewStringUTF(context);
 }
@@ -37,7 +36,6 @@ Java_com_sanmer_mrepo_provider_SELinux_getContextByPid(JNIEnv *env, jobject thiz
     char *context = nullptr;
     int ok = getpidcon(pid, &context) == 0;
     context = ok ? context : strdup("unknown");
-    LOGD("context=%s, pid=%i, ok=%i", context, pid, ok);
     freecon(context);
     return env->NewStringUTF(context);
 }

@@ -21,19 +21,8 @@ import com.sanmer.mrepo.provider.EnvProvider
 fun RootItem() = Surface(
     shape = RoundedCornerShape(20.dp),
     color = MaterialTheme.colorScheme.surface,
-    tonalElevation = 2.dp,
-    onClick = {
-        if (Status.Env.isFailed) {
-            EnvProvider.init()
-        }
-    }
+    tonalElevation = 2.dp
 ) {
-    LaunchedEffect(Status.Env.event, Status.Provider.event) {
-        if (Status.Env.isFailed && Status.Provider.isSucceeded) {
-            EnvProvider.init()
-        }
-    }
-
     Row(
         modifier = Modifier
             .padding(all = 20.dp)

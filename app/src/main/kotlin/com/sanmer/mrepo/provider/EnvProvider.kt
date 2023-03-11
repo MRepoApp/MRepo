@@ -24,6 +24,7 @@ object EnvProvider {
 
     fun init() {
         Timber.d("EnvProvider init")
+        Status.Env.setLoading()
 
         when {
             isMagisk -> Magisk.init()

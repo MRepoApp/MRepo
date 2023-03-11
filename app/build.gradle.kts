@@ -7,8 +7,8 @@ plugins {
     kotlin("plugin.parcelize")
 }
 
-val verName = "1.2.1-beta03"
-val verCode = 121
+val verName = "1.2.2"
+val verCode = 122
 
 android {
     namespace = "com.sanmer.mrepo"
@@ -29,7 +29,7 @@ android {
         targetSdk = 33
         versionCode = verCode
         versionName = verName
-        resourceConfigurations += arrayOf("en", "zh-rCN")
+        resourceConfigurations += arrayOf("en", "zh-rCN", "fr")
         multiDexEnabled = true
 
         ndk {
@@ -82,7 +82,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.2"
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
 
     packagingOptions {
@@ -119,6 +119,7 @@ kotlin {
             optIn("androidx.compose.foundation.ExperimentalFoundationApi")
             optIn("com.google.accompanist.permissions.ExperimentalPermissionsApi")
             optIn("kotlin.ExperimentalStdlibApi")
+            optIn("kotlinx.coroutines.FlowPreview")
         }
     }
 }
@@ -132,14 +133,16 @@ ksp {
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.work:work-runtime-ktx:2.8.0")
-    implementation("androidx.appcompat:appcompat:1.7.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-service:2.5.1")
+    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha08")
     implementation("com.google.android.material:material:1.9.0-alpha02")
 
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha07")
+    val vLifecycle = "2.6.0"
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${vLifecycle}")
+    implementation("androidx.lifecycle:lifecycle-service:${vLifecycle}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${vLifecycle}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:${vLifecycle}")
 
     val vCompose = "1.4.0-beta02"
     implementation("androidx.compose.ui:ui:${vCompose}")
@@ -147,7 +150,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:${vCompose}")
     debugImplementation("androidx.compose.ui:ui-test-manifest:${vCompose}")
 
-    val vAccompanist = "0.29.1-alpha"
+    val vAccompanist = "0.29.2-rc"
     implementation("com.google.accompanist:accompanist-systemuicontroller:${vAccompanist}")
     implementation("com.google.accompanist:accompanist-navigation-animation:${vAccompanist}")
     implementation("com.google.accompanist:accompanist-permissions:${vAccompanist}")

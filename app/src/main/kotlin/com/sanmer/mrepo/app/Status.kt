@@ -15,11 +15,11 @@ object Status {
         var event by mutableStateOf(initialState)
             private set
 
-        val isNon get() = event.isNon
         val isLoading get() = event.isLoading
         val isSucceeded get() = event.isSucceeded
         val isFailed get() = event.isFailed
         val isFinished get() = event.isFinished
+        val isNotReady get() = event.isNotReady
 
         open fun setSucceeded(value: Any? = null) {
             event = Event.SUCCEEDED
@@ -33,11 +33,11 @@ object Status {
             event = Event.LOADING
         }
 
-        open fun setNon(value: Any? = null) {
-            event = Event.NON
-        }
-
-        private operator fun MutableState<Event>.setValue(thisObj: Any?, property: KProperty<*>, value: Event) {
+        private operator fun MutableState<Event>.setValue(
+            thisObj: Any?,
+            property: KProperty<*>,
+            value: Event
+        ) {
             runCatching {
                 this.value = value
             }.onFailure {
@@ -47,13 +47,9 @@ object Status {
         }
     }
 
-    object Env : State() {
-        val isNotReady get() = event.isNotReady
-    }
+    object Env : State()
 
-    object Provider : State() {
-        val isNotReady get() = event.isNotReady
-    }
+    object Provider : State()
 
     object Local : State()
 

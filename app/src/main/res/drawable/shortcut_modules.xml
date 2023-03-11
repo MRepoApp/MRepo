@@ -3,6 +3,6 @@
     <foreground>
         <inset
             android:drawable="@drawable/box_bold"
-            android:inset="30%" />
+            android:inset="28%" />
     </foreground>
 </adaptive-icon>

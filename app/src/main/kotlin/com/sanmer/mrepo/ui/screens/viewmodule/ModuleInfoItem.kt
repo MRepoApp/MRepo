@@ -65,13 +65,6 @@ fun ModuleInfoItem(
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
 
-                    if (viewModel.isMulti) {
-                        NormalChip(
-                            painter = painterResource(id = R.drawable.hierarchy_outline),
-                            text = "MULTIREPO"
-                        )
-                    }
-
                     if (viewModel.hasLicense) {
                         NormalChip(
                             painter = painterResource(id = R.drawable.document_text_outline),

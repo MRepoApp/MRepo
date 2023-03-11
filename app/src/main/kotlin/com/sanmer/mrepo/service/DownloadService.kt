@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@OptIn(FlowPreview::class)
 class DownloadService : LifecycleService() {
     private data class DownloadItem(
         val id: Int = System.currentTimeMillis().toInt(),

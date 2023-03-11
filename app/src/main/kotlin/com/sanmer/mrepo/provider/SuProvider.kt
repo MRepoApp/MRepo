@@ -34,10 +34,9 @@ object SuProvider {
 
     fun init(context: Context) {
         if (EnvProvider.isRoot) {
+            Status.Provider.setLoading()
             val intent = Intent(context, SuService::class.java)
             RootService.bind(intent, Connection)
-        } else {
-            Status.Provider.setFailed()
         }
     }
 
@@ -54,7 +53,7 @@ object SuProvider {
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            Timber.w("SuProvider close")
+            Timber.w("SuProvider disable")
             Status.Provider.setFailed()
         }
     }

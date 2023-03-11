@@ -43,9 +43,8 @@ class DetailViewModel(
     var changelog: String? by mutableStateOf(null)
         private set
 
-    val isMulti get() = module.repoId.size >= 2
     val hasLicense get() = module.license.isNotBlank()
-    val hasLabel get() = hasLicense || isMulti
+    val hasLabel get() = hasLicense
 
     var message: String? = null
 

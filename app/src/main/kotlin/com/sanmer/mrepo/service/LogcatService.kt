@@ -17,8 +17,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class LogcatService : LifecycleService() {
-    private val uid by lazy { applicationInfo.uid }
-
     override fun onCreate() {
         super.onCreate()
         isActive =  true

@@ -49,7 +49,7 @@
     <string name="selinux_status_enforcing">Renforçé</string>
     <string name="selinux_status_permissive">Permissif</string>
     <!-- About -->
-    <string name="about_source_code">Afficher code source de</string>
+    <string name="about_source_code">Afficher code source de %1$s</string>
     <!-- Menu -->
     <string name="menu_reboot">Redémarrer</string>
     <string name="menu_reboot_userspace">Rédémarrer en espace utilisateur</string>

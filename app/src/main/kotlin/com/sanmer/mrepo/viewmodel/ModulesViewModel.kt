@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.module.LocalModule
@@ -22,8 +23,8 @@ class ModulesViewModel : ViewModel() {
     val localValue get() = if (isSearch) _local else local
     val onlineValue get() = if (isSearch) _online else online
 
-    private val local = mutableStateListOf<LocalModule>()
-    private val online = mutableStateListOf<OnlineModule>()
+    private var local = mutableStateListOf<LocalModule>()
+    private var online = mutableStateListOf<OnlineModule>()
     private val updatable by derivedStateOf {
         online.filter { module ->
             module.versionCode > (local
@@ -59,43 +60,41 @@ class ModulesViewModel : ViewModel() {
 
     init {
         Timber.d("ModulesViewModel init")
+
         updateLocal()
+        Status.Local.state.onEach {
+            if (it.isSucceeded && !localUpdating) {
+                updateLocal()
+            }
+        }.launchIn(viewModelScope)
+
         updateOnline()
-
-        snapshotFlow { Status.Cloud.isSucceeded }
-            .onEach { if (it) updateOnline() }
-            .launchIn(viewModelScope)
-
-        snapshotFlow { Status.Local.isSucceeded }
-            .onEach { if (it) updateLocal() }
-            .launchIn(viewModelScope)
+        Status.Cloud.state.onEach {
+            if (it.isSucceeded && !onlineUpdating) {
+                updateOnline()
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun updateLocal() = viewModelScope.launch {
-        if (localUpdating) return@launch
-
-        Timber.i("updateLocal")
+        Timber.i("ModulesViewModel: updateLocal")
         localUpdating = true
-        if (local.isNotEmpty()) {
-            local.clear()
-        }
 
         val list = ModuleManager.getLocalAll()
+        if (local.isNotEmpty()) local.clear()
         local.addAll(list)
+
         localUpdating = false
     }
 
     private fun updateOnline() = viewModelScope.launch {
-        if (onlineUpdating) return@launch
-
-        Timber.i("updateOnline")
+        Timber.i("ModulesViewModel: updateOnline")
         onlineUpdating = true
-        if (online.isNotEmpty()) {
-            online.clear()
-        }
 
         val list = ModuleManager.getOnlineAll()
+        if (online.isNotEmpty()) online.clear()
         online.addAll(list)
+
         onlineUpdating = false
     }
 
@@ -114,7 +113,7 @@ class ModulesViewModel : ViewModel() {
         }
     }
 
-    val OnlineModule.path get() = Const.DOWNLOAD_PATH.resolve(
+    private val OnlineModule.path get() = Const.DOWNLOAD_PATH.resolve(
         "${name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")
