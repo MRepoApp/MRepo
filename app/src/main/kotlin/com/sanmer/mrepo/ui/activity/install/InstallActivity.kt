@@ -14,14 +14,15 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.app.isLoading
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.*
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.ui.theme.AppTheme
 import com.sanmer.mrepo.viewmodel.InstallViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.io.File
 
@@ -37,21 +38,21 @@ class InstallActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         /**
-         * Use livedata instead of sate(crashed by "readError") to
+         * Use StateFlow instead of State to
          * safety started by other apps.
          * */
-        Status.Provider.value.observe(this) {
-            if (it.isLoading) {
+        Status.Provider.state.onEach {
+            if (it.isNotReady) {
                 viewModel.send("SuProvider init")
                 SuProvider.init(this)
             }
-            if (it.isSucceeded && Status.Env.isLoading) {
+            if (it.isSucceeded && Status.Env.isNotReady) {
                 viewModel.send("EnvProvider init")
                 EnvProvider.init()
             }
-        }
+        }.launchIn(lifecycleScope)
 
-        Status.Env.value.observe(this) {
+        Status.Env.state.onEach {
             if (it.isSucceeded) {
                 val uri = intent.data
                 if (uri != null) {
@@ -60,7 +61,7 @@ class InstallActivity : ComponentActivity() {
                     viewModel.state.setFailed("The uri is null!")
                 }
             }
-        }
+        }.launchIn(lifecycleScope)
 
         setContent {
             AppTheme {
