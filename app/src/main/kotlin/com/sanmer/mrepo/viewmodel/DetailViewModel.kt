@@ -13,6 +13,7 @@ import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.json.OnlineModule
+import com.sanmer.mrepo.data.json.Update
 import com.sanmer.mrepo.data.json.UpdateItem
 import com.sanmer.mrepo.data.parcelable.Module
 import com.sanmer.mrepo.provider.repo.RepoProvider
@@ -53,7 +54,7 @@ class DetailViewModel(
         getModule()
     }
 
-    private fun getModule() = viewModelScope.launch(Dispatchers.Default) {
+    private fun getModule() = viewModelScope.launch {
         if (id.isNullOrBlank()) {
             state.setFailed("The id is null or blank")
         } else {
@@ -70,18 +71,20 @@ class DetailViewModel(
     }
 
     suspend fun getUpdates() {
+        val update: (Update) -> Unit = { update ->
+            update.versions.forEach { item ->
+                val versionCodes = versions.map { it.versionCode }
+                if (item.versionCode !in versionCodes) {
+                    val new = item.copy(repoId = update.repoId)
+                    versions.update(new)
+                }
+            }
+        }
+
         RepoProvider.getUpdate(module).onSuccess { list ->
             list.filterNotNull()
                 .sortedByDescending { it.timestamp }
-                .forEach { update ->
-                    update.versions.forEach { item ->
-                        val versionCodes = versions.map { it.versionCode }
-                        if (item.versionCode !in versionCodes) {
-                            val new = item.copy(repoId = update.repoId)
-                            versions.update(new)
-                        }
-                    }
-                }
+                .forEach(update)
 
             if (versions.isNotEmpty()) {
                 versions.sortedByDescending { it.versionCode }
@@ -95,22 +98,20 @@ class DetailViewModel(
         }
     }
 
-    fun getChangelog(versionCode: Int) {
+    fun getChangelog(versionCode: Int) = viewModelScope.launch {
         val updateItem = versions.find {
             it.versionCode == versionCode
         } ?: versions.first()
 
         if (updateItem.changelog.isNotBlank()) {
-            HttpUtils.request(
-                url = updateItem.changelog,
-                onSucceeded = {
-                    changelog = it.string()
-                },
-                onFailed = {
-                    changelog = it
-                    Timber.d("getChangelog: $it")
-                }
-            )
+            HttpUtils.requestString(
+                url = updateItem.changelog
+            ).onSuccess {
+                changelog = it
+            }.onFailure {
+                changelog = it.message
+                Timber.d("getChangelog: ${it.message}")
+            }
         }
     }
 

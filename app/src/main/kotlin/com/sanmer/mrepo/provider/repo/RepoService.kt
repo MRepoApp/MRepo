@@ -6,6 +6,7 @@ import com.sanmer.mrepo.data.json.Update
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import retrofit2.http.GET
 import retrofit2.http.Path
 import timber.log.Timber
@@ -25,7 +26,7 @@ interface RepoService {
                 .baseUrl(repoUrl)
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
-                .create(RepoService::class.java)
+                .create()
         }
     }
 }

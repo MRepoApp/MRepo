@@ -1,87 +1,71 @@
 package com.sanmer.mrepo.utils
 
+import com.sanmer.mrepo.utils.expansion.runRequest
 import com.sanmer.mrepo.utils.MediaStoreUtils.newOutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.*
 import java.io.File
-import java.io.IOException
 
 object HttpUtils {
-    private fun request(
-        url: String, callback: Callback
-    ) {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        client.newCall(request).enqueue(callback)
+    suspend fun <T>request(
+        url: String,
+        get: (ResponseBody) -> T
+    ) =  withContext(Dispatchers.IO) {
+        runRequest(get) {
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url(url)
+                .build()
+            client.newCall(request).execute()
+        }
     }
 
-    fun request(
-        url: String,
-        onSucceeded: (ResponseBody) -> Unit = {},
-        onFailed: (String?) -> Unit = {},
-        onFinished: () -> Unit = {},
-    ) = request(url = url, callback = object : Callback {
-        override fun onResponse(call: Call, response: Response) {
-            if (response.isSuccessful) {
-                response.body()?.let(onSucceeded)
-            } else {
-                onFailed(response.body()?.string())
-            }
-            onFinished()
-        }
-        override fun onFailure(call: Call, e: IOException) {
-            onFailed(e.message)
-            onFinished()
-        }
-    })
+    suspend fun requestString(
+        url: String
+    ): Result<String> = request(
+        url = url,
+        get = { it.string() }
+    )
 
-    fun downloader(
+    suspend fun downloader(
         url: String,
-        onProgress: (Float) -> Unit,
-        onSucceeded: () -> Unit = {},
-        onFailed: (String?) -> Unit = {},
-        onFinished: () -> Unit = {},
-        path: File
-    ) {
-        path.parentFile!!.let {
+        out: File,
+        onProgress: (Float) -> Unit
+    ): Result<File> {
+        out.parentFile!!.let {
             if (!it.exists())
                 it.mkdirs()
         }
 
-        val succeeded: (ResponseBody) -> Unit = { body ->
-            runCatching {
-                val buffer = ByteArray(2048)
-                val input = body.byteStream()
+        val get: (ResponseBody) -> File = {
+            val buffer = ByteArray(2048)
+            val input = it.byteStream()
 
-                val output = path.newOutputStream()
+            val output = out.newOutputStream()
 
-                val all = body.contentLength()
-                var finished: Long = 0
-                var readying: Int
+            val all = it.contentLength()
+            var finished: Long = 0
+            var readying: Int
 
-                while (input.read(buffer).also { readying = it } != -1) {
-                    output?.write(buffer, 0, readying)
-                    finished += readying.toLong()
+            while (input.read(buffer).also { readying = it } != -1) {
+                output?.write(buffer, 0, readying)
+                finished += readying.toLong()
 
-                    val progress = (finished * 1.0 / all).toFloat()
-                    onProgress(progress)
-                }
-
-                output?.flush()
-                output?.close()
-                input.close()
-                onSucceeded()
-            }.onFailure {
-                onFailed(it.message)
+                val progress = (finished * 1.0 / all).toFloat()
+                onProgress(progress)
             }
+
+            output?.flush()
+            output?.close()
+            input.close()
+
+            out
         }
 
-        request(
+        return request(
             url = url,
-            onSucceeded = succeeded,
-            onFailed = onFailed,
-            onFinished = onFinished
+            get = get
         )
     }
 }

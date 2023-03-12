@@ -18,13 +18,14 @@ import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.expansion.parcelable
 import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class DownloadService : LifecycleService() {
+    val context by lazy { this }
+
     private data class DownloadItem(
         val id: Int = System.currentTimeMillis().toInt(),
         val value: Module,
@@ -78,7 +79,7 @@ class DownloadService : LifecycleService() {
 
     private fun downloader(
         item: DownloadItem
-    ) {
+    ) = lifecycleScope.launch {
         val module = item.value
         val notificationId = item.id
         val notificationIdFinish = notificationId + 1
@@ -87,7 +88,7 @@ class DownloadService : LifecycleService() {
         Timber.d("download to ${path.absolutePath}")
 
         val notification = NotificationUtils
-            .buildNotification(this, Const.CHANNEL_ID_DOWNLOAD)
+            .buildNotification(context, Const.CHANNEL_ID_DOWNLOAD)
             .setContentTitle(module.name)
             .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
             .setProgress(0, 0 , false)
@@ -121,7 +122,7 @@ class DownloadService : LifecycleService() {
             )
 
             if (item.install) {
-                InstallActivity.start(context = this, path = path)
+                InstallActivity.start(context = context, path = path)
             }
         }
 
@@ -138,18 +139,22 @@ class DownloadService : LifecycleService() {
 
         HttpUtils.downloader(
             url = module.url,
-            path = path,
+            out = path,
             onProgress = {
                 broadcast(it, module)
                 progressFlow.value = (it * 100).toInt()
-            },
-            onSucceeded = succeeded,
-            onFailed = failed,
-            onFinished = {
-                list.remove(item)
-                stopIt()
             }
-        )
+        ).onSuccess {
+            succeeded()
+
+            list.remove(item)
+            stopIt()
+        }.onFailure {
+            failed(it.message)
+
+            list.remove(item)
+            stopIt()
+        }
     }
 
     private fun setForeground() {
