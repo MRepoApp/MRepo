@@ -37,6 +37,12 @@
     <string name="root_status_none">Aucun</string>
     <!-- Non Root Card -->
     <string name="non_root_desc">Le fonctionnement est limité</string>
+    <!-- App Update Card -->
+    <!--
+    <string name="app_update_latest">Latest: %1$s</string>
+    <string name="app_update_installed">Installed: %1$s</string>
+    <string name="app_update_package">Package: %1$s</string>
+    -->
     <!-- Info Card -->
     <string name="modules_status_repo">Activer dépôts / Tous les dépôt</string>
     <string name="modules_status_module">Modules locaux / Modules en ligne</string>
@@ -75,7 +81,6 @@
     <string name="module_install">Installer</string>
     <string name="module_download">Télécharger</string>
     <string name="module_view">Afficher</string>
-    <string name="module_new_version">Nouvelle version: %1$s</string>
     <!-- Modules Page -->
     <string name="modules_page_cloud_empty">Dépôt vide</string>
     <string name="modules_page_installed_empty">Aucun module trouvé</string>
@@ -142,7 +147,9 @@
     <string name="message_loading">Chargement…</string>
 
     <!-- Notification -->
-    <string name="notification_name_download">téléchargement du module</string>
+    <!--
+    <string name="notification_name_download">Download Service</string>
+    -->
 
     <!-- Shortcut -->
     <string name="shortcut_log_label">Journaux</string>

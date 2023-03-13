@@ -2,14 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+        android:maxSdkVersion="29"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+        android:maxSdkVersion="28"/>
 
     <application
         android:name=".App"
@@ -24,23 +25,23 @@
             android:name=".ui.activity.setup.SetupActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="${applicationId}.shortcut.modules" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="${applicationId}.shortcut.modules"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="${applicationId}.shortcut.settings" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="${applicationId}.shortcut.settings"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name=".ui.activity.main.MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity android:name=".ui.activity.install.InstallActivity"
             android:label="@string/activity_install_label"
@@ -49,23 +50,23 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="application/zip"/>
-                <data android:scheme="content" />
+                <data android:scheme="content"/>
             </intent-filter>
         </activity>
 
         <activity android:name=".ui.activity.log.LogActivity"
             android:label="@string/page_log_viewer"
-            android:exported="true" />
+            android:exported="true"/>
 
         <activity android:name=".ui.activity.license.LicenseActivity"
             android:label="@string/license_title"
-            android:exported="true" />
+            android:exported="true"/>
 
         <service android:name=".service.DownloadService"
-            android:exported="false" />
+            android:exported="false"/>
 
         <service android:name=".service.LogcatService"
-            android:exported="false" />
+            android:exported="false"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

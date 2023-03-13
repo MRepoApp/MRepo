@@ -21,7 +21,11 @@ data class Repo(
     @set:JvmName("state")
     var isEnable: Boolean by mutableStateOf(enable)
 
-    private operator fun MutableState<Boolean>.setValue(thisObj: Any?, property: KProperty<*>, value: Boolean) {
+    private operator fun MutableState<Boolean>.setValue(
+        thisObj: Any?,
+        property: KProperty<*>,
+        value: Boolean
+    ) {
         this.value = value
         enable = value
     }

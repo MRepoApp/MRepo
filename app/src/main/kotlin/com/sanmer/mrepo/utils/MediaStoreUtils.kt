@@ -10,6 +10,7 @@ import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.provider.FileProvider
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 import java.io.OutputStream
 
 object MediaStoreUtils {
@@ -40,6 +41,17 @@ object MediaStoreUtils {
             cr.openOutputStream(new.toUri())?.use { output ->
                 input.copyTo(output)
             }
+        }
+    }
+
+    @Throws(IOException::class)
+    fun File.newInputStream(): InputStream? = try {
+        cr.openInputStream(toUri())
+    } catch (e: Exception) {
+        if (Status.Provider.isSucceeded) {
+            fs.getFile(this).newInputStream()
+        } else {
+            throw IOException(e)
         }
     }
 

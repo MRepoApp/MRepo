@@ -5,14 +5,14 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.module.LocalModule
-import com.sanmer.mrepo.data.parcelable.Module
 import com.sanmer.mrepo.service.DownloadService
+import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -113,7 +113,7 @@ class ModulesViewModel : ViewModel() {
         }
     }
 
-    private val OnlineModule.path get() = Const.DOWNLOAD_PATH.resolve(
+    private val OnlineModule.path get() = Config.DOWNLOAD_PATH.toFile().resolve(
         "${name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")
@@ -124,11 +124,9 @@ class ModulesViewModel : ViewModel() {
         module: OnlineModule,
     ) = DownloadService.start(
         context = context,
-        module = Module(
-            name = module.name,
-            path = module.path.absolutePath,
-            url = module.states.zipUrl
-        ),
+        name = module.name,
+        path = module.path.absolutePath,
+        url = module.states.zipUrl,
         install = false
     )
 
@@ -137,11 +135,9 @@ class ModulesViewModel : ViewModel() {
         module: OnlineModule
     ) = DownloadService.start(
         context = context,
-        module = Module(
-            name = module.name,
-            path = module.path.absolutePath,
-            url = module.states.zipUrl
-        ),
+        name = module.name,
+        path = module.path.absolutePath,
+        url = module.states.zipUrl,
         install = true
     )
 }

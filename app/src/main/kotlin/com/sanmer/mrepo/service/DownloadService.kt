@@ -73,7 +73,7 @@ class DownloadService : LifecycleService() {
         val notificationIdFinish = notificationId + 1
 
         val path = item.path.toFile()
-        Timber.d("download to ${item.path}")
+        Timber.d("Download: ${item.url} to ${item.path}")
 
         val notification = NotificationUtils
             .buildNotification(context, Const.CHANNEL_ID_DOWNLOAD)

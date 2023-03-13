@@ -4,7 +4,7 @@ import android.content.Context
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.provider.local.LocalProvider
-import com.sanmer.mrepo.utils.unzip
+import com.sanmer.mrepo.utils.expansion.unzip
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import java.io.File

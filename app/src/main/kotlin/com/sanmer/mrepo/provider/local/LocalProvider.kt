@@ -17,7 +17,7 @@ import timber.log.Timber
 import java.io.File
 
 object LocalProvider {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     @Synchronized
     fun getLocalAll(
@@ -27,7 +27,7 @@ object LocalProvider {
             SuProvider.init(context)
         }
 
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch {
             getLocalAll().onFailure {
                 Timber.e("getLocal: ${it.message}")
             }
@@ -36,7 +36,7 @@ object LocalProvider {
         Timber.e("getLocal: ${it.message}")
     }
 
-    suspend fun getLocalAll() = withContext(Dispatchers.Default) {
+    suspend fun getLocalAll() = withContext(Dispatchers.IO) {
         if (Status.Local.isLoading) {
             return@withContext Result.failure(RuntimeException("getLocal is already loading!"))
         } else {
@@ -49,10 +49,6 @@ object LocalProvider {
         }
 
         if (!Status.Env.isSucceeded) {
-            if (!Status.Env.isLoading) {
-                EnvProvider.init()
-            }
-
             Status.Local.setFailed()
             throw RuntimeException("EnvProvider is not ready!")
         }

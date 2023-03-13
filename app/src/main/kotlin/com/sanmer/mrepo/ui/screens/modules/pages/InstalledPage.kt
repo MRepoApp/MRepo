@@ -71,16 +71,6 @@ private fun LocalModuleItem(
     module: LocalModule
 ) {
     val state = ModuleUtils.updateUIState(module)
-    var update: OnlineModule? by remember { mutableStateOf(null) }
-
-    LaunchedEffect(state) {
-        launch(Dispatchers.Default) {
-            update = ModuleManager.getOnlineAll()
-                .find {
-                    it.id == module.id && it.versionCode > module.versionCode
-                }
-        }
-    }
 
     ModuleCard(
         name = module.name,
@@ -92,11 +82,8 @@ private fun LocalModuleItem(
         switch = {
             Switch(
                 checked = module.state == State.ENABLE,
-                onCheckedChange = {
-                    if (Status.Provider.isSucceeded) {
-                        state.onChecked(it)
-                    }
-                }
+                onCheckedChange = state.toggle,
+                enabled = Status.Provider.isSucceeded
             )
         },
         indicator = when (module.state) {
@@ -107,17 +94,9 @@ private fun LocalModuleItem(
             State.ZYGISK_DISABLE -> stateIndicator(R.drawable.danger_outline)
             else -> null
         },
-        message = {
-            update?.let {
-                Text(
-                    text = stringResource(id = R.string.module_new_version, it.versionDisplay),
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-        },
         buttons = {
             TextButton(
-                onClick = state.onClick,
+                onClick = state.change,
                 enabled = Status.Provider.isSucceeded
             ) {
                 Text(

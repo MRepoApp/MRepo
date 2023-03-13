@@ -21,7 +21,7 @@ fun <T> runRequest(
     Result.failure(e)
 }
 
-fun <T>runRequest(
+fun <T> runRequest(
     get: (okhttp3.ResponseBody) -> T,
     run: () -> okhttp3.Response
 ): Result<T> = try {

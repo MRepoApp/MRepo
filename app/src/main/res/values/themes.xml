@@ -10,6 +10,6 @@
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
     </style>
 
-    <style name="Theme" parent="Base.Theme.App" />
+    <style name="Theme" parent="Base.Theme.App"/>
 
 </resources>

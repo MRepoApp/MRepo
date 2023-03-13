@@ -14,10 +14,4 @@ fun String.toLongOr(v: Long): Long {
 
 fun String.toLongOrZero(): Long = toLongOr(0)
 
-fun String.toFile(): File? {
-    return try {
-        File(this)
-    } catch (e: Exception) {
-        null
-    }
-}
+fun String.toFile() = File(this)

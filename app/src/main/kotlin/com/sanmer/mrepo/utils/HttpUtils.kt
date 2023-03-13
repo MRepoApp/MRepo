@@ -1,10 +1,12 @@
 package com.sanmer.mrepo.utils
 
-import com.sanmer.mrepo.utils.expansion.runRequest
 import com.sanmer.mrepo.utils.MediaStoreUtils.newOutputStream
+import com.sanmer.mrepo.utils.expansion.runRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.ResponseBody
 import java.io.File
 
 object HttpUtils {
@@ -38,13 +40,13 @@ object HttpUtils {
                 it.mkdirs()
         }
 
-        val get: (ResponseBody) -> File = {
+        val get: (ResponseBody) -> File = { body ->
             val buffer = ByteArray(2048)
-            val input = it.byteStream()
+            val input = body.byteStream()
 
             val output = out.newOutputStream()
 
-            val all = it.contentLength()
+            val all = body.contentLength()
             var finished: Long = 0
             var readying: Int
 

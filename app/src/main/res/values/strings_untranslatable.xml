@@ -10,6 +10,8 @@
     <!-- Overview -->
     <!-- Non Root Card -->
     <string name="non_root_title" translatable="false">@string/setup_non_root_title</string>
+    <!-- App Update Card -->
+    <string name="app_update_update" translatable="false">@string/module_update</string>
 
     <!-- Settings -->
     <!-- App -->

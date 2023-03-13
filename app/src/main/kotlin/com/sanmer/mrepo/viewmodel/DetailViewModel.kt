@@ -8,19 +8,18 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.json.Update
 import com.sanmer.mrepo.data.json.UpdateItem
-import com.sanmer.mrepo.data.parcelable.Module
 import com.sanmer.mrepo.provider.repo.RepoProvider
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
+import com.sanmer.mrepo.utils.expansion.toFile
 import com.sanmer.mrepo.utils.expansion.update
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -124,7 +123,7 @@ class DetailViewModel(
         }
     }
 
-    val UpdateItem.path get() = Const.DOWNLOAD_PATH.resolve(
+    val UpdateItem.path get() = Config.DOWNLOAD_PATH.toFile().resolve(
         "${module.name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")
@@ -135,11 +134,9 @@ class DetailViewModel(
         item: UpdateItem
     ) = DownloadService.start(
         context = context,
-        module = Module(
-            name = module.name,
-            path = item.path.absolutePath,
-            url = item.zipUrl
-        ),
+        name = module.name,
+        path = item.path.absolutePath,
+        url = item.zipUrl,
         install = false
     )
 
@@ -148,15 +145,13 @@ class DetailViewModel(
         item: UpdateItem
     ) = DownloadService.start(
         context = context,
-        module = Module(
-            name = module.name,
-            path = item.path.absolutePath,
-            url = item.zipUrl
-        ),
+        name = module.name,
+        path = item.path.absolutePath,
+        url = item.zipUrl,
         install = true
     )
 
-    val OnlineModule.path get() = Const.DOWNLOAD_PATH.resolve(
+    val OnlineModule.path get() = Config.DOWNLOAD_PATH.toFile().resolve(
         "${name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")
@@ -166,11 +161,9 @@ class DetailViewModel(
         context: Context
     ) = DownloadService.start(
         context = context,
-        module = Module(
-            name = module.name,
-            path = module.path.absolutePath,
-            url = module.states.zipUrl
-        ),
+        name = module.name,
+        path = module.path.absolutePath,
+        url = module.states.zipUrl,
         install = true
     )
 }

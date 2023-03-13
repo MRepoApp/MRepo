@@ -37,6 +37,10 @@
     <string name="root_status_none">None</string>
     <!-- Non Root Card -->
     <string name="non_root_desc">Functionality is limited</string>
+    <!-- App Update Card -->
+    <string name="app_update_latest">Latest: %1$s</string>
+    <string name="app_update_installed">Installed: %1$s</string>
+    <string name="app_update_package">Package: %1$s</string>
     <!-- Info Card -->
     <string name="modules_status_repo">Enabled Repositories / All Repositories</string>
     <string name="modules_status_module">Modules in Local / Modules in  Cloud</string>
@@ -75,7 +79,6 @@
     <string name="module_install">Install</string>
     <string name="module_download">Download</string>
     <string name="module_view">View</string>
-    <string name="module_new_version">New version: %1$s</string>
     <!-- Modules Page -->
     <string name="modules_page_cloud_empty">Repositories is empty</string>
     <string name="modules_page_installed_empty">No modules found</string>
@@ -142,7 +145,7 @@
     <string name="message_loading">Loading…</string>
 
     <!-- Notification -->
-    <string name="notification_name_download">Module Download</string>
+    <string name="notification_name_download">Download Service</string>
 
     <!-- Shortcut -->
     <string name="shortcut_log_label">Logs</string>

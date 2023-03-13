@@ -42,7 +42,7 @@ fun NonRootItem() = Surface(
         ) {
             Text(
                 text = stringResource(id = R.string.non_root_title),
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(

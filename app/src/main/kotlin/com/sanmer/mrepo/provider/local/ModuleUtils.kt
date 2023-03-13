@@ -44,8 +44,8 @@ object ModuleUtils {
     data class UIState(
         val alpha: Float = 1f,
         val decoration: TextDecoration = TextDecoration.None,
-        val onChecked: (Boolean) -> Unit = {},
-        val onClick: () -> Unit = {},
+        val toggle: (Boolean) -> Unit = {},
+        val change: () -> Unit = {},
     )
 
     fun updateUIState(
@@ -53,23 +53,23 @@ object ModuleUtils {
     ): UIState {
         var alpha = 1f
         var decoration = TextDecoration.None
-        var onChecked: (Boolean) -> Unit = {}
-        var onClick = {}
+        var toggle: (Boolean) -> Unit = {}
+        var change = {}
 
         when (module.state) {
             State.ENABLE -> {
-                onChecked = { module.disable() }
-                onClick = { module.remove() }
+                toggle = { module.disable() }
+                change = { module.remove() }
             }
             State.DISABLE -> {
                 alpha = 0.5f
-                onChecked = { module.enable() }
-                onClick = { module.remove() }
+                toggle = { module.enable() }
+                change = { module.remove() }
             }
             State.REMOVE -> {
                 alpha = 0.5f
                 decoration = TextDecoration.LineThrough
-                onClick = { module.enable() }
+                change = { module.enable() }
             }
             State.ZYGISK_UNLOADED,
             State.RIRU_DISABLE,
@@ -82,8 +82,8 @@ object ModuleUtils {
         return UIState(
             alpha = alpha,
             decoration = decoration,
-            onChecked = onChecked,
-            onClick = onClick
+            toggle = toggle,
+            change = change
         )
     }
 }

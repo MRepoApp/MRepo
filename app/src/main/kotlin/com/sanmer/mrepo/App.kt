@@ -24,7 +24,6 @@ class App : Application() {
         super.onCreate()
         app = this
 
-        SPUtils.init(this)
         MediaStoreUtils.init(this)
         NotificationUtils.init(this)
 

@@ -37,6 +37,10 @@
     <string name="root_status_none">无</string>
     <!-- Non Root Card -->
     <string name="non_root_desc">功能受到限制</string>
+    <!-- App Update Card -->
+    <string name="app_update_latest">最新: %1$s</string>
+    <string name="app_update_installed">当前: %1$s</string>
+    <string name="app_update_package">包名: %1$s</string>
     <!-- Info Card -->
     <string name="modules_status_repo">已启用 / 存储库</string>
     <string name="modules_status_module">本地模块 / 云端模块</string>
@@ -75,7 +79,6 @@
     <string name="module_install">安装</string>
     <string name="module_download">下载</string>
     <string name="module_view">查看</string>
-    <string name="module_new_version">新版本：%1$s</string>
     <!-- Modules Page -->
     <string name="modules_page_cloud_empty">存储库为空</string>
     <string name="modules_page_installed_empty">没找到任何模块</string>
@@ -142,7 +145,7 @@
     <string name="message_loading">加载中…</string>
 
     <!-- Notification -->
-    <string name="notification_name_download">模块下载</string>
+    <string name="notification_name_download">下载服务</string>
 
     <!-- Shortcut -->
     <string name="shortcut_log_label">日志</string>

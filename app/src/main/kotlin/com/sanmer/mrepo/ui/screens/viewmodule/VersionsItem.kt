@@ -153,6 +153,8 @@ private fun UpdateItemDialog(
                     Text(text = stringResource(id = R.string.module_download))
                 }
 
+                Spacer(modifier = Modifier.width(8.dp))
+
                 TextButton(
                     onClick = {
                         viewModel.installer(context = context, item = value)
