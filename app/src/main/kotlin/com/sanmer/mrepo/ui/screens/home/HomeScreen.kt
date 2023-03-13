@@ -14,14 +14,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.utils.HtmlText
 import com.sanmer.mrepo.ui.utils.Logo
+import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    viewModel: HomeViewModel = viewModel()
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val context = LocalContext.current
 
@@ -49,6 +53,7 @@ fun HomeScreen() {
         ) {
             if (EnvProvider.isRoot) RootItem()
             if (EnvProvider.isNonRoot) NonRootItem()
+            if (viewModel.isUpdatable) AppUpdateItem()
             InfoItem()
         }
     }
@@ -133,7 +138,7 @@ private fun AboutDialog(
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})",
+                    text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
