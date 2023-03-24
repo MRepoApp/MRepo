@@ -3,18 +3,16 @@ package com.sanmer.mrepo.ui.activity.main
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.sanmer.mrepo.app.Shortcut
-import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.ui.navigation.BottomNav
 import com.sanmer.mrepo.ui.navigation.MainGraph
 import com.sanmer.mrepo.ui.navigation.graph.homeGraph
@@ -34,10 +32,9 @@ fun MainScreen() {
 
     Scaffold(
         bottomBar = {
-            BottomNav(
-                navController = navController
-            )
+            BottomNav(navController = navController)
         },
+        contentWindowInsets = WindowInsets.safeContent
     ) {
         AnimatedNavHost(
             modifier = Modifier

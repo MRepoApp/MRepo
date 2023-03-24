@@ -7,16 +7,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.sanmer.mrepo.app.*
+import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.isNotReady
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.ui.theme.AppTheme
@@ -65,15 +63,10 @@ class InstallActivity : ComponentActivity() {
 
         setContent {
             AppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                CompositionLocalProvider(
+                    LocalViewModelStoreOwner provides this
                 ) {
-                    CompositionLocalProvider(
-                        LocalViewModelStoreOwner provides this
-                    ) {
-                        InstallScreen()
-                    }
+                    InstallScreen()
                 }
             }
         }

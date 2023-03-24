@@ -2,6 +2,7 @@ package com.sanmer.mrepo.ui.screens.apptheme
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,7 +17,8 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.component.TitleItemForSetting
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
-import com.sanmer.mrepo.utils.expansion.navigateBack
+import com.sanmer.mrepo.ui.utils.navigateBack
+import com.sanmer.mrepo.ui.utils.none
 
 @Composable
 fun AppThemeScreen(
@@ -34,7 +36,8 @@ fun AppThemeScreen(
                 scrollBehavior = scrollBehavior,
                 navController = navController
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
         Column(
             modifier = Modifier

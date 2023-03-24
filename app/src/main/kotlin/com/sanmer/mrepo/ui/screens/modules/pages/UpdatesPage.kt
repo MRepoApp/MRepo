@@ -26,7 +26,7 @@ import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
 import com.sanmer.mrepo.ui.utils.fabPadding
-import com.sanmer.mrepo.utils.expansion.navigatePopUpTo
+import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable

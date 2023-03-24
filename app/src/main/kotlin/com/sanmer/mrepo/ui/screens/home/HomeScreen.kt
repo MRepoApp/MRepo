@@ -20,6 +20,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.utils.HtmlText
 import com.sanmer.mrepo.ui.utils.Logo
+import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
@@ -42,7 +43,8 @@ fun HomeScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             HomeTopBar(scrollBehavior = scrollBehavior)
-        }
+        },
+        contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
         Column(
             modifier = Modifier

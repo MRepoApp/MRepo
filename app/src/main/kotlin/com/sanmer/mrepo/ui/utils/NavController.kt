@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.utils.expansion
+package com.sanmer.mrepo.ui.utils
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination

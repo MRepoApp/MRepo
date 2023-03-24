@@ -31,10 +31,7 @@ import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.component.PageIndicator
-import com.sanmer.mrepo.ui.utils.HtmlText
-import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
-import com.sanmer.mrepo.ui.utils.fabPadding
-import com.sanmer.mrepo.utils.expansion.navigateBack
+import com.sanmer.mrepo.ui.utils.*
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
@@ -86,7 +83,8 @@ fun RepositoryScreen(
         },
         floatingActionButton = {
             RepositoryFloatingButton { add = true }
-        }
+        },
+        contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
         Box(
             modifier = Modifier.padding(innerPadding)

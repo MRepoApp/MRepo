@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.utils.expansion.navigatePopUpTo
+import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 
 sealed class MainGraph(
     val route: String,

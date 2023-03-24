@@ -13,7 +13,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sanmer.mrepo.ui.navigation.graph.HomeGraph
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
-import com.sanmer.mrepo.utils.expansion.navigatePopUpTo
+import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 
 private val mainGraph = listOf(
     MainGraph.Modules,

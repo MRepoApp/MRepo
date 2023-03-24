@@ -2,6 +2,7 @@ package com.sanmer.mrepo.ui.screens.settings
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
@@ -25,7 +27,8 @@ import com.sanmer.mrepo.ui.component.NormalItemForSetting
 import com.sanmer.mrepo.ui.component.TitleItemForSetting
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
 import com.sanmer.mrepo.ui.navigation.navigateToHome
-import com.sanmer.mrepo.utils.expansion.navigatePopUpTo
+import com.sanmer.mrepo.ui.utils.navigatePopUpTo
+import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.utils.expansion.openUrl
 
 @Composable
@@ -45,7 +48,8 @@ fun SettingsScreen(
             SettingsTopBar(
                 scrollBehavior = scrollBehavior
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
         Column(
             modifier = Modifier

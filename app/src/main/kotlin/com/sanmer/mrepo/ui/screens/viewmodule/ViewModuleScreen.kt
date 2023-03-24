@@ -25,7 +25,8 @@ import com.sanmer.mrepo.ui.component.CircularProgressIndicator
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
-import com.sanmer.mrepo.utils.expansion.navigateBack
+import com.sanmer.mrepo.ui.utils.navigateBack
+import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.DetailViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +48,8 @@ fun ViewModuleScreen(
                 scrollBehavior = scrollBehavior,
                 navController = navController
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
         Box(
             modifier = Modifier.padding(innerPadding)

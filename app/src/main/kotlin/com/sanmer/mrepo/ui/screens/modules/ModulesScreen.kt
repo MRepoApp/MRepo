@@ -4,9 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.*
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
@@ -22,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -35,13 +31,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
-import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.navigateToHome
 import com.sanmer.mrepo.ui.screens.modules.pages.CloudPage
 import com.sanmer.mrepo.ui.screens.modules.pages.InstalledPage
@@ -87,7 +81,8 @@ fun ModulesScreen(
             if (EnvProvider.isRoot && !viewModel.isSearch) {
                 InstallFloatingButton()
             }
-        }
+        },
+        contentWindowInsets = WindowInsets(top = 0.dp, bottom = 0.dp)
     ) { innerPadding ->
         Box(
             modifier = Modifier.padding(innerPadding)
@@ -108,17 +103,15 @@ fun ModulesScreen(
                 }
             }
 
-            if (Status.Cloud.isLoading || Status.Local.isLoading) {
-                AnimatedVisibility(
-                    visible = ModuleManager.isReady,
-                    enter = SlideIn.topToBottom,
-                    exit = SlideOut.bottomToTop
-                ) {
-                    LinearProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
+            AnimatedVisibility(
+                visible = Status.Cloud.isLoading || Status.Local.isLoading,
+                enter = SlideIn.topToBottom,
+                exit = SlideOut.bottomToTop
+            ) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
             }
         }
     }
