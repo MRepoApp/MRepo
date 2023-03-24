@@ -21,7 +21,8 @@ fun AppTheme(
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
-            darkIcons = !darkTheme
+            darkIcons = !darkTheme,
+            isNavigationBarContrastEnforced = false
         )
     }
 
