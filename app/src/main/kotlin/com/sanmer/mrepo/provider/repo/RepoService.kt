@@ -1,8 +1,8 @@
 package com.sanmer.mrepo.provider.repo
 
 import com.sanmer.mrepo.BuildConfig
+import com.sanmer.mrepo.data.json.ModuleUpdate
 import com.sanmer.mrepo.data.json.Modules
-import com.sanmer.mrepo.data.json.Update
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -16,7 +16,7 @@ interface RepoService {
     fun getModules(): Call<Modules>
 
     @GET("modules/{id}/update.json")
-    fun getUpdate(@Path("id") id: String): Call<Update>
+    fun getUpdate(@Path("id") id: String): Call<ModuleUpdate>
 
     companion object {
         fun create(repoUrl: String): RepoService {

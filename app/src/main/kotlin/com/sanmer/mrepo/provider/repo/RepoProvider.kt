@@ -1,10 +1,10 @@
 package com.sanmer.mrepo.provider.repo
 
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.CloudManager
 import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.data.json.OnlineModule
+import com.sanmer.mrepo.data.database.entity.toEntity
+import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.utils.expansion.runRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,8 +25,12 @@ object RepoProvider {
         }
 
         Timber.i("getRepo: ${RepoManger.enabled}/${RepoManger.all}")
-        val out = RepoManger.getAll().map { repo ->
-            getRepo(repo)
+        val out = RepoManger.getRepoAll().map { repo ->
+            if (repo.enable) {
+                getRepo(repo)
+            } else {
+                return@map Result.failure(RuntimeException("${repo.name} is disabled!"))
+            }
         }
 
         if (out.all { it.isSuccess }) {
@@ -41,44 +45,37 @@ object RepoProvider {
     }
 
     suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
-        if (!repo.enable) {
-            return@withContext Result.failure(RuntimeException("${repo.name} is disabled!"))
-        }
-
         runRequest {
             val api = RepoService.create(repo.url)
             return@runRequest api.getModules().execute()
-        }.onSuccess {
-            CloudManager.updateById(
-                id = repo.id,
-                value = it.copy(repoId = repo.id)
-            )
-
-            RepoManger.update(
+        }.onSuccess { result ->
+            RepoManger.updateRepo(
                 repo.copy(
-                    name = it.name,
-                    size = it.modules.size,
-                    timestamp = it.timestamp
+                    name = result.name,
+                    size = result.modules.size,
+                    timestamp = result.timestamp
                 )
             )
+
+            val list = result.modules.map { it.toEntity(repo.url) }
+            RepoManger.insertModule(list)
+
         }.onFailure {
             Timber.e("getRepo: ${it.message}")
         }
     }
 
     suspend fun getUpdate(module: OnlineModule) = withContext(Dispatchers.IO) {
-        if (module.repoId.isEmpty()) {
+        if (module.repoUrls.isEmpty()) {
             return@withContext Result.failure(NoSuchElementException("The repoId is empty!"))
         }
 
-        val result = module.repoId.map { id ->
-            val repo = RepoManger.getById(id)!!
-
+        val result = module.repoUrls.map { url ->
             runRequest {
-                val api = RepoService.create(repo.url)
+                val api = RepoService.create(url)
                 api.getUpdate(module.id).execute()
             }.onSuccess {
-                return@map Result.success(it.copy(repoId = repo.id))
+                return@map Result.success(it.copy(repoUrl = url))
             }.onFailure {
                 Timber.d("getUpdate: ${it.message}")
             }

@@ -125,7 +125,7 @@ private fun RepoList(
         }
         items(
             items = list,
-            key = { it.id }
+            key = { it.name }
         ) { repo ->
             RepoItem(repo = repo)
         }
@@ -217,6 +217,7 @@ private fun AddDialog(
         confirmButton = {
             TextButton(
                 onClick = {
+                    if (url.isBlank()) return@TextButton
                     if (!url.endsWith("/")) url += "/"
 
                     onAdd(url)

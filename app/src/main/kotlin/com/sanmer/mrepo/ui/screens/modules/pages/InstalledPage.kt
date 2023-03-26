@@ -15,9 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.json.OnlineModule
-import com.sanmer.mrepo.data.json.versionDisplay
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.provider.local.ModuleUtils
@@ -26,8 +23,6 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.stateIndicator
 import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun InstalledPage(

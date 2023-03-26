@@ -1,6 +1,6 @@
-package com.sanmer.mrepo.data.json
+package com.sanmer.mrepo.data.module
 
-import com.sanmer.mrepo.data.module.LocalModule
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -12,9 +12,14 @@ data class OnlineModule(
     val author: String = id,
     val description: String = id,
     val license: String = id,
-    val states: States = States()
+    val states: States = States(),
+    @Json(ignore = true) val repoUrls: MutableList<String> = mutableListOf()
 ) {
-    val repoId = mutableListOf<Long>()
+    val versionDisplay get() = if ("(${versionCode})" in version) {
+        version
+    } else {
+        "$version (${versionCode})"
+    }
 
     override fun equals(other: Any?): Boolean {
         return when (other) {
@@ -34,9 +39,3 @@ data class States(
     val zipUrl: String = "",
     val changelog: String = "",
 )
-
-val OnlineModule.versionDisplay get() = if ("(${versionCode})" in version) {
-    version
-} else {
-    "$version (${versionCode})"
-}

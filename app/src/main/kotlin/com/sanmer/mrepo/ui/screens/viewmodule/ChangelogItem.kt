@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.json.UpdateItem
+import com.sanmer.mrepo.data.json.ModuleUpdateItem
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.ui.component.ExpandableItem
 import com.sanmer.mrepo.ui.utils.MarkdownText
@@ -75,7 +75,7 @@ private fun ChangeItem(
 fun UpdateItemSelect(
     viewModel: DetailViewModel = viewModel(),
     versionCode: Int,
-    onClick: (UpdateItem) -> Unit,
+    onClick: (ModuleUpdateItem) -> Unit,
 ) {
     val selectedValue = viewModel.versions.find {
         it.versionCode == versionCode
@@ -130,7 +130,7 @@ fun UpdateItemSelect(
 
 @Composable
 private fun MenuItem(
-    value: UpdateItem,
+    value: ModuleUpdateItem,
     versionCode: Int,
     onClick: () -> Unit
 ) = DropdownMenuItem(

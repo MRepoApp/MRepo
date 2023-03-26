@@ -9,8 +9,8 @@ import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.json.OnlineModule
 import com.sanmer.mrepo.data.module.LocalModule
+import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.flow.launchIn

@@ -1,25 +1,26 @@
 package com.sanmer.mrepo.data.json
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Update(
+data class ModuleUpdate(
     val timestamp: Float,
-    val versions: List<UpdateItem>,
-    val repoId: Long = 0
+    val versions: List<ModuleUpdateItem>,
+    @Json(ignore = true) val repoUrl: String = ""
 )
 
 @JsonClass(generateAdapter = true)
-data class UpdateItem(
+data class ModuleUpdateItem(
     val timestamp: Float,
     val version: String,
     val versionCode: Int,
     val zipUrl: String,
     val changelog: String,
-    val repoId: Long = 0
+    @Json(ignore = true) val repoUrl: String = ""
 )
 
-val UpdateItem.versionDisplay get() = if ("(${versionCode})" in version) {
+val ModuleUpdateItem.versionDisplay get() = if ("(${versionCode})" in version) {
     version
 } else {
     "$version (${versionCode})"

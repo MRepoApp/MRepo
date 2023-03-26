@@ -6,8 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.data.CloudManager
-import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.provider.repo.RepoProvider
@@ -33,7 +31,7 @@ class RepositoryViewModel : ViewModel() {
             all.clear()
         }
 
-        val list = RepoManger.getAll()
+        val list = RepoManger.getRepoAll()
         all.addAll(list)
         progress = false
     }
@@ -44,7 +42,7 @@ class RepositoryViewModel : ViewModel() {
     ) = viewModelScope.launch {
         val repo = Repo(url = repoUrl)
         all.add(repo)
-        RepoManger.insert(repo)
+        RepoManger.insertRepo(repo)
 
         RepoProvider.getRepo(repo = repo)
             .onSuccess {
@@ -61,13 +59,13 @@ class RepositoryViewModel : ViewModel() {
 
     fun update(repo: Repo) = viewModelScope.launch {
         all.update(repo)
-        RepoManger.update(repo)
+        RepoManger.updateRepo(repo)
     }
 
     fun delete(repo: Repo) = viewModelScope.launch {
         all.remove(repo)
-        RepoManger.delete(repo)
-        CloudManager.deleteById(id = repo.id)
+        RepoManger.deleteRepo(repo)
+        RepoManger.deleteModules(repo.url)
     }
 
     fun getUpdate(
@@ -92,8 +90,7 @@ class RepositoryViewModel : ViewModel() {
     }
 
     fun onDestroy() = viewModelScope.launch {
-        RepoManger.getAll()
+        RepoManger.getRepoAll()
         RepoProvider.getRepoAll()
-        ModuleManager.getOnlineAll()
     }
 }

@@ -20,8 +20,7 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.RepoManger
-import com.sanmer.mrepo.data.json.OnlineModule
-import com.sanmer.mrepo.data.json.versionDisplay
+import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
@@ -84,7 +83,7 @@ private fun OnlineModuleItem(
 
     var repoName: String? by remember { mutableStateOf(null) }
     LaunchedEffect(module) {
-        repoName = RepoManger.getById(module.repoId.first())?.name
+        repoName = RepoManger.getRepoByUrl(module.repoUrls.first())?.name
     }
 
     var update by remember { mutableStateOf(false) }

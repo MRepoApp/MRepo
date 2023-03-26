@@ -114,8 +114,7 @@ fun RepoItem(
                 onClose = { expanded = false },
                 onDelete = { delete = true },
                 onShare = { context.shareText(repo.url) },
-                onUpdate = onUpdate,
-                updatable = repo.enable
+                onUpdate = onUpdate
             )
         }
     }
@@ -186,8 +185,7 @@ private fun MenuItem(
     onClose: () -> Unit,
     onDelete: () -> Unit,
     onShare: () -> Unit,
-    onUpdate: () -> Unit,
-    updatable: Boolean = true
+    onUpdate: () -> Unit
 ) = DropdownMenuItem(
     leadingIcon = {
         Icon(
@@ -204,10 +202,6 @@ private fun MenuItem(
             Menu.Update -> onUpdate()
         }
         onClose()
-    },
-    enabled = when (value) {
-        Menu.Update -> updatable
-        else -> true
     }
 )
 

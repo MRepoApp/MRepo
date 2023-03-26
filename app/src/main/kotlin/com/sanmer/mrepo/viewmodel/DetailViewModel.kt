@@ -12,9 +12,9 @@ import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.json.OnlineModule
-import com.sanmer.mrepo.data.json.Update
-import com.sanmer.mrepo.data.json.UpdateItem
+import com.sanmer.mrepo.data.json.ModuleUpdate
+import com.sanmer.mrepo.data.json.ModuleUpdateItem
+import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.provider.repo.RepoProvider
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
@@ -37,7 +37,7 @@ class DetailViewModel(
         }
     }
 
-    val versions = mutableListOf<UpdateItem>()
+    val versions = mutableListOf<ModuleUpdateItem>()
 
     val hasChangelog get() = versions.any { it.changelog.isNotBlank() }
     var changelog: String? by mutableStateOf(null)
@@ -70,11 +70,11 @@ class DetailViewModel(
     }
 
     suspend fun getUpdates() {
-        val update: (Update) -> Unit = { update ->
+        val update: (ModuleUpdate) -> Unit = { update ->
             update.versions.forEach { item ->
                 val versionCodes = versions.map { it.versionCode }
                 if (item.versionCode !in versionCodes) {
-                    val new = item.copy(repoId = update.repoId)
+                    val new = item.copy(repoUrl = update.repoUrl)
                     versions.update(new)
                 }
             }
@@ -123,7 +123,7 @@ class DetailViewModel(
         }
     }
 
-    val UpdateItem.path get() = Config.DOWNLOAD_PATH.toFile().resolve(
+    val ModuleUpdateItem.path get() = Config.DOWNLOAD_PATH.toFile().resolve(
         "${module.name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")
@@ -131,7 +131,7 @@ class DetailViewModel(
 
     fun downloader(
         context: Context,
-        item: UpdateItem
+        item: ModuleUpdateItem
     ) = DownloadService.start(
         context = context,
         name = module.name,
@@ -142,7 +142,7 @@ class DetailViewModel(
 
     fun installer(
         context: Context,
-        item: UpdateItem
+        item: ModuleUpdateItem
     ) = DownloadService.start(
         context = context,
         name = module.name,

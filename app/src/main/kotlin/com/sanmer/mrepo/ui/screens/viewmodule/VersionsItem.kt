@@ -15,7 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.data.json.UpdateItem
+import com.sanmer.mrepo.data.json.ModuleUpdateItem
 import com.sanmer.mrepo.data.json.versionDisplay
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.component.ExpandableItem
@@ -51,11 +51,11 @@ fun VersionsItem(
 
 @Composable
 private fun UpdateItem(
-    value: UpdateItem
+    value: ModuleUpdateItem
 ) {
     var repo: Repo? by remember { mutableStateOf(null) }
     LaunchedEffect(value) {
-        repo = RepoManger.getById(value.repoId)
+        repo = RepoManger.getRepoByUrl(value.repoUrl)
     }
 
     var update by remember { mutableStateOf(false) }
@@ -104,7 +104,7 @@ private fun UpdateItem(
 @Composable
 private fun UpdateItemDialog(
     viewModel: DetailViewModel = viewModel(),
-    value: UpdateItem,
+    value: ModuleUpdateItem,
     onClose: () -> Unit
 ) = AlertDialog(
     onDismissRequest = onClose

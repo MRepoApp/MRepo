@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.json.OnlineModule
+import com.sanmer.mrepo.data.module.OnlineModule
+import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
@@ -56,7 +57,7 @@ private fun ModulesList(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
-        contentPadding = fabPadding(20.dp),
+        contentPadding = if (EnvProvider.isRoot) fabPadding(20.dp) else PaddingValues(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         items(

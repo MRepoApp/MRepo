@@ -3,19 +3,16 @@ package com.sanmer.mrepo.data.database.entity
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import kotlin.reflect.KProperty
 
 @Entity(tableName = "repo")
 data class Repo(
-    val url: String,
+    @PrimaryKey val url: String,
     val name: String = url,
     val size: Int = 0,
     val timestamp: Float = 0f,
-    var enable: Boolean = true,
-    @PrimaryKey val id: Long = System.currentTimeMillis()
+    var enable: Boolean = true
 ) {
     @get:Ignore
     @set:JvmName("state")
@@ -41,3 +38,13 @@ data class Repo(
         return url.hashCode()
     }
 }
+
+data class RepoWithModule(
+    @Embedded val repo: Repo,
+    @Relation(
+        parentColumn = "url",
+        entityColumn = "repo_url",
+        entity = OnlineModuleEntity::class
+    )
+    val modules: List<OnlineModuleEntity> = listOf()
+)

@@ -24,7 +24,7 @@ class RepoWork(
         }
 
         Timber.i("getRepo: ${RepoManger.enabled}/${RepoManger.all}")
-        val out = RepoManger.getAll().map { repo ->
+        val out = RepoManger.getRepoAll().map { repo ->
             RepoProvider.getRepo(repo)
         }
 

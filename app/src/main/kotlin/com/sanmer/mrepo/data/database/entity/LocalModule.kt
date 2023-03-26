@@ -17,53 +17,45 @@ data class LocalModuleEntity(
     val state: Int
 )
 
-fun LocalModule.toEntity(): LocalModuleEntity {
-    return LocalModuleEntity(
-        id = id,
-        name = name,
-        version = version,
-        versionCode = versionCode,
-        author = author,
-        description = description,
-        state = state.toInt()
-    )
+fun LocalModule.toEntity() = LocalModuleEntity(
+    id = id,
+    name = name,
+    version = version,
+    versionCode = versionCode,
+    author = author,
+    description = description,
+    state = state.toInt()
+)
+
+fun LocalModuleEntity.toModule() = LocalModule(
+    id = id,
+    name = name,
+    version = version,
+    versionCode = versionCode,
+    author = author,
+    description = description
+).let {
+    it.state = state.toState()
+    return@let it
 }
 
-fun LocalModuleEntity.toModule(): LocalModule {
-    val module =  LocalModule(
-        id = id,
-        name = name,
-        version = version,
-        versionCode = versionCode,
-        author = author,
-        description = description
-    )
-
-    module.state = state.toState()
-    return module
+private fun State.toInt() = when (this) {
+    State.ENABLE -> 0
+    State.REMOVE -> 1
+    State.DISABLE -> 2
+    State.UPDATE -> 3
+    State.RIRU_DISABLE -> 4
+    State.ZYGISK_DISABLE -> 5
+    State.ZYGISK_UNLOADED -> 6
 }
 
-private fun State.toInt(): Int {
-    return when (this) {
-        State.ENABLE -> 0
-        State.REMOVE -> 1
-        State.DISABLE -> 2
-        State.UPDATE -> 3
-        State.RIRU_DISABLE -> 4
-        State.ZYGISK_DISABLE -> 5
-        State.ZYGISK_UNLOADED -> 6
-    }
-}
-
-private fun Int.toState(): State {
-    return when (this) {
-        0 -> State.ENABLE
-        1 -> State.REMOVE
-        2 -> State.DISABLE
-        3 -> State.UPDATE
-        4 -> State.RIRU_DISABLE
-        5 -> State.ZYGISK_DISABLE
-        6 -> State.ZYGISK_UNLOADED
-        else -> State.DISABLE
-    }
+private fun Int.toState() = when (this) {
+    0 -> State.ENABLE
+    1 -> State.REMOVE
+    2 -> State.DISABLE
+    3 -> State.UPDATE
+    4 -> State.RIRU_DISABLE
+    5 -> State.ZYGISK_DISABLE
+    6 -> State.ZYGISK_UNLOADED
+    else -> State.DISABLE
 }
