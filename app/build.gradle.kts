@@ -132,30 +132,30 @@ ksp {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.work:work-runtime-ktx:2.8.0")
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.activity:activity-compose:1.7.0")
     implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha08")
-    implementation("com.google.android.material:material:1.9.0-alpha02")
+    implementation("androidx.compose.material3:material3:1.1.0-beta01")
+    implementation("com.google.android.material:material:1.9.0-beta01")
 
-    val vLifecycle = "2.6.0"
+    val vLifecycle = "2.6.1"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${vLifecycle}")
     implementation("androidx.lifecycle:lifecycle-service:${vLifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${vLifecycle}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:${vLifecycle}")
 
-    val vCompose = "1.4.0-beta02"
+    val vCompose = "1.4.0"
     implementation("androidx.compose.ui:ui:${vCompose}")
     implementation("androidx.compose.ui:ui-tooling-preview:${vCompose}")
     debugImplementation("androidx.compose.ui:ui-tooling:${vCompose}")
     debugImplementation("androidx.compose.ui:ui-test-manifest:${vCompose}")
 
-    val vAccompanist = "0.29.2-rc"
+    val vAccompanist = "0.30.0"
     implementation("com.google.accompanist:accompanist-systemuicontroller:${vAccompanist}")
     implementation("com.google.accompanist:accompanist-navigation-animation:${vAccompanist}")
     implementation("com.google.accompanist:accompanist-permissions:${vAccompanist}")
 
-    val vRoom = "2.5.0"
+    val vRoom = "2.5.1"
     implementation("androidx.room:room-runtime:${vRoom}")
     implementation("androidx.room:room-ktx:${vRoom}")
     ksp("androidx.room:room-compiler:${vRoom}")
