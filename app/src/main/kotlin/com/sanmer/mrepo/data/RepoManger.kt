@@ -104,7 +104,7 @@ object RepoManger {
                     it.id == item.id && it.repoUrl == old.repoUrls.first()
                 }.toModule()
 
-                list.add(new.copy(repoUrls = old.repoUrls))
+                list.update(new.copy(repoUrls = old.repoUrls))
             }
         }
 
