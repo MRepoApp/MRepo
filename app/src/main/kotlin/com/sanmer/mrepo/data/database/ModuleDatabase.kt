@@ -23,8 +23,20 @@ abstract class ModuleDatabase : RoomDatabase() {
             return Room.databaseBuilder(context.applicationContext,
                 ModuleDatabase::class.java, "module")
                 .build().apply {
+                    renameTo(context, "mrepo", "module")
                     instance = this
                 }
+        }
+
+        @Suppress("SameParameterValue")
+        private fun renameTo(context: Context, old: String, new: String) {
+            context.databaseList().forEach {
+                if (it.startsWith(old)) {
+                    val oldFile = context.getDatabasePath(it)
+                    val newFile = context.getDatabasePath(it!!.replace(old, new))
+                    oldFile.renameTo(newFile)
+                }
+            }
         }
     }
 }
