@@ -40,13 +40,12 @@
     <!-- App Update Card -->
     <string name="app_update_latest">Latest: %1$s</string>
     <string name="app_update_installed">Installed: %1$s</string>
-    <string name="app_update_package">Package: %1$s</string>
     <!-- Info Card -->
     <string name="modules_status_repo">Enabled Repositories / All Repositories</string>
     <string name="modules_status_module">Modules in Local / Modules in  Cloud</string>
+    <string name="device_name">Device</string>
     <string name="device_system_version">System Version</string>
     <string name="device_system_abi">System ABI</string>
-    <string name="device_fingerprint">Fingerprint</string>
     <string name="device_security_patch">Security Patch</string>
     <string name="device_selinux_status">SELinux Status</string>
     <string name="selinux_status_disabled">Disabled</string>

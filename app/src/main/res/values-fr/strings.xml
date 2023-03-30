@@ -37,18 +37,11 @@
     <string name="root_status_none">Aucun</string>
     <!-- Non Root Card -->
     <string name="non_root_desc">Le fonctionnement est limité</string>
-    <!-- App Update Card -->
-    <!--
-    <string name="app_update_latest">Latest: %1$s</string>
-    <string name="app_update_installed">Installed: %1$s</string>
-    <string name="app_update_package">Package: %1$s</string>
-    -->
     <!-- Info Card -->
     <string name="modules_status_repo">Activer dépôts / Tous les dépôt</string>
     <string name="modules_status_module">Modules locaux / Modules en ligne</string>
     <string name="device_system_version">Version du système</string>
     <string name="device_system_abi">ABI du système</string>
-    <string name="device_fingerprint">Empreinte</string>
     <string name="device_security_patch">Correctif de sécurité</string>
     <string name="device_selinux_status">Status SELinux</string>
     <string name="selinux_status_disabled">Désactivé</string>
@@ -145,11 +138,6 @@
     <string name="message_download_failed">Échec du téléchargement: %1$s</string>
     <string name="message_download_success">téléchargement réussi</string>
     <string name="message_loading">Chargement…</string>
-
-    <!-- Notification -->
-    <!--
-    <string name="notification_name_download">Download Service</string>
-    -->
 
     <!-- Shortcut -->
     <string name="shortcut_log_label">Journaux</string>

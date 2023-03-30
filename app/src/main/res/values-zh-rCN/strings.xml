@@ -40,13 +40,12 @@
     <!-- App Update Card -->
     <string name="app_update_latest">最新: %1$s</string>
     <string name="app_update_installed">当前: %1$s</string>
-    <string name="app_update_package">包名: %1$s</string>
     <!-- Info Card -->
     <string name="modules_status_repo">已启用 / 存储库</string>
     <string name="modules_status_module">本地模块 / 云端模块</string>
+    <string name="device_name">设备</string>
     <string name="device_system_version">系统版本</string>
     <string name="device_system_abi">系统架构</string>
-    <string name="device_fingerprint">系统指纹</string>
     <string name="device_security_patch">安全补丁</string>
     <string name="device_selinux_status">SELinux 状态</string>
     <string name="selinux_status_disabled">被禁用</string>
