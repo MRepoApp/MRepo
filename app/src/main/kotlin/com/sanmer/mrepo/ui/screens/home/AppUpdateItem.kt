@@ -56,13 +56,6 @@ fun AppUpdateItem(
             ),
             style = MaterialTheme.typography.bodyMedium
         )
-        Text(
-            text = stringResource(
-                id = R.string.app_update_package,
-                BuildConfig.APPLICATION_ID
-            ),
-            style = MaterialTheme.typography.bodyMedium,
-        )
 
         Row(
             modifier = Modifier

@@ -41,6 +41,11 @@ fun InfoItem() = OutlinedCard(
         )
 
         InfoItem(
+            key = stringResource(id = R.string.device_name),
+            value = getDevice()
+        )
+
+        InfoItem(
             key = stringResource(id = R.string.device_system_version),
             value = if (Build.VERSION.PREVIEW_SDK_INT != 0) {
                 "${Build.VERSION.CODENAME} Preview (API ${Build.VERSION.SDK_INT})"
@@ -52,11 +57,6 @@ fun InfoItem() = OutlinedCard(
         InfoItem(
             key = stringResource(id = R.string.device_system_abi),
             value = Build.SUPPORTED_ABIS[0]
-        )
-
-        InfoItem(
-            key = stringResource(id = R.string.device_fingerprint),
-            value = Build.FINGERPRINT
         )
 
         InfoItem(
@@ -95,4 +95,14 @@ private fun InfoItem(
             style = MaterialTheme.typography.bodyLarge,
         )
     }
+}
+
+private fun getDevice(): String {
+    var manufacturer =
+        Build.MANUFACTURER[0].uppercaseChar().toString() + Build.MANUFACTURER.substring(1)
+    if (Build.BRAND != Build.MANUFACTURER) {
+        manufacturer += " " + Build.BRAND[0].uppercaseChar() + Build.BRAND.substring(1)
+    }
+    manufacturer += " " + Build.MODEL + " "
+    return manufacturer
 }

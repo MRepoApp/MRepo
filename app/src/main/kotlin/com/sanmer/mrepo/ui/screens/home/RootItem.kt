@@ -7,13 +7,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.provider.EnvProvider
 
 @Composable
@@ -22,6 +24,8 @@ fun RootItem() = Surface(
     color = MaterialTheme.colorScheme.surface,
     tonalElevation = 2.dp
 ) {
+    val state by EnvProvider.state.collectAsState()
+
     Row(
         modifier = Modifier
             .padding(all = 20.dp)
@@ -33,7 +37,7 @@ fun RootItem() = Surface(
             modifier = Modifier
                 .size(28.dp),
             painter = painterResource(id =
-            if (Status.Env.isSucceeded) {
+            if (state.isSucceeded) {
                 R.drawable.tick_circle_outline
             } else {
                 R.drawable.slash_outline
@@ -48,7 +52,7 @@ fun RootItem() = Surface(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = if (Status.Env.isSucceeded) {
+                text = if (state.isSucceeded) {
                     stringResource(id = R.string.root_status_access,
                         stringResource(id = R.string.root_status_granted)
                     )
@@ -61,7 +65,7 @@ fun RootItem() = Surface(
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = if (Status.Env.isSucceeded) {
+                text = if (state.isSucceeded) {
                     stringResource(id = R.string.root_status_provider,
                         EnvProvider.version)
                 } else {

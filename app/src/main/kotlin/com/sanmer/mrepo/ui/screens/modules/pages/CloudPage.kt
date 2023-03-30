@@ -63,7 +63,7 @@ private fun ModulesList(
         items(
             items = list,
             key = { it.id }
-        )  {module ->
+        )  { module ->
             OnlineModuleItem(module = module) {
                 navController.navigatePopUpTo(module.id.toRoute())
             }

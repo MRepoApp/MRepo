@@ -96,7 +96,7 @@ fun RepositoryScreen(
                 )
             }
 
-            RepoList(list = viewModel.all)
+            RepoList(list = viewModel.all.sortedBy { it.name })
 
             AnimatedVisibility(
                 visible = viewModel.progress,

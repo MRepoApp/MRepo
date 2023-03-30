@@ -12,9 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Const
@@ -117,9 +115,8 @@ fun SettingsScreen(
                 iconRes = R.drawable.translate_outline,
                 text = stringResource(id = R.string.settings_translate),
                 subText = stringResource(id = R.string.settings_translate_desc),
-                enabled = BuildConfig.DEBUG,
                 onClick = {
-
+                    context.openUrl(Const.TRANSLATE_URL)
                 }
             )
 
