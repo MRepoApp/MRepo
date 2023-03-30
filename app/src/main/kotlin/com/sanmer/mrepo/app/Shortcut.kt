@@ -14,8 +14,8 @@ object Shortcut {
     private const val ID_LOGS = "logs"
     private const val ID_SETTINGS = "settings"
     private const val ID_MODULES = "modules"
-    const val ACTION_MODULES = "${BuildConfig.APPLICATION_ID}.shortcut.modules"
-    const val ACTION_SETTINGS = "${BuildConfig.APPLICATION_ID}.shortcut.settings"
+    const val ACTION_MODULES = "${BuildConfig.APPLICATION_ID}.shortcut.MODULES"
+    const val ACTION_SETTINGS = "${BuildConfig.APPLICATION_ID}.shortcut.SETTINGS"
 
     val logs get() = run {
         val activity = Intent(Intent.ACTION_MAIN, null, context, LogActivity::class.java)

@@ -29,11 +29,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="${applicationId}.shortcut.modules"/>
+                <action android:name="${applicationId}.shortcut.MODULES"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="${applicationId}.shortcut.settings"/>
+                <action android:name="${applicationId}.shortcut.SETTINGS"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>

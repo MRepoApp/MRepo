@@ -13,21 +13,15 @@ object Const {
         .getExternalStoragePublicDirectory(
             Environment.DIRECTORY_DOWNLOADS
         )
+
     // NOTIFICATION
     const val CHANNEL_ID_DOWNLOAD = "module_download"
 
-    // GITHUB
+    // URL
     const val ISSUES_URL = "https://github.com/ya0211/MRepo/issues"
-
-    // REPO
     const val MY_REPO_URL = "https://ya0211.github.io/magisk-modules-repo/"
-
-    // TELEGRAM
     const val TELEGRAM_CHANNEL_URL = "https://t.me/mrepo_news"
-
-    // SPDX
+    const val TRANSLATE_URL = "https://weblate.sanmer.dev"
     const val SPDX_URL = "https://spdx.org/licenses/"
-
-    // UPDATE
     const val UPDATE_URL = "https://ya0211.github.io/mrepo-files/"
 }

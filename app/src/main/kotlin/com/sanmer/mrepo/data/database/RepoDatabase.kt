@@ -15,6 +15,7 @@ abstract class RepoDatabase : RoomDatabase() {
     abstract fun repoDao(): RepoDao
 
     companion object {
+        @Volatile
         private var instance: RepoDatabase? = null
 
         @Synchronized

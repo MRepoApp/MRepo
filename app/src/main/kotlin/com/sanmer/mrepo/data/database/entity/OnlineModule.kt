@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import com.sanmer.mrepo.data.module.OnlineModule
+import com.sanmer.mrepo.data.module.States
 
 @Entity(tableName = "online_module", primaryKeys = ["id", "repo_url"])
 data class OnlineModuleEntity(
@@ -40,4 +41,20 @@ fun OnlineModule.toEntity(repoUrl: String) = OnlineModuleEntity(
     description = description,
     license = license,
     states = states.toEntity()
+)
+
+@Entity(tableName = "states")
+data class StatesEntity(
+    val zipUrl: String,
+    val changelog: String,
+)
+
+fun States.toEntity() = StatesEntity(
+    zipUrl = zipUrl,
+    changelog = changelog
+)
+
+fun StatesEntity.toStates() = States(
+    zipUrl = zipUrl,
+    changelog = changelog
 )

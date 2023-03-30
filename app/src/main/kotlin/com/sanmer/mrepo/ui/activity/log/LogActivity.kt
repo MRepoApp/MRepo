@@ -16,10 +16,9 @@ class LogActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            val context = this
             LaunchedEffect(LogcatService.isActive) {
                 if (!LogcatService.isActive) {
-                    LogcatService.start(context)
+                    LogcatService.start(this@LogActivity)
                 }
             }
 

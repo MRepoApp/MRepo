@@ -12,6 +12,7 @@ abstract class ModuleDatabase : RoomDatabase() {
     abstract fun moduleDao(): ModuleDao
 
     companion object {
+        @Volatile
         private var instance: ModuleDatabase? = null
 
         @Synchronized
