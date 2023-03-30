@@ -14,8 +14,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RepositoryViewModel : ViewModel() {
-    val all = mutableStateListOf<Repo>()
-    val enabled get() = all.filter { it.enable }
+    val list = mutableStateListOf<Repo>()
 
     var progress by mutableStateOf(false)
         private set
@@ -27,12 +26,10 @@ class RepositoryViewModel : ViewModel() {
 
     fun getAll() = viewModelScope.launch {
         progress  = true
-        if (all.isNotEmpty()) {
-            all.clear()
-        }
+        val values = RepoManger.getRepoAll()
 
-        val list = RepoManger.getRepoAll()
-        all.addAll(list)
+        if (list.isNotEmpty()) list.clear()
+        list.addAll(values)
         progress = false
     }
 
@@ -41,29 +38,28 @@ class RepositoryViewModel : ViewModel() {
         onFailure: (Repo, Throwable) -> Unit
     ) = viewModelScope.launch {
         val repo = Repo(url = repoUrl)
-        all.add(repo)
+        list.add(repo)
         RepoManger.insertRepo(repo)
 
-        RepoProvider.getRepo(repo = repo)
-            .onSuccess {
-                val new = repo.copy(
-                    name = it.name,
-                    size = it.modules.size,
-                    timestamp = it.timestamp
-                )
-                all.update(new)
-            }.onFailure {
-                onFailure(repo, it)
-            }
+        RepoProvider.getRepo(repo).onSuccess {
+            val new = repo.copy(
+                name = it.name,
+                size = it.modules.size,
+                timestamp = it.timestamp
+            )
+            list.update(new)
+        }.onFailure {
+            onFailure(repo, it)
+        }
     }
 
     fun update(repo: Repo) = viewModelScope.launch {
-        all.update(repo)
+        list.update(repo)
         RepoManger.updateRepo(repo)
     }
 
     fun delete(repo: Repo) = viewModelScope.launch {
-        all.remove(repo)
+        list.remove(repo)
         RepoManger.deleteRepo(repo)
         RepoManger.deleteModules(repo.url)
     }
@@ -73,24 +69,24 @@ class RepositoryViewModel : ViewModel() {
         onFailure: (Throwable) -> Unit
     ) = viewModelScope.launch {
         progress = true
-        RepoProvider.getRepo(repo = repo)
-            .onSuccess {
-                progress = false
-                val new = repo.copy(
-                    name = it.name,
-                    size = it.modules.size,
-                    timestamp = it.timestamp
-                )
-                all.update(new)
-            }
-            .onFailure {
-                progress = false
-                onFailure(it)
-            }
+
+        RepoProvider.getRepo(repo).onSuccess {
+            progress = false
+            val new = repo.copy(
+                name = it.name,
+                size = it.modules.size,
+                timestamp = it.timestamp
+            )
+            list.update(new)
+        }.onFailure {
+            progress = false
+            onFailure(it)
+        }
     }
 
     fun onDestroy() = viewModelScope.launch {
-        RepoManger.getRepoAll()
-        RepoProvider.getRepoAll()
+        RepoManger.getRepoAll().map { repo ->
+            if (repo.enable) RepoProvider.getRepo(repo)
+        }
     }
 }

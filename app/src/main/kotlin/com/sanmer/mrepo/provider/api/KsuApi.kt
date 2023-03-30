@@ -1,7 +1,6 @@
 package com.sanmer.mrepo.provider.api
 
 import android.content.Context
-import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.provider.SuProvider
@@ -12,7 +11,7 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 
-object Ksu : Api() {
+object KsuApi : BaseApi() {
     init {
         System.loadLibrary("ksu")
     }
@@ -21,22 +20,23 @@ object Ksu : Api() {
     val versionCode: Int
         external get
 
-    override fun init() {
+    override fun init(onSucceeded: () -> Unit, onFailed: () -> Unit) {
         Timber.i("initKsu")
+
         Shell.cmd("$ksud --version").submit {
             if (it.isSuccess) {
+                version = it.output.uppercase()
+
                 runCatching {
                     SuProvider.Root.ksuVersionCode
                 }.onSuccess { versionCode ->
-                    version = "${it.output.uppercase()} ($versionCode)"
-                }.onFailure { _ ->
-                    version = it.output.uppercase()
+                    version += " ($versionCode)"
                 }
 
-                Status.Env.setSucceeded()
+                onSucceeded()
             } else {
                 Timber.e("initKsu: ${it.output}")
-                Status.Env.setFailed()
+                onFailed()
             }
         }
     }
@@ -76,14 +76,12 @@ object Ksu : Api() {
         onConsole: (console: String) -> Unit,
         onSucceeded: (LocalModule) -> Unit,
         onFailed: () -> Unit,
-        onFinished: () -> Unit,
         zipFile: File
     ) = install(
         context = context,
         onConsole = onConsole,
         onSucceeded = onSucceeded,
         onFailed = onFailed,
-        onFinished = onFinished,
         zipFile = zipFile,
         cmd = "$ksud module install ${zipFile.absolutePath}"
     )

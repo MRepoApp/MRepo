@@ -1,56 +1,52 @@
 package com.sanmer.mrepo.provider.local
 
 import android.content.Context
-import androidx.compose.ui.text.style.TextDecoration
 import com.sanmer.mrepo.data.module.LocalModule
-import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.provider.api.Ksu
-import com.sanmer.mrepo.provider.api.Magisk
+import com.sanmer.mrepo.provider.api.KsuApi
+import com.sanmer.mrepo.provider.api.MagiskApi
 import java.io.File
 
 object ModuleUtils {
     fun install(
         context: Context,
-        onConsole: (console: String) -> Unit = {},
+        onConsole: (String) -> Unit = {},
         onSucceeded: (LocalModule) -> Unit = {},
         onFailed: () -> Unit = {},
-        onFinished: () -> Unit = {},
         zipFile: File
     ) = when {
-        EnvProvider.isMagisk -> Magisk.install(context, onConsole, onSucceeded, onFailed, onFinished, zipFile)
-        EnvProvider.isKsu -> Ksu.install(context, onConsole, onSucceeded, onFailed, onFinished, zipFile)
+        EnvProvider.isMagisk -> MagiskApi.install(context, onConsole, onSucceeded, onFailed, zipFile)
+        EnvProvider.isKsu -> KsuApi.install(context, onConsole, onSucceeded, onFailed, zipFile)
         else -> {}
     }
 
-    private fun LocalModule.enable() = when {
-        EnvProvider.isMagisk -> Magisk.enable(this)
-        EnvProvider.isKsu -> Ksu.enable(this)
+    fun LocalModule.enable() = when {
+        EnvProvider.isMagisk -> MagiskApi.enable(this)
+        EnvProvider.isKsu -> KsuApi.enable(this)
         else -> {}
     }
 
-    private fun LocalModule.disable() = when {
-        EnvProvider.isMagisk -> Magisk.disable(this)
-        EnvProvider.isKsu -> Ksu.disable(this)
+    fun LocalModule.disable() = when {
+        EnvProvider.isMagisk -> MagiskApi.disable(this)
+        EnvProvider.isKsu -> KsuApi.disable(this)
         else -> {}
     }
 
-    private fun LocalModule.remove() = when {
-        EnvProvider.isMagisk -> Magisk.remove(this)
-        EnvProvider.isKsu -> Ksu.remove(this)
+    fun LocalModule.remove() = when {
+        EnvProvider.isMagisk -> MagiskApi.remove(this)
+        EnvProvider.isKsu -> KsuApi.remove(this)
         else -> {}
     }
 
-    data class UIState(
+    /*
+    data class UiState(
         val alpha: Float = 1f,
         val decoration: TextDecoration = TextDecoration.None,
         val toggle: (Boolean) -> Unit = {},
         val change: () -> Unit = {},
     )
 
-    fun updateUIState(
-        module: LocalModule
-    ): UIState {
+    fun updateUiState(module: LocalModule): UiState {
         var alpha = 1f
         var decoration = TextDecoration.None
         var toggle: (Boolean) -> Unit = {}
@@ -79,11 +75,8 @@ object ModuleUtils {
             State.UPDATE -> {}
         }
 
-        return UIState(
-            alpha = alpha,
-            decoration = decoration,
-            toggle = toggle,
-            change = change
-        )
+        return UiState(alpha, decoration, toggle, change)
     }
+
+     */
 }

@@ -12,7 +12,6 @@ import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.app.isNotReady
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.provider.EnvProvider
@@ -39,18 +38,18 @@ class InstallActivity : ComponentActivity() {
          * Use StateFlow instead of State to
          * safety started by other apps.
          * */
-        Status.Provider.state.onEach {
+        SuProvider.state.onEach {
             if (it.isNotReady) {
                 viewModel.send("SuProvider init")
                 SuProvider.init(this)
             }
-            if (it.isSucceeded && Status.Env.isNotReady) {
+            if (it.isSucceeded && EnvProvider.event.isNotReady) {
                 viewModel.send("EnvProvider init")
                 EnvProvider.init()
             }
         }.launchIn(lifecycleScope)
 
-        Status.Env.state.onEach {
+        EnvProvider.state.onEach {
             if (it.isSucceeded) {
                 val uri = intent.data
                 if (uri != null) {

@@ -1,10 +1,9 @@
 package com.sanmer.mrepo.provider.api
 
 import android.content.Context
-import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
-import com.sanmer.mrepo.provider.FileProvider
+import com.sanmer.mrepo.provider.FileSystemProvider
 import com.sanmer.mrepo.provider.local.LocalProvider
 import com.sanmer.mrepo.utils.expansion.output
 import com.topjohnwu.superuser.Shell
@@ -12,8 +11,8 @@ import com.topjohnwu.superuser.ShellUtils
 import timber.log.Timber
 import java.io.File
 
-object Magisk : Api() {
-    private val fs = FileProvider
+object MagiskApi : BaseApi() {
+    private val fs = FileSystemProvider
 
     private lateinit var MAGISK_PATH: String
     private var isZygiskEnabled = false
@@ -36,19 +35,21 @@ object Magisk : Api() {
         }
     }
 
-    override fun init() {
+    override fun init(onSucceeded: () -> Unit, onFailed: () -> Unit) {
         Timber.i("initMagisk")
+
         Shell.cmd("magisk --path").submit {
             if (it.isSuccess) {
                 MAGISK_PATH = "${it.output}/.magisk"
                 version = ShellUtils.fastCmd("magisk -c")
-                isZygiskEnabled = isZygisk()
 
-                Timber.i("isZygiskEnabled: $isZygiskEnabled")
-                Status.Env.setSucceeded()
+                isZygiskEnabled = isZygisk()
+                Timber.d("isZygiskEnabled: $isZygiskEnabled")
+
+                onSucceeded()
             } else {
                 Timber.e("initMagisk: ${it.output}")
-                Status.Env.setFailed()
+                onFailed()
             }
         }
     }
@@ -92,14 +93,12 @@ object Magisk : Api() {
         onConsole: (console: String) -> Unit,
         onSucceeded: (LocalModule) -> Unit,
         onFailed: () -> Unit,
-        onFinished: () -> Unit,
         zipFile: File
     ) = install(
         context = context,
         onConsole = onConsole,
         onSucceeded = onSucceeded,
         onFailed = onFailed,
-        onFinished = onFinished,
         zipFile = zipFile,
         cmd = "magisk --install-module ${zipFile.absolutePath}"
     )

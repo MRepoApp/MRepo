@@ -7,14 +7,18 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.Process
 import com.sanmer.mrepo.BuildConfig
-import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.provider.api.Ksu
+import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.provider.api.KsuApi
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
+import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
 object SuProvider {
+    val state = MutableStateFlow(Event.NON)
+    val event: Event get() = state.value
+
     private lateinit var provider: ISuProvider
     val Root get() = provider
 
@@ -34,27 +38,26 @@ object SuProvider {
 
     fun init(context: Context) {
         if (EnvProvider.isRoot) {
-            Status.Provider.setLoading()
             val intent = Intent(context, SuService::class.java)
-            RootService.bind(intent, Connection)
+            RootService.bind(intent, ISuConnection)
         }
     }
 
     fun close(context: Context) {
         val intent = Intent(context, SuService::class.java)
-        RootService.bind(intent, Connection)
+        RootService.bind(intent, ISuConnection)
     }
 
-    private object Connection : ServiceConnection {
+    private object ISuConnection : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             Timber.i("SuProvider init")
             provider = ISuProvider.Stub.asInterface(binder)
-            Status.Provider.setSucceeded()
+            state.value = Event.SUCCEEDED
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            Timber.w("SuProvider disable")
-            Status.Provider.setFailed()
+            Timber.w("SuProvider close")
+            state.value = Event.FAILED
         }
     }
 
@@ -66,7 +69,7 @@ object SuProvider {
             override fun isSelinuxEnabled(): Boolean = SELinux.isSelinuxEnabled()
             override fun getContextByPid(pid: Int) = SELinux.getContextByPid(pid)
             override fun getFileSystemService(): IBinder = FileSystemManager.getService()
-            override fun getKsuVersionCode(): Int = Ksu.versionCode
+            override fun getKsuVersionCode(): Int = KsuApi.versionCode
         }
 
         override fun onBind(intent: Intent): IBinder = Provider

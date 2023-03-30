@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.State
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.json.ModuleUpdate
 import com.sanmer.mrepo.data.json.ModuleUpdateItem
@@ -30,7 +30,7 @@ class DetailViewModel(
     var module = OnlineModule()
         private set
 
-    val state = object : Status.State(initialState = Event.LOADING) {
+    val state = object : State(initialState = Event.LOADING) {
         override fun setFailed(value: Any?) {
             super.setFailed(value)
             value?.let { message = value.toString() }

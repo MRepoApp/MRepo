@@ -1,61 +1,26 @@
 package com.sanmer.mrepo.provider.repo
 
-import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.database.entity.toEntity
 import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.utils.expansion.runRequest
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 object RepoProvider {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-    @Synchronized
-    fun getRepoAll() = coroutineScope.launch {
-        if (Status.Cloud.isLoading) {
-            Timber.w("getRepo is already loading!")
-            return@launch
-        } else {
-            Status.Cloud.setLoading()
-        }
-
-        Timber.i("getRepo: ${RepoManger.enabled}/${RepoManger.all}")
-        val out = RepoManger.getRepoAll().map { repo ->
-            if (repo.enable) {
-                getRepo(repo)
-            } else {
-                return@map Result.failure(RuntimeException("${repo.name} is disabled!"))
-            }
-        }
-
-        if (out.all { it.isSuccess }) {
-            Status.Cloud.setSucceeded()
-        } else {
-            if (out.all { it.isFailure }) {
-                Status.Cloud.setFailed()
-            } else {
-                Status.Cloud.setSucceeded()
-            }
-        }
-    }
-
     suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
         runRequest {
             val api = RepoService.create(repo.url)
             return@runRequest api.getModules().execute()
         }.onSuccess { result ->
-            RepoManger.updateRepo(
-                repo.copy(
-                    name = result.name,
-                    size = result.modules.size,
-                    timestamp = result.timestamp
-                )
+            val new = repo.copy(
+                name = result.name,
+                size = result.modules.size,
+                timestamp = result.timestamp
             )
+            RepoManger.updateRepo(new)
 
             val list = result.modules.map { it.toEntity(repo.url) }
             RepoManger.insertModule(list)

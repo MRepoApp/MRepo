@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.State
 import com.sanmer.mrepo.data.json.License
 import com.sanmer.mrepo.provider.spdx.LicenseProvider
 import com.sanmer.mrepo.ui.component.CircularProgressIndicator
@@ -31,7 +31,7 @@ fun LicenseScreen(
 ) {
     var license: License? by remember { mutableStateOf(null) }
     var message: String? by remember { mutableStateOf(null) }
-    val state = object : Status.State(Event.LOADING) {
+    val state = object : State(Event.LOADING) {
         override fun setSucceeded(value: Any?) {
             super.setSucceeded(value)
             license = value as License

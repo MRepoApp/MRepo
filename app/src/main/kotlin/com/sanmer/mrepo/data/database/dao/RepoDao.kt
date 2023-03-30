@@ -4,6 +4,7 @@ import androidx.room.*
 import com.sanmer.mrepo.data.database.entity.OnlineModuleEntity
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.database.entity.RepoWithModule
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RepoDao {
@@ -11,11 +12,21 @@ interface RepoDao {
     @Query("SELECT * FROM repo")
     fun getAllRepoWithModule(): List<RepoWithModule>
 
+    @Transaction
+    @Query("SELECT * FROM repo")
+    fun getRepoWithModuleFlow(): Flow<List<RepoWithModule>>
+
     @Query("SELECT * FROM repo")
     fun getRepoAll(): List<Repo>
 
+    @Query("SELECT COUNT(url) FROM repo")
+    fun getRepoCount(): Flow<Int>
+
+    @Query("SELECT COUNT(*) FROM repo WHERE enable LIKE 1")
+    fun getEnableCount(): Flow<Int>
+
     @Query("SELECT * FROM repo WHERE url LIKE :url LIMIT 1")
-    fun getRepoByUrl(url: String): Repo?
+    fun getRepoByUrl(url: String): Repo
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRepo(value: Repo)

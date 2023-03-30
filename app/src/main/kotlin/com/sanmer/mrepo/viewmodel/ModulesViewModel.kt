@@ -2,16 +2,25 @@ package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Config
-import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.data.ModuleManager
+import com.sanmer.mrepo.data.RepoManger
+import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.OnlineModule
+import com.sanmer.mrepo.data.module.State
+import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.local.LocalProvider
+import com.sanmer.mrepo.provider.local.ModuleUtils.disable
+import com.sanmer.mrepo.provider.local.ModuleUtils.enable
+import com.sanmer.mrepo.provider.local.ModuleUtils.remove
+import com.sanmer.mrepo.provider.repo.RepoProvider
 import com.sanmer.mrepo.service.DownloadService
+import com.sanmer.mrepo.utils.expansion.merge
 import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -23,8 +32,8 @@ class ModulesViewModel : ViewModel() {
     val localValue get() = if (isSearch) _local else local
     val onlineValue get() = if (isSearch) _online else online
 
-    private var local = mutableStateListOf<LocalModule>()
-    private var online = mutableStateListOf<OnlineModule>()
+    private val local = mutableStateListOf<LocalModule>()
+    private val online = mutableStateListOf<OnlineModule>()
     private val updatable by derivedStateOf {
         online.filter { module ->
             module.versionCode > (local
@@ -55,47 +64,36 @@ class ModulesViewModel : ViewModel() {
         }
     }
 
-    private var localUpdating = false
-    private var onlineUpdating = false
+    val suState get() = SuProvider.state
+    var progress by mutableStateOf(false)
+        private set
 
     init {
         Timber.d("ModulesViewModel init")
 
-        updateLocal()
-        Status.Local.state.onEach {
-            if (it.isSucceeded && !localUpdating) {
-                updateLocal()
-            }
+        ModuleManager.getLocalFlow().onEach { list ->
+            if (list.isEmpty()) return@onEach
+
+            if (local.isNotEmpty()) local.clear()
+            local.addAll(list)
+            Timber.i("ModulesViewModel: updateLocal")
+
         }.launchIn(viewModelScope)
 
-        updateOnline()
-        Status.Cloud.state.onEach {
-            if (it.isSucceeded && !onlineUpdating) {
-                updateOnline()
-            }
+        RepoManger.getRepoWithModuleFlow().onEach { list ->
+            if (list.isEmpty()) return@onEach
+
+            val values = list.filter { it.repo.enable }
+                .map { it.modules }
+                .merge()
+
+            val new = RepoManger.fromModuleList(values)
+
+            if (online.isNotEmpty()) online.clear()
+            online.addAll(new)
+            Timber.i("ModulesViewModel: updateOnline")
+
         }.launchIn(viewModelScope)
-    }
-
-    private fun updateLocal() = viewModelScope.launch {
-        Timber.i("ModulesViewModel: updateLocal")
-        localUpdating = true
-
-        val list = ModuleManager.getLocalAll()
-        if (local.isNotEmpty()) local.clear()
-        local.addAll(list)
-
-        localUpdating = false
-    }
-
-    private fun updateOnline() = viewModelScope.launch {
-        Timber.i("ModulesViewModel: updateOnline")
-        onlineUpdating = true
-
-        val list = ModuleManager.getOnlineAll()
-        if (online.isNotEmpty()) online.clear()
-        online.addAll(list)
-
-        onlineUpdating = false
     }
 
     fun closeSearch() {
@@ -140,4 +138,67 @@ class ModulesViewModel : ViewModel() {
         url = module.states.zipUrl,
         install = true
     )
+
+    data class UiState(
+        val alpha: Float = 1f,
+        val decoration: TextDecoration = TextDecoration.None,
+        val toggle: (Boolean) -> Unit = {},
+        val change: () -> Unit = {},
+    )
+
+    fun updateUiState(module: LocalModule): UiState {
+        var alpha = 1f
+        var decoration = TextDecoration.None
+        var toggle: (Boolean) -> Unit = {}
+        var change = {}
+
+        when (module.state) {
+            State.ENABLE -> {
+                toggle = { module.disable() }
+                change = { module.remove() }
+            }
+            State.DISABLE -> {
+                alpha = 0.5f
+                toggle = { module.enable() }
+                change = { module.remove() }
+            }
+            State.REMOVE -> {
+                alpha = 0.5f
+                decoration = TextDecoration.LineThrough
+                change = { module.enable() }
+            }
+            State.ZYGISK_UNLOADED,
+            State.RIRU_DISABLE,
+            State.ZYGISK_DISABLE -> {
+                alpha = 0.5f
+            }
+            State.UPDATE -> {}
+        }
+
+        return UiState(alpha, decoration, toggle, change)
+    }
+
+    fun getRepoByUrl(
+        url: String,
+        callback: (Repo) -> Unit
+    ) = viewModelScope.launch {
+        val repo = RepoManger.getRepoByUrl(url)
+        callback(repo)
+    }
+
+    fun getLocalAll() = viewModelScope.launch {
+        progress = true
+        LocalProvider.getLocalAll().onFailure {
+            Timber.e("getLocalAll: ${it.message}")
+        }
+        progress = false
+    }
+
+    fun getOnlineAll() = viewModelScope.launch {
+        progress = true
+        RepoManger.getRepoAll().map { repo ->
+            if (repo.enable) RepoProvider.getRepo(repo)
+        }
+        progress = false
+    }
 }

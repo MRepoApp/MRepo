@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.modules
 
-import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.size
@@ -10,16 +9,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.provider.local.LocalProvider
-import com.sanmer.mrepo.provider.repo.RepoProvider
 import com.sanmer.mrepo.ui.component.DropdownMenu
+import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 private sealed class Menu(
     @StringRes val label: Int,
@@ -60,7 +58,7 @@ fun MenuItem(
 
 @Composable
 private fun MenuItem(
-    context: Context = LocalContext.current,
+    viewModel: ModulesViewModel = viewModel(),
     value: Menu,
     onClose: () -> Unit
 ) = DropdownMenuItem(
@@ -74,8 +72,8 @@ private fun MenuItem(
     text = { Text(text = stringResource(id = value.label)) },
     onClick = {
         when (value) {
-            Menu.Cloud -> RepoProvider.getRepoAll()
-            Menu.Local -> LocalProvider.getLocalAll(context)
+            Menu.Cloud -> viewModel.getOnlineAll()
+            Menu.Local -> viewModel.getLocalAll()
         }
         onClose()
     },

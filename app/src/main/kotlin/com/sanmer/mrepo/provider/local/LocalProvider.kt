@@ -1,68 +1,36 @@
 package com.sanmer.mrepo.provider.local
 
-import android.content.Context
-import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.provider.SuProvider
-import com.sanmer.mrepo.provider.api.Ksu
-import com.sanmer.mrepo.provider.api.Magisk
+import com.sanmer.mrepo.provider.api.KsuApi
+import com.sanmer.mrepo.provider.api.MagiskApi
 import com.topjohnwu.superuser.Shell
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
 object LocalProvider {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-    @Synchronized
-    fun getLocalAll(
-        context: Context
-    ) = runCatching {
-        if (Status.Provider.isFailed) {
-            SuProvider.init(context)
-        }
-
-        coroutineScope.launch {
-            getLocalAll().onFailure {
-                Timber.e("getLocal: ${it.message}")
-            }
-        }
-    }.onFailure {
-        Timber.e("getLocal: ${it.message}")
-    }
-
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
-        if (Status.Local.isLoading) {
-            return@withContext Result.failure(RuntimeException("getLocal is already loading!"))
-        } else {
-            Status.Local.setLoading()
-        }
-
-        if (!Status.Provider.isSucceeded) {
-            Status.Local.setFailed()
+        if (!SuProvider.event.isSucceeded) {
             throw RuntimeException("SuProvider is not ready!")
         }
 
-        if (!Status.Env.isSucceeded) {
-            Status.Local.setFailed()
+        if (!EnvProvider.event.isSucceeded) {
             throw RuntimeException("EnvProvider is not ready!")
         }
 
         when {
-            EnvProvider.isMagisk -> Magisk.getModulesList()
-            EnvProvider.isKsu -> Ksu.getModulesList()
+            EnvProvider.isMagisk -> MagiskApi.getModulesList()
+            EnvProvider.isKsu -> KsuApi.getModulesList()
             else -> throw RuntimeException("unknown root provider: ${EnvProvider.context}")
         }.onSuccess {
             ModuleManager.insertLocal(it)
-            Status.Local.setSucceeded()
         }.onFailure {
             Timber.e("getLocal: ${it.message}")
-            Status.Local.setFailed()
         }
     }
 

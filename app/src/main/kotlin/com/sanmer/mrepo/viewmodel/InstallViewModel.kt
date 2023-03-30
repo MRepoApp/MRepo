@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.App
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.State
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.provider.local.ModuleUtils
@@ -24,12 +24,7 @@ class InstallViewModel : ViewModel() {
     val context by lazy { App.context }
     val console = mutableStateListOf<String>()
 
-    val state = object : Status.State(initialState = Event.LOADING) {
-        override fun setSucceeded(value: Any?) {
-            super.setSucceeded(value)
-            Status.Local.setSucceeded()
-        }
-
+    val state = object : State(initialState = Event.LOADING) {
         override fun setFailed(value: Any?) {
             super.setFailed(value)
             value?.let { send(it.toString())}
@@ -43,12 +38,6 @@ class InstallViewModel : ViewModel() {
                 it.delete()
             }
         }
-
-        /** Since the data is held by the ViewModel,
-         * it is necessary to use the Local fake update to
-         * notify the ViewModel to update the data.
-         * */
-        Status.Local.setLoading()
     }
 
     fun send(message: String) = console.add("- $message")

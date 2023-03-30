@@ -10,20 +10,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.RepoManger
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.provider.SELinux
+import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
-fun InfoItem() = OutlinedCard(
-    modifier = Modifier,
+fun InfoItem(
+    viewModel: HomeViewModel = viewModel()
+) = OutlinedCard(
     shape = RoundedCornerShape(20.dp)
 ) {
+    val suState by viewModel.suState.collectAsState()
+    val enable by viewModel.enableCount.collectAsState(0)
+    val all by viewModel.allCount.collectAsState(0)
+    val local by viewModel.localCount.collectAsState(0)
+    val online by viewModel.onlineCount.collectAsState()
+
     Column(
         modifier = Modifier
             .padding(all = 20.dp)
@@ -32,12 +41,12 @@ fun InfoItem() = OutlinedCard(
     ) {
         InfoItem(
             key = stringResource(id = R.string.modules_status_repo),
-            value = "${RepoManger.enabled} / ${RepoManger.all}"
+            value = "$enable / $all"
         )
 
         InfoItem(
             key = stringResource(id = R.string.modules_status_module),
-            value = "${ModuleManager.local} / ${ModuleManager.online}"
+            value = "$local / $online"
         )
 
         InfoItem(
@@ -64,7 +73,7 @@ fun InfoItem() = OutlinedCard(
             value = Build.VERSION.SECURITY_PATCH
         )
 
-        if (Status.Provider.isSucceeded) {
+        if (suState.isSucceeded) {
             InfoItem(
                 key = stringResource(id = R.string.device_selinux_status),
                 value = when (SELinux.Root.enforce) {

@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.data.RepoManger
+import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
@@ -81,13 +81,13 @@ private fun OnlineModuleItem(
     var progress by remember { mutableStateOf(0f) }
     viewModel.observeProgress(owner, module) { progress = it }
 
-    var repoName: String? by remember { mutableStateOf(null) }
-    LaunchedEffect(module) {
-        repoName = RepoManger.getRepoByUrl(module.repoUrls.first())?.name
-    }
+    var repo: Repo? by remember { mutableStateOf(null) }
+    viewModel.getRepoByUrl(module.repoUrl) { repo = it }
 
     var update by remember { mutableStateOf(false) }
     if (update) UpdateDialog(value = module, onView = onView) { update = false }
+
+    val suSate by viewModel.suState.collectAsState()
 
     ModuleCard(
         name = module.name,
@@ -96,9 +96,9 @@ private fun OnlineModuleItem(
         description = module.description,
         progress = progress,
         message = {
-            repoName?.let {
+            repo?.let {
                 Text(
-                    text = stringResource(id = R.string.view_module_provided, it),
+                    text = stringResource(id = R.string.view_module_provided, it.name),
                     color = MaterialTheme.colorScheme.primary
                 )
             }
@@ -106,7 +106,7 @@ private fun OnlineModuleItem(
         buttons = {
             TextButton(
                 onClick = { update = true },
-                enabled = Status.Provider.isSucceeded
+                enabled = suSate.isSucceeded
             ) {
                 Text(
                     modifier = Modifier

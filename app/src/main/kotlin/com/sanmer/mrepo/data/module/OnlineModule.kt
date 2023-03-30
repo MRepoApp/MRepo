@@ -15,6 +15,12 @@ data class OnlineModule(
     val states: States = States(),
     @Json(ignore = true) val repoUrls: MutableList<String> = mutableListOf()
 ) {
+    val repoUrl get() = try {
+        repoUrls.first()
+    } catch (e: NoSuchElementException) {
+        ""
+    }
+
     val versionDisplay get() = if ("(${versionCode})" in version) {
         version
     } else {

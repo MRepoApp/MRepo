@@ -9,11 +9,11 @@ import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import java.io.File
 
-abstract class Api {
+abstract class BaseApi {
     var version: String = "unknown"
         protected set
 
-    abstract fun init()
+    abstract fun init(onSucceeded: () -> Unit, onFailed: () -> Unit)
     abstract fun enable(module: LocalModule)
     abstract fun disable(module: LocalModule)
     abstract fun remove(module: LocalModule)
@@ -23,7 +23,6 @@ abstract class Api {
         onConsole: (console: String) -> Unit = {},
         onSucceeded: (LocalModule) -> Unit = {},
         onFailed: () -> Unit = {},
-        onFinished: () -> Unit = {},
         zipFile: File,
         cmd: String
     ) = Shell.cmd(cmd)
@@ -53,7 +52,6 @@ abstract class Api {
             }
 
             context.cacheDir.resolve("install.zip").delete()
-            onFinished()
         }
 
     abstract fun install(
@@ -61,7 +59,6 @@ abstract class Api {
         onConsole: (console: String) -> Unit,
         onSucceeded: (LocalModule) -> Unit,
         onFailed: () -> Unit,
-        onFinished: () -> Unit,
         zipFile: File
     )
 

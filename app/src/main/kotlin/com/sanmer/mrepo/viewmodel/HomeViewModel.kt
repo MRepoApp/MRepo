@@ -11,17 +11,24 @@ import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.State
+import com.sanmer.mrepo.data.ModuleManager
+import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.json.AppUpdate
+import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.provider.app.AppProvider
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.expansion.toFile
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
-    val state = object : Status.State(Event.LOADING) {
+    val state = object : State(Event.LOADING) {
         override fun setSucceeded(value: Any?) {
             super.setSucceeded(value)
             update = value as AppUpdate
@@ -41,9 +48,23 @@ class HomeViewModel : ViewModel() {
     val isUpdatable get() = state.isSucceeded &&
             (update?.versionCode ?: Int.MIN_VALUE) > BuildConfig.VERSION_CODE
 
+    val suState get() = SuProvider.state
+    val envState get() = EnvProvider.state
+
+    val localCount get() = ModuleManager.local
+    val onlineCount = MutableStateFlow(0)
+    val allCount get() = RepoManger.all
+    val enableCount get() = RepoManger.enable
+
     init {
         Timber.d("HomeViewModel init")
         getAppUpdate()
+
+        RepoManger.getRepoWithModuleFlow().onEach { list ->
+            list.filter { it.repo.enable }
+                .sumOf { it.modules.size }
+                .let { onlineCount.emit(it) }
+        }.launchIn(viewModelScope)
     }
 
     private fun getAppUpdate() = viewModelScope.launch {
@@ -63,6 +84,7 @@ class HomeViewModel : ViewModel() {
             }
     }
 
+    @Suppress("RegExpRedundantEscape")
     private val url get() = update!!.apkUrl.replace(
         "\\{.*?\\}".toRegex(), Build.SUPPORTED_ABIS[0]
     )

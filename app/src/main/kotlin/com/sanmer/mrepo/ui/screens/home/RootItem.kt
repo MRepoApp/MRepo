@@ -14,17 +14,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
-fun RootItem() = Surface(
+fun RootItem(
+    viewModel: HomeViewModel = viewModel()
+) = Surface(
     shape = RoundedCornerShape(20.dp),
     color = MaterialTheme.colorScheme.surface,
     tonalElevation = 2.dp
 ) {
-    val state by EnvProvider.state.collectAsState()
+    val envState by viewModel.envState.collectAsState()
 
     Row(
         modifier = Modifier
@@ -37,7 +41,7 @@ fun RootItem() = Surface(
             modifier = Modifier
                 .size(28.dp),
             painter = painterResource(id =
-            if (state.isSucceeded) {
+            if (envState.isSucceeded) {
                 R.drawable.tick_circle_outline
             } else {
                 R.drawable.slash_outline
@@ -52,7 +56,7 @@ fun RootItem() = Surface(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = if (state.isSucceeded) {
+                text = if (envState.isSucceeded) {
                     stringResource(id = R.string.root_status_access,
                         stringResource(id = R.string.root_status_granted)
                     )
@@ -65,7 +69,7 @@ fun RootItem() = Surface(
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = if (state.isSucceeded) {
+                text = if (envState.isSucceeded) {
                     stringResource(id = R.string.root_status_provider,
                         EnvProvider.version)
                 } else {

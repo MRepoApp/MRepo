@@ -3,7 +3,7 @@ package com.sanmer.mrepo.provider
 import com.topjohnwu.superuser.nio.FileSystemManager
 import java.io.File
 
-object FileProvider {
+object FileSystemProvider {
     private val fileSystemManager get() = try {
         FileSystemManager.getRemote(SuProvider.Root.fileSystemService)
     } catch (e: Exception) {

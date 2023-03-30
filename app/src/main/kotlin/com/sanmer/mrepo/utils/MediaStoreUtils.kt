@@ -6,8 +6,9 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import com.sanmer.mrepo.app.Status
-import com.sanmer.mrepo.provider.FileProvider
+import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.provider.FileSystemProvider
+import com.sanmer.mrepo.provider.SuProvider
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -15,7 +16,7 @@ import java.io.OutputStream
 
 object MediaStoreUtils {
     private lateinit var cr: ContentResolver
-    private val fs = FileProvider
+    private val fs = FileSystemProvider
 
     fun init(context: Context) {
         cr = context.contentResolver
@@ -48,7 +49,7 @@ object MediaStoreUtils {
     fun File.newInputStream(): InputStream? = try {
         cr.openInputStream(toUri())
     } catch (e: Exception) {
-        if (Status.Provider.isSucceeded) {
+        if (SuProvider.event.isSucceeded) {
             fs.getFile(this).newInputStream()
         } else {
             throw IOException(e)
@@ -59,7 +60,7 @@ object MediaStoreUtils {
     fun File.newOutputStream(): OutputStream? = try {
         cr.openOutputStream(toUri())
     } catch (e: Exception) {
-        if (Status.Provider.isSucceeded) {
+        if (SuProvider.event.isSucceeded) {
             fs.getFile(this).newOutputStream()
         } else {
             throw IOException(e)

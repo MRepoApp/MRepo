@@ -20,3 +20,9 @@ inline fun <reified T> SnapshotStateList<T>.update(value: T) {
         add(index, value)
     }
 }
+
+inline fun <reified T> List<List<T>>.merge(): List<T> {
+    val values = mutableListOf<T>()
+    forEach { values.addAll(it) }
+    return values
+}

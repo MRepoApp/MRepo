@@ -6,18 +6,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Status
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
-import com.sanmer.mrepo.provider.local.ModuleUtils
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.stateIndicator
@@ -26,7 +30,7 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun InstalledPage(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = viewModel()
 ) {
     val list = viewModel.localValue
         .sortedBy { it.name }
@@ -63,22 +67,24 @@ private fun ModulesList(
 
 @Composable
 private fun LocalModuleItem(
+    viewModel: ModulesViewModel = viewModel(),
     module: LocalModule
 ) {
-    val state = ModuleUtils.updateUIState(module)
+    val uiState = viewModel.updateUiState(module)
+    val suState by viewModel.suState.collectAsState()
 
     ModuleCard(
         name = module.name,
         version = module.version,
         author = module.author,
         description = module.description,
-        alpha = state.alpha,
-        decoration = state.decoration,
+        alpha = uiState.alpha,
+        decoration = uiState.decoration,
         switch = {
             Switch(
                 checked = module.state == State.ENABLE,
-                onCheckedChange = state.toggle,
-                enabled = Status.Provider.isSucceeded
+                onCheckedChange = uiState.toggle,
+                enabled = suState.isSucceeded
             )
         },
         indicator = when (module.state) {
@@ -91,8 +97,8 @@ private fun LocalModuleItem(
         },
         buttons = {
             TextButton(
-                onClick = state.change,
-                enabled = Status.Provider.isSucceeded
+                onClick = uiState.change,
+                enabled = suState.isSucceeded
             ) {
                 Text(
                     modifier = Modifier

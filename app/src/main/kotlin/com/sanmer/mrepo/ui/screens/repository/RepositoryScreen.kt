@@ -89,14 +89,14 @@ fun RepositoryScreen(
         Box(
             modifier = Modifier.padding(innerPadding)
         ) {
-            if (viewModel.all.isEmpty()) {
+            if (viewModel.list.isEmpty()) {
                 PageIndicator(
                     icon = R.drawable.hierarchy_outline,
                     text = R.string.repo_empty
                 )
             }
 
-            RepoList(list = viewModel.all.sortedBy { it.name })
+            RepoList(list = viewModel.list.sortedBy { it.name })
 
             AnimatedVisibility(
                 visible = viewModel.progress,

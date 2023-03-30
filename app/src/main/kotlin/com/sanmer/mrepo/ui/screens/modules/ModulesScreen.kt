@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Status
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.animate.SlideIn
@@ -104,7 +103,7 @@ fun ModulesScreen(
             }
 
             AnimatedVisibility(
-                visible = Status.Cloud.isLoading || Status.Local.isLoading,
+                visible = viewModel.progress,
                 enter = SlideIn.topToBottom,
                 exit = SlideOut.bottomToTop
             ) {

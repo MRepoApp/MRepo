@@ -11,14 +11,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import com.sanmer.mrepo.app.Shortcut
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.ui.theme.AppTheme
 import com.sanmer.mrepo.utils.NotificationUtils
-import com.sanmer.mrepo.works.Works
 import kotlinx.coroutines.launch
 
 class SetupActivity : ComponentActivity() {
@@ -28,11 +25,7 @@ class SetupActivity : ComponentActivity() {
         }
         startActivity(intent)
 
-        SuProvider.init(this)
-        EnvProvider.init()
-        Works.start()
-
-        if (EnvProvider.isNonRoot && ModuleManager.local != 0) {
+        if (EnvProvider.isNonRoot) {
             lifecycleScope.launch {
                 ModuleManager.deleteLocalAll()
             }
@@ -45,7 +38,6 @@ class SetupActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        Shortcut.push()
         if (!EnvProvider.isSetup) finish()
 
         setContent {

@@ -1,9 +1,6 @@
 package com.sanmer.mrepo.data
 
 import android.content.Context
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.data.database.RepoDatabase
 import com.sanmer.mrepo.data.database.entity.OnlineModuleEntity
@@ -11,6 +8,7 @@ import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.database.entity.toModule
 import com.sanmer.mrepo.data.module.OnlineModule
 import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.utils.expansion.merge
 import com.sanmer.mrepo.utils.expansion.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,11 +21,8 @@ object RepoManger {
     private lateinit var db: RepoDatabase
     private val repoDao get() = db.repoDao()
 
-    var all by mutableStateOf(0)
-        private set
-
-    var enabled by mutableStateOf(0)
-        private set
+    val all get() = repoDao.getRepoCount()
+    val enable get() = repoDao.getEnableCount()
 
     fun init(context: Context) {
         db = RepoDatabase.getDatabase(context)
@@ -40,11 +35,10 @@ object RepoManger {
         }
     }
 
+    fun getRepoWithModuleFlow() = repoDao.getRepoWithModuleFlow()
+
     suspend fun getRepoAll() = withContext(Dispatchers.IO) {
-        repoDao.getRepoAll().apply {
-            all = size
-            enabled = filter { it.enable }.size
-        }
+        repoDao.getRepoAll()
     }
 
     suspend fun getRepoByUrl(url: String) = withContext(Dispatchers.IO) {
@@ -64,13 +58,10 @@ object RepoManger {
     }
 
     suspend fun getModuleAll() = withContext(Dispatchers.IO) {
-        val list = mutableListOf<OnlineModuleEntity>()
-        repoDao.getAllRepoWithModule()
+        val list = repoDao.getAllRepoWithModule()
             .filter { it.repo.enable }
             .map { it.modules }
-            .forEach {
-                list.addAll(it)
-            }
+            .merge()
 
         return@withContext fromModuleList(list)
     }
@@ -83,7 +74,7 @@ object RepoManger {
         repoDao.deleteModule(repoUrl)
     }
 
-    private suspend fun fromModuleList(values: List<OnlineModuleEntity>) = withContext(Dispatchers.Default) {
+    suspend fun fromModuleList(values: List<OnlineModuleEntity>) = withContext(Dispatchers.Default) {
         val list = mutableListOf<OnlineModule>()
 
         values.forEach { item ->
@@ -101,7 +92,7 @@ object RepoManger {
                 }
 
                 val new = values.first {
-                    it.id == item.id && it.repoUrl == old.repoUrls.first()
+                    it.id == item.id && it.repoUrl == old.repoUrl
                 }.toModule()
 
                 list.update(new.copy(repoUrls = old.repoUrls))
