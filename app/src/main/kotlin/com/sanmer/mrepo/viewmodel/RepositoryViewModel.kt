@@ -41,12 +41,10 @@ class RepositoryViewModel : ViewModel() {
 
     fun getAll() = viewModelScope.launch {
         updateProgress {
-            progress = true
             val values = RepoManger.getRepoAll()
 
             if (list.isNotEmpty()) list.clear()
             list.addAll(values)
-            progress = false
         }
     }
 
