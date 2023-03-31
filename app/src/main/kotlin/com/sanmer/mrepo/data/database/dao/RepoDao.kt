@@ -10,14 +10,17 @@ import kotlinx.coroutines.flow.Flow
 interface RepoDao {
     @Transaction
     @Query("SELECT * FROM repo")
-    fun getAllRepoWithModule(): List<RepoWithModule>
+    fun getRepoWithModule(): List<RepoWithModule>
 
     @Transaction
     @Query("SELECT * FROM repo")
-    fun getRepoWithModuleFlow(): Flow<List<RepoWithModule>>
+    fun getRepoWithModuleAsFlow(): Flow<List<RepoWithModule>>
 
     @Query("SELECT * FROM repo")
     fun getRepoAll(): List<Repo>
+
+    @Query("SELECT * FROM repo")
+    fun getRepoAllAsFlow(): Flow<List<Repo>>
 
     @Query("SELECT COUNT(url) FROM repo")
     fun getRepoCount(): Flow<Int>

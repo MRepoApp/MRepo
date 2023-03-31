@@ -1,10 +1,9 @@
 package com.sanmer.mrepo.data.database.entity
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.room.*
-import kotlin.reflect.KProperty
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity(tableName = "repo")
 data class Repo(
@@ -14,19 +13,6 @@ data class Repo(
     val timestamp: Float = 0f,
     var enable: Boolean = true
 ) {
-    @get:Ignore
-    @set:JvmName("state")
-    var isEnable: Boolean by mutableStateOf(enable)
-
-    private operator fun MutableState<Boolean>.setValue(
-        thisObj: Any?,
-        property: KProperty<*>,
-        value: Boolean
-    ) {
-        this.value = value
-        enable = value
-    }
-
     override fun equals(other: Any?): Boolean {
         return when (other) {
             is Repo -> url == other.url

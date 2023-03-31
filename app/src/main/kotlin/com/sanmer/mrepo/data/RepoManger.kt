@@ -35,7 +35,9 @@ object RepoManger {
         }
     }
 
-    fun getRepoWithModuleFlow() = repoDao.getRepoWithModuleFlow()
+    fun getRepoWithModuleAsFlow() = repoDao.getRepoWithModuleAsFlow()
+
+    fun getRepoAllAsFlow() = repoDao.getRepoAllAsFlow()
 
     suspend fun getRepoAll() = withContext(Dispatchers.IO) {
         repoDao.getRepoAll()
@@ -58,12 +60,12 @@ object RepoManger {
     }
 
     suspend fun getModuleAll() = withContext(Dispatchers.IO) {
-        val list = repoDao.getAllRepoWithModule()
+        val list = repoDao.getRepoWithModule()
             .filter { it.repo.enable }
             .map { it.modules }
             .merge()
 
-        return@withContext fromModuleList(list)
+        return@withContext list.toModuleList()
     }
 
     suspend fun insertModule(list: List<OnlineModuleEntity>) = withContext(Dispatchers.IO) {
@@ -74,10 +76,10 @@ object RepoManger {
         repoDao.deleteModule(repoUrl)
     }
 
-    suspend fun fromModuleList(values: List<OnlineModuleEntity>) = withContext(Dispatchers.Default) {
+    suspend fun List<OnlineModuleEntity>.toModuleList() = withContext(Dispatchers.Default) {
         val list = mutableListOf<OnlineModule>()
 
-        values.forEach { item ->
+        forEach { item ->
             val module = item.toModule()
             if (module !in list) {
                 list.add(module)
@@ -86,12 +88,12 @@ object RepoManger {
 
                 old.repoUrls.update(item.repoUrl)
                 old.repoUrls.sortByDescending {
-                    values.first {
+                    first {
                         it.id == item.id && it.repoUrl == item.repoUrl
                     }.versionCode
                 }
 
-                val new = values.first {
+                val new = first {
                     it.id == item.id && it.repoUrl == old.repoUrl
                 }.toModule()
 

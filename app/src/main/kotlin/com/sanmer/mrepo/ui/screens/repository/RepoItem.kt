@@ -100,8 +100,7 @@ fun RepoItem(
             RepoItem(
                 repo = repo,
                 onChange = {
-                    repo.isEnable = it
-                    viewModel.update(repo)
+                    viewModel.update(repo.copy(enable = it))
                 },
                 onLongClick = { expanded = true },
                 onIconClick = { expanded = true }
@@ -140,15 +139,14 @@ private fun RepoItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
-            checked = repo.isEnable,
+            checked = repo.enable,
             onCheckedChange = null
         )
 
         Spacer(modifier = Modifier.width(16.dp))
 
         Column(
-            modifier = Modifier
-                .weight(1f),
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {

@@ -10,6 +10,8 @@ import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.provider.repo.RepoProvider
 import com.sanmer.mrepo.utils.expansion.update
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -19,18 +21,33 @@ class RepositoryViewModel : ViewModel() {
     var progress by mutableStateOf(false)
         private set
 
+    private inline fun <T> T.updateProgress(callback: T.() -> Unit) {
+        progress  = true
+        callback()
+        progress = false
+    }
+
     init {
         Timber.d("RepositoryViewModel init")
-        getAll()
+
+        RepoManger.getRepoAllAsFlow().onEach {
+            if (it.isEmpty()) return@onEach
+
+            if (list.isNotEmpty()) list.clear()
+            list.addAll(it)
+
+        }.launchIn(viewModelScope)
     }
 
     fun getAll() = viewModelScope.launch {
-        progress  = true
-        val values = RepoManger.getRepoAll()
+        updateProgress {
+            progress = true
+            val values = RepoManger.getRepoAll()
 
-        if (list.isNotEmpty()) list.clear()
-        list.addAll(values)
-        progress = false
+            if (list.isNotEmpty()) list.clear()
+            list.addAll(values)
+            progress = false
+        }
     }
 
     fun insert(
@@ -68,25 +85,19 @@ class RepositoryViewModel : ViewModel() {
         repo: Repo,
         onFailure: (Throwable) -> Unit
     ) = viewModelScope.launch {
-        progress = true
-
-        RepoProvider.getRepo(repo).onSuccess {
-            progress = false
-            val new = repo.copy(
-                name = it.name,
-                size = it.modules.size,
-                timestamp = it.timestamp
-            )
-            list.update(new)
-        }.onFailure {
-            progress = false
-            onFailure(it)
+        updateProgress {
+            RepoProvider.getRepo(repo).onSuccess {
+                val new = repo.copy(
+                    name = it.name,
+                    size = it.modules.size,
+                    timestamp = it.timestamp
+                )
+                list.update(new)
+            }.onFailure(onFailure)
         }
     }
 
     fun onDestroy() = viewModelScope.launch {
-        RepoManger.getRepoAll().map { repo ->
-            if (repo.enable) RepoProvider.getRepo(repo)
-        }
+        RepoProvider.getRepoAll()
     }
 }
