@@ -13,9 +13,13 @@ fun <T> runRequest(
         }
     } else {
         val errorBody = response.errorBody()
-        val error = errorBody?.string()
+        val error = errorBody?.string() ?: "404 Not Found"
 
-        Result.failure(RuntimeException(error))
+        if ("<html>" in error) {
+            Result.failure(RuntimeException("404 Not Found"))
+        } else {
+            Result.failure(RuntimeException(error))
+        }
     }
 } catch (e: Exception) {
     Result.failure(e)
@@ -35,9 +39,13 @@ fun <T> runRequest(
         }
     } else {
         val errorBody = response.body()
-        val error = errorBody?.string()
+        val error = errorBody?.string() ?: "404 Not Found"
 
-        Result.failure(RuntimeException(error))
+        if ("<html>" in error) {
+            Result.failure(RuntimeException("404 Not Found"))
+        } else {
+            Result.failure(RuntimeException(error))
+        }
     }
 } catch (e: Exception) {
     Result.failure(e)
