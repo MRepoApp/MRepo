@@ -1,9 +1,8 @@
-package com.sanmer.mrepo.utils
+package com.sanmer.mrepo.utils.preference
 
 import android.content.Context
 import com.sanmer.mrepo.App
 import com.sanmer.mrepo.BuildConfig
-import kotlin.reflect.KProperty
 
 object SPUtils {
     private val context by lazy { App.context }
@@ -11,7 +10,7 @@ object SPUtils {
     private val sp by lazy { context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE) }
 
     fun <T> getValue(name: String, default: T): T = with(sp) {
-        val res: Any = when (default) {
+        val value: Any = when (default) {
             is Long -> getLong(name, default)
             is String -> getString(name, default).orEmpty()
             is Int -> getInt(name, default)
@@ -20,7 +19,7 @@ object SPUtils {
             else -> throw IllegalArgumentException()
         }
         @Suppress("UNCHECKED_CAST")
-        res as T
+        return@with value as T
     }
 
     fun <T> putValue(name: String, value: T) = with(sp.edit()) {
@@ -35,24 +34,3 @@ object SPUtils {
     }
 }
 
-data class Preference<T>(
-    var value: T
-) {
-    operator fun getValue(
-        thisObj: Any?, property:
-        KProperty<*>
-    ): T {
-        return SPUtils.getValue(property.name, value)
-    }
-
-    operator fun setValue(
-        thisObj: Any?,
-        property: KProperty<*>,
-        value: T
-    ) {
-        SPUtils.putValue(property.name, value)
-        this.value = value
-    }
-}
-
-fun <T>mutablePreferenceOf(value: T) = Preference(value)
