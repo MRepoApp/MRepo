@@ -30,8 +30,8 @@
 
     <!-- Overview -->
     <!-- Root Card -->
-    <string name="root_status_access">Root 授權：%1$s</string>
-    <string name="root_status_provider">授權應用程式：%1$s</string>
+    <string name="root_status_access">Root 狀態：%1$s</string>
+    <string name="root_status_provider">授權者：%1$s</string>
     <string name="root_status_granted">已授權</string>
     <string name="root_status_not_available">不可用</string>
     <string name="root_status_none">無</string>
@@ -93,7 +93,7 @@
     <!-- Settings-->
     <!-- Normal -->
     <string name="settings_title_normal">一般</string>
-    <string name="settings_app_theme">設定主題</string>
+    <string name="settings_app_theme">主題</string>
     <string name="settings_app_theme_desc">更改深色模式和主題調色盤</string>
     <string name="settings_log_viewer">日誌檢視器</string>
     <string name="settings_log_viewer_desc">檢視應用程式執行日誌</string>
