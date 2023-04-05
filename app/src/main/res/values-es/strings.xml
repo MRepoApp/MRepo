@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="device_fingerprint">Huella dactilar</string>
     <string name="settings_app_theme_desc">Cambiar modo noche y colores del fondo</string>
     <string name="menu_reboot_bootloader">Reiniciar a Bootloader</string>
     <string name="settings_log_viewer_desc">Ver los registros de ejecución de la aplicación</string>
@@ -39,7 +38,6 @@
     <string name="settings_bug_tracker">Rastreador de errores</string>
     <string name="settings_follow_updates">Seguir las actualizaciones</string>
     <string name="settings_follow_updates_desc">Únete a nuestro canal de Telegram</string>
-    <string name="app_update_package">Paquete: %1$s</string>
     <string name="modules_status_repo">Repositorios activados / Todos los repositorios</string>
     <string name="modules_status_module">Módulos en local / Módulos en la nube</string>
     <string name="device_system_version">Versión del sistema</string>
@@ -55,7 +53,7 @@
     <string name="menu_reboot_recovery">Reiniciar a Recovery</string>
     <string name="module_download">Descargar</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Requiere acceso Root desde Magisk o KernelSU(KSU),</string>
+    <string name="setup_root_desc1">Requiere acceso Root desde Magisk o KernelSU</string>
     <string name="setup_root_desc2">Disponible: funcionalidad completa</string>
     <string name="setup_non_root_title">Sin Root</string>
     <string name="setup_non_root_desc2">Disponible: descargar módulo</string>

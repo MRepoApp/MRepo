@@ -8,11 +8,10 @@
     <string name="root_status_none">Nimic</string>
     <string name="app_update_installed">Instalat: %1$s</string>
     <string name="app_update_latest">Ultimul: %1$s</string>
-    <string name="app_update_package">Pachet: %1$s</string>
     <string name="modules_status_repo">Depozite activate/Toate depozitele</string>
+    <string name="device_name">Dispozitiv</string>
     <string name="device_system_version">Versiune sistem</string>
     <string name="device_system_abi">ABI sistem</string>
-    <string name="device_fingerprint">Amprentă</string>
     <string name="device_selinux_status">Stare SELinux</string>
     <string name="selinux_status_disabled">Dezactivat</string>
     <string name="selinux_status_enforcing">Obligatoriu</string>
@@ -60,7 +59,7 @@
     <string name="app_theme_dark_theme_auto">Automat</string>
     <string name="app_theme_dark_theme_light">Luminoasă</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Necesită acces root de la Magisk sau KernelSU(KSU),</string>
+    <string name="setup_root_desc1">Necesită acces root de la Magisk sau KernelSU</string>
     <string name="setup_root_desc2">Disponibil: funcționalitate completă</string>
     <string name="setup_non_root_title">Fără acces root</string>
     <string name="setup_non_root_desc1">Nu necesită acces root</string>

@@ -3,7 +3,7 @@
     <!-- Setup -->
     <string name="setup_mode">Working Mode</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Require Root access from Magisk or KernelSU(KSU), </string>
+    <string name="setup_root_desc1">Require Root access from Magisk or KernelSU</string>
     <string name="setup_root_desc2">Available: full functionality</string>
     <string name="setup_non_root_title">Non-Root</string>
     <string name="setup_non_root_desc1">Does not require Root access</string>
@@ -43,7 +43,6 @@
     <!-- Info Card -->
     <string name="modules_status_repo">Enabled Repositories / All Repositories</string>
     <string name="modules_status_module">Modules in Local / Modules in  Cloud</string>
-    <string name="device_name">Device</string>
     <string name="device_system_version">System Version</string>
     <string name="device_system_abi">System ABI</string>
     <string name="device_security_patch">Security Patch</string>
@@ -151,5 +150,6 @@
 
     <!-- Other -->
     <string name="unknown_error">Unknown error</string>
+    <string name="device_name">Device</string>
 
 </resources>

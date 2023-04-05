@@ -3,7 +3,7 @@
     <!-- Setup -->
     <string name="setup_mode">Traitement en cours</string>
     <string name="setup_root_title">Raçine</string>
-    <string name="setup_root_desc1">Accès à la racine requis via Magisk ou KernelSU(KSU), </string>
+    <string name="setup_root_desc1">Accès à la racine requis via Magisk ou KernelSU</string>
     <string name="setup_root_desc2">Disponible: Toutes les fonctionnalités</string>
     <string name="setup_non_root_title">Sans racine</string>
     <string name="setup_non_root_desc1">Accès à la racine non requis</string>
@@ -38,8 +38,11 @@
     <!-- Non Root Card -->
     <string name="non_root_desc">Le fonctionnement est limité</string>
     <!-- Info Card -->
+    <string name="app_update_latest">Dernier : %1$s</string>
+    <string name="app_update_installed">Installé : %1$s</string>
     <string name="modules_status_repo">Activer dépôts / Tous les dépôt</string>
     <string name="modules_status_module">Modules locaux / Modules en ligne</string>
+    <string name="device_name">Appareil</string>
     <string name="device_system_version">Version du système</string>
     <string name="device_system_abi">ABI du système</string>
     <string name="device_security_patch">Correctif de sécurité</string>
@@ -140,6 +143,7 @@
     <string name="message_loading">Chargement…</string>
 
     <!-- Shortcut -->
+    <string name="notification_name_download">Service de téléchargement</string>
     <string name="shortcut_log_label">Journaux</string>
 
     <!-- Other -->
