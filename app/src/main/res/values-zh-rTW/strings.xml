@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Setup -->
+    <string name="setup_mode">工作模式</string>
+    <string name="setup_root_title">Root</string>
+    <string name="setup_root_desc1">需要由 Magisk 或 KernelSU 提供 Root 授權</string>
+    <string name="setup_root_desc2">可用：完整功能</string>
+    <string name="setup_non_root_title">免 Root</string>
+    <string name="setup_non_root_desc1">不需要 Root 授權</string>
+    <string name="setup_non_root_desc2">可用：下載模組</string>
+
+    <!-- Install -->
+    <string name="activity_install_label">模組安裝器</string>
+    <string name="install_title">安裝</string>
+    <string name="install_flashing">正在刷入</string>
+    <string name="install_done">完成</string>
+    <string name="install_failure">失敗</string>
+    <string name="install_reboot">重啟</string>
+
+    <!-- License -->
+    <string name="license_title">閱讀授權條款</string>
+    <string name="license_osi_approved">OSI Approved</string>
+    <string name="license_fsf_libre">FSF Libre</string>
+
+    <!-- Page -->
+    <string name="page_modules">模組</string>
+    <string name="page_home">概覽</string>
+    <string name="page_settings">設定</string>
+    <string name="page_view_module">檢視模組</string>
+
+    <!-- Overview -->
+    <!-- Root Card -->
+    <string name="root_status_access">Root 授權：%1$s</string>
+    <string name="root_status_provider">授權應用程式：%1$s</string>
+    <string name="root_status_granted">已授權</string>
+    <string name="root_status_not_available">不可用</string>
+    <string name="root_status_none">無</string>
+    <!-- Non Root Card -->
+    <string name="non_root_desc">功能受到限制</string>
+    <!-- App Update Card -->
+    <string name="app_update_latest">最新: %1$s</string>
+    <string name="app_update_installed">當前: %1$s</string>
+    <!-- Info Card -->
+    <string name="modules_status_repo">已啟用 / 儲存庫</string>
+    <string name="modules_status_module">本地模組 / 線上模組</string>
+    <string name="device_name">設備</string>
+    <string name="device_system_version">系統版本</string>
+    <string name="device_system_abi">系統架構</string>
+    <string name="device_security_patch">安全補丁</string>
+    <string name="device_selinux_status">SELinux 狀態</string>
+    <string name="selinux_status_disabled">被禁用</string>
+    <string name="selinux_status_enforcing">強制執行</string>
+    <string name="selinux_status_permissive">寬容模式</string>
+    <!-- About -->
+    <string name="about_source_code">在 %1$s 檢視原始碼</string>
+    <!-- Menu -->
+    <string name="menu_reboot">重新啟動</string>
+    <string name="menu_reboot_userspace">軟重啟</string>
+    <string name="menu_reboot_recovery">重啟到 Recovery</string>
+    <string name="menu_reboot_bootloader">重啟到 BootLoader</string>
+    <string name="menu_reboot_download">重啟到 Download</string>
+    <string name="menu_reboot_edl">重啟到 EDL</string>
+
+    <!-- Modules -->
+    <!-- Modules Title -->
+    <string name="modules_title_cloud">線上</string>
+    <string name="modules_title_installed">已安裝</string>
+    <string name="modules_title_updates">更新</string>
+    <!-- Modules Menu -->
+    <string name="modules_menu_cloud">線上</string>
+    <string name="modules_menu_local">本地</string>
+    <!-- Module Card -->
+    <string name="module_version_author">%1$s，作者 %2$s</string>
+    <string name="module_author">作者 %1$s</string>
+    <string name="module_update">更新</string>
+    <string name="module_remove">移除</string>
+    <string name="module_restore">還原</string>
+    <string name="module_install">安裝</string>
+    <string name="module_download">下載</string>
+    <string name="module_view">檢視</string>
+    <!-- Modules Page -->
+    <string name="modules_page_cloud_empty">儲存庫為空</string>
+    <string name="modules_page_installed_empty">沒找到任何模組</string>
+    <string name="modules_page_updates_empty">所有模組已是最新</string>
+    <string name="modules_page_search_empty">空列表</string>
+    <string name="modules_page_search_placeholder">搜尋…</string>
+    <string name="modules_version_dialog_desc">是否%1$s或下載該版本的模組？</string>
+    <!-- View Module -->
+    <string name="view_module_versions">版本</string>
+    <string name="view_module_provided">由 %1$s 提供</string>
+    <string name="view_module_changelog">更新日誌</string>
+
+    <!-- Settings-->
+    <!-- Normal -->
+    <string name="settings_title_normal">一般</string>
+    <string name="settings_app_theme">設定主題</string>
+    <string name="settings_app_theme_desc">更改深色模式和主題調色盤</string>
+    <string name="settings_log_viewer">日誌檢視器</string>
+    <string name="settings_log_viewer_desc">檢視應用程式執行日誌</string>
+    <!-- App -->
+    <string name="settings_title_app">應用程式</string>
+    <string name="settings_download_path">下載路徑</string>
+    <string name="settings_repo">儲存庫</string>
+    <string name="settings_repo_desc">管理 Magisk 模組儲存庫</string>
+    <!-- Others -->
+    <string name="settings_title_others">其他</string>
+    <string name="settings_translate">參與翻譯</string>
+    <string name="settings_translate_desc">幫助我們把 MRepo 翻譯到你的語言</string>
+    <string name="settings_bug_tracker">錯誤追蹤</string>
+    <string name="settings_follow_updates">關注更新</string>
+    <string name="settings_follow_updates_desc">加入我們的 Telegram 頻道</string>
+    <!-- App Theme -->
+    <string name="app_theme_example">範例</string>
+    <string name="app_theme_palette">主題調色盤</string>
+    <string name="app_theme_dark_theme">深色主題</string>
+    <string name="app_theme_dark_theme_auto">自動</string>
+    <string name="app_theme_dark_theme_light">淺色</string>
+    <string name="app_theme_dark_theme_dark">深色</string>
+    <!-- Repo -->
+    <string name="repo_modules">%1$d 個模組</string>
+    <string name="repo_last_update">上次更新：%1$s</string>
+    <string name="repo_options_update">更新</string>
+    <string name="repo_options_share">分享</string>
+    <string name="repo_options_delete">刪除</string>
+    <string name="repo_options_delete_dialog_desc1">你確定要刪除 %1$s？</string>
+    <string name="repo_options_delete_dialog_desc2">提示：已安裝的所有模組會保留在你的裝置上。</string>
+    <string name="repo_add_dialog_title">新增儲存庫</string>
+    <string name="repo_add_dialog_label">連結</string>
+    <string name="repo_add_dialog_label_support">你可以參考 %1$s。</string>
+    <string name="repo_add_dialog_add">新增</string>
+    <string name="repo_update_dialog_failure">更新失敗：%1$s</string>
+    <string name="repo_notification_desc">模組的內容審查由儲存庫所有者負責。關於該儲存庫的任何問題，請聯絡其所有者。</string>
+
+    <!-- Dialog-->
+    <string name="dialog_title_attention">注意</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_ok">確定</string>
+    <!-- Text Field Dialog -->
+    <string name="dialog_empty_default">留空恢復預設值</string>
+
+    <!-- Message -->
+    <string name="message_download_failed">下載失敗：%1$s</string>
+    <string name="message_download_success">下載成功</string>
+    <string name="message_loading">載入中…</string>
+
+    <!-- Notification -->
+    <string name="notification_name_download">下載服務</string>
+
+    <!-- Shortcut -->
+    <string name="shortcut_log_label">日誌</string>
+
+    <!-- Other -->
+    <string name="unknown_error">未知錯誤</string>
+
+</resources>
