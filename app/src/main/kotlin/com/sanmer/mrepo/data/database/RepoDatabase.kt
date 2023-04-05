@@ -24,6 +24,9 @@ abstract class RepoDatabase : RoomDatabase() {
                 return it
             }
 
+            // MIGRATION
+            context.filesDir.resolve("repositories").deleteRecursively()
+
             return Room.databaseBuilder(context.applicationContext,
                 RepoDatabase::class.java, "repo")
                 .addMigrations(MIGRATION_1_2)
@@ -62,7 +65,6 @@ abstract class RepoDatabase : RoomDatabase() {
                         "changelog TEXT NOT NULL, " +
                         "PRIMARY KEY(id, repo_url))")
             }
-
         }
     }
 }
