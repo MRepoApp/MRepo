@@ -86,7 +86,7 @@ class HomeViewModel : ViewModel() {
     )
 
     private val path get() = Config.DOWNLOAD_PATH.toFile().resolve(
-        "mrepo-${update!!.version}-${Build.SUPPORTED_ABIS[0]}.apk"
+        "app-${update!!.version}-${Build.SUPPORTED_ABIS[0]}-release.apk"
     )
 
     fun observeProgress(
@@ -105,6 +105,6 @@ class HomeViewModel : ViewModel() {
         name = "${update!!.version}(${update!!.versionCode})",
         path = path.absolutePath,
         url = url,
-        install = false
+        install = true
     )
 }
