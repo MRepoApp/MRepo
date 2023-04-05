@@ -8,7 +8,6 @@ import android.os.IBinder
 import android.os.Process
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.provider.api.KsuApi
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
@@ -43,11 +42,6 @@ object SuProvider {
         }
     }
 
-    fun close(context: Context) {
-        val intent = Intent(context, SuService::class.java)
-        RootService.bind(intent, ISuConnection)
-    }
-
     private object ISuConnection : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             Timber.i("SuProvider init")
@@ -56,7 +50,7 @@ object SuProvider {
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            Timber.w("SuProvider close")
+            Timber.w("SuProvider disable")
             state.value = Event.FAILED
         }
     }
@@ -66,10 +60,7 @@ object SuProvider {
             override fun getPid(): Int = Process.myPid()
             override fun getContext(): String = SELinux.context
             override fun getEnforce(): Int = SELinux.enforce
-            override fun isSelinuxEnabled(): Boolean = SELinux.isSelinuxEnabled()
-            override fun getContextByPid(pid: Int) = SELinux.getContextByPid(pid)
             override fun getFileSystemService(): IBinder = FileSystemManager.getService()
-            override fun getKsuVersionCode(): Int = KsuApi.versionCode
         }
 
         override fun onBind(intent: Intent): IBinder = Provider

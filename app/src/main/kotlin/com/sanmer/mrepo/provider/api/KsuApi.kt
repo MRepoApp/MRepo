@@ -3,7 +3,6 @@ package com.sanmer.mrepo.provider.api
 import android.content.Context
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
-import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.utils.expansion.output
 import com.topjohnwu.superuser.Shell
 import org.json.JSONArray
@@ -12,37 +11,19 @@ import timber.log.Timber
 import java.io.File
 
 object KsuApi : BaseApi() {
-    init {
-        System.loadLibrary("ksu")
-    }
-
-    private const val ksud = "/data/adb/ksud"
-    val versionCode: Int
-        external get
+    private const val KSUD = "/data/adb/ksud"
 
     override fun init(onSucceeded: () -> Unit, onFailed: () -> Unit) {
         Timber.i("initKsu")
 
-        Shell.cmd("$ksud --version").submit {
-            if (it.isSuccess) {
-                version = it.output.uppercase()
-
-                runCatching {
-                    SuProvider.Root.ksuVersionCode
-                }.onSuccess { versionCode ->
-                    version += " ($versionCode)"
-                }
-
-                onSucceeded()
-            } else {
-                Timber.e("initKsu: ${it.output}")
-                onFailed()
-            }
+        getVersion(onSucceeded) {
+            Timber.e("initKsu: ${it.output}")
+            onFailed()
         }
     }
 
     override fun enable(module: LocalModule) {
-        Shell.cmd("$ksud module enable ${module.id}").submit {
+        Shell.cmd("$KSUD module enable ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.ENABLE
             } else {
@@ -52,7 +33,7 @@ object KsuApi : BaseApi() {
     }
 
     override fun disable(module: LocalModule) {
-        Shell.cmd("$ksud module disable ${module.id}").submit {
+        Shell.cmd("$KSUD module disable ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.DISABLE
             } else {
@@ -62,7 +43,7 @@ object KsuApi : BaseApi() {
     }
 
     override fun remove(module: LocalModule) {
-        Shell.cmd("$ksud module uninstall ${module.id}").submit {
+        Shell.cmd("$KSUD module uninstall ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.REMOVE
             } else {
@@ -83,10 +64,10 @@ object KsuApi : BaseApi() {
         onSucceeded = onSucceeded,
         onFailed = onFailed,
         zipFile = zipFile,
-        cmd = "$ksud module install ${zipFile.absolutePath}"
+        cmd = "$KSUD module install ${zipFile.absolutePath}"
     )
 
-    private fun getLocal(obj: JSONObject) = LocalModule(
+    private fun getModule(obj: JSONObject) = LocalModule(
         id = obj.getString("id"),
         name = obj.optString("name", "unknown"),
         author = obj.optString("author", "unknown"),
@@ -110,10 +91,10 @@ object KsuApi : BaseApi() {
         }
     }
 
-    override fun getModulesList() = runCatching {
+    override suspend fun getModules() = runCatching {
         Timber.i("getLocal: $version")
 
-        val out = Shell.cmd("$ksud module list").exec().out
+        val out = Shell.cmd("$KSUD module list").exec().out
         val text = out.joinToString("\n").ifBlank { "[]" }
 
         val array = JSONArray(text)
@@ -121,10 +102,9 @@ object KsuApi : BaseApi() {
             .asSequence()
             .map { array.getJSONObject(it) }
             .map { obj ->
-                val module = getLocal(obj)
-                module.state = getState(obj)
-
-                return@map module
+                getModule(obj).apply {
+                    state = getState(obj)
+                }
             }.toList()
 
         return@runCatching modules

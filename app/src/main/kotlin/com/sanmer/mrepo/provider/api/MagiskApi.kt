@@ -6,7 +6,6 @@ import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.provider.FileSystemProvider
 import com.sanmer.mrepo.provider.local.LocalProvider
 import com.sanmer.mrepo.utils.expansion.output
-import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import timber.log.Timber
 import java.io.File
@@ -15,43 +14,39 @@ object MagiskApi : BaseApi() {
     private val fs = FileSystemProvider
 
     private lateinit var MAGISK_PATH: String
+    private const val MODULES_PATH = "/data/adb/modules"
+    private val MODULES_MOUNT_PATH get() = "$MAGISK_PATH/.magisk/modules"
     private var isZygiskEnabled = false
 
-    private val MODULES_MOUNT_PATH get() = "$MAGISK_PATH/modules"
-    private const val MODULES_PATH = "/data/adb/modules"
-
     private fun isZygisk(): Boolean {
-        val query = "SELECT value FROM settings WHERE key == \"zygisk\" LIMIT 1"
-        val out = ShellUtils.fastCmd("magisk --sqlite '$query'")
+        val query = "SELECT value FROM settings WHERE key LIKE \"zygisk\" LIMIT 1"
 
-        return if (out.isNotBlank()) {
-            val map = out.split("\\|".toRegex())
-                .map { it.split("=", limit = 2) }
-                .filter { it.size == 2 }
-                .associate { it[0] to it[1] }
-            map["value"] == "1"
-        } else {
-            false
+        isZygiskEnabled = ShellUtils.fastCmd("magisk --sqlite '$query'").let {
+            if (it.isNotBlank()) {
+                it.split("=", limit = 2)[1] == "1"
+            } else {
+                false
+            }
         }
+
+        Timber.d("isZygiskEnabled: $isZygiskEnabled")
+        return isZygiskEnabled
     }
 
     override fun init(onSucceeded: () -> Unit, onFailed: () -> Unit) {
         Timber.i("initMagisk")
 
-        Shell.cmd("magisk --path").submit {
-            if (it.isSuccess) {
-                MAGISK_PATH = "${it.output}/.magisk"
-                version = ShellUtils.fastCmd("magisk -c")
-
-                isZygiskEnabled = isZygisk()
-                Timber.d("isZygiskEnabled: $isZygiskEnabled")
-
+        getVersion(
+            onSucceeded = {
+                MAGISK_PATH = ShellUtils.fastCmd("magisk --path")
+                isZygisk()
                 onSucceeded()
-            } else {
+            },
+            onFailed = {
                 Timber.e("initMagisk: ${it.output}")
                 onFailed()
             }
-        }
+        )
     }
 
     private val LocalModule.path get() = "${MODULES_PATH}/${id}"
@@ -136,14 +131,14 @@ object MagiskApi : BaseApi() {
         }
     }
 
-    override fun getModulesList() = runCatching {
+    override suspend fun getModules() = runCatching {
         Timber.i("getLocal: $MODULES_MOUNT_PATH")
 
         val modules = mutableListOf<LocalModule>()
         fs.getFile(MODULES_MOUNT_PATH).listFiles().orEmpty()
             .filter { !it.isFile && !it.isHidden }
             .forEach { path ->
-                LocalProvider.getLocal(
+                LocalProvider.getModule(
                     prop = path.resolve("module.prop")
                 ).onSuccess { module ->
                     module.state = getState(path)

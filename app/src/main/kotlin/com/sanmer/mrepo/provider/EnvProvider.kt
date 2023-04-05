@@ -15,7 +15,10 @@ object EnvProvider {
     val isKsu get() = context == "u:r:su:s0"
     val isMagisk get() = context == "u:r:magisk:s0"
 
-    val index get() = Config.WORKING_MODE - 1
+    var index: Int
+        get() = Config.WORKING_MODE - 1
+        set(value) { Config.WORKING_MODE = value + 1 }
+
     val isSetup get() = Config.WORKING_MODE == Config.FIRST_SETUP
     val isRoot get() = Config.WORKING_MODE == Config.MODE_ROOT
     val isNonRoot get() = Config.WORKING_MODE == Config.MODE_NON_ROOT
@@ -39,9 +42,5 @@ object EnvProvider {
                 onFailed = { state.value = Event.FAILED }
             )
         }
-    }
-
-    fun setMode(index: Int) {
-        Config.WORKING_MODE = index + 1
     }
 }

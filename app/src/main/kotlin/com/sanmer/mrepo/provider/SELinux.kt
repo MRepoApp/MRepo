@@ -17,18 +17,6 @@ object SELinux {
         } catch (e: Exception) {
             SELinux.enforce
         }
-
-        val isSelinuxEnabled: Boolean get() = try {
-            SuProvider.Root.isSelinuxEnabled
-        } catch (e: Exception) {
-            isSelinuxEnabled()
-        }
-
-        fun getContextByPid(pid: Int): String = try {
-            SuProvider.Root.getContextByPid(pid)
-        } catch (e: Exception) {
-            SELinux.getContextByPid(pid)
-        }
     }
 
     val context: String
@@ -36,8 +24,4 @@ object SELinux {
 
     val enforce: Int
         external get
-
-    external fun isSelinuxEnabled(): Boolean
-
-    external fun getContextByPid(pid: Int): String
 }

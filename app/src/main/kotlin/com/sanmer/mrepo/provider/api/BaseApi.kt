@@ -4,9 +4,11 @@ import android.content.Context
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.State
 import com.sanmer.mrepo.provider.local.LocalProvider
+import com.sanmer.mrepo.utils.expansion.output
 import com.sanmer.mrepo.utils.expansion.unzip
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.ShellUtils
 import java.io.File
 
 abstract class BaseApi {
@@ -17,6 +19,19 @@ abstract class BaseApi {
     abstract fun enable(module: LocalModule)
     abstract fun disable(module: LocalModule)
     abstract fun remove(module: LocalModule)
+
+    protected fun getVersion(
+        onSucceeded: () -> Unit = {},
+        onFailed: (Shell.Result) -> Unit = {}
+    ) = Shell.cmd("su -v").submit {
+        if (it.isSuccess) {
+            val versionCode = ShellUtils.fastCmd("su -V")
+            version = "${it.output} ($versionCode)"
+            onSucceeded()
+        } else {
+            onFailed(it)
+        }
+    }
 
     protected fun install(
         context: Context,
@@ -37,7 +52,7 @@ abstract class BaseApi {
                 if (!tmp.exists()) tmp.mkdirs()
                 zipFile.unzip(tmp, "module.prop", true)
 
-                LocalProvider.getLocal(
+                LocalProvider.getModule(
                     prop = tmp.resolve("module.prop")
                 ).onSuccess { value ->
                     value.state = State.UPDATE
@@ -62,5 +77,5 @@ abstract class BaseApi {
         zipFile: File
     )
 
-    abstract fun getModulesList(): Result<List<LocalModule>>
+    abstract suspend fun getModules(): Result<List<LocalModule>>
 }
