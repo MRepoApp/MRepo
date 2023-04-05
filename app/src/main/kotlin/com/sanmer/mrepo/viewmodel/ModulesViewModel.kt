@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.data.ModuleManager
 import com.sanmer.mrepo.data.RepoManger
+import com.sanmer.mrepo.data.RepoManger.toModuleList
 import com.sanmer.mrepo.data.database.entity.Repo
 import com.sanmer.mrepo.data.module.LocalModule
 import com.sanmer.mrepo.data.module.OnlineModule
@@ -68,10 +69,16 @@ class ModulesViewModel : ViewModel() {
     var progress by mutableStateOf(false)
         private set
 
+    private inline fun <T> T.updateProgress(callback: T.() -> Unit) {
+        progress  = true
+        callback()
+        progress = false
+    }
+
     init {
         Timber.d("ModulesViewModel init")
 
-        ModuleManager.getLocalFlow().onEach { list ->
+        ModuleManager.getLocalAllAsFlow().onEach { list ->
             if (list.isEmpty()) return@onEach
 
             if (local.isNotEmpty()) local.clear()
@@ -80,17 +87,16 @@ class ModulesViewModel : ViewModel() {
 
         }.launchIn(viewModelScope)
 
-        RepoManger.getRepoWithModuleFlow().onEach { list ->
+        RepoManger.getRepoWithModuleAsFlow().onEach { list ->
             if (list.isEmpty()) return@onEach
 
             val values = list.filter { it.repo.enable }
                 .map { it.modules }
                 .merge()
-
-            val new = RepoManger.fromModuleList(values)
+                .toModuleList()
 
             if (online.isNotEmpty()) online.clear()
-            online.addAll(new)
+            online.addAll(values)
             Timber.i("ModulesViewModel: updateOnline")
 
         }.launchIn(viewModelScope)
@@ -187,18 +193,18 @@ class ModulesViewModel : ViewModel() {
     }
 
     fun getLocalAll() = viewModelScope.launch {
-        progress = true
-        LocalProvider.getLocalAll().onFailure {
-            Timber.e("getLocalAll: ${it.message}")
+        updateProgress {
+            LocalProvider.getLocalAll().onFailure {
+                Timber.e("getLocalAll: ${it.message}")
+            }
         }
-        progress = false
     }
 
     fun getOnlineAll() = viewModelScope.launch {
-        progress = true
-        RepoManger.getRepoAll().map { repo ->
-            if (repo.enable) RepoProvider.getRepo(repo)
+        updateProgress {
+            RepoProvider.getRepoAll().onFailure {
+                Timber.e("getRepoAll: ${it.message}")
+            }
         }
-        progress = false
     }
 }

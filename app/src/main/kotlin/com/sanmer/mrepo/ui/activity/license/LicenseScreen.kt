@@ -14,24 +14,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.State
 import com.sanmer.mrepo.data.json.License
-import com.sanmer.mrepo.provider.spdx.LicenseProvider
 import com.sanmer.mrepo.ui.component.CircularProgressIndicator
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.MarkdownText
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
+import com.sanmer.mrepo.utils.HttpUtils
 import timber.log.Timber
 
 @Composable
-fun LicenseScreen(
-    licenseId: String
-) {
+fun LicenseScreen(licenseId: String) {
     var license: License? by remember { mutableStateOf(null) }
     var message: String? by remember { mutableStateOf(null) }
-    val state = object : State(Event.LOADING) {
+    val state = object : State(initial = Event.LOADING) {
         override fun setSucceeded(value: Any?) {
             super.setSucceeded(value)
             license = value as License
@@ -46,12 +45,11 @@ fun LicenseScreen(
     }
 
     LaunchedEffect(licenseId) {
-        LicenseProvider.getLicense(licenseId)
-            .onSuccess {
-                state.setSucceeded(it)
-            }.onFailure {
-                state.setFailed(it)
-            }
+        HttpUtils.requestJson<License>(Const.SPDX_URL + "${licenseId}.json").onSuccess {
+            state.setSucceeded(it)
+        }.onFailure {
+            state.setFailed(it)
+        }
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -60,9 +58,7 @@ fun LicenseScreen(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            LicenseTopBar(
-                scrollBehavior = scrollBehavior
-            )
+            LicenseTopBar(scrollBehavior = scrollBehavior)
         }
     ) { innerPadding ->
         Box(

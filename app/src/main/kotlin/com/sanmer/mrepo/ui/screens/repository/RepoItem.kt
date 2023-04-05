@@ -260,7 +260,10 @@ fun FailureDialog(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = stringResource(id = R.string.repo_update_dialog_failure, message.toString()))
+            Text(
+                text = stringResource(id = R.string.repo_update_dialog_failure, message.toString()),
+                maxLines = 5,
+            )
         }
     },
     confirmButton = {

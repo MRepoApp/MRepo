@@ -15,16 +15,16 @@ class LocalWork(
     workerParams
 ) {
     override suspend fun doWork(): Result {
-        return try {
-            LocalProvider.getLocalAll()
-            Result.success()
-        } catch (e: Exception) {
-            Timber.e(e.message)
-            if (EnvProvider.isRoot) {
+        LocalProvider.getLocalAll().onSuccess {
+            return Result.success()
+        }.onFailure {
+            return if (EnvProvider.isRoot) {
                 Result.retry()
             } else {
                 Result.failure()
             }
         }
+
+        return Result.failure()
     }
 }

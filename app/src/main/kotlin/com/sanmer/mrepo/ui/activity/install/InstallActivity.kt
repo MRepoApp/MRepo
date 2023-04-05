@@ -34,10 +34,6 @@ class InstallActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        /**
-         * Use StateFlow instead of State to
-         * safety started by other apps.
-         * */
         SuProvider.state.onEach {
             if (it.isNotReady) {
                 viewModel.send("SuProvider init")

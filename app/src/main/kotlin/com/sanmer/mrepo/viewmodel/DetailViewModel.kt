@@ -30,7 +30,7 @@ class DetailViewModel(
     var module = OnlineModule()
         private set
 
-    val state = object : State(initialState = Event.LOADING) {
+    val state = object : State(initial = Event.LOADING) {
         override fun setFailed(value: Any?) {
             super.setFailed(value)
             value?.let { message = value.toString() }
@@ -81,8 +81,7 @@ class DetailViewModel(
         }
 
         RepoProvider.getUpdate(module).onSuccess { list ->
-            list.filterNotNull()
-                .sortedByDescending { it.timestamp }
+            list.sortedByDescending { it.timestamp }
                 .forEach(update)
 
             if (versions.isNotEmpty()) {

@@ -10,6 +10,24 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 object RepoProvider {
+    suspend fun getRepoAll() = withContext(Dispatchers.IO) {
+        val repos = RepoManger.getRepoAll()
+        Timber.i("getRepo: ${repos.filter { it.enable }.size}/${repos.size}")
+
+        val result = repos.map {
+            return@map if (it.enable) {
+                getRepo(it)
+            } else {
+                Result.failure(RuntimeException("${it.name} is disabled!"))
+            }
+        }
+
+        return@withContext if (result.all { it.isFailure }) {
+            Result.failure(result.first().exceptionOrNull()!!)
+        } else {
+            Result.success(result.mapNotNull { it.getOrNull() })
+        }
+    }
     suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
         runRequest {
             val api = RepoService.create(repo.url)
@@ -49,7 +67,7 @@ object RepoProvider {
         return@withContext if (result.all { it.isFailure }) {
             Result.failure(result.first().exceptionOrNull()!!)
         } else {
-            Result.success(result.map { it.getOrNull() })
+            Result.success(result.mapNotNull { it.getOrNull() })
         }
     }
 }

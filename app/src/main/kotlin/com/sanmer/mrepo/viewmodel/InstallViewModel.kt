@@ -24,7 +24,7 @@ class InstallViewModel : ViewModel() {
     val context by lazy { App.context }
     val console = mutableStateListOf<String>()
 
-    val state = object : State(initialState = Event.LOADING) {
+    val state = object : State(initial = Event.LOADING) {
         override fun setFailed(value: Any?) {
             super.setFailed(value)
             value?.let { send(it.toString())}
@@ -33,11 +33,14 @@ class InstallViewModel : ViewModel() {
 
     init {
         Timber.d("InstallViewModel init")
-        context.cacheDir.resolve("log").walkBottomUp().forEach {
-            if (it.name.startsWith("module")) {
-                it.delete()
+
+        context.cacheDir.resolve("log")
+            .walkBottomUp()
+            .forEach {
+                if (it.name.startsWith("module")) {
+                    it.delete()
+                }
             }
-        }
     }
 
     fun send(message: String) = console.add("- $message")

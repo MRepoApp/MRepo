@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.reflect.KProperty
 
 open class State(
-    initialState: Event = Event.NON
+    initial: Event = Event.NON
 ) {
-    val state = MutableStateFlow(initialState)
-    var event by mutableStateOf(initialState)
+    val state = MutableStateFlow(initial)
+    var event by mutableStateOf(initial)
         private set
 
     val isLoading get() = event.isLoading

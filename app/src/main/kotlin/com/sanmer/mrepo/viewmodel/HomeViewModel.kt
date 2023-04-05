@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.app.Config
+import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.State
 import com.sanmer.mrepo.data.ModuleManager
@@ -17,7 +18,6 @@ import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.data.json.AppUpdate
 import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.provider.SuProvider
-import com.sanmer.mrepo.provider.app.AppProvider
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.expansion.toFile
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
-    val state = object : State(Event.LOADING) {
+    val state = object : State(initial = Event.LOADING) {
         override fun setSucceeded(value: Any?) {
             super.setSucceeded(value)
             update = value as AppUpdate
@@ -42,8 +42,6 @@ class HomeViewModel : ViewModel() {
     }
 
     var update: AppUpdate? by mutableStateOf(null)
-        private set
-    var changelog: String by mutableStateOf("")
         private set
     val isUpdatable get() = state.isSucceeded &&
             (update?.versionCode ?: Int.MIN_VALUE) > BuildConfig.VERSION_CODE
@@ -60,7 +58,7 @@ class HomeViewModel : ViewModel() {
         Timber.d("HomeViewModel init")
         getAppUpdate()
 
-        RepoManger.getRepoWithModuleFlow().onEach { list ->
+        RepoManger.getRepoWithModuleAsFlow().onEach { list ->
             list.filter { it.repo.enable }
                 .sumOf { it.modules.size }
                 .let { onlineCount.emit(it) }
@@ -69,17 +67,15 @@ class HomeViewModel : ViewModel() {
 
     private fun getAppUpdate() = viewModelScope.launch {
         Timber.d("getAppUpdate")
-        AppProvider.getStable()
-            .onSuccess {
-                HttpUtils.requestString(it.changelog)
-                    .onSuccess { text ->
-                        changelog = text
-                    }.onFailure {
-                        changelog = ""
-                    }
-
-                state.setSucceeded(it)
-            }.onFailure {
+        HttpUtils.requestJson<AppUpdate>(Const.UPDATE_URL + "stable.json")
+            .onSuccess { update ->
+                HttpUtils.requestString(update.changelog).onSuccess { text ->
+                    state.setSucceeded(update.copy(changelog = text))
+                }.onFailure {
+                    state.setSucceeded(update)
+                }
+            }
+            .onFailure {
                 state.setFailed(it)
             }
     }

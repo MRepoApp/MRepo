@@ -104,7 +104,7 @@ fun UpdateDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
-                text = viewModel.changelog,
+                text = viewModel.update!!.changelog,
                 style = MaterialTheme.typography.bodyMedium
             )
 

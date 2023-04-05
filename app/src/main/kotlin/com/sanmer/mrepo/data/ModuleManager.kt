@@ -19,7 +19,7 @@ object ModuleManager {
         db = ModuleDatabase.getDatabase(context)
     }
 
-    fun getLocalFlow() = moduleDao.getLocalFlow().map { list ->
+    fun getLocalAllAsFlow() = moduleDao.getLocalAllAsFlow().map { list ->
         list.map { it.toModule() }
     }
 

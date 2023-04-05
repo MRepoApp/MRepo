@@ -104,7 +104,7 @@ fun SettingsScreen(
                 ),
                 selected = EnvProvider.index,
                 onChange = { index, _ ->
-                    EnvProvider.setMode(index)
+                    EnvProvider.index = index
                     that.setup()
                 }
             )

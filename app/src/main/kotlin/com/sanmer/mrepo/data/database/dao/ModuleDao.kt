@@ -10,7 +10,7 @@ interface ModuleDao {
     fun getLocalAll(): List<LocalModuleEntity>
 
     @Query("SELECT * FROM local_module")
-    fun getLocalFlow(): Flow<List<LocalModuleEntity>>
+    fun getLocalAllAsFlow(): Flow<List<LocalModuleEntity>>
 
     @Query("SELECT COUNT(id) FROM local_module")
     fun getLocalCount(): Flow<Int>

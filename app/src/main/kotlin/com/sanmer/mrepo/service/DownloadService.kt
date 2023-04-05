@@ -2,6 +2,7 @@ package com.sanmer.mrepo.service
 
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import android.os.Process
 import androidx.core.app.ServiceCompat
 import androidx.core.content.FileProvider
@@ -13,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.data.parcelable.DownloadItem
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.io.File
 
@@ -204,6 +205,15 @@ class DownloadService : LifecycleService() {
     companion object {
         private const val DOWNLOAD_ITEM = "DOWNLOAD_ITEM"
         private const val GROUP_KEY = "DOWNLOAD_SERVICE_GROUP_KEY"
+
+        @Parcelize
+        data class DownloadItem(
+            val id: Int = System.currentTimeMillis().toInt(),
+            val name: String,
+            val path: String,
+            val url: String,
+            val install: Boolean
+        ) : Parcelable
 
         private val progressBroadcast = MutableLiveData<Pair<Float, DownloadItem>?>()
 
