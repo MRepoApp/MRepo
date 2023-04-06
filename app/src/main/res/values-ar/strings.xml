@@ -1,2 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="root_status_access">تصريح الروت%1$s</string>
+    <string name="setup_root_title">روت</string>
+    <string name="setup_root_desc2">متاح : الوصول الكامل للوظائف</string>
+    <string name="setup_non_root_title">بدون روت</string>
+    <string name="setup_non_root_desc1">لا يتطلب خصائص الروت</string>
+    <string name="setup_non_root_desc2">متاح : تحميل الملف</string>
+    <string name="install_title">تنصيب</string>
+    <string name="install_flashing">تثبيت</string>
+    <string name="install_done">إنتهى.</string>
+    <string name="install_failure">فشل</string>
+    <string name="install_reboot">إعادة تشغيل</string>
+    <string name="license_title">عرض الترخيص</string>
+    <string name="license_osi_approved">تراخيص معتمدة</string>
+    <string name="page_modules">الملفات</string>
+    <string name="page_home">الصفحة الرئيسية</string>
+    <string name="page_view_module">عرض تفاصيل الملف</string>
+    <string name="root_status_provider">المزود%1$s</string>
+    <string name="root_status_none">غير متوفر</string>
+    <string name="non_root_desc">الوظائف محدودة</string>
+    <string name="app_update_latest">التحديث الأخير%1$s</string>
+    <string name="app_update_installed">تم التنصيب %1$s</string>
+    <string name="modules_status_module">الإضافات المحملة / الإضافات المتوفرة</string>
+    <string name="device_system_version">رقم الإصدار</string>
+    <string name="device_system_abi">رقم النظام التعريفي</string>
+    <string name="device_security_patch">إصدار الحماية</string>
+    <string name="selinux_status_enforcing">فعّالة</string>
+    <string name="selinux_status_disabled">غير فعّالة</string>
+    <string name="modules_status_repo">تفعيل الوحدة / كل الوحدات</string>
+    <string name="device_selinux_status">حالة الحماية الفعلية للنظام /SELinux status</string>
+    <string name="setup_mode">نمط العمل</string>
+    <string name="setup_root_desc1">مطلوب تصريح الوصول إلى خصائص الروت من ماجيسك أو أي برنامج مسؤول آخر</string>
+    <string name="activity_install_label">تنصيب الملف</string>
+    <string name="page_settings">الإعدادات</string>
+    <string name="root_status_granted">تم التصريح</string>
+    <string name="root_status_not_available">غير متاح</string>
+</resources>
