@@ -13,9 +13,7 @@ import java.io.File
 object MagiskApi : BaseApi() {
     private val fs = FileSystemProvider
 
-    private lateinit var MAGISK_PATH: String
     private const val MODULES_PATH = "/data/adb/modules"
-    private val MODULES_MOUNT_PATH get() = "$MAGISK_PATH/.magisk/modules"
     private var isZygiskEnabled = false
 
     private fun isZygisk(): Boolean {
@@ -38,7 +36,6 @@ object MagiskApi : BaseApi() {
 
         getVersion(
             onSucceeded = {
-                MAGISK_PATH = ShellUtils.fastCmd("magisk --path")
                 isZygisk()
                 onSucceeded()
             },
@@ -132,10 +129,10 @@ object MagiskApi : BaseApi() {
     }
 
     override suspend fun getModules() = runCatching {
-        Timber.i("getLocal: $MODULES_MOUNT_PATH")
+        Timber.i("getLocal: $MODULES_PATH")
 
         val modules = mutableListOf<LocalModule>()
-        fs.getFile(MODULES_MOUNT_PATH).listFiles().orEmpty()
+        fs.getFile(MODULES_PATH).listFiles().orEmpty()
             .filter { !it.isFile && !it.isHidden }
             .forEach { path ->
                 LocalProvider.getModule(
