@@ -90,7 +90,7 @@ class HomeViewModel @Inject constructor(
     )
 
     private val path get() = Config.downloadPath.toFile().resolve(
-        "app-${update.version}-${Build.SUPPORTED_ABIS[0]}-release.apk"
+        "MRepo-${update.version}(${update.versionCode}).apk"
     )
 
     fun observeProgress(
