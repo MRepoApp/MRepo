@@ -4,7 +4,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sanmer.mrepo.app.Config
 
@@ -15,9 +14,7 @@ fun AppTheme(
     val darkMode = Config.isDarkMode()
     val themeColor = Config.themeColor
 
-    val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
-
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
@@ -26,8 +23,7 @@ fun AppTheme(
         )
     }
 
-    val color = getColor(context = context, id = themeColor)
-
+    val color = getColor(id = themeColor)
     val colorScheme = when {
         darkMode -> color.darkColorScheme
         else -> color.lightColorScheme
