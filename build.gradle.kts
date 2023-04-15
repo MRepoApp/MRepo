@@ -7,7 +7,7 @@ buildscript {
 
     @Suppress("GradleDependency", "GradleDynamicVersion")
     dependencies {
-        classpath("com.android.tools.build:gradle:7.4.2")
+        classpath("com.android.tools.build:gradle:8.0.0")
 
         val kotlinVersion = "1.8.10"
         classpath(kotlin("gradle-plugin", version = kotlinVersion))

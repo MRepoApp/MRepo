@@ -70,15 +70,13 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = "11"
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
+        aidl = true
+        buildConfig = true
         compose = true
     }
 
@@ -86,7 +84,7 @@ android {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += setOf(
                 "META-INF/**",
@@ -109,8 +107,14 @@ android {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 
     sourceSets.all {
         languageSettings {
