@@ -59,14 +59,16 @@ class RepositoryViewModel @Inject constructor(
         repoUrl: String,
         onFailure: (Repo, Throwable) -> Unit
     ) = viewModelScope.launch {
-        val repo = repoUrl.toRepo()
+        updateProgress {
+            val repo = repoUrl.toRepo()
 
-        modulesRepository.getRepo(repo)
-            .onSuccess {
-                localRepository.insertRepo(repo)
-            }.onFailure {
-                onFailure(repo, it)
-            }
+            modulesRepository.getRepo(repo)
+                .onSuccess {
+                    localRepository.insertRepo(it)
+                }.onFailure {
+                    onFailure(repo, it)
+                }
+        }
     }
 
     fun update(repo: Repo) = viewModelScope.launch {
