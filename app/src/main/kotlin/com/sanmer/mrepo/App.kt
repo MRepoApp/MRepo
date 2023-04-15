@@ -1,17 +1,23 @@
 package com.sanmer.mrepo
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import com.sanmer.mrepo.app.Shortcut
-import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.RepoManger
 import com.sanmer.mrepo.utils.MediaStoreUtils
 import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.timber.DebugTree
 import com.sanmer.mrepo.utils.timber.ReleaseTree
-import com.sanmer.mrepo.works.Works
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
+import javax.inject.Inject
 
-class App : Application() {
+@HiltAndroidApp
+class App : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
     init {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
@@ -27,12 +33,13 @@ class App : Application() {
         MediaStoreUtils.init(this)
         NotificationUtils.init(this)
 
-        ModuleManager.init(this)
-        RepoManger.init(this)
-        Works.init(this)
-
         Shortcut.push()
     }
+
+    override fun getWorkManagerConfiguration() =
+        Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 
     companion object {
         private lateinit var app: App

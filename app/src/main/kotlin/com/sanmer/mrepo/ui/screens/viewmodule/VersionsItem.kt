@@ -11,20 +11,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.RepoManger
-import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.data.json.ModuleUpdateItem
-import com.sanmer.mrepo.data.json.versionDisplay
-import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.app.Config
+import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.model.json.ModuleUpdateItem
+import com.sanmer.mrepo.model.json.versionDisplay
 import com.sanmer.mrepo.ui.component.ExpandableItem
 import com.sanmer.mrepo.utils.expansion.toDate
 import com.sanmer.mrepo.viewmodel.DetailViewModel
 
 @Composable
 fun VersionsItem(
-    viewModel: DetailViewModel = viewModel()
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
     var expanded by remember { mutableStateOf(true) }
     ExpandableItem(
@@ -51,11 +50,12 @@ fun VersionsItem(
 
 @Composable
 private fun UpdateItem(
+    viewModel: DetailViewModel = hiltViewModel(),
     value: ModuleUpdateItem
 ) {
     var repo: Repo? by remember { mutableStateOf(null) }
     LaunchedEffect(value) {
-        repo = RepoManger.getRepoByUrl(value.repoUrl)
+        repo = viewModel.getRepoByUrl(value.repoUrl)
     }
 
     var update by remember { mutableStateOf(false) }
@@ -103,13 +103,14 @@ private fun UpdateItem(
 
 @Composable
 private fun UpdateItemDialog(
-    viewModel: DetailViewModel = viewModel(),
+    viewModel: DetailViewModel = hiltViewModel(),
     value: ModuleUpdateItem,
     onClose: () -> Unit
 ) = AlertDialog(
     onDismissRequest = onClose
 ) {
     val context = LocalContext.current
+
     Surface(
         shape = RoundedCornerShape(25.dp),
         color = AlertDialogDefaults.containerColor,
@@ -160,7 +161,7 @@ private fun UpdateItemDialog(
                         viewModel.installer(context = context, item = value)
                         onClose()
                     },
-                    enabled = EnvProvider.isRoot
+                    enabled = Config.isRoot
                 ) {
                     Text(text = stringResource(id = R.string.module_install))
                 }

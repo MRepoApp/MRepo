@@ -23,9 +23,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 import kotlinx.coroutines.launch
 
@@ -59,14 +59,13 @@ val pages = listOf(
 
 @Composable
 fun TabsItem(
-    state: PagerState,
-    modifier: Modifier = Modifier,
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
+    state: PagerState
 ) {
     val scope = rememberCoroutineScope()
 
     Row(
-        modifier = modifier
+        modifier = Modifier
             .width(IntrinsicSize.Min)
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically,
@@ -127,7 +126,7 @@ fun TabsItem(
                 },
                 selectedContentColor = MaterialTheme.colorScheme.onPrimary,
                 unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                enabled = if (page !is Pages.Cloud) EnvProvider.isRoot else true
+                enabled = if (page !is Pages.Cloud) Config.isRoot else true
             )
         }
     }

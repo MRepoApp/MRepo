@@ -1,25 +1,29 @@
 package com.sanmer.mrepo.works
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.sanmer.mrepo.provider.repo.RepoProvider
-import timber.log.Timber
+import com.sanmer.mrepo.repository.ModulesRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class RepoWork(
-    context: Context,
-    workerParams: WorkerParameters
+@HiltWorker
+class RepoWork @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val modulesRepository: ModulesRepository
 ) : CoroutineWorker(
     context,
     workerParams
 ) {
     override suspend fun doWork(): Result {
-        RepoProvider.getRepoAll().onSuccess {
-            return Result.success()
-        }.onFailure {
-            return Result.retry()
-        }
+        val result = modulesRepository.getRepoAll()
 
-        return Result.failure()
+        return if (result.all { it.isFailure }) {
+            Result.retry()
+        } else {
+            Result.success()
+        }
     }
 }

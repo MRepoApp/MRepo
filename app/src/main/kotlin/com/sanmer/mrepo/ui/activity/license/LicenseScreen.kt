@@ -17,7 +17,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.State
-import com.sanmer.mrepo.data.json.License
+import com.sanmer.mrepo.model.json.License
 import com.sanmer.mrepo.ui.component.CircularProgressIndicator
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator

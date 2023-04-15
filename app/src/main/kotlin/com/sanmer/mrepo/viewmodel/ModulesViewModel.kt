@@ -7,28 +7,29 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Config
-import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.RepoManger
-import com.sanmer.mrepo.data.RepoManger.toModuleList
-import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.data.module.LocalModule
-import com.sanmer.mrepo.data.module.OnlineModule
-import com.sanmer.mrepo.data.module.State
-import com.sanmer.mrepo.provider.SuProvider
-import com.sanmer.mrepo.provider.local.LocalProvider
-import com.sanmer.mrepo.provider.local.ModuleUtils.disable
-import com.sanmer.mrepo.provider.local.ModuleUtils.enable
-import com.sanmer.mrepo.provider.local.ModuleUtils.remove
-import com.sanmer.mrepo.provider.repo.RepoProvider
+import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.model.module.LocalModule
+import com.sanmer.mrepo.model.module.OnlineModule
+import com.sanmer.mrepo.model.module.State
+import com.sanmer.mrepo.repository.LocalRepository
+import com.sanmer.mrepo.repository.ModulesRepository
+import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.service.DownloadService
-import com.sanmer.mrepo.utils.expansion.merge
 import com.sanmer.mrepo.utils.expansion.toFile
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class ModulesViewModel : ViewModel() {
+@HiltViewModel
+class ModulesViewModel @Inject constructor(
+    private val localRepository: LocalRepository,
+    private val modulesRepository: ModulesRepository,
+    private val suRepository: SuRepository
+) : ViewModel() {
+
     val updatableValue get() = if (isSearch) _updatable else updatable
     val localValue get() = if (isSearch) _local else local
     val onlineValue get() = if (isSearch) _online else online
@@ -65,10 +66,10 @@ class ModulesViewModel : ViewModel() {
         }
     }
 
-    val suState get() = SuProvider.state
+    val suState get() = suRepository.state
+
     var progress by mutableStateOf(false)
         private set
-
     private inline fun <T> T.updateProgress(callback: T.() -> Unit) {
         progress  = true
         callback()
@@ -78,7 +79,7 @@ class ModulesViewModel : ViewModel() {
     init {
         Timber.d("ModulesViewModel init")
 
-        ModuleManager.getLocalAllAsFlow().onEach { list ->
+        localRepository.getLocalAllAsFlow().onEach { list ->
             if (list.isEmpty()) return@onEach
 
             if (local.isNotEmpty()) local.clear()
@@ -87,16 +88,11 @@ class ModulesViewModel : ViewModel() {
 
         }.launchIn(viewModelScope)
 
-        RepoManger.getRepoWithModuleAsFlow().onEach { list ->
+        localRepository.getOnlineAllAsFlow().onEach { list ->
             if (list.isEmpty()) return@onEach
 
-            val values = list.filter { it.repo.enable }
-                .map { it.modules }
-                .merge()
-                .toModuleList()
-
             if (online.isNotEmpty()) online.clear()
-            online.addAll(values)
+            online.addAll(list)
             Timber.i("ModulesViewModel: updateOnline")
 
         }.launchIn(viewModelScope)
@@ -117,7 +113,7 @@ class ModulesViewModel : ViewModel() {
         }
     }
 
-    private val OnlineModule.path get() = Config.DOWNLOAD_PATH.toFile().resolve(
+    private val OnlineModule.path get() = Config.downloadPath.toFile().resolve(
         "${name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")
@@ -145,14 +141,14 @@ class ModulesViewModel : ViewModel() {
         install = true
     )
 
-    data class UiState(
+    data class LocalModuleUiState(
         val alpha: Float = 1f,
         val decoration: TextDecoration = TextDecoration.None,
         val toggle: (Boolean) -> Unit = {},
         val change: () -> Unit = {},
     )
 
-    fun updateUiState(module: LocalModule): UiState {
+    fun getLocalModuleUiState(module: LocalModule): LocalModuleUiState {
         var alpha = 1f
         var decoration = TextDecoration.None
         var toggle: (Boolean) -> Unit = {}
@@ -160,18 +156,18 @@ class ModulesViewModel : ViewModel() {
 
         when (module.state) {
             State.ENABLE -> {
-                toggle = { module.disable() }
-                change = { module.remove() }
+                toggle = { suRepository.disable(module) }
+                change = { suRepository.remove(module) }
             }
             State.DISABLE -> {
                 alpha = 0.5f
-                toggle = { module.enable() }
-                change = { module.remove() }
+                toggle = { suRepository.enable(module) }
+                change = { suRepository.remove(module) }
             }
             State.REMOVE -> {
                 alpha = 0.5f
                 decoration = TextDecoration.LineThrough
-                change = { module.enable() }
+                change = { suRepository.enable(module) }
             }
             State.ZYGISK_UNLOADED,
             State.RIRU_DISABLE,
@@ -181,30 +177,26 @@ class ModulesViewModel : ViewModel() {
             State.UPDATE -> {}
         }
 
-        return UiState(alpha, decoration, toggle, change)
+        return LocalModuleUiState(alpha, decoration, toggle, change)
     }
 
     fun getRepoByUrl(
         url: String,
         callback: (Repo) -> Unit
     ) = viewModelScope.launch {
-        val repo = RepoManger.getRepoByUrl(url)
+        val repo = localRepository.getRepoByUrl(url)
         callback(repo)
     }
 
     fun getLocalAll() = viewModelScope.launch {
         updateProgress {
-            LocalProvider.getLocalAll().onFailure {
-                Timber.e("getLocalAll: ${it.message}")
-            }
+            modulesRepository.getLocalAll()
         }
     }
 
     fun getOnlineAll() = viewModelScope.launch {
         updateProgress {
-            RepoProvider.getRepoAll().onFailure {
-                Timber.e("getRepoAll: ${it.message}")
-            }
+            modulesRepository.getRepoAll()
         }
     }
 }

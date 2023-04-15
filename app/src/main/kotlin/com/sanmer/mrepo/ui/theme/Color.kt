@@ -4,7 +4,18 @@ import android.content.Context
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import com.sanmer.mrepo.ui.theme.color.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import com.sanmer.mrepo.ui.theme.color.BlueDarkColorScheme
+import com.sanmer.mrepo.ui.theme.color.BlueLightColorScheme
+import com.sanmer.mrepo.ui.theme.color.CyanDarkColorScheme
+import com.sanmer.mrepo.ui.theme.color.CyanLightColorScheme
+import com.sanmer.mrepo.ui.theme.color.DeepPurpleDarkColorScheme
+import com.sanmer.mrepo.ui.theme.color.DeepPurpleLightColorScheme
+import com.sanmer.mrepo.ui.theme.color.OrangeDarkColorScheme
+import com.sanmer.mrepo.ui.theme.color.OrangeLightColorScheme
+import com.sanmer.mrepo.ui.theme.color.SakuraDarkColorScheme
+import com.sanmer.mrepo.ui.theme.color.SakuraLightColorScheme
 
 sealed class Colors(
     val id: Int,
@@ -59,7 +70,10 @@ fun getColors(): List<Int> {
     return colors.map { it.id }
 }
 
-fun getColor(context: Context, id: Int): Colors {
+@Composable
+fun getColor(id: Int): Colors {
+    val context = LocalContext.current
+
     return if (id == Colors.Dynamic.id) {
         Colors.Dynamic(context)
     } else {

@@ -11,21 +11,27 @@ import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.State
-import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.json.ModuleUpdate
-import com.sanmer.mrepo.data.json.ModuleUpdateItem
-import com.sanmer.mrepo.data.module.OnlineModule
-import com.sanmer.mrepo.provider.repo.RepoProvider
+import com.sanmer.mrepo.model.json.ModuleUpdate
+import com.sanmer.mrepo.model.json.ModuleUpdateItem
+import com.sanmer.mrepo.model.module.OnlineModule
+import com.sanmer.mrepo.repository.LocalRepository
+import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.expansion.toFile
 import com.sanmer.mrepo.utils.expansion.update
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class DetailViewModel(
+@HiltViewModel
+class DetailViewModel @Inject constructor(
+    private val localRepository: LocalRepository,
+    private val modulesRepository: ModulesRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
     private val id: String? = savedStateHandle["id"]
     var module = OnlineModule()
         private set
@@ -58,7 +64,7 @@ class DetailViewModel(
             state.setFailed("The id is null or blank")
         } else {
             runCatching {
-                ModuleManager.getOnlineAll().first { it.id == id }
+                localRepository.getOnlineAll().first { it.id == id }
             }.onSuccess {
                 module = it
                 getUpdates()
@@ -68,6 +74,8 @@ class DetailViewModel(
             }
         }
     }
+
+    suspend fun getRepoByUrl(url: String) = localRepository.getRepoByUrl(url)
 
     suspend fun getUpdates() {
         val update: (ModuleUpdate) -> Unit = { update ->
@@ -80,7 +88,15 @@ class DetailViewModel(
             }
         }
 
-        RepoProvider.getUpdate(module).onSuccess { list ->
+        module.repoUrls.map { url ->
+            modulesRepository.getUpdate(url, module.id)
+                .onSuccess {
+                    return@map Result.success(it.copy(repoUrl = url))
+                }
+                .onFailure {
+                    Timber.d("getUpdates: ${it.message}")
+                }
+        }.mapNotNull { it.getOrNull() }.let { list ->
             list.sortedByDescending { it.timestamp }
                 .forEach(update)
 
@@ -90,9 +106,6 @@ class DetailViewModel(
             } else {
                 state.setFailed()
             }
-        }.onFailure {
-            Timber.d("getUpdates: ${it.message}")
-            state.setFailed(it.message)
         }
     }
 
@@ -122,7 +135,7 @@ class DetailViewModel(
         }
     }
 
-    val ModuleUpdateItem.path get() = Config.DOWNLOAD_PATH.toFile().resolve(
+    val ModuleUpdateItem.path get() = Config.downloadPath.toFile().resolve(
         "${module.name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")
@@ -150,7 +163,7 @@ class DetailViewModel(
         install = true
     )
 
-    val OnlineModule.path get() = Config.DOWNLOAD_PATH.toFile().resolve(
+    val OnlineModule.path get() = Config.downloadPath.toFile().resolve(
         "${name}_${version}_${versionCode}.zip"
             .replace(" ", "_")
             .replace("/", "_")

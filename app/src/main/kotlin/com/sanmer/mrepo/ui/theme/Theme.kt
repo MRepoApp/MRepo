@@ -12,8 +12,8 @@ import com.sanmer.mrepo.app.Config
 fun AppTheme(
     content: @Composable () -> Unit
 ) {
-    val darkTheme = Config.isDarkTheme()
-    val themeColor = Config.THEME_COLOR
+    val darkMode = Config.isDarkMode()
+    val themeColor = Config.themeColor
 
     val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
@@ -21,7 +21,7 @@ fun AppTheme(
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
-            darkIcons = !darkTheme,
+            darkIcons = !darkMode,
             isNavigationBarContrastEnforced = false
         )
     }
@@ -29,7 +29,7 @@ fun AppTheme(
     val color = getColor(context = context, id = themeColor)
 
     val colorScheme = when {
-        darkTheme -> color.darkColorScheme
+        darkMode -> color.darkColorScheme
         else -> color.lightColorScheme
     }
 

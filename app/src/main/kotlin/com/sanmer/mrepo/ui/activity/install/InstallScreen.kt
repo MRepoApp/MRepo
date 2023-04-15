@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
@@ -35,7 +35,7 @@ import com.sanmer.mrepo.viewmodel.InstallViewModel
 
 @Composable
 fun InstallScreen(
-    viewModel: InstallViewModel = viewModel()
+    viewModel: InstallViewModel = hiltViewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -81,7 +81,7 @@ fun InstallScreen(
 
 @Composable
 private fun InstallTopBar(
-    viewModel: InstallViewModel = viewModel(),
+    viewModel: InstallViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
     title = R.string.install_title,

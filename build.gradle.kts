@@ -15,12 +15,8 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
+plugins {
+    id("com.google.dagger.hilt.android") version "2.45" apply false
 }
 
 task<Delete>("clean") {

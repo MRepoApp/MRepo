@@ -5,23 +5,28 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.App
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.State
-import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.module.LocalModule
-import com.sanmer.mrepo.provider.local.ModuleUtils
+import com.sanmer.mrepo.model.module.LocalModule
+import com.sanmer.mrepo.repository.LocalRepository
+import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.utils.MediaStoreUtils.copyTo
 import com.sanmer.mrepo.utils.MediaStoreUtils.displayName
 import com.sanmer.mrepo.utils.expansion.now
 import com.sanmer.mrepo.utils.expansion.shareFile
 import com.sanmer.mrepo.utils.expansion.toCacheDir
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
+import javax.inject.Inject
 
-class InstallViewModel : ViewModel() {
-    val context by lazy { App.context }
+@HiltViewModel
+class InstallViewModel @Inject constructor(
+    private val localRepository: LocalRepository,
+    private val suRepository: SuRepository
+) : ViewModel() {
+
     val console = mutableStateListOf<String>()
 
     val state = object : State(initial = Event.LOADING) {
@@ -31,16 +36,10 @@ class InstallViewModel : ViewModel() {
         }
     }
 
+    val suState get() = suRepository.state
+
     init {
         Timber.d("InstallViewModel init")
-
-        context.cacheDir.resolve("log")
-            .walkBottomUp()
-            .forEach {
-                if (it.name.startsWith("module")) {
-                    it.delete()
-                }
-            }
     }
 
     fun send(message: String) = console.add("- $message")
@@ -48,7 +47,7 @@ class InstallViewModel : ViewModel() {
 
     private val onSucceeded: (LocalModule) -> Unit = {
         viewModelScope.launch {
-            ModuleManager.insertLocal(it)
+            localRepository.insertLocal(it)
             state.setSucceeded()
         }
     }
@@ -62,12 +61,11 @@ class InstallViewModel : ViewModel() {
         send("Copying zip to temp directory")
         send("Installing ${path.displayName}")
 
-        ModuleUtils.install(
-            context = context,
+        suRepository.install(
             zipFile = file,
-            onConsole = { console.add(it) },
-            onSucceeded = onSucceeded,
-            onFailed = {
+            console = { console.add(it) },
+            onSuccess = onSucceeded,
+            onFailure = {
                 state.setFailed()
             }
         )

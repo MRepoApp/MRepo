@@ -6,15 +6,39 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.pager.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerSnapDistance
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -27,10 +51,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
@@ -43,12 +67,12 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun ModulesScreen(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val state = rememberPagerState(
-        initialPage = if (EnvProvider.isRoot) {
+        initialPage = if (Config.isRoot) {
             Pages.Installed.id
         } else {
             Pages.Cloud.id
@@ -77,7 +101,7 @@ fun ModulesScreen(
             )
         },
         floatingActionButton = {
-            if (EnvProvider.isRoot && !viewModel.isSearch) {
+            if (Config.isRoot && !viewModel.isSearch) {
                 InstallFloatingButton()
             }
         },
@@ -93,7 +117,7 @@ fun ModulesScreen(
                     state = state,
                     pagerSnapDistance = PagerSnapDistance.atMost(0)
                 ),
-                userScrollEnabled = if (viewModel.isSearch) false else EnvProvider.isRoot
+                userScrollEnabled = if (viewModel.isSearch) false else Config.isRoot
             ) {
                 when (it) {
                     Pages.Cloud.id -> CloudPage(navController = navController)
@@ -118,7 +142,7 @@ fun ModulesScreen(
 
 @Composable
 private fun ModulesTopBar(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
     state: PagerState
 ) = if (viewModel.isSearch) {
@@ -134,7 +158,7 @@ private fun ModulesTopBar(
 
 @Composable
 private fun ModulesNormalTopBar(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
     state: PagerState
 ) = TopAppBar(
@@ -171,7 +195,7 @@ private fun ModulesNormalTopBar(
 
 @Composable
 private fun ModulesSearchTopBar(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior
 ) = TopAppBar(
     navigationIcon = {
@@ -208,7 +232,7 @@ private fun ModulesSearchTopBar(
                 defaultKeyboardAction(ImeAction.Search)
             },
             shape = RoundedCornerShape(15.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent
             ),

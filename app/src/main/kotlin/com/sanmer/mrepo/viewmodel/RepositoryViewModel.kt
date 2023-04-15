@@ -6,16 +6,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.data.RepoManger
-import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.provider.repo.RepoProvider
-import com.sanmer.mrepo.utils.expansion.update
+import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.database.entity.toRepo
+import com.sanmer.mrepo.repository.LocalRepository
+import com.sanmer.mrepo.repository.ModulesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class RepositoryViewModel : ViewModel() {
+@HiltViewModel
+class RepositoryViewModel @Inject constructor(
+    private val localRepository: LocalRepository,
+    private val modulesRepository: ModulesRepository
+) : ViewModel() {
+
     val list = mutableStateListOf<Repo>()
 
     var progress by mutableStateOf(false)
@@ -30,7 +37,7 @@ class RepositoryViewModel : ViewModel() {
     init {
         Timber.d("RepositoryViewModel init")
 
-        RepoManger.getRepoAllAsFlow().onEach {
+        localRepository.getRepoAllAsFlow().onEach {
             if (it.isEmpty()) return@onEach
 
             if (list.isNotEmpty()) list.clear()
@@ -41,7 +48,7 @@ class RepositoryViewModel : ViewModel() {
 
     fun getAll() = viewModelScope.launch {
         updateProgress {
-            val values = RepoManger.getRepoAll()
+            val values = localRepository.getRepoAll()
 
             if (list.isNotEmpty()) list.clear()
             list.addAll(values)
@@ -52,31 +59,23 @@ class RepositoryViewModel : ViewModel() {
         repoUrl: String,
         onFailure: (Repo, Throwable) -> Unit
     ) = viewModelScope.launch {
-        val repo = Repo(url = repoUrl)
-        list.add(repo)
-        RepoManger.insertRepo(repo)
+        val repo = repoUrl.toRepo()
 
-        RepoProvider.getRepo(repo).onSuccess {
-            val new = repo.copy(
-                name = it.name,
-                size = it.modules.size,
-                timestamp = it.timestamp
-            )
-            list.update(new)
-        }.onFailure {
-            onFailure(repo, it)
-        }
+        modulesRepository.getRepo(repo)
+            .onSuccess {
+                localRepository.insertRepo(repo)
+            }.onFailure {
+                onFailure(repo, it)
+            }
     }
 
     fun update(repo: Repo) = viewModelScope.launch {
-        list.update(repo)
-        RepoManger.updateRepo(repo)
+        localRepository.updateRepo(repo)
     }
 
     fun delete(repo: Repo) = viewModelScope.launch {
-        list.remove(repo)
-        RepoManger.deleteRepo(repo)
-        RepoManger.deleteModules(repo.url)
+        localRepository.deleteRepo(repo)
+        localRepository.deleteOnlineByUrl(repo.url)
     }
 
     fun getUpdate(
@@ -84,18 +83,14 @@ class RepositoryViewModel : ViewModel() {
         onFailure: (Throwable) -> Unit
     ) = viewModelScope.launch {
         updateProgress {
-            RepoProvider.getRepo(repo).onSuccess {
-                val new = repo.copy(
-                    name = it.name,
-                    size = it.modules.size,
-                    timestamp = it.timestamp
-                )
-                list.update(new)
-            }.onFailure(onFailure)
+            modulesRepository.getRepo(repo)
+                .onSuccess {
+                    localRepository.updateRepo(it)
+                }.onFailure(onFailure)
         }
     }
 
     fun onDestroy() = viewModelScope.launch {
-        RepoProvider.getRepoAll()
+        modulesRepository.getRepoAll()
     }
 }

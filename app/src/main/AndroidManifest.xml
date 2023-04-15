@@ -38,8 +38,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.activity.main.MainActivity"
+        <activity android:name=".ui.activity.main.MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
@@ -77,6 +76,17 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths">
             </meta-data>
+        </provider>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
         </provider>
         
     </application>

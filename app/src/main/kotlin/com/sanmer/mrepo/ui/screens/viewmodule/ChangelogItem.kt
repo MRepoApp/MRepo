@@ -4,10 +4,24 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,9 +29,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.json.ModuleUpdateItem
+import com.sanmer.mrepo.model.json.ModuleUpdateItem
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.ui.component.ExpandableItem
 import com.sanmer.mrepo.ui.utils.MarkdownText
@@ -25,7 +39,7 @@ import com.sanmer.mrepo.viewmodel.DetailViewModel
 
 @Composable
 fun ChangelogItem(
-    viewModel: DetailViewModel = viewModel()
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
     var expanded by remember { mutableStateOf(false) }
     var versionCode by remember { mutableStateOf(viewModel.module.versionCode) }
@@ -73,9 +87,9 @@ private fun ChangeItem(
 
 @Composable
 fun UpdateItemSelect(
-    viewModel: DetailViewModel = viewModel(),
+    viewModel: DetailViewModel = hiltViewModel(),
     versionCode: Int,
-    onClick: (ModuleUpdateItem) -> Unit,
+    onClick: (ModuleUpdateItem) -> Unit
 ) {
     val selectedValue = viewModel.versions.find {
         it.versionCode == versionCode

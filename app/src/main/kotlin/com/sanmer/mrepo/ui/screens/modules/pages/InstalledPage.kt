@@ -17,11 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
-import com.sanmer.mrepo.data.module.LocalModule
-import com.sanmer.mrepo.data.module.State
+import com.sanmer.mrepo.model.module.LocalModule
+import com.sanmer.mrepo.model.module.State
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.stateIndicator
@@ -30,10 +31,9 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun InstalledPage(
-    viewModel: ModulesViewModel = viewModel()
+    viewModel: ModulesViewModel = hiltViewModel()
 ) {
-    val list = viewModel.localValue
-        .sortedBy { it.name }
+    val list = viewModel.localValue.sortedBy { it.name }
 
     if (list.isEmpty()) {
         PageIndicator(
@@ -67,11 +67,11 @@ private fun ModulesList(
 
 @Composable
 private fun LocalModuleItem(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     module: LocalModule
 ) {
-    val uiState = viewModel.updateUiState(module)
-    val suState by viewModel.suState.collectAsState()
+    val uiState = viewModel.getLocalModuleUiState(module)
+    val suState by viewModel.suState.collectAsState(Event.NON)
 
     ModuleCard(
         name = module.name,

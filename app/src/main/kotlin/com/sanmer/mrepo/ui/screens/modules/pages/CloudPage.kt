@@ -16,11 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.data.module.OnlineModule
-import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.app.Config
+import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
@@ -30,11 +30,10 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun CloudPage(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val list = viewModel.onlineValue
-        .sortedBy { it.name }
+    val list = viewModel.onlineValue.sortedBy { it.name }
 
     if (list.isEmpty()) {
         PageIndicator(
@@ -43,21 +42,21 @@ fun CloudPage(
         )
     } else {
         ModulesList(
-            list = list,
-            navController = navController
+            navController = navController,
+            list = list
         )
     }
 }
 
 @Composable
 private fun ModulesList(
-    list: List<OnlineModule>,
-    navController: NavController
+    navController: NavController,
+    list: List<OnlineModule>
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
-        contentPadding = if (EnvProvider.isRoot) fabPadding(20.dp) else PaddingValues(20.dp),
+        contentPadding = if (Config.isRoot) fabPadding(20.dp) else PaddingValues(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         items(

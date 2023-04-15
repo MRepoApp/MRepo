@@ -6,7 +6,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -16,7 +21,6 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.ui.component.EditItemForSetting
@@ -79,10 +83,10 @@ fun SettingsScreen(
             EditItemForSetting(
                 iconRes = R.drawable.cube_scan_outline,
                 title = stringResource(id = R.string.settings_download_path),
-                text = Config.DOWNLOAD_PATH,
+                text = Config.downloadPath,
                 supportingText = { Text(text = stringResource(id = R.string.dialog_empty_default)) },
                 onChange = {
-                    Config.DOWNLOAD_PATH = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
+                    Config.downloadPath = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
                 }
             )
 
@@ -98,13 +102,13 @@ fun SettingsScreen(
             MenuItemForSetting(
                 iconRes = R.drawable.main_component_outline,
                 title = stringResource(id = R.string.settings_mode),
-                itemList = listOf(
-                    stringResource(id = R.string.settings_mode_root),
-                    stringResource(id = R.string.settings_mode_non_root)
+                items = mapOf(
+                    Config.MODE_ROOT to stringResource(id = R.string.settings_mode_root),
+                    Config.MODE_NON_ROOT to stringResource(id = R.string.settings_mode_non_root)
                 ),
-                selected = EnvProvider.index,
-                onChange = { index, _ ->
-                    EnvProvider.index = index
+                selected = Config.workingMode,
+                onChange = { value, _ ->
+                    Config.workingMode = value
                     that.setup()
                 }
             )

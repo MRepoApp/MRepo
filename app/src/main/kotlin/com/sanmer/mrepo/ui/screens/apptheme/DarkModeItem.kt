@@ -62,7 +62,7 @@ fun DarkModeItem() {
             DarkModeItem(
                 item = it
             ) { id ->
-                Config.DARK_MODE = id
+                Config.darkMode = id
             }
         }
     }
@@ -73,7 +73,8 @@ private fun DarkModeItem(
     item: DarkMode,
     onClick: (Int) -> Unit
 ) {
-    val selected = item.id == Config.DARK_MODE
+    val selected = item.id == Config.darkMode
+
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))

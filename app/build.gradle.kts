@@ -1,15 +1,16 @@
-@file:Suppress("UnstableApiUsage")
-
 plugins {
     id("com.android.application")
+    id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
     kotlin("android")
+    kotlin("kapt")
     kotlin("plugin.parcelize")
 }
 
-val verName = "1.2.2"
-val verCode = 122
+val verName = "1.2.3"
+val verCode = 123
 
+@Suppress("UnstableApiUsage")
 android {
     namespace = "com.sanmer.mrepo"
     compileSdk = 33
@@ -29,7 +30,7 @@ android {
         targetSdk = 33
         versionCode = verCode
         versionName = verName
-        resourceConfigurations += arrayOf("en", "zh-rCN", "fr")
+        resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es")
         multiDexEnabled = true
 
         ndk {
@@ -130,13 +131,20 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("com.google.android.material:material:1.8.0")
+
     implementation("androidx.activity:activity-compose:1.7.0")
     implementation("androidx.navigation:navigation-compose:2.5.3")
-    implementation("androidx.compose.material3:material3:1.1.0-beta01")
-    implementation("com.google.android.material:material:1.9.0-beta01")
+    implementation("androidx.compose.material3:material3:1.1.0-beta02")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     val vLifecycle = "2.6.1"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${vLifecycle}")
@@ -172,6 +180,14 @@ dependencies {
     val vMoshi = "1.14.0"
     implementation("com.squareup.moshi:moshi:${vMoshi}")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:${vMoshi}")
+
+    val vHilt = "2.45"
+    implementation("com.google.dagger:hilt-android:${vHilt}")
+    kapt("com.google.dagger:hilt-android-compiler:${vHilt}")
+
+    val vAndroidxHilt = "1.0.0"
+    implementation("androidx.hilt:hilt-work:${vAndroidxHilt}")
+    kapt("androidx.hilt:hilt-compiler:${vAndroidxHilt}")
 
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("io.noties.markwon:core:4.6.2")

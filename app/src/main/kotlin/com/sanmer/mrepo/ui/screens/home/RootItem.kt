@@ -14,21 +14,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
-import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
 fun RootItem(
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) = Surface(
     shape = RoundedCornerShape(20.dp),
     color = MaterialTheme.colorScheme.surface,
     tonalElevation = 2.dp
 ) {
-    val envState by viewModel.envState.collectAsState()
+    val suEvent by viewModel.suState.collectAsState(Event.NON)
 
     Row(
         modifier = Modifier
@@ -41,7 +41,7 @@ fun RootItem(
             modifier = Modifier
                 .size(28.dp),
             painter = painterResource(id =
-            if (envState.isSucceeded) {
+            if (suEvent.isSucceeded) {
                 R.drawable.tick_circle_outline
             } else {
                 R.drawable.slash_outline
@@ -56,7 +56,7 @@ fun RootItem(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = if (envState.isSucceeded) {
+                text = if (suEvent.isSucceeded) {
                     stringResource(id = R.string.root_status_access,
                         stringResource(id = R.string.root_status_granted)
                     )
@@ -68,10 +68,11 @@ fun RootItem(
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
+
             Text(
-                text = if (envState.isSucceeded) {
+                text = if (suEvent.isSucceeded) {
                     stringResource(id = R.string.root_status_provider,
-                        EnvProvider.version)
+                        viewModel.apiVersion)
                 } else {
                     stringResource(id = R.string.root_status_provider,
                         stringResource(id = R.string.root_status_not_available)

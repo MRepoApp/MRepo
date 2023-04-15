@@ -2,13 +2,19 @@ package com.sanmer.mrepo.works
 
 import android.content.Context
 import androidx.work.*
-import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.app.Config
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object Works {
-    private lateinit var workManager: WorkManager
+@Singleton
+class Works @Inject constructor(
+    @ApplicationContext  private val context: Context
+) {
+    private val workManager by lazy { WorkManager.getInstance(context) }
 
-    private val RepoOneTimeWork = OneTimeWorkRequestBuilder<RepoWork>()
+    private val repoOneTimeWork = OneTimeWorkRequestBuilder<RepoWork>()
         .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
         .setConstraints(
             Constraints.Builder()
@@ -17,17 +23,13 @@ object Works {
         )
         .build()
 
-    private val LocalOneTimeWork = OneTimeWorkRequestBuilder<LocalWork>()
+    private val localOneTimeWork = OneTimeWorkRequestBuilder<LocalWork>()
         .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
         .build()
 
-    fun init(context: Context) {
-        workManager = WorkManager.getInstance(context)
-    }
-
     fun start() = when {
-        EnvProvider.isRoot -> workManager.enqueue(listOf(RepoOneTimeWork, LocalOneTimeWork))
-        EnvProvider.isNonRoot -> workManager.enqueue(RepoOneTimeWork)
+        Config.isRoot -> workManager.enqueue(listOf(repoOneTimeWork, localOneTimeWork))
+        Config.isNonRoot -> workManager.enqueue(repoOneTimeWork)
         else -> null
     }
 }

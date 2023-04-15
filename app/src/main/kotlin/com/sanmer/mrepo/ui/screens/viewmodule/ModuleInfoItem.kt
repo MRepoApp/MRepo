@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.activity.license.LicenseActivity
 import com.sanmer.mrepo.ui.component.NormalChip
@@ -22,7 +22,7 @@ import com.sanmer.mrepo.viewmodel.DetailViewModel
 
 @Composable
 fun ModuleInfoItem(
-    viewModel: DetailViewModel = viewModel()
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 

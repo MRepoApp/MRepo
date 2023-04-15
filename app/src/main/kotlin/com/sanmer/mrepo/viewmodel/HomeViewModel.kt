@@ -9,25 +9,31 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.BuildConfig
-import com.sanmer.mrepo.app.Config
-import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.State
-import com.sanmer.mrepo.data.ModuleManager
-import com.sanmer.mrepo.data.RepoManger
-import com.sanmer.mrepo.data.json.AppUpdate
-import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.app.*
+import com.sanmer.mrepo.model.json.AppUpdate
+import com.sanmer.mrepo.repository.LocalRepository
+import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.expansion.toFile
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import com.sanmer.mrepo.works.Works
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val localRepository: LocalRepository,
+    private val suRepository: SuRepository,
+    private val works: Works
+) : ViewModel() {
+
+    var update by mutableStateOf(AppUpdate.empty())
+        private set
+    val isUpdatable get() = state.isSucceeded && update.versionCode > BuildConfig.VERSION_CODE
+
     val state = object : State(initial = Event.LOADING) {
         override fun setSucceeded(value: Any?) {
             super.setSucceeded(value)
@@ -41,27 +47,25 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    var update: AppUpdate? by mutableStateOf(null)
-        private set
-    val isUpdatable get() = state.isSucceeded &&
-            (update?.versionCode ?: Int.MIN_VALUE) > BuildConfig.VERSION_CODE
+    val suState get() = suRepository.state
+    val apiVersion get() = suRepository.version
+    val enforce get() = suRepository.enforce
 
-    val suState get() = SuProvider.state
-    val envState get() = EnvProvider.state
+    val fs get() = suRepository.fs
 
-    val localCount get() = ModuleManager.local
-    val onlineCount = MutableStateFlow(0)
-    val allCount get() = RepoManger.all
-    val enableCount get() = RepoManger.enable
+    val localCount get() = localRepository.localCount
+    val onlineCount get() = localRepository.onlineCount
+    val allCount get() = localRepository.repoCount
+    val enableCount get() = localRepository.enableCount
 
     init {
         Timber.d("HomeViewModel init")
         getAppUpdate()
 
-        RepoManger.getRepoWithModuleAsFlow().onEach { list ->
-            list.filter { it.repo.enable }
-                .sumOf { it.modules.size }
-                .let { onlineCount.emit(it) }
+        suRepository.state.onEach {
+            if (it.isSucceeded) {
+                works.start()
+            }
         }.launchIn(viewModelScope)
     }
 
@@ -81,12 +85,12 @@ class HomeViewModel : ViewModel() {
     }
 
     @Suppress("RegExpRedundantEscape")
-    private val url get() = update!!.apkUrl.replace(
+    private val url get() = update.apkUrl.replace(
         "\\{.*?\\}".toRegex(), Build.SUPPORTED_ABIS[0]
     )
 
-    private val path get() = Config.DOWNLOAD_PATH.toFile().resolve(
-        "app-${update!!.version}-${Build.SUPPORTED_ABIS[0]}-release.apk"
+    private val path get() = Config.downloadPath.toFile().resolve(
+        "app-${update.version}-${Build.SUPPORTED_ABIS[0]}-release.apk"
     )
 
     fun observeProgress(
@@ -102,7 +106,7 @@ class HomeViewModel : ViewModel() {
         context: Context
     ) = DownloadService.start(
         context = context,
-        name = "${update!!.version}(${update!!.versionCode})",
+        name = "${update.version}(${update.versionCode})",
         path = path.absolutePath,
         url = url,
         install = true

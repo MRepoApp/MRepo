@@ -3,11 +3,30 @@ package com.sanmer.mrepo.ui.component
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -183,30 +202,30 @@ private fun EditDialog(
 }
 
 @Composable
-fun MenuItemForSetting(
+fun <T> MenuItemForSetting(
     @DrawableRes iconRes: Int? = null,
-    itemList: List<String>,
+    items: Map<T, String>,
     title: String,
-    selected: Int,
+    selected: T,
     enabled: Boolean = true,
-    onChange: (Int, String) -> Unit
+    onChange: (T, String) -> Unit
 ) = MenuItemForSetting(
     iconRes = iconRes,
-    itemList = itemList,
+    items = items,
     title = title,
-    selected = itemList[selected],
+    selected = items[selected] ?: items.values.first(),
     enabled = enabled,
     onChange = onChange
 )
 
 @Composable
-fun MenuItemForSetting(
+fun <T> MenuItemForSetting(
     @DrawableRes iconRes: Int? = null,
-    itemList: List<String>,
+    items: Map<T, String>,
     title: String,
     selected: String,
     enabled: Boolean = true,
-    onChange: (Int, String) -> Unit
+    onChange: (T, String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -227,14 +246,14 @@ fun MenuItemForSetting(
             }
         }
     ) {
-        itemList.forEachIndexed { index, value ->
+        items.forEach { (key, value) ->
             MenuItem(
                 value = value,
                 selected = selected
             ) {
                 expanded = false
                 if (value != selected) {
-                    onChange(index, value)
+                    onChange(key, value)
                 }
             }
         }

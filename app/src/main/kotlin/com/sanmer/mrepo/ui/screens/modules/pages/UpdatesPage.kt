@@ -15,12 +15,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
-import com.sanmer.mrepo.data.database.entity.Repo
-import com.sanmer.mrepo.data.module.OnlineModule
+import com.sanmer.mrepo.model.module.OnlineModule
+import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
@@ -30,11 +31,10 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun UpdatesPage(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val list = viewModel.updatableValue
-        .sortedBy { it.name }
+    val list = viewModel.updatableValue.sortedBy { it.name }
 
     if (list.isEmpty()) {
         PageIndicator(
@@ -73,7 +73,7 @@ private fun ModulesList(
 
 @Composable
 private fun OnlineModuleItem(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     module: OnlineModule,
     onView: () -> Unit
 ) {
@@ -87,7 +87,7 @@ private fun OnlineModuleItem(
     var update by remember { mutableStateOf(false) }
     if (update) UpdateDialog(value = module, onView = onView) { update = false }
 
-    val suSate by viewModel.suState.collectAsState()
+    val suState by viewModel.suState.collectAsState(Event.NON)
 
     ModuleCard(
         name = module.name,
@@ -106,7 +106,7 @@ private fun OnlineModuleItem(
         buttons = {
             TextButton(
                 onClick = { update = true },
-                enabled = suSate.isSucceeded
+                enabled = suState.isSucceeded
             ) {
                 Text(
                     modifier = Modifier
@@ -126,7 +126,7 @@ private fun OnlineModuleItem(
 
 @Composable
 private fun UpdateDialog(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     value: OnlineModule,
     onView: () -> Unit,
     onClose: () -> Unit

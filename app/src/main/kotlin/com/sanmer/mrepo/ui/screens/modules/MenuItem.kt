@@ -13,15 +13,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 private sealed class Menu(
     @StringRes val label: Int,
-    @DrawableRes val icon: Int,
+    @DrawableRes val icon: Int
 ) {
     object Cloud : Menu(
         label = R.string.modules_menu_cloud,
@@ -58,7 +58,7 @@ fun MenuItem(
 
 @Composable
 private fun MenuItem(
-    viewModel: ModulesViewModel = viewModel(),
+    viewModel: ModulesViewModel = hiltViewModel(),
     value: Menu,
     onClose: () -> Unit
 ) = DropdownMenuItem(
@@ -77,5 +77,5 @@ private fun MenuItem(
         }
         onClose()
     },
-    enabled = if (value is Menu.Local) EnvProvider.isRoot else true
+    enabled = if (value is Menu.Local) Config.isRoot else true
 )

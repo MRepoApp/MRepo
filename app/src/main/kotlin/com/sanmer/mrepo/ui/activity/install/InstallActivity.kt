@@ -12,19 +12,18 @@ import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.sanmer.mrepo.app.isNotReady
 import com.sanmer.mrepo.app.isSucceeded
-import com.sanmer.mrepo.provider.EnvProvider
-import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.ui.theme.AppTheme
 import com.sanmer.mrepo.viewmodel.InstallViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.io.File
 
+@AndroidEntryPoint
 class InstallActivity : ComponentActivity() {
-    private val viewModel by viewModels<InstallViewModel>()
+    private val viewModel: InstallViewModel by viewModels()
 
     init {
         Timber.d("InstallActivity init")
@@ -34,18 +33,15 @@ class InstallActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        SuProvider.state.onEach {
-            if (it.isNotReady) {
-                viewModel.send("SuProvider init")
-                SuProvider.init(this)
+        cacheDir.resolve("log")
+            .walkBottomUp()
+            .forEach {
+                if (it.name.startsWith("module")) {
+                    it.delete()
+                }
             }
-            if (it.isSucceeded && EnvProvider.event.isNotReady) {
-                viewModel.send("EnvProvider init")
-                EnvProvider.init()
-            }
-        }.launchIn(lifecycleScope)
 
-        EnvProvider.state.onEach {
+        viewModel.suState.onEach {
             if (it.isSucceeded) {
                 val uri = intent.data
                 if (uri != null) {

@@ -14,10 +14,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.provider.EnvProvider
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.ui.utils.HtmlText
 import com.sanmer.mrepo.ui.utils.Logo
 import com.sanmer.mrepo.ui.utils.none
@@ -25,7 +25,7 @@ import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val context = LocalContext.current
@@ -53,8 +53,8 @@ fun HomeScreen(
                 .padding(all = 20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            if (EnvProvider.isRoot) RootItem()
-            if (EnvProvider.isNonRoot) NonRootItem()
+            if (Config.isRoot) RootItem()
+            if (Config.isNonRoot) NonRootItem()
             if (viewModel.isUpdatable) AppUpdateItem()
             InfoItem()
         }
@@ -81,9 +81,10 @@ private fun HomeTopBar(
     },
     actions = {
         var expanded by remember { mutableStateOf(false) }
+
         IconButton(
             onClick = { expanded = true },
-            enabled = EnvProvider.isRoot
+            enabled = Config.isRoot
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.refresh_outline),

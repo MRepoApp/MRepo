@@ -16,11 +16,11 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.provider.EnvProvider
 import com.sanmer.mrepo.ui.component.CircularProgressIndicator
 import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.component.PageIndicator
@@ -33,8 +33,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ViewModuleScreen(
-    viewModel: DetailViewModel = viewModel(),
-    navController: NavController,
+    viewModel: DetailViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -74,7 +74,7 @@ fun ViewModuleScreen(
 
 @Composable
 private fun ViewModule(
-    viewModel: DetailViewModel = viewModel(),
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier
@@ -94,7 +94,7 @@ private fun ViewModule(
 
 @Composable
 private fun ProgressItem(
-    viewModel: DetailViewModel = viewModel()
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
     val owner = LocalLifecycleOwner.current
     var progress by remember { mutableStateOf(0f) }
@@ -119,7 +119,7 @@ private fun ProgressItem(
 
 @Composable
 private fun ViewModuleTopBar(
-    viewModel: DetailViewModel = viewModel(),
+    viewModel: DetailViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
 ) = NavigateUpTopBar(
@@ -147,7 +147,7 @@ private fun ViewModuleTopBar(
 @Composable
 private fun InstallButton(
     context: Context = LocalContext.current,
-    viewModel: DetailViewModel = viewModel()
+    viewModel: DetailViewModel = hiltViewModel()
 ) = Button(
     modifier = Modifier
         .fillMaxWidth(),
@@ -156,7 +156,7 @@ private fun InstallButton(
     onClick = {
         viewModel.installer(context)
     },
-    enabled = EnvProvider.isRoot
+    enabled = Config.isRoot
 ) {
     Text(
         text = stringResource(id = R.string.module_install),
@@ -184,7 +184,7 @@ private fun Loading() = PageIndicator(
 
 @Composable
 private fun Failed(
-    viewModel: DetailViewModel = viewModel()
+    viewModel: DetailViewModel = hiltViewModel()
 ) = PageIndicator(
     icon = R.drawable.danger_outline,
     text = viewModel.message ?: stringResource(id = R.string.unknown_error)

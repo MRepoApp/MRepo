@@ -12,11 +12,11 @@ import okhttp3.ResponseBody
 import java.io.File
 
 object HttpUtils {
-    suspend fun <T>request(
+    suspend inline fun <reified T> request(
         url: String,
-        get: (ResponseBody) -> T
+        crossinline get: (ResponseBody) -> T
     ) =  withContext(Dispatchers.IO) {
-        runRequest(get) {
+        runRequest(get = get) {
             val client = OkHttpClient()
             val request = Request.Builder()
                 .url(url)

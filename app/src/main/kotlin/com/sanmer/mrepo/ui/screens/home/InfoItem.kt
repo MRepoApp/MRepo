@@ -15,23 +15,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
-import com.sanmer.mrepo.provider.SELinux
 import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
 fun InfoItem(
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) = OutlinedCard(
     shape = RoundedCornerShape(20.dp)
 ) {
-    val suState by viewModel.suState.collectAsState()
+    val suEvent by viewModel.suState.collectAsState(Event.NON)
     val enable by viewModel.enableCount.collectAsState(0)
     val all by viewModel.allCount.collectAsState(0)
     val local by viewModel.localCount.collectAsState(0)
-    val online by viewModel.onlineCount.collectAsState()
+    val online by viewModel.onlineCount.collectAsState(0)
 
     Column(
         modifier = Modifier
@@ -73,10 +73,10 @@ fun InfoItem(
             value = Build.VERSION.SECURITY_PATCH
         )
 
-        if (suState.isSucceeded) {
+        if (suEvent.isSucceeded) {
             InfoItem(
                 key = stringResource(id = R.string.device_selinux_status),
-                value = when (SELinux.Root.enforce) {
+                value = when (viewModel.enforce) {
                     0 -> stringResource(id = R.string.selinux_status_permissive)
                     1 -> stringResource(id = R.string.selinux_status_enforcing)
                     else -> stringResource(id = R.string.selinux_status_disabled)
