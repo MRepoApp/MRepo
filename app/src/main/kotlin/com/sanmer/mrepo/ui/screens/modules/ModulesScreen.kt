@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -43,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -58,7 +60,6 @@ import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
-import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.navigation.navigateToHome
 import com.sanmer.mrepo.ui.screens.modules.pages.CloudPage
 import com.sanmer.mrepo.ui.screens.modules.pages.InstalledPage
@@ -133,7 +134,8 @@ fun ModulesScreen(
             ) {
                 LinearProgressIndicator(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    strokeCap = StrokeCap.Round
                 )
             }
         }

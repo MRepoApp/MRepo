@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -21,8 +22,6 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.ui.component.CircularProgressIndicator
-import com.sanmer.mrepo.ui.component.LinearProgressIndicator
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.navigateBack
@@ -111,7 +110,8 @@ private fun ProgressItem(
                 modifier = Modifier
                     .weight(1f)
                     .height(8.dp),
-                progress = progress
+                progress = progress,
+                strokeCap = StrokeCap.Round
             )
         }
     }
@@ -170,7 +170,8 @@ private fun Loading() = PageIndicator(
         CircularProgressIndicator(
             modifier = Modifier
                 .size(50.dp),
-            strokeWidth = 5.dp
+            strokeWidth = 5.dp,
+            strokeCap = StrokeCap.Round
         )
     },
     text = {

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,7 +38,6 @@ import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.State
 import com.sanmer.mrepo.model.json.License
-import com.sanmer.mrepo.ui.component.CircularProgressIndicator
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.MarkdownText
@@ -191,7 +192,8 @@ private fun Loading() = PageIndicator(
         CircularProgressIndicator(
             modifier = Modifier
                 .size(50.dp),
-            strokeWidth = 5.dp
+            strokeWidth = 5.dp,
+            strokeCap = StrokeCap.Round
         )
     },
     text = {
