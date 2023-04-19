@@ -30,7 +30,7 @@ android {
         targetSdk = 33
         versionCode = verCode
         versionName = verName
-        resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es")
+        resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es", "ar")
         multiDexEnabled = true
 
         ndk {

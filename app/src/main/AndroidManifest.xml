@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme"
         android:localeConfig="@xml/locales_config"
         android:enableOnBackInvokedCallback="true"
+        android:supportsRtl="true"
         tools:targetApi="tiramisu">
 
         <activity
