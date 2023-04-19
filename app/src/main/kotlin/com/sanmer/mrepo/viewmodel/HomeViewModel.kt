@@ -9,7 +9,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.BuildConfig
-import com.sanmer.mrepo.app.*
+import com.sanmer.mrepo.app.Config
+import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.app.State
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.model.json.AppUpdate
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
@@ -18,7 +22,8 @@ import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.expansion.toFile
 import com.sanmer.mrepo.works.Works
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -70,7 +75,11 @@ class HomeViewModel @Inject constructor(
     private fun getAppUpdate() = viewModelScope.launch {
         Timber.d("getAppUpdate")
         HttpUtils.requestJson<AppUpdate>(Const.UPDATE_URL.format("stable"))
-            .onSuccess { update ->
+            .onSuccess {
+                val update = it.copy(
+                    apkUrl = it.apkUrl.format(Build.SUPPORTED_ABIS[0])
+                )
+
                 HttpUtils.requestString(update.changelog).onSuccess { text ->
                     state.setSucceeded(update.copy(changelog = text))
                 }.onFailure {
@@ -82,31 +91,25 @@ class HomeViewModel @Inject constructor(
             }
     }
 
-    @Suppress("RegExpRedundantEscape")
-    private val url get() = update.apkUrl.replace(
-        "\\{.*?\\}".toRegex(), Build.SUPPORTED_ABIS[0]
-    )
-
-    private val path get() = Config.downloadPath.toFile().resolve(
-        "MRepo-${update.version}(${update.versionCode}).apk"
-    )
-
     fun observeProgress(
         owner: LifecycleOwner,
         callback: (Float) -> Unit
     ) = DownloadService.observeProgress(owner) { p, v ->
-        if (v.url == url) {
+        if (v.url == update.apkUrl) {
             callback(p)
         }
     }
 
-    fun installer(
-        context: Context
-    ) = DownloadService.start(
-        context = context,
-        name = "${update.version}(${update.versionCode})",
-        path = path.absolutePath,
-        url = url,
-        install = true
-    )
+    fun installer(context: Context) {
+        val name = "MRepo-${update.version}(${update.versionCode})"
+        val path = Config.downloadPath.toFile().resolve("${name}.apk")
+
+        DownloadService.start(
+            context = context,
+            name = name,
+            path = path,
+            url = update.apkUrl,
+            install = true
+        )
+    }
 }

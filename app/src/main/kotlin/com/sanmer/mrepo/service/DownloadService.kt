@@ -22,7 +22,11 @@ import com.sanmer.mrepo.utils.expansion.parcelable
 import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -245,5 +249,11 @@ class DownloadService : LifecycleService() {
             }
             context.startService(intent)
         }
+
+        fun start(
+            context: Context,
+            name: String, path: File,
+            url: String, install: Boolean
+        ) = start(context, name,  path.absolutePath, url, install)
     }
 }
