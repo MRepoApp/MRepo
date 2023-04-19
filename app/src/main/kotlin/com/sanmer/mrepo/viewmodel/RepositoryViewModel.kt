@@ -91,8 +91,4 @@ class RepositoryViewModel @Inject constructor(
                 }.onFailure(onFailure)
         }
     }
-
-    fun onDestroy() = viewModelScope.launch {
-        modulesRepository.getRepoAll()
-    }
 }

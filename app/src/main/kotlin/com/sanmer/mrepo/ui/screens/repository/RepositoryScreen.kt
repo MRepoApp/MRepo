@@ -71,10 +71,6 @@ fun RepositoryScreen(
 
     BackHandler { navController.navigateBack() }
 
-    DisposableEffect(viewModel){
-        onDispose { viewModel.onDestroy() }
-    }
-
     var value = Repo(url = "")
     var message: String? by remember { mutableStateOf(null) }
 
