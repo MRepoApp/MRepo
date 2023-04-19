@@ -22,7 +22,6 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.ui.activity.log.LogActivity
-import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.ui.component.EditItemForSetting
 import com.sanmer.mrepo.ui.component.MenuItemForSetting
 import com.sanmer.mrepo.ui.component.NormalItemForSetting
@@ -38,7 +37,6 @@ fun SettingsScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
-    val that = context as MainActivity
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     BackHandler { navController.navigateToHome() }
@@ -109,7 +107,6 @@ fun SettingsScreen(
                 selected = Config.workingMode,
                 onChange = { value, _ ->
                     Config.workingMode = value
-                    that.setup()
                 }
             )
 
