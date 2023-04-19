@@ -51,8 +51,6 @@ class HomeViewModel @Inject constructor(
     val apiVersion get() = suRepository.version
     val enforce get() = suRepository.enforce
 
-    val fs get() = suRepository.fs
-
     val localCount get() = localRepository.localCount
     val onlineCount get() = localRepository.onlineCount
     val allCount get() = localRepository.repoCount
@@ -71,7 +69,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getAppUpdate() = viewModelScope.launch {
         Timber.d("getAppUpdate")
-        HttpUtils.requestJson<AppUpdate>(Const.UPDATE_URL + "stable.json")
+        HttpUtils.requestJson<AppUpdate>(Const.UPDATE_URL.format("stable"))
             .onSuccess { update ->
                 HttpUtils.requestString(update.changelog).onSuccess { text ->
                     state.setSucceeded(update.copy(changelog = text))

@@ -19,8 +19,8 @@ interface ModulesRepoApi {
     fun getUpdate(@Path("id") id: String): Call<ModuleUpdate>
 
     companion object {
-        fun create(repoUrl: String): ModulesRepoApi {
-            if (BuildConfig.DEBUG) Timber.d("RepoService.create: $repoUrl")
+        fun build(repoUrl: String): ModulesRepoApi {
+            if (BuildConfig.DEBUG) Timber.d("repoUrl: $repoUrl")
 
             return Retrofit.Builder()
                 .baseUrl(repoUrl)

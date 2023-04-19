@@ -1,9 +1,9 @@
 package com.sanmer.mrepo.api.local
 
 import android.content.Context
+import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
-import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.utils.ModuleUtils
 import com.sanmer.mrepo.utils.expansion.output
 import com.topjohnwu.superuser.Shell
@@ -15,7 +15,7 @@ import java.io.File
 
 class KernelSuModulesApi(private val context: Context) {
 
-    private var mVersion = "kernelsu"
+    private var version = "kernelsu"
     private val ksud = "/data/adb/ksud"
 
     fun build(listener: ApiInitializerListener): ModulesLocalApi {
@@ -24,7 +24,7 @@ class KernelSuModulesApi(private val context: Context) {
         Shell.cmd("su -v").submit {
             if (it.isSuccess) {
                 val versionCode = ShellUtils.fastCmd("su -V")
-                mVersion = "${it.output} ($versionCode)"
+                version = "${it.output} ($versionCode)"
                 listener.onSuccess()
 
             } else {
@@ -34,32 +34,17 @@ class KernelSuModulesApi(private val context: Context) {
         }
 
         return object : ModulesLocalApi {
-            override val version: String get() = mVersion
-
-            override suspend fun getModules(): Result<List<LocalModule>> {
-                return this@KernelSuModulesApi.getModules()
-            }
-
-            override fun enable(module: LocalModule) {
-                this@KernelSuModulesApi.enable(module)
-            }
-
-            override fun disable(module: LocalModule) {
-                this@KernelSuModulesApi.disable(module)
-            }
-
-            override fun remove(module: LocalModule) {
-                this@KernelSuModulesApi.remove(module)
-            }
-
+            override val version: String get() = this@KernelSuModulesApi.version
+            override suspend fun getModules() = this@KernelSuModulesApi.getModules()
+            override fun enable(module: LocalModule) = this@KernelSuModulesApi.enable(module)
+            override fun disable(module: LocalModule) = this@KernelSuModulesApi.disable(module)
+            override fun remove(module: LocalModule) = this@KernelSuModulesApi.remove(module)
             override fun install(
                 console: (String) -> Unit,
                 onSuccess: (LocalModule) -> Unit,
                 onFailure: () -> Unit,
                 zipFile: File
-            ) {
-                return this@KernelSuModulesApi.install(console, onSuccess, onFailure, zipFile)
-            }
+            ) = this@KernelSuModulesApi.install(console, onSuccess, onFailure, zipFile)
         }
     }
 
@@ -88,7 +73,7 @@ class KernelSuModulesApi(private val context: Context) {
     }
 
     private fun getModules() = runCatching {
-        Timber.i("getLocal: $mVersion")
+        Timber.i("getLocal: $version")
 
         val out = Shell.cmd("$ksud module list").exec().out
         val text = out.joinToString("\n").ifBlank { "[]" }

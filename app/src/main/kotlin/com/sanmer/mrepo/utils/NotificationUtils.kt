@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -40,7 +40,7 @@ object NotificationUtils {
     fun PermissionState() {
         val permissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 
-        LaunchedEffect(permissionState.status) {
+        SideEffect {
             if (!permissionState.status.isGranted) {
                 permissionState.launchPermissionRequest()
             }

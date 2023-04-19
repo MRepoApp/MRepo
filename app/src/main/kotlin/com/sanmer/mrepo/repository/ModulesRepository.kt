@@ -25,7 +25,7 @@ class ModulesRepository @Inject constructor(
     suspend fun getRepoAll() = withContext(Dispatchers.IO) {
         localRepository.getRepoAll().map { repo ->
             runRequest {
-                val api = ModulesRepoApi.create(repo.url)
+                val api = ModulesRepoApi.build(repo.url)
                 return@runRequest api.getModules().execute()
             }.onSuccess { data ->
                 val new = repo.copy(
@@ -46,7 +46,7 @@ class ModulesRepository @Inject constructor(
     suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
         runRequest(
             run = {
-                val api = ModulesRepoApi.create(repo.url)
+                val api = ModulesRepoApi.build(repo.url)
                 api.getModules().execute()
             }
         ) {
@@ -60,7 +60,7 @@ class ModulesRepository @Inject constructor(
 
     suspend fun getUpdate(repoUrl: String, moduleId: String) = withContext(Dispatchers.IO) {
         runRequest {
-            val api = ModulesRepoApi.create(repoUrl)
+            val api = ModulesRepoApi.build(repoUrl)
             api.getUpdate(moduleId).execute()
         }
     }

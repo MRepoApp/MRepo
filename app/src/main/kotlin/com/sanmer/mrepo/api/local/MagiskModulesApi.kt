@@ -15,7 +15,7 @@ import java.io.File
 
 class MagiskModulesApi(private val context: Context) {
 
-    private var mVersion = "magisk"
+    private var version = "magisk"
     private val path = "/data/adb/modules"
     private var isZygiskEnabled = false
 
@@ -33,7 +33,7 @@ class MagiskModulesApi(private val context: Context) {
         Shell.cmd("su -v").submit {
             if (it.isSuccess) {
                 val versionCode = ShellUtils.fastCmd("su -V")
-                mVersion = "${it.output} ($versionCode)"
+                version = "${it.output} ($versionCode)"
                 isZygisk()
                 listener.onSuccess()
 
@@ -44,32 +44,17 @@ class MagiskModulesApi(private val context: Context) {
         }
 
         return object : ModulesLocalApi {
-            override val version: String get() = mVersion
-
-            override suspend fun getModules(): Result<List<LocalModule>> {
-                return this@MagiskModulesApi.getModules()
-            }
-
-            override fun enable(module: LocalModule) {
-                this@MagiskModulesApi.enable(module)
-            }
-
-            override fun disable(module: LocalModule) {
-                this@MagiskModulesApi.disable(module)
-            }
-
-            override fun remove(module: LocalModule) {
-                this@MagiskModulesApi.remove(module)
-            }
-
+            override val version: String get() = this@MagiskModulesApi.version
+            override suspend fun getModules() = this@MagiskModulesApi.getModules()
+            override fun enable(module: LocalModule) = this@MagiskModulesApi.enable(module)
+            override fun disable(module: LocalModule) = this@MagiskModulesApi.disable(module)
+            override fun remove(module: LocalModule) = this@MagiskModulesApi.remove(module)
             override fun install(
                 console: (String) -> Unit,
                 onSuccess: (LocalModule) -> Unit,
                 onFailure: () -> Unit,
                 zipFile: File
-            ) {
-                return this@MagiskModulesApi.install(console, onSuccess, onFailure, zipFile)
-            }
+            ) = this@MagiskModulesApi.install(console, onSuccess, onFailure, zipFile)
         }
     }
 
