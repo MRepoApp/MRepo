@@ -8,7 +8,6 @@ import com.sanmer.mrepo.utils.MediaStoreUtils
 import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.timber.DebugTree
 import com.sanmer.mrepo.utils.timber.ReleaseTree
-import com.sanmer.mrepo.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject

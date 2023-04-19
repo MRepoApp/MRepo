@@ -41,14 +41,8 @@ class HomeViewModel @Inject constructor(
 
     val state = object : State(initial = Event.LOADING) {
         override fun setSucceeded(value: Any?) {
-            super.setSucceeded(value)
             update = value as AppUpdate
-        }
-
-        override fun setFailed(value: Any?) {
-            super.setFailed(value)
-            val e = value as Throwable
-            Timber.e(e.message)
+            super.setSucceeded(value)
         }
     }
 
@@ -73,7 +67,6 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getAppUpdate() = viewModelScope.launch {
-        Timber.d("getAppUpdate")
         HttpUtils.requestJson<AppUpdate>(Const.UPDATE_URL.format("stable"))
             .onSuccess {
                 val update = it.copy(
@@ -85,9 +78,9 @@ class HomeViewModel @Inject constructor(
                 }.onFailure {
                     state.setSucceeded(update)
                 }
-            }
-            .onFailure {
+            }.onFailure {
                 state.setFailed(it)
+                Timber.e(it, "getAppUpdate")
             }
     }
 

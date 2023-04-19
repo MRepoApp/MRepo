@@ -74,6 +74,6 @@ object ModuleUtils {
             }
         }
     }.onFailure {
-        Timber.e("parseProps: ${it.message}")
+        Timber.e(it, "parseProps")
     }
 }

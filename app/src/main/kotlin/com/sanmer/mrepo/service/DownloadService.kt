@@ -78,7 +78,7 @@ class DownloadService : LifecycleService() {
         val notificationIdFinish = notificationId + 1
 
         val path = item.path.toFile()
-        Timber.d("Download: ${item.url} to ${item.path}")
+        Timber.d("download: ${item.url} to ${item.path}")
 
         val notification = NotificationUtils
             .buildNotification(context, Const.CHANNEL_ID_DOWNLOAD)
@@ -123,7 +123,7 @@ class DownloadService : LifecycleService() {
                     runCatching {
                         apkInstall(path)
                     }.onFailure {
-                        Timber.e("Install failed: ${it.message}")
+                        Timber.e(it, "apk install failed")
                     }
                 }
             }

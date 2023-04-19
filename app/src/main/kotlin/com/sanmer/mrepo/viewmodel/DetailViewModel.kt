@@ -38,8 +38,8 @@ class DetailViewModel @Inject constructor(
 
     val state = object : State(initial = Event.LOADING) {
         override fun setFailed(value: Any?) {
-            super.setFailed(value)
             value?.let { message = value.toString() }
+            super.setFailed(value)
         }
     }
 
@@ -69,7 +69,7 @@ class DetailViewModel @Inject constructor(
                 module = it
                 getUpdates()
             }.onFailure {
-                Timber.d("getModule: ${it.message}")
+                Timber.e(it, "getModule")
                 state.setFailed(it.message)
             }
         }
@@ -88,15 +88,21 @@ class DetailViewModel @Inject constructor(
             }
         }
 
-        module.repoUrls.map { url ->
+        val result = module.repoUrls.map { url ->
             modulesRepository.getUpdate(url, module.id)
                 .onSuccess {
                     return@map Result.success(it.copy(repoUrl = url))
+                }.onFailure {
+                    Timber.e(it, "getUpdates")
                 }
-                .onFailure {
-                    Timber.d("getUpdates: ${it.message}")
-                }
-        }.mapNotNull { it.getOrNull() }.let { list ->
+        }
+
+        if (result.all { it.isFailure }) {
+            state.setFailed(result.firstOrNull()?.exceptionOrNull())
+            return
+        }
+
+        result.mapNotNull { it.getOrNull() }.let { list ->
             list.sortedByDescending { it.timestamp }
                 .forEach(update)
 
@@ -104,7 +110,7 @@ class DetailViewModel @Inject constructor(
                 versions.sortedByDescending { it.versionCode }
                 state.setSucceeded()
             } else {
-                state.setFailed()
+                state.setFailed("The versions is empty")
             }
         }
     }
@@ -121,7 +127,7 @@ class DetailViewModel @Inject constructor(
                 changelog = it
             }.onFailure {
                 changelog = it.message
-                Timber.d("getChangelog: ${it.message}")
+                Timber.e(it, "getChangelog")
             }
         }
     }
@@ -137,8 +143,7 @@ class DetailViewModel @Inject constructor(
 
     val ModuleUpdateItem.path get() = Config.downloadPath.toFile().resolve(
         "${module.name}_${version}_${versionCode}.zip"
-            .replace(" ", "_")
-            .replace("/", "_")
+            .replace("[\\s+|/]".toRegex(), "_")
     )
 
     fun downloader(
@@ -165,8 +170,7 @@ class DetailViewModel @Inject constructor(
 
     val OnlineModule.path get() = Config.downloadPath.toFile().resolve(
         "${name}_${version}_${versionCode}.zip"
-            .replace(" ", "_")
-            .replace("/", "_")
+            .replace("[\\s+|/]".toRegex(), "_")
     )
 
     fun installer(

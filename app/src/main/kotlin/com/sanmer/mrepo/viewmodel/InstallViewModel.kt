@@ -31,8 +31,8 @@ class InstallViewModel @Inject constructor(
 
     val state = object : State(initial = Event.LOADING) {
         override fun setFailed(value: Any?) {
-            super.setFailed(value)
             value?.let { send(it.toString())}
+            super.setFailed(value)
         }
     }
 

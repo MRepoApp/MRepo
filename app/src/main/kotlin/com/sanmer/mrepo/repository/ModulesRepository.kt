@@ -19,7 +19,7 @@ class ModulesRepository @Inject constructor(
         .onSuccess {
             localRepository.insertLocal(it)
         }.onFailure {
-            Timber.e("getLocalAll: ${it.message}")
+            Timber.e(it, "getLocalAll")
         }
 
     suspend fun getRepoAll() = withContext(Dispatchers.IO) {
@@ -38,7 +38,7 @@ class ModulesRepository @Inject constructor(
                 val list = data.modules.map { it.toEntity(repo.url) }
                 localRepository.insertOnline(list)
             }.onFailure {
-                Timber.d("getRepoAll: ${it.message}")
+                Timber.d(it, "getRepoAll: ${repo.url}")
             }
         }
     }

@@ -50,15 +50,13 @@ fun LicenseScreen(licenseId: String) {
     var message: String? by remember { mutableStateOf(null) }
     val state = object : State(initial = Event.LOADING) {
         override fun setSucceeded(value: Any?) {
-            super.setSucceeded(value)
             license = value as License
+            super.setSucceeded(value)
         }
 
         override fun setFailed(value: Any?) {
+            message = value.toString()
             super.setFailed(value)
-            val error = value as Throwable
-            message = error.message
-            Timber.e(error.message)
         }
     }
 
@@ -67,6 +65,7 @@ fun LicenseScreen(licenseId: String) {
             state.setSucceeded(it)
         }.onFailure {
             state.setFailed(it)
+            Timber.e(it, "getLicense: $licenseId")
         }
     }
 
