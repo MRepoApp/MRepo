@@ -28,6 +28,9 @@ interface RepoDao {
     @Query("SELECT COUNT(*) FROM repo WHERE enable LIKE 1")
     fun getEnableCount(): Flow<Int>
 
+    @Query("SELECT SUM(size) FROM repo WHERE enable LIKE 1")
+    fun getModuleCount(): Flow<Int>
+
     @Query("SELECT * FROM repo WHERE url LIKE :url LIMIT 1")
     fun getRepoByUrl(url: String): Repo
 

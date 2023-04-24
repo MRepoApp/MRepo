@@ -10,15 +10,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
@@ -27,11 +27,8 @@ fun InfoItem(
 ) = OutlinedCard(
     shape = RoundedCornerShape(20.dp)
 ) {
-    val suEvent by viewModel.suState.collectAsState(Event.NON)
-    val enable by viewModel.enableCount.collectAsState(0)
-    val all by viewModel.allCount.collectAsState(0)
-    val local by viewModel.localCount.collectAsState(0)
-    val online by viewModel.onlineCount.collectAsState(0)
+    val suEvent by viewModel.suState.collectAsStateWithLifecycle()
+    val count by viewModel.count.collectAsStateWithLifecycle(LocalRepository.Count.zeros())
 
     Column(
         modifier = Modifier
@@ -41,12 +38,12 @@ fun InfoItem(
     ) {
         InfoItem(
             key = stringResource(id = R.string.modules_status_repo),
-            value = "$enable / $all"
+            value = "${count.enable} / ${count.all}"
         )
 
         InfoItem(
             key = stringResource(id = R.string.modules_status_module),
-            value = "$local / $online"
+            value = "${count.local} / ${count.online}"
         )
 
         InfoItem(

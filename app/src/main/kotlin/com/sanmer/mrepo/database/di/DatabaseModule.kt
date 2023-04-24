@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.sanmer.mrepo.database.ModuleDatabase
 import com.sanmer.mrepo.database.RepoDatabase
+import com.sanmer.mrepo.database.dao.ModuleDao
+import com.sanmer.mrepo.database.dao.RepoDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,7 +33,7 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesModuleDao(db: ModuleDatabase) = db.moduleDao()
+    fun providesModuleDao(db: ModuleDatabase): ModuleDao = db.moduleDao()
 
     @Provides
     @Singleton
@@ -49,7 +51,7 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesRepoDao(db: RepoDatabase) = db.repoDao()
+    fun providesRepoDao(db: RepoDatabase): RepoDao = db.repoDao()
 
     @Suppress("SameParameterValue")
     private fun dbRename(context: Context, old: String, new: String) {

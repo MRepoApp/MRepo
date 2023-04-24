@@ -16,10 +16,8 @@ import com.sanmer.mrepo.utils.expansion.merge
 import com.sanmer.mrepo.utils.expansion.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -32,16 +30,27 @@ class LocalRepository @Inject constructor(
     private val repoDao: RepoDao,
     @ApplicationScope private val externalScope: CoroutineScope
 ) {
-    val localCount get() = moduleDao.getLocalCount()
-    val onlineCount = MutableStateFlow(0)
-    val repoCount get() = repoDao.getRepoCount()
-    val enableCount get() = repoDao.getEnableCount()
+    data class Count(
+        val local: Int,
+        val online: Int,
+        val all: Int,
+        val enable: Int,
+    ) {
+        companion object {
+            fun zeros() = Count(0, 0, 0, 0)
+        }
+    }
+
+    val count = combine(
+        moduleDao.getLocalCount(),
+        repoDao.getModuleCount(),
+        repoDao.getRepoCount(),
+        repoDao.getEnableCount(),
+    ) { args: Array<Int> ->
+        Count(args[0], args[1], args[2], args[3])
+    }
 
     init {
-        getOnlineAllAsFlow().onEach {
-            onlineCount.value = it.size
-        }.launchIn(externalScope)
-
         externalScope.launch {
             if (!Config.isSetup) return@launch
 
@@ -101,12 +110,11 @@ class LocalRepository @Inject constructor(
     }
 
     suspend fun getOnlineAll() = withContext(Dispatchers.IO) {
-        val list = repoDao.getRepoWithModule()
+        repoDao.getRepoWithModule()
             .filter { it.repo.enable }
             .map { it.modules }
             .merge()
-
-        return@withContext list.toModuleList()
+            .toModuleList()
     }
 
     suspend fun insertOnline(list: List<OnlineModuleEntity>) = withContext(Dispatchers.IO) {

@@ -49,11 +49,7 @@ class HomeViewModel @Inject constructor(
     val suState get() = suRepository.state
     val apiVersion get() = suRepository.version
     val enforce get() = suRepository.enforce
-
-    val localCount get() = localRepository.localCount
-    val onlineCount get() = localRepository.onlineCount
-    val allCount get() = localRepository.repoCount
-    val enableCount get() = localRepository.enableCount
+    val count get() = localRepository.count
 
     init {
         Timber.d("HomeViewModel init")
