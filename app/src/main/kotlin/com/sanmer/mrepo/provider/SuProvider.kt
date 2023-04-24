@@ -13,20 +13,21 @@ import com.sanmer.mrepo.api.local.MagiskModulesApi
 import com.sanmer.mrepo.api.local.ModulesLocalApi
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.model.module.LocalModule
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
+import java.io.File
 
-class SuProvider(private val appContext: Context) : ISuProvider.Stub() {
+class SuProvider(private val appContext: Context) : ISuProvider.Stub(), ModulesLocalApi {
 
     val state = MutableStateFlow(Event.NON)
     val event: Event get() = state.value
 
     private lateinit var mProvider: ISuProvider
     private lateinit var mApi: ModulesLocalApi
-    val api get() = mApi
 
     init {
         Shell.enableVerboseLogging = BuildConfig.DEBUG
@@ -99,4 +100,16 @@ class SuProvider(private val appContext: Context) : ISuProvider.Stub() {
     override fun getContext(): String = mProvider.context
     override fun getEnforce(): Int = mProvider.enforce
     override fun getFileSystemService(): IBinder = mProvider.fileSystemService
+
+    override val version: String get() = mApi.version
+    override suspend fun getModules() = mApi.getModules()
+    override fun enable(module: LocalModule) = mApi.enable(module)
+    override fun disable(module: LocalModule) = mApi.disable(module)
+    override fun remove(module: LocalModule) = mApi.remove(module)
+    override fun install(
+        console: (String) -> Unit,
+        onSuccess: (LocalModule) -> Unit,
+        onFailure: () -> Unit,
+        zipFile: File
+    ) = mApi.install(console, onSuccess, onFailure, zipFile)
 }

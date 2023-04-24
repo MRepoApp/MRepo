@@ -25,23 +25,13 @@ object ProviderModule {
     fun providesSuProvider(
         @ApplicationContext context: Context,
         @MainScope externalScope: CoroutineScope
-    ): SuProvider {
-        val suProvider = SuProvider(context)
-
-        suProvider.state.onEach {
+    ): SuProvider = SuProvider(context).apply {
+        state.onEach {
             if (it.isNotReady && Config.isRoot) {
-                suProvider.init()
+                init()
             }
         }.launchIn(externalScope)
-
-        return suProvider
     }
-
-    @Provides
-    @Singleton
-    fun providesModulesLocalApi(
-        suProvider: SuProvider
-    ) = suProvider.api
 
     @Provides
     @Singleton
