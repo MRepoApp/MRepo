@@ -28,12 +28,14 @@ class ModulesRepository @Inject constructor(
         }.launchIn(externalScope)
     }
 
-    suspend fun getLocalAll() = suRepository.getModules()
-        .onSuccess {
-            localRepository.insertLocal(it)
-        }.onFailure {
-            Timber.e(it, "getLocalAll")
-        }
+    suspend fun getLocalAll() = withContext(Dispatchers.IO) {
+        suRepository.getModules()
+            .onSuccess {
+                localRepository.insertLocal(it)
+            }.onFailure {
+                Timber.e(it, "getLocalAll")
+            }
+    }
 
     suspend fun getRepoAll() = withContext(Dispatchers.IO) {
         localRepository.getRepoAll()
@@ -46,7 +48,7 @@ class ModulesRepository @Inject constructor(
                     val list = data.modules.map { it.toEntity(repo.url) }
                     localRepository.insertOnline(list)
                 }.onFailure {
-                    Timber.d(it, "getRepoAll: ${repo.url}")
+                    Timber.e(it, "getRepoAll: ${repo.url}")
                 }
             }
     }
