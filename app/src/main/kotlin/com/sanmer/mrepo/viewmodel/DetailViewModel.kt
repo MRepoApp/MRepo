@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +20,7 @@ import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.expansion.toFile
 import com.sanmer.mrepo.utils.expansion.update
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -53,6 +53,14 @@ class DetailViewModel @Inject constructor(
     val hasLabel get() = hasLicense
 
     var message: String? = null
+
+    val progress get() = DownloadService.progress.map {
+        if (it.second?.name == module.name){
+            it.first
+        } else {
+            0f
+        }
+    }
 
     init {
         Timber.d("DetailViewModel init: $id")
@@ -129,15 +137,6 @@ class DetailViewModel @Inject constructor(
                 changelog = it.message
                 Timber.e(it, "getChangelog")
             }
-        }
-    }
-
-    fun observeProgress(
-        owner: LifecycleOwner,
-        callback: (Float) -> Unit
-    ) = DownloadService.observeProgress(owner) { p, v ->
-        if (v.name == module.name) {
-            callback(p)
         }
     }
 

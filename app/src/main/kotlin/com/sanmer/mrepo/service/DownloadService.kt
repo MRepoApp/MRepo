@@ -7,9 +7,7 @@ import android.os.Process
 import androidx.core.app.ServiceCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
@@ -17,12 +15,14 @@ import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
+import com.sanmer.mrepo.utils.MediaStoreUtils.newOutputStream
 import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.expansion.parcelable
 import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,21 +34,33 @@ import java.io.File
 
 class DownloadService : LifecycleService() {
     val context by lazy { this }
-    private val list = mutableListOf<DownloadItem>()
+    private val tasks = mutableListOf<Task>()
 
-    private fun stopIt() = list.isEmpty().let {
-        if (it) lifecycleScope.launch {
-            delay(5000)
-            if (list.isEmpty()) stopSelf()
-        }
+    init {
+        val notification = NotificationUtils
+            .buildNotification(context, Const.CHANNEL_ID_DOWNLOAD)
+            .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
+            .setProgress(0, 0 , false)
+            .setOngoing(true)
+            .setGroup(GROUP_KEY)
+
+        progress.sample(500)
+            .flowOn(Dispatchers.IO)
+            .onEach {
+                val p = (it.first * 100).toInt()
+                if (p == 100 || p == 0) {
+                    return@onEach
+                }
+
+                val task = tasks.last()
+                NotificationUtils.notify(task.id,
+                    notification
+                        .setContentTitle(task.name)
+                        .setProgress(100, p, false)
+                        .build()
+                )
+            }.launchIn(lifecycleScope)
     }
-
-    private fun addToList(value: DownloadItem): Boolean =
-        if (value.url in list.map { it.url }) {
-            false
-        } else {
-            list.add(value)
-        }
 
     override fun onCreate() {
         super.onCreate()
@@ -56,11 +68,13 @@ class DownloadService : LifecycleService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val item = intent?.parcelable<DownloadItem>(DOWNLOAD_ITEM)
-
-        item?.let {
-            val new = addToList(item)
-            if (new) downloader(list.last())
+        intent?.parcelable<Task>(DOWNLOAD_TASK)?.let {
+            if (it !in tasks) {
+                downloader(it)
+                tasks.add(it)
+            } else {
+                Timber.d("download: ${it.name} is already in list")
+            }
         }
 
         return super.onStartCommand(intent, flags, startId)
@@ -71,50 +85,28 @@ class DownloadService : LifecycleService() {
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
     }
 
-    private fun downloader(
-        item: DownloadItem
-    ) = lifecycleScope.launch {
-        val notificationId = item.id
+    private fun downloader(task: Task) = lifecycleScope.launch {
+        val notificationId = task.id
         val notificationIdFinish = notificationId + 1
 
-        val path = item.path.toFile()
-        Timber.d("download: ${item.url} to ${item.path}")
-
-        val notification = NotificationUtils
-            .buildNotification(context, Const.CHANNEL_ID_DOWNLOAD)
-            .setContentTitle(item.name)
-            .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
-            .setProgress(0, 0 , false)
-            .setOngoing(true)
-            .setGroup(GROUP_KEY)
-
-        val progressFlow = MutableStateFlow(0)
-        progressFlow.sample(500)
-            .flowOn(Dispatchers.IO)
-            .onEach {
-                if (it == 100) {
-                    NotificationUtils.cancel(notificationId)
-                    broadcast(0f, item)
-                    return@onEach
-                }
-
-                NotificationUtils.notify(
-                    notificationId,
-                    notification.setProgress(100, it, false)
-                        .build()
-                )
-            }.launchIn(lifecycleScope)
+        Timber.d("download: ${task.url} to ${task.path}")
+        val path = task.path.toFile()
+        path.parentFile!!.let {
+            if (!it.exists()) it.mkdirs()
+        }
 
         val succeeded: () -> Unit = {
+            NotificationUtils.cancel(notificationId)
+
             val message = getString(R.string.message_download_success)
             notifyFinish(
                 id = notificationIdFinish,
-                name = item.name,
+                name = task.name,
                 message = message,
                 silent = true
             )
 
-            if (item.install) {
+            if (task.install) {
                 if (path.name.endsWith("zip")) {
                     InstallActivity.start(context = context, path = path)
                 }
@@ -130,33 +122,40 @@ class DownloadService : LifecycleService() {
         }
 
         val failed: (String?) -> Unit = {
-            broadcast(0f, item)
+            updateProgress(0f, task)
+            NotificationUtils.cancel(notificationId)
 
             val message = getString(R.string.message_download_failed, it)
             notifyFinish(
                 id = notificationIdFinish,
-                name = item.name,
+                name = task.name,
                 message = message
             )
         }
 
         HttpUtils.downloader(
-            url = item.url,
-            out = path,
+            url = task.url,
+            output = path.newOutputStream()!!,
             onProgress = {
-                broadcast(it, item)
-                progressFlow.value = (it * 100).toInt()
+                updateProgress(it, task)
             }
         ).onSuccess {
             succeeded()
 
-            list.remove(item)
+            tasks.remove(task)
             stopIt()
         }.onFailure {
             failed(it.message)
 
-            list.remove(item)
+            tasks.remove(task)
             stopIt()
+        }
+    }
+
+    private fun stopIt() = tasks.isEmpty().let {
+        if (it) lifecycleScope.launch {
+            delay(5000)
+            if (tasks.isEmpty()) stopSelf()
         }
     }
 
@@ -207,30 +206,33 @@ class DownloadService : LifecycleService() {
     }
 
     companion object {
-        private const val DOWNLOAD_ITEM = "DOWNLOAD_ITEM"
+        private const val DOWNLOAD_TASK = "DOWNLOAD_TASK"
         private const val GROUP_KEY = "DOWNLOAD_SERVICE_GROUP_KEY"
 
         @Parcelize
-        data class DownloadItem(
+        data class Task(
             val id: Int = System.currentTimeMillis().toInt(),
             val name: String,
             val path: String,
             val url: String,
             val install: Boolean
-        ) : Parcelable
+        ) : Parcelable {
+            override fun equals(other: Any?): Boolean {
+                return when (other) {
+                    is Task -> url == other.url
+                    else -> false
+                }
+            }
 
-        private val progressBroadcast = MutableLiveData<Pair<Float, DownloadItem>?>()
-
-        private fun broadcast(progress: Float, item: DownloadItem) {
-            progressBroadcast.postValue(progress to item)
+            override fun hashCode(): Int {
+                return url.hashCode()
+            }
         }
 
-        fun observeProgress(owner: LifecycleOwner, callback: (Float, DownloadItem) -> Unit) {
-            progressBroadcast.value = null
-            progressBroadcast.observe(owner) {
-                val (progress, item) = it ?: return@observe
-                callback(progress, item)
-            }
+        private val mProgress = MutableStateFlow<Pair<Float, Task?>>(0f to null)
+        val progress get() = mProgress.asStateFlow()
+        private fun updateProgress(progress: Float, item: Task) {
+            mProgress.value = progress to item
         }
 
         fun start(
@@ -238,14 +240,14 @@ class DownloadService : LifecycleService() {
             name: String, path: String,
             url: String, install: Boolean
         ) {
-            val item = DownloadItem(
+            val task = Task(
                 name = name,
                 path = path,
                 url = url,
                 install = install
             )
             val intent = Intent(context, DownloadService::class.java).apply {
-                putExtra(DOWNLOAD_ITEM, item)
+                putExtra(DOWNLOAD_TASK, task)
             }
             context.startService(intent)
         }

@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Config
@@ -25,6 +24,7 @@ import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.expansion.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -110,13 +110,13 @@ class ModulesViewModel @Inject constructor(
         key = ""
     }
 
-    fun observeProgress(
-        owner: LifecycleOwner,
+    fun getProgress(
         value: OnlineModule,
-        callback: (Float) -> Unit
-    ) = DownloadService.observeProgress(owner) { p, v ->
-        if (v.name == value.name) {
-            callback(p)
+    ) = DownloadService.progress.map {
+        if (it.second?.name == value.name){
+            it.first
+        } else {
+            0f
         }
     }
 

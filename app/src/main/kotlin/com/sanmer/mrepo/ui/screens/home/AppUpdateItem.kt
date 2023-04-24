@@ -27,10 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.utils.MarkdownText
@@ -45,9 +45,7 @@ fun AppUpdateItem(
     tonalElevation = 2.dp,
     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
 ) {
-    val owner = LocalLifecycleOwner.current
-    var progress by remember { mutableStateOf(0f) }
-    viewModel.observeProgress(owner) { progress = it }
+    val progress by viewModel.progress.collectAsStateWithLifecycle(0f)
 
     var update by remember { mutableStateOf(false) }
     if (update) UpdateDialog { update = false }
@@ -85,7 +83,7 @@ fun AppUpdateItem(
                 LinearProgressIndicator(
                     progress = progress,
                     modifier = Modifier
-                        .padding(start=6.dp, end = 15.dp)
+                        .padding(start = 6.dp, end = 15.dp)
                         .weight(1f)
                         .height(6.dp),
                     strokeCap = StrokeCap.Round

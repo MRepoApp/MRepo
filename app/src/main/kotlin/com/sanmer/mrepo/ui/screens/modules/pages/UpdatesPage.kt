@@ -1,27 +1,42 @@
 package com.sanmer.mrepo.ui.screens.modules.pages
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
-import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
@@ -77,17 +92,14 @@ private fun OnlineModuleItem(
     module: OnlineModule,
     onView: () -> Unit
 ) {
-    val owner = LocalLifecycleOwner.current
-    var progress by remember { mutableStateOf(0f) }
-    viewModel.observeProgress(owner, module) { progress = it }
+    val suState by viewModel.suState.collectAsStateWithLifecycle()
+    val progress by viewModel.getProgress(module).collectAsStateWithLifecycle(0f)
 
     var repo: Repo? by remember { mutableStateOf(null) }
     viewModel.getRepoByUrl(module.repoUrl) { repo = it }
 
     var update by remember { mutableStateOf(false) }
     if (update) UpdateDialog(value = module, onView = onView) { update = false }
-
-    val suState by viewModel.suState.collectAsState(Event.NON)
 
     ModuleCard(
         name = module.name,

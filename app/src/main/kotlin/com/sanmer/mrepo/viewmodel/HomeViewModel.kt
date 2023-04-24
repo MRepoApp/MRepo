@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.BuildConfig
@@ -23,6 +22,7 @@ import com.sanmer.mrepo.utils.expansion.toFile
 import com.sanmer.mrepo.works.Works
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -51,6 +51,14 @@ class HomeViewModel @Inject constructor(
     val enforce get() = suRepository.enforce
     val count get() = localRepository.count
 
+    val progress get() = DownloadService.progress.map {
+        if (it.second?.url == update.apkUrl){
+            it.first
+        } else {
+            0f
+        }
+    }
+
     init {
         Timber.d("HomeViewModel init")
         getAppUpdate()
@@ -78,15 +86,6 @@ class HomeViewModel @Inject constructor(
                 state.setFailed(it)
                 Timber.e(it, "getAppUpdate")
             }
-    }
-
-    fun observeProgress(
-        owner: LifecycleOwner,
-        callback: (Float) -> Unit
-    ) = DownloadService.observeProgress(owner) { p, v ->
-        if (v.url == update.apkUrl) {
-            callback(p)
-        }
     }
 
     fun installer(context: Context) {
