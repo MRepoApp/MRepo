@@ -11,15 +11,14 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
@@ -70,8 +69,8 @@ private fun LocalModuleItem(
     viewModel: ModulesViewModel = hiltViewModel(),
     module: LocalModule
 ) {
-    val uiState = viewModel.getLocalModuleUiState(module)
-    val suState by viewModel.suState.collectAsState(Event.NON)
+    val uiState = viewModel.rememberLocalModuleState(module)
+    val suState by viewModel.suState.collectAsStateWithLifecycle()
 
     ModuleCard(
         name = module.name,

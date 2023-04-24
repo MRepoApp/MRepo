@@ -1,7 +1,14 @@
 package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
@@ -141,14 +148,35 @@ class ModulesViewModel @Inject constructor(
         install = true
     )
 
-    data class LocalModuleUiState(
+    fun getRepoByUrl(
+        url: String,
+        callback: (Repo) -> Unit
+    ) = viewModelScope.launch {
+        val repo = localRepository.getRepoByUrl(url)
+        callback(repo)
+    }
+
+    fun getLocalAll() = viewModelScope.launch {
+        updateProgress {
+            modulesRepository.getLocalAll()
+        }
+    }
+
+    fun getOnlineAll() = viewModelScope.launch {
+        updateProgress {
+            modulesRepository.getRepoAll()
+        }
+    }
+
+    @Stable
+    data class LocalModuleState(
         val alpha: Float = 1f,
         val decoration: TextDecoration = TextDecoration.None,
         val toggle: (Boolean) -> Unit = {},
         val change: () -> Unit = {},
     )
 
-    fun getLocalModuleUiState(module: LocalModule): LocalModuleUiState {
+    private fun createLocalModuleState(module: LocalModule): LocalModuleState {
         var alpha = 1f
         var decoration = TextDecoration.None
         var toggle: (Boolean) -> Unit = {}
@@ -177,26 +205,13 @@ class ModulesViewModel @Inject constructor(
             State.UPDATE -> {}
         }
 
-        return LocalModuleUiState(alpha, decoration, toggle, change)
+        return LocalModuleState(alpha, decoration, toggle, change)
     }
 
-    fun getRepoByUrl(
-        url: String,
-        callback: (Repo) -> Unit
-    ) = viewModelScope.launch {
-        val repo = localRepository.getRepoByUrl(url)
-        callback(repo)
-    }
-
-    fun getLocalAll() = viewModelScope.launch {
-        updateProgress {
-            modulesRepository.getLocalAll()
-        }
-    }
-
-    fun getOnlineAll() = viewModelScope.launch {
-        updateProgress {
-            modulesRepository.getRepoAll()
+    @Composable
+    fun rememberLocalModuleState(module: LocalModule): LocalModuleState {
+        return remember(key1 = module) {
+            createLocalModuleState(module)
         }
     }
 }
