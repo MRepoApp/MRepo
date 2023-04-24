@@ -1,9 +1,9 @@
 package com.sanmer.mrepo.viewmodel
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.database.entity.Repo
@@ -11,8 +11,7 @@ import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -23,7 +22,9 @@ class RepositoryViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
 
-    val list = mutableStateListOf<Repo>()
+    val list = localRepository.getRepoAllAsFlow().map {
+        it.toMutableStateList()
+    }
 
     var progress by mutableStateOf(false)
         private set
@@ -36,23 +37,6 @@ class RepositoryViewModel @Inject constructor(
 
     init {
         Timber.d("RepositoryViewModel init")
-
-        localRepository.getRepoAllAsFlow().onEach {
-            if (it.isEmpty()) return@onEach
-
-            if (list.isNotEmpty()) list.clear()
-            list.addAll(it)
-
-        }.launchIn(viewModelScope)
-    }
-
-    fun getAll() = viewModelScope.launch {
-        updateProgress {
-            val values = localRepository.getRepoAll()
-
-            if (list.isNotEmpty()) list.clear()
-            list.addAll(values)
-        }
     }
 
     fun insert(

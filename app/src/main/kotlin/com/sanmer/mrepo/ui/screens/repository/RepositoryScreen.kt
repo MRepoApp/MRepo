@@ -18,7 +18,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -49,9 +48,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
 import com.sanmer.mrepo.ui.component.PageIndicator
@@ -67,11 +69,13 @@ fun RepositoryScreen(
     viewModel: RepositoryViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    val list by viewModel.list.collectAsStateWithLifecycle(emptyList())
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     BackHandler { navController.navigateBack() }
 
-    var value = Repo(url = "")
+    var value = Const.MY_REPO_URL.toRepo()
     var message: String? by remember { mutableStateOf(null) }
 
     var failure by remember { mutableStateOf(false) }
@@ -113,14 +117,14 @@ fun RepositoryScreen(
         Box(
             modifier = Modifier.padding(innerPadding)
         ) {
-            if (viewModel.list.isEmpty()) {
+            if (list.isEmpty()) {
                 PageIndicator(
                     icon = R.drawable.hierarchy_outline,
                     text = R.string.repo_empty
                 )
             }
 
-            RepoList(list = viewModel.list.sortedBy { it.name })
+            RepoList(list = list.sortedBy { it.name })
 
             AnimatedVisibility(
                 visible = viewModel.progress,
@@ -274,25 +278,12 @@ private fun AddDialog(
 
 @Composable
 private fun RepositoryTopBar(
-    viewModel: RepositoryViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
 ) = NavigateUpTopBar(
     title = R.string.page_repository,
     scrollBehavior = scrollBehavior,
-    navController = navController,
-    actions = {
-        IconButton(
-            onClick = {
-                viewModel.getAll()
-            }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.rotate_left_outline),
-                contentDescription = null
-            )
-        }
-    }
+    navController = navController
 )
 
 @Composable
