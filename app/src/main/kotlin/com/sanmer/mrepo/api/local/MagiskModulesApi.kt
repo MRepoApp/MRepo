@@ -4,7 +4,6 @@ import android.content.Context
 import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
-import com.sanmer.mrepo.provider.ISuProvider
 import com.sanmer.mrepo.utils.ModuleUtils
 import com.sanmer.mrepo.utils.expansion.output
 import com.topjohnwu.superuser.Shell
@@ -13,19 +12,14 @@ import com.topjohnwu.superuser.nio.FileSystemManager
 import timber.log.Timber
 import java.io.File
 
-class MagiskModulesApi(private val context: Context) : ModulesLocalApi {
+class MagiskModulesApi(
+    private val context: Context,
+    private val fs: FileSystemManager
+) : ModulesLocalApi {
 
     override var version = "magisk"
     private val path = "/data/adb/modules"
     private var isZygiskEnabled = false
-
-    private var fs = FileSystemManager.getLocal()
-
-    fun setSuProvider(su: ISuProvider): MagiskModulesApi {
-        fs = FileSystemManager.getRemote(su.fileSystemService)
-
-        return this
-    }
 
     fun build(listener: ApiInitializerListener): ModulesLocalApi {
         Timber.d("initMagisk")

@@ -8,7 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import com.sanmer.mrepo.app.Config
-import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.SuProviderImpl
 import com.sanmer.mrepo.ui.theme.AppTheme
 import com.sanmer.mrepo.utils.NotificationUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SetupActivity : ComponentActivity() {
     @Inject
-    lateinit var suProvider: SuProvider
+    lateinit var suProviderImpl: SuProviderImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class SetupActivity : ComponentActivity() {
         }
     }
 
-    fun initSu() = suProvider.init()
+    fun initSu() = suProviderImpl.init()
 
     companion object {
         fun start(context: Context) {
