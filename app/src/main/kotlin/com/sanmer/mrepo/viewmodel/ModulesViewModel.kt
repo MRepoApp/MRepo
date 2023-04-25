@@ -210,7 +210,7 @@ class ModulesViewModel @Inject constructor(
 
     @Composable
     fun rememberLocalModuleState(module: LocalModule): LocalModuleState {
-        return remember(key1 = module) {
+        return remember(key1 = module.state, key2 = local.toList()) {
             createLocalModuleState(module)
         }
     }
