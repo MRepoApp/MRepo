@@ -41,8 +41,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.navigateBack
@@ -96,6 +96,8 @@ fun ViewModuleScreen(
 private fun ViewModule(
     viewModel: DetailViewModel = hiltViewModel()
 ) {
+    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
+
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -106,8 +108,8 @@ private fun ViewModule(
     ) {
         ModuleInfoItem()
         ProgressItem()
-        InstallButton()
-        VersionsItem()
+        InstallButton(userData = userData)
+        VersionsItem(userData = userData)
         if (viewModel.hasChangelog) ChangelogItem()
     }
 }
@@ -166,7 +168,8 @@ private fun ViewModuleTopBar(
 @Composable
 private fun InstallButton(
     context: Context = LocalContext.current,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: DetailViewModel = hiltViewModel(),
+    userData: UserData
 ) = Button(
     modifier = Modifier
         .fillMaxWidth(),
@@ -175,7 +178,7 @@ private fun InstallButton(
     onClick = {
         viewModel.installer(context)
     },
-    enabled = Config.isRoot
+    enabled = userData.isRoot
 ) {
     Text(
         text = stringResource(id = R.string.module_install),

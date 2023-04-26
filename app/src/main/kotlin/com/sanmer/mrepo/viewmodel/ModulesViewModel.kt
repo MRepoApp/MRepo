@@ -12,7 +12,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.OnlineModule
@@ -20,9 +19,11 @@ import com.sanmer.mrepo.model.module.State
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository
+import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.service.DownloadService
-import com.sanmer.mrepo.utils.expansion.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ import javax.inject.Inject
 class ModulesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository,
+    private val userDataRepository: UserDataRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
 
@@ -72,6 +74,7 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
+    val userData get() = userDataRepository.userData
     val suState get() = suRepository.state
 
     var progress by mutableStateOf(false)
@@ -85,23 +88,27 @@ class ModulesViewModel @Inject constructor(
     init {
         Timber.d("ModulesViewModel init")
 
-        localRepository.getLocalAllAsFlow().onEach { list ->
-            if (list.isEmpty()) return@onEach
+        localRepository.getLocalAllAsFlow()
+            .distinctUntilChanged()
+            .onEach { list ->
+                if (list.isEmpty()) return@onEach
 
-            if (local.isNotEmpty()) local.clear()
-            local.addAll(list)
-            Timber.i("ModulesViewModel: updateLocal")
+                if (local.isNotEmpty()) local.clear()
+                local.addAll(list)
+                Timber.i("ModulesViewModel: updateLocal")
 
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
 
-        localRepository.getOnlineAllAsFlow().onEach { list ->
-            if (list.isEmpty()) return@onEach
+        localRepository.getOnlineAllAsFlow()
+            .distinctUntilChanged()
+            .onEach { list ->
+                if (list.isEmpty()) return@onEach
 
-            if (online.isNotEmpty()) online.clear()
-            online.addAll(list)
-            Timber.i("ModulesViewModel: updateOnline")
+                if (online.isNotEmpty()) online.clear()
+                online.addAll(list)
+                Timber.i("ModulesViewModel: updateOnline")
 
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     fun closeSearch() {
@@ -113,33 +120,25 @@ class ModulesViewModel @Inject constructor(
         value: OnlineModule
     ) = DownloadService.getProgress { it.name == value.name }
 
-    private val OnlineModule.path get() = Config.downloadPath.toFile().resolve(
-        "${name}_${version}_${versionCode}.zip"
-            .replace(" ", "_")
-            .replace("/", "_")
-    )
-
     fun downloader(
         context: Context,
         module: OnlineModule,
-    ) = DownloadService.start(
-        context = context,
-        name = module.name,
-        path = module.path.absolutePath,
-        url = module.states.zipUrl,
-        install = false
-    )
+        install: Boolean = false
+    ) = viewModelScope.launch {
+        val userData = userData.last()
+        val path = userData.downloadPath.resolve(
+            "${module.name}_${module.version}_${module.versionCode}.zip"
+                .replace("[\\s+|/]".toRegex(), "_")
+        )
 
-    fun installer(
-        context: Context,
-        module: OnlineModule
-    ) = DownloadService.start(
-        context = context,
-        name = module.name,
-        path = module.path.absolutePath,
-        url = module.states.zipUrl,
-        install = true
-    )
+        DownloadService.start(
+            context = context,
+            name = module.name,
+            path = path.absolutePath,
+            url = module.states.zipUrl,
+            install = install
+        )
+    }
 
     fun getRepoByUrl(
         url: String,
@@ -203,7 +202,7 @@ class ModulesViewModel @Inject constructor(
 
     @Composable
     fun rememberLocalModuleState(module: LocalModule): LocalModuleState {
-        return remember(key1 = module.state, key2 = local.toList()) {
+        return remember(key1 = module.state, key2 = progress) {
             createLocalModuleState(module)
         }
     }

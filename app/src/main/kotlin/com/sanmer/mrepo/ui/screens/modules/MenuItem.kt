@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config
+import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
@@ -40,6 +40,7 @@ private val options = listOf(
 
 @Composable
 fun MenuItem(
+    userData: UserData,
     expanded: Boolean,
     onClose: () -> Unit
 ) = DropdownMenu(
@@ -51,6 +52,7 @@ fun MenuItem(
     options.forEach {
         MenuItem(
             value = it,
+            userData = userData,
             onClose = onClose
         )
     }
@@ -59,6 +61,7 @@ fun MenuItem(
 @Composable
 private fun MenuItem(
     viewModel: ModulesViewModel = hiltViewModel(),
+    userData: UserData,
     value: Menu,
     onClose: () -> Unit
 ) = DropdownMenuItem(
@@ -77,5 +80,5 @@ private fun MenuItem(
         }
         onClose()
     },
-    enabled = if (value is Menu.Local) Config.isRoot else true
+    enabled = if (value is Menu.Local) userData.isRoot else true
 )

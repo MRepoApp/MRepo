@@ -7,6 +7,7 @@ plugins {
     id("mrepo.android.room")
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.protobuf)
 }
 
 val baseVersionName = "1.2.4"
@@ -78,12 +79,32 @@ android {
     }
 }
 
+protobuf {
+    protoc {
+        artifact = libs.protobuf.protoc.get().toString()
+    }
+
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
 dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)
+    implementation(libs.datastore.core)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewModel.compose)
@@ -94,6 +115,7 @@ dependencies {
     implementation(libs.libsu.core)
     implementation(libs.libsu.io)
     implementation(libs.libsu.service)
+    implementation(libs.protobuf.kotlin.lite)
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.moshi)
 

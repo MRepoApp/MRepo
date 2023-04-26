@@ -5,15 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.sanmer.mrepo.app.Config
 
 @Composable
 fun AppTheme(
+    darkMode: Boolean,
+    themeColor: Int,
     content: @Composable () -> Unit
 ) {
-    val darkMode = Config.isDarkMode()
-    val themeColor = Config.themeColor
-
     val systemUiController = rememberSystemUiController()
     SideEffect {
         systemUiController.setSystemBarsColor(

@@ -13,14 +13,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.EditItemForSetting
 import com.sanmer.mrepo.ui.component.MenuItemForSetting
@@ -31,13 +35,16 @@ import com.sanmer.mrepo.ui.navigation.navigateToHome
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.utils.expansion.openUrl
+import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
 fun SettingsScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val context = LocalContext.current
+    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val context = LocalContext.current
 
     BackHandler { navController.navigateToHome() }
 
@@ -81,10 +88,11 @@ fun SettingsScreen(
             EditItemForSetting(
                 iconRes = R.drawable.cube_scan_outline,
                 title = stringResource(id = R.string.settings_download_path),
-                text = Config.downloadPath,
+                text = userData.downloadPath.absolutePath,
                 supportingText = { Text(text = stringResource(id = R.string.dialog_empty_default)) },
                 onChange = {
-                    Config.downloadPath = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
+                    val value = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
+                    viewModel.setDownloadPath(value)
                 }
             )
 
@@ -101,12 +109,12 @@ fun SettingsScreen(
                 iconRes = R.drawable.main_component_outline,
                 title = stringResource(id = R.string.settings_mode),
                 items = mapOf(
-                    Config.MODE_ROOT to stringResource(id = R.string.settings_mode_root),
-                    Config.MODE_NON_ROOT to stringResource(id = R.string.settings_mode_non_root)
+                    WorkingMode.MODE_ROOT to stringResource(id = R.string.settings_mode_root),
+                    WorkingMode.MODE_NON_ROOT to stringResource(id = R.string.settings_mode_non_root)
                 ),
-                selected = Config.workingMode,
+                selected = userData.workingMode,
                 onChange = { value, _ ->
-                    Config.workingMode = value
+                    viewModel.setWorkingMode(value)
                 }
             )
 

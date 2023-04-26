@@ -4,39 +4,45 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.core.view.WindowCompat
-import com.sanmer.mrepo.app.Config
-import com.sanmer.mrepo.provider.SuProviderImpl
-import com.sanmer.mrepo.ui.theme.AppTheme
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.sanmer.mrepo.datastore.WorkingMode
+import com.sanmer.mrepo.ui.activity.base.BaseActivity
 import com.sanmer.mrepo.utils.NotificationUtils
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SetupActivity : ComponentActivity() {
-    @Inject
-    lateinit var suProviderImpl: SuProviderImpl
-
+class SetupActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        if (!Config.isSetup) finish()
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userDataRepository.userData
+                    .collect {
+                        if (!it.isSetup) finish()
+                    }
+            }
+        }
 
-        setContent {
+        setActivityContent {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 NotificationUtils.PermissionState()
             }
 
-            AppTheme {
-                SetupScreen()
-            }
+            SetupScreen(
+                onRoot = {
+                    userDataRepository.setWorkingMode(WorkingMode.MODE_ROOT)
+                },
+                onNonRoot = {
+                    userDataRepository.setWorkingMode(WorkingMode.MODE_NON_ROOT)
+
+                }
+            )
         }
     }
-
-    fun initSu() = suProviderImpl.init()
 
     companion object {
         fun start(context: Context) {

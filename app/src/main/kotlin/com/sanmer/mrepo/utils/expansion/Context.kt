@@ -29,33 +29,3 @@ fun Context.shareFile(file: File, mimeType: String) {
         .addStream(uri)
         .startChooser()
 }
-
-fun Context.toFileDir(input: String?, name: String): File {
-    val out = filesDir.resolve(name)
-    out.parentFile?.let {
-        if (!it.exists()) {
-            it.mkdirs()
-        }
-    }
-
-    val output = out.outputStream()
-    output.write(input?.toByteArray())
-    output.close()
-
-    return out
-}
-
-fun Context.toCacheDir(input: String?, name: String): File {
-    val out = cacheDir.resolve(name)
-    out.parentFile?.let {
-        if (!it.exists()) {
-            it.mkdirs()
-        }
-    }
-
-    val output = out.outputStream()
-    output.write(input?.toByteArray())
-    output.close()
-
-    return out
-}

@@ -54,9 +54,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config
+import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.animate.SlideIn
 import com.sanmer.mrepo.ui.animate.SlideOut
@@ -71,14 +72,9 @@ fun ModulesScreen(
     viewModel: ModulesViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val state = rememberPagerState(
-        initialPage = if (Config.isRoot) {
-            Pages.Installed.id
-        } else {
-            Pages.Cloud.id
-        }
-    )
+    val state = rememberPagerState(initialPage = Pages.Cloud.id)
 
     BackHandler {
         if (viewModel.isSearch) {
@@ -98,11 +94,12 @@ fun ModulesScreen(
         topBar = {
             ModulesTopBar(
                 scrollBehavior = scrollBehavior,
-                state = state
+                state = state,
+                userData = userData
             )
         },
         floatingActionButton = {
-            if (Config.isRoot && !viewModel.isSearch) {
+            if (userData.isRoot && !viewModel.isSearch) {
                 InstallFloatingButton()
             }
         },
@@ -118,12 +115,19 @@ fun ModulesScreen(
                     state = state,
                     pagerSnapDistance = PagerSnapDistance.atMost(0)
                 ),
-                userScrollEnabled = if (viewModel.isSearch) false else Config.isRoot
+                userScrollEnabled = if (viewModel.isSearch) false else userData.isRoot
             ) {
                 when (it) {
-                    Pages.Cloud.id -> CloudPage(navController = navController)
+                    Pages.Cloud.id -> CloudPage(
+                        navController = navController,
+                        userData = userData
+                    )
+
                     Pages.Installed.id -> InstalledPage()
-                    Pages.Updates.id -> UpdatesPage(navController = navController)
+
+                    Pages.Updates.id -> UpdatesPage(
+                        navController = navController
+                    )
                 }
             }
 
@@ -146,15 +150,17 @@ fun ModulesScreen(
 private fun ModulesTopBar(
     viewModel: ModulesViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
-    state: PagerState
+    state: PagerState,
+    userData: UserData
 ) = if (viewModel.isSearch) {
     ModulesSearchTopBar(
-        scrollBehavior = scrollBehavior,
+        scrollBehavior = scrollBehavior
     )
 } else {
     ModulesNormalTopBar(
         scrollBehavior = scrollBehavior,
-        state = state
+        state = state,
+        userData = userData
     )
 }
 
@@ -162,10 +168,14 @@ private fun ModulesTopBar(
 private fun ModulesNormalTopBar(
     viewModel: ModulesViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
-    state: PagerState
+    state: PagerState,
+    userData: UserData
 ) = TopAppBar(
     title = {
-        TabsItem(state = state)
+        TabsItem(
+            state = state,
+            userData = userData
+        )
     },
     actions = {
         IconButton(
@@ -187,6 +197,7 @@ private fun ModulesNormalTopBar(
             )
 
             MenuItem(
+                userData = userData,
                 expanded = expanded,
                 onClose = { expanded = false }
             )
@@ -245,28 +256,10 @@ private fun ModulesSearchTopBar(
                 )
             },
             placeholder = {
-                Text(text = stringResource(id = R.string.modules_page_search_placeholder),)
+                Text(text = stringResource(id = R.string.modules_page_search_placeholder))
             },
             singleLine = true,
             textStyle = MaterialTheme.typography.bodyLarge
-        )
-    },
-    actions = {
-        var expanded by remember { mutableStateOf(false) }
-        IconButton(
-            onClick = {
-                expanded = true
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null
-            )
-        }
-
-        MenuItem(
-            expanded = expanded,
-            onClose = { expanded = false }
         )
     },
     scrollBehavior = scrollBehavior

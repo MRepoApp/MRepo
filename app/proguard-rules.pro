@@ -6,6 +6,11 @@
 -dontwarn org.conscrypt.**
 -dontwarn kotlinx.serialization.**
 
+# Keep DataStore fields
+-keepclassmembers class * extends com.google.protobuf.GeneratedMessageLite* {
+   <fields>;
+}
+
 -repackageclasses com.sanmer.mrepo
 
 # TODO: Waiting for new retrofit release to remove these rules

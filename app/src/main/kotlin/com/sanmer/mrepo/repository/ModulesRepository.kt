@@ -7,6 +7,7 @@ import com.sanmer.mrepo.di.ApplicationScope
 import com.sanmer.mrepo.utils.expansion.runRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -18,14 +19,16 @@ import javax.inject.Singleton
 class ModulesRepository @Inject constructor(
     private val localRepository: LocalRepository,
     private val suRepository: SuRepository,
-    @ApplicationScope private val externalScope: CoroutineScope
+    @ApplicationScope private val applicationScope: CoroutineScope
 ) {
     init {
-        localRepository.getRepoAllAsFlow().onEach {
-            if (it.isEmpty()) return@onEach
+        localRepository.getRepoAllAsFlow()
+            .distinctUntilChanged()
+            .onEach {
+                if (it.isEmpty()) return@onEach
 
-            getRepoAll()
-        }.launchIn(externalScope)
+                getRepoAll()
+            }.launchIn(applicationScope)
     }
 
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
@@ -45,6 +48,14 @@ class ModulesRepository @Inject constructor(
                     val api = ModulesRepoApi.build(repo.url)
                     return@runRequest api.getModules().execute()
                 }.onSuccess { data ->
+                    localRepository.updateRepo(
+                        repo.copy(
+                            name = data.name,
+                            size = data.modules.size,
+                            timestamp = data.timestamp
+                        )
+                    )
+
                     val list = data.modules.map { it.toEntity(repo.url) }
                     localRepository.insertOnline(list)
                 }.onFailure {

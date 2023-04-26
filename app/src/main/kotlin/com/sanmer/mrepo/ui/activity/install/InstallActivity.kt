@@ -4,25 +4,20 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.net.toUri
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.sanmer.mrepo.app.isSucceeded
-import com.sanmer.mrepo.ui.theme.AppTheme
+import com.sanmer.mrepo.ui.activity.base.BaseActivity
 import com.sanmer.mrepo.viewmodel.InstallViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.io.File
 
-@AndroidEntryPoint
-class InstallActivity : ComponentActivity() {
+class InstallActivity : BaseActivity() {
     private val viewModel: InstallViewModel by viewModels()
 
     init {
@@ -31,7 +26,6 @@ class InstallActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         cacheDir.resolve("log")
             .walkBottomUp()
@@ -52,13 +46,11 @@ class InstallActivity : ComponentActivity() {
             }
         }.launchIn(lifecycleScope)
 
-        setContent {
-            AppTheme {
-                CompositionLocalProvider(
-                    LocalViewModelStoreOwner provides this
-                ) {
-                    InstallScreen()
-                }
+        setActivityContent {
+            CompositionLocalProvider(
+                LocalViewModelStoreOwner provides this
+            ) {
+                InstallScreen()
             }
         }
     }

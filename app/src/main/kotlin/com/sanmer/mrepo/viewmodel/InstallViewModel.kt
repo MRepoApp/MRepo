@@ -14,7 +14,6 @@ import com.sanmer.mrepo.utils.MediaStoreUtils.copyTo
 import com.sanmer.mrepo.utils.MediaStoreUtils.displayName
 import com.sanmer.mrepo.utils.expansion.now
 import com.sanmer.mrepo.utils.expansion.shareFile
-import com.sanmer.mrepo.utils.expansion.toCacheDir
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
@@ -43,7 +42,6 @@ class InstallViewModel @Inject constructor(
     }
 
     fun send(message: String) = console.add("- $message")
-    fun clear() = console.clear()
 
     private val onSucceeded: (LocalModule) -> Unit = {
         viewModelScope.launch {
@@ -71,10 +69,14 @@ class InstallViewModel @Inject constructor(
         )
     }
 
-    fun shareConsole(context: Context) {
+    fun sendLogFile(context: Context) {
         val text = console.joinToString(separator = "\n")
         val date = LocalDateTime.now()
-        val file = context.toCacheDir(text, "log/module_${date}.log")
-        context.shareFile(file, "text/plain")
+        val logFile = context.cacheDir
+            .resolve("log/module_${date}.log")
+            .apply {
+                writeText(text)
+            }
+        context.shareFile(logFile, "text/plain")
     }
 }

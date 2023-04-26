@@ -1,9 +1,26 @@
 package com.sanmer.mrepo.ui.screens.viewmodule
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.Badge
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -13,8 +30,8 @@ import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.model.json.ModuleUpdateItem
 import com.sanmer.mrepo.model.json.versionDisplay
 import com.sanmer.mrepo.ui.component.ExpandableItem
@@ -23,7 +40,8 @@ import com.sanmer.mrepo.viewmodel.DetailViewModel
 
 @Composable
 fun VersionsItem(
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: DetailViewModel = hiltViewModel(),
+    userData: UserData
 ) {
     var expanded by remember { mutableStateOf(true) }
     ExpandableItem(
@@ -42,7 +60,10 @@ fun VersionsItem(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             viewModel.versions.forEach {
-                UpdateItem(value = it)
+                UpdateItem(
+                    value = it,
+                    userData = userData
+                )
             }
         }
     }
@@ -51,6 +72,7 @@ fun VersionsItem(
 @Composable
 private fun UpdateItem(
     viewModel: DetailViewModel = hiltViewModel(),
+    userData: UserData,
     value: ModuleUpdateItem
 ) {
     var repo: Repo? by remember { mutableStateOf(null) }
@@ -59,7 +81,7 @@ private fun UpdateItem(
     }
 
     var update by remember { mutableStateOf(false) }
-    if (update) UpdateItemDialog(value = value) { update = false }
+    if (update) UpdateItemDialog(value = value, userData = userData) { update = false }
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
@@ -104,6 +126,7 @@ private fun UpdateItem(
 @Composable
 private fun UpdateItemDialog(
     viewModel: DetailViewModel = hiltViewModel(),
+    userData: UserData,
     value: ModuleUpdateItem,
     onClose: () -> Unit
 ) = AlertDialog(
@@ -147,7 +170,10 @@ private fun UpdateItemDialog(
 
                 TextButton(
                     onClick = {
-                        viewModel.downloader(context = context, item = value)
+                        viewModel.downloader(
+                            context = context,
+                            item = value
+                        )
                         onClose()
                     }
                 ) {
@@ -158,10 +184,14 @@ private fun UpdateItemDialog(
 
                 TextButton(
                     onClick = {
-                        viewModel.installer(context = context, item = value)
+                        viewModel.downloader(
+                            context = context,
+                            item = value,
+                            install = true
+                        )
                         onClose()
                     },
-                    enabled = Config.isRoot
+                    enabled = userData.isRoot
                 ) {
                     Text(text = stringResource(id = R.string.module_install))
                 }

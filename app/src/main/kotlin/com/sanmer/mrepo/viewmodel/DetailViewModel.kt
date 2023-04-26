@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.State
 import com.sanmer.mrepo.model.json.ModuleUpdate
@@ -15,11 +14,12 @@ import com.sanmer.mrepo.model.json.ModuleUpdateItem
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
+import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
-import com.sanmer.mrepo.utils.expansion.toFile
 import com.sanmer.mrepo.utils.expansion.update
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,12 +28,15 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository,
+    private val userDataRepository: UserDataRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val id: String? = savedStateHandle["id"]
     var module = OnlineModule()
         private set
+    val hasLicense get() = module.license.isNotBlank()
+    val hasLabel get() = hasLicense
 
     val state = object : State(initial = Event.LOADING) {
         override fun setFailed(value: Any?) {
@@ -43,17 +46,15 @@ class DetailViewModel @Inject constructor(
     }
 
     val versions = mutableListOf<ModuleUpdateItem>()
-
     val hasChangelog get() = versions.any { it.changelog.isNotBlank() }
+
     var changelog: String? by mutableStateOf(null)
         private set
-
-    val hasLicense get() = module.license.isNotBlank()
-    val hasLabel get() = hasLicense
-
     var message: String? = null
+        private set
 
     val progress get() = DownloadService.getProgress { it.name == module.name }
+    val userData get() = userDataRepository.userData
 
     init {
         Timber.d("DetailViewModel init: $id")
@@ -133,45 +134,39 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    val ModuleUpdateItem.path get() = Config.downloadPath.toFile().resolve(
-        "${module.name}_${version}_${versionCode}.zip"
-            .replace("[\\s+|/]".toRegex(), "_")
-    )
-
     fun downloader(
         context: Context,
-        item: ModuleUpdateItem
-    ) = DownloadService.start(
-        context = context,
-        name = module.name,
-        path = item.path.absolutePath,
-        url = item.zipUrl,
-        install = false
-    )
+        item: ModuleUpdateItem,
+        install: Boolean = false
+    ) = viewModelScope.launch {
+        val userData = userData.last()
+        val path = userData.downloadPath.resolve(
+            "${module.name}_${item.version}_${item.versionCode}.zip"
+                .replace("[\\s+|/]".toRegex(), "_")
+        )
 
-    fun installer(
-        context: Context,
-        item: ModuleUpdateItem
-    ) = DownloadService.start(
-        context = context,
-        name = module.name,
-        path = item.path.absolutePath,
-        url = item.zipUrl,
-        install = true
-    )
+        DownloadService.start(
+            context = context,
+            name = module.name,
+            path = path.absolutePath,
+            url = item.zipUrl,
+            install = install
+        )
+    }
 
-    val OnlineModule.path get() = Config.downloadPath.toFile().resolve(
-        "${name}_${version}_${versionCode}.zip"
-            .replace("[\\s+|/]".toRegex(), "_")
-    )
+    fun installer(context: Context) = viewModelScope.launch {
+        val userData = userData.last()
+        val path = userData.downloadPath.resolve(
+            "${module.name}_${module.version}_${module.versionCode}.zip"
+                .replace("[\\s+|/]".toRegex(), "_")
+        )
 
-    fun installer(
-        context: Context
-    ) = DownloadService.start(
-        context = context,
-        name = module.name,
-        path = module.path.absolutePath,
-        url = module.states.zipUrl,
-        install = true
-    )
+        DownloadService.start(
+            context = context,
+            name = module.name,
+            path = path.absolutePath,
+            url = module.states.zipUrl,
+            install = true
+        )
+    }
 }

@@ -97,7 +97,7 @@ private fun InstallTopBar(
 
         if (viewModel.state.isFinished) {
             IconButton(
-                onClick = { viewModel.shareConsole(context) }
+                onClick = { viewModel.sendLogFile(context) }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.send_outline),

@@ -3,24 +3,18 @@ package com.sanmer.mrepo.ui.activity.license
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.core.view.WindowCompat
-import com.sanmer.mrepo.ui.theme.AppTheme
+import com.sanmer.mrepo.ui.activity.base.BaseActivity
 
-class LicenseActivity : ComponentActivity() {
+class LicenseActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val licenseId = intent.getStringExtra(LICENSE_ID) ?: "UNKNOWN"
 
-        setContent {
-            AppTheme {
-                LicenseScreen(
-                    licenseId = licenseId
-                )
-            }
+        setActivityContent {
+            LicenseScreen(
+                licenseId = licenseId
+            )
         }
     }
 

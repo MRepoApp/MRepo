@@ -1,6 +1,14 @@
 package com.sanmer.mrepo.ui.screens.modules.pages
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config
+import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
@@ -31,7 +39,8 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 @Composable
 fun CloudPage(
     viewModel: ModulesViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    userData: UserData
 ) {
     val list = viewModel.onlineValue.sortedBy { it.name }
 
@@ -43,6 +52,7 @@ fun CloudPage(
     } else {
         ModulesList(
             navController = navController,
+            userData = userData,
             list = list
         )
     }
@@ -50,13 +60,19 @@ fun CloudPage(
 
 @Composable
 private fun ModulesList(
+    viewModel: ModulesViewModel = hiltViewModel(),
     navController: NavController,
+    userData: UserData,
     list: List<OnlineModule>
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
-        contentPadding = if (Config.isRoot) fabPadding(20.dp) else PaddingValues(20.dp),
+        contentPadding = if (userData.isRoot && !viewModel.isSearch) {
+            fabPadding(20.dp)
+        } else {
+            PaddingValues(20.dp)
+        },
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         items(

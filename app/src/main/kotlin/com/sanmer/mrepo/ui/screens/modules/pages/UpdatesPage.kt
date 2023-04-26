@@ -186,7 +186,10 @@ private fun UpdateDialog(
 
                 TextButton(
                     onClick = {
-                        viewModel.downloader(context = context, module = value)
+                        viewModel.downloader(
+                            context = context,
+                            module = value
+                        )
                         onClose()
                     }
                 ) {
@@ -195,7 +198,11 @@ private fun UpdateDialog(
 
                 TextButton(
                     onClick = {
-                        viewModel.installer(context = context, module = value)
+                        viewModel.downloader(
+                            context = context,
+                            module = value,
+                            install = true
+                        )
                         onClose()
                     }
                 ) {

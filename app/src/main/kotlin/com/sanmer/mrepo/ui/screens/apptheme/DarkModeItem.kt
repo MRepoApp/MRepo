@@ -2,7 +2,12 @@ package com.sanmer.mrepo.ui.screens.apptheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +16,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,51 +24,60 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Config
+import com.sanmer.mrepo.datastore.DarkMode
+import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.viewmodel.HomeViewModel
 
-private sealed class DarkMode(
-    val id: Int,
+private sealed class DarkModeItem(
+    val value: DarkMode,
     val icon: Int,
     val name: Int
 ) {
-    object Auto : DarkMode(
-        id = Config.FOLLOW_SYSTEM,
+    object Auto : DarkModeItem(
+        value = DarkMode.FOLLOW_SYSTEM,
         icon = R.drawable.auto_brightness_outline,
         name = R.string.app_theme_dark_theme_auto
     )
-    object Light : DarkMode(
-        id = Config.ALWAYS_OFF,
+    object Light : DarkModeItem(
+        value = DarkMode.ALWAYS_OFF,
         icon = R.drawable.sun_outline,
         name = R.string.app_theme_dark_theme_light
     )
-    object Dark : DarkMode(
-        id = Config.ALWAYS_ON,
+    object Dark : DarkModeItem(
+        value = DarkMode.ALWAYS_ON,
         icon = R.drawable.moon_outline,
         name = R.string.app_theme_dark_theme_dark
     )
 }
 
 private val modes = listOf(
-    DarkMode.Auto,
-    DarkMode.Light,
-    DarkMode.Dark
+    DarkModeItem.Auto,
+    DarkModeItem.Light,
+    DarkModeItem.Dark
 )
 
 @Composable
-fun DarkModeItem() {
+fun DarkModeItem(
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
+
     LazyRow(
         contentPadding = PaddingValues(horizontal = 18.dp, vertical = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         items(
             items = modes,
-            key = { it.id }
+            key = { it.value }
         ) {
             DarkModeItem(
+                userData = userData,
                 item = it
-            ) { id ->
-                Config.darkMode = id
+            ) { value ->
+                viewModel.setDarkTheme(value)
             }
         }
     }
@@ -70,18 +85,17 @@ fun DarkModeItem() {
 
 @Composable
 private fun DarkModeItem(
-    item: DarkMode,
-    onClick: (Int) -> Unit
+    userData: UserData,
+    item: DarkModeItem,
+    onClick: (DarkMode) -> Unit
 ) {
-    val selected = item.id == Config.darkMode
+    val selected = item.value == userData.darkMode
 
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .clickable(
-                onClick = {
-                    onClick(item.id)
-                },
+                onClick = { onClick(item.value) }
             )
             .background(
                 color = if (selected) {

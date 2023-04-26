@@ -11,25 +11,20 @@ import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.api.local.KernelSuModulesApi
 import com.sanmer.mrepo.api.local.MagiskModulesApi
 import com.sanmer.mrepo.api.local.ModulesLocalApi
-import com.sanmer.mrepo.app.Config
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.isNotReady
-import com.sanmer.mrepo.di.MainScope
 import com.sanmer.mrepo.utils.expansion.toFile
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SuProviderImpl @Inject constructor(
-    @MainScope mainScope: CoroutineScope,
     @ApplicationContext private val appContext: Context
 ) : SuProvider {
     override val state = MutableStateFlow(Event.NON)
@@ -45,12 +40,6 @@ class SuProviderImpl @Inject constructor(
                 .setFlags(Shell.FLAG_REDIRECT_STDERR)
                 .setTimeout(15)
         )
-
-        state.onEach { // TODO: Add observer to workingMode
-            if (it.isNotReady && Config.isRoot) {
-                init()
-            }
-        }.launchIn(mainScope)
     }
 
     private class SuShellInitializer : Shell.Initializer() {
