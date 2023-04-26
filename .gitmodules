@@ -1,6 +1,0 @@
-[submodule "app/src/main/cpp/external/selinux"]
-	path = app/src/main/cpp/external/selinux
-	url = https://android.googlesource.com/platform/external/selinux
-[submodule "app/src/main/cpp/external/pcre"]
-	path = app/src/main/cpp/external/pcre
-	url = https://android.googlesource.com/platform/external/pcre

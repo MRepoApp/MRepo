@@ -9,35 +9,27 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-val verName = "1.2.4"
-val verCode = 124
+val baseVersionName = "1.2.4"
+val baseVersionCode = 124
+val commitId get() = "git rev-parse --short HEAD".exec()
+val commitCount get() = "git rev-list --count HEAD".exec()
 
 android {
     namespace = "com.sanmer.mrepo"
+
+    defaultConfig {
+        applicationId = namespace
+        versionCode = baseVersionCode + commitCount.toInt()
+        versionName = "${baseVersionName}.r${commitCount}.${commitId}"
+
+        resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es", "ar")
+        multiDexEnabled = true
+    }
 
     signingConfigs {
         create("release") {
             enableV2Signing = true
             enableV3Signing = true
-        }
-    }
-
-    defaultConfig {
-        applicationId = namespace
-        versionCode = verCode
-        versionName = verName
-        resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es", "ar")
-        multiDexEnabled = true
-
-        ndk {
-            abiFilters += arrayOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-        }
-    }
-
-    externalNativeBuild {
-        cmake {
-            path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.22.1"
         }
     }
 
@@ -80,18 +72,8 @@ android {
 
     applicationVariants.configureEach {
         outputs.configureEach {
-            if (filters.isNotEmpty()) {
-                val abi = filters.toList().first().identifier
-                (this as ApkVariantOutputImpl).outputFileName =
-                    "MRepo-${verName}-${verCode}-${abi}.apk"
-            }
-        }
-    }
-
-    splits {
-        abi {
-            isEnable = true
-            isUniversalApk = true
+            (this as ApkVariantOutputImpl).outputFileName =
+                "mrepo-v${versionName}-${name}.apk"
         }
     }
 }
@@ -123,3 +105,9 @@ dependencies {
     implementation(libs.markwon.core)
     implementation(libs.timber)
 }
+
+fun Project.exec(command: String): String = providers.exec {
+    commandLine(command.split(" "))
+}.standardOutput.asText.get().trim()
+
+fun String.exec() = exec(this)

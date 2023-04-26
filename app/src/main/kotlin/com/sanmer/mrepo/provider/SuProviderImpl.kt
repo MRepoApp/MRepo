@@ -16,6 +16,7 @@ import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isNotReady
 import com.sanmer.mrepo.di.MainScope
+import com.sanmer.mrepo.utils.expansion.toFile
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
@@ -58,10 +59,10 @@ class SuProviderImpl @Inject constructor(
 
     fun init() {
         val intent = Intent(appContext, SuService::class.java)
-        RootService.bind(intent, iSuConnection)
+        RootService.bind(intent, connection)
     }
 
-    private val iSuConnection = object : ServiceConnection {
+    private val connection = object : ServiceConnection {
 
         private val listener = object : ApiInitializerListener {
             override fun onSuccess() {
@@ -107,10 +108,33 @@ class SuProviderImpl @Inject constructor(
     private class SuService : RootService() {
         override fun onBind(intent: Intent): IBinder = object : ISuProvider.Stub() {
             override fun getPid(): Int = Process.myPid()
-            override fun getContext(): String = SELinux.context
-            override fun getEnforce(): Int = SELinux.enforce
+            override fun getContext(): String = getContextImpl(pid)
+            override fun getEnforce(): Int = getEnforceImpl()
             override fun getFileSystemService(): IBinder = FileSystemManager.getService()
         }
+
+        private inline fun <T> safe(default: T, block: () -> T): T {
+            return try {
+                block()
+            } catch (e: Throwable) {
+                Timber.e(e)
+                default
+            }
+        }
+
+        private fun getContextImpl(pid: Int) = safe("unknown") {
+            "/proc/$pid/attr/current".toFile()
+                .readText()
+                .replace("[^a-z0-9:_,]".toRegex(), "")
+        }
+
+        private fun getEnforceImpl() = safe(1) {
+            "/sys/fs/selinux/enforce".toFile()
+                .readText()
+                .replace("[^0-9]".toRegex(), "")
+                .toInt()
+        }
+
     }
 
     override val pid: Int get() = mProvider.pid
