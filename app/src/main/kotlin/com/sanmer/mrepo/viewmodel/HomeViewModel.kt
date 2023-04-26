@@ -22,7 +22,6 @@ import com.sanmer.mrepo.utils.expansion.toFile
 import com.sanmer.mrepo.works.Works
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -51,13 +50,7 @@ class HomeViewModel @Inject constructor(
     val enforce get() = suRepository.enforce
     val count get() = localRepository.count
 
-    val progress get() = DownloadService.progress.map {
-        if (it.second?.url == update.apkUrl){
-            it.first
-        } else {
-            0f
-        }
-    }
+    val progress get() = DownloadService.getProgress { it.url == update.apkUrl }
 
     init {
         Timber.d("HomeViewModel init")

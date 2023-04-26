@@ -22,9 +22,9 @@ import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
@@ -46,14 +46,13 @@ class DownloadService : LifecycleService() {
 
         progress.sample(500)
             .flowOn(Dispatchers.IO)
-            .onEach {
-                val p = (it.first * 100).toInt()
+            .onEach { (value, task) ->
+                val p = (value * 100).toInt()
                 if (p == 100 || p == 0) {
                     return@onEach
                 }
 
-                val task = tasks.last()
-                NotificationUtils.notify(task.id,
+                NotificationUtils.notify(task!!.id,
                     notification
                         .setContentTitle(task.name)
                         .setProgress(100, p, false)
@@ -229,11 +228,18 @@ class DownloadService : LifecycleService() {
             }
         }
 
-        private val mProgress = MutableStateFlow<Pair<Float, Task?>>(0f to null)
-        val progress get() = mProgress.asStateFlow()
+        private val progress = MutableStateFlow<Pair<Float, Task?>>(0f to null)
         private fun updateProgress(progress: Float, item: Task) {
-            mProgress.value = progress to item
+            this.progress.value = progress to item
         }
+        fun getProgress(get: (Task) -> Boolean) =
+            progress.map { (value, task) ->
+                if (task != null && get(task)) {
+                    value
+                } else {
+                    0f
+                }
+            }
 
         fun start(
             context: Context,

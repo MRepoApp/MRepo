@@ -20,7 +20,6 @@ import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.expansion.toFile
 import com.sanmer.mrepo.utils.expansion.update
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,13 +53,7 @@ class DetailViewModel @Inject constructor(
 
     var message: String? = null
 
-    val progress get() = DownloadService.progress.map {
-        if (it.second?.name == module.name){
-            it.first
-        } else {
-            0f
-        }
-    }
+    val progress get() = DownloadService.getProgress { it.name == module.name }
 
     init {
         Timber.d("DetailViewModel init: $id")

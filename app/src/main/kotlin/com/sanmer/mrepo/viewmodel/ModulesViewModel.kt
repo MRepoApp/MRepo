@@ -24,7 +24,6 @@ import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.expansion.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -111,14 +110,8 @@ class ModulesViewModel @Inject constructor(
     }
 
     fun getProgress(
-        value: OnlineModule,
-    ) = DownloadService.progress.map {
-        if (it.second?.name == value.name){
-            it.first
-        } else {
-            0f
-        }
-    }
+        value: OnlineModule
+    ) = DownloadService.getProgress { it.name == value.name }
 
     private val OnlineModule.path get() = Config.downloadPath.toFile().resolve(
         "${name}_${version}_${versionCode}.zip"
