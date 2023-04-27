@@ -1,2 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="settings_bug_tracker">バグトラッカー</string>
+    <string name="unknown_error">不明なエラー</string>
+    <string name="view_module_changelog">更新履歴</string>
+    <string name="repo_add_dialog_title">リポジトリの追加</string>
+    <string name="repo_options_delete">削除</string>
+    <string name="setup_non_root_desc2">利用可能: モジュールのダウンロード</string>
+    <string name="modules_page_cloud_empty">リポジトリは空です</string>
+    <string name="view_module_versions">バージョン</string>
+    <string name="modules_page_search_placeholder">検索…</string>
+    <string name="page_settings">設定</string>
+    <string name="install_title">インストール</string>
+    <string name="install_done">完了</string>
+    <string name="install_failure">失敗</string>
+    <string name="install_reboot">再起動</string>
+    <string name="license_title">ライセンスを表示</string>
+    <string name="page_modules">モジュール</string>
+    <string name="page_view_module">モジュールを表示</string>
+    <string name="setup_mode">動作モード</string>
+    <string name="setup_root_title">Root</string>
+    <string name="setup_root_desc1">Magisk または KernelSU からRootアクセスする必要があります</string>
+    <string name="setup_root_desc2">利用可能: 全ての機能</string>
+    <string name="setup_non_root_title">非Root</string>
+    <string name="setup_non_root_desc1">Rootアクセスは必要ありません</string>
+    <string name="license_osi_approved">OSI Approved</string>
+    <string name="license_fsf_libre">FSF Libre</string>
+    <string name="modules_status_repo">有効なリポジトリ / 全てのリポジトリ</string>
+    <string name="menu_reboot">再起動</string>
+    <string name="modules_title_installed">インストール済</string>
+    <string name="modules_menu_cloud">クラウド</string>
+    <string name="modules_menu_local">ローカル</string>
+    <string name="module_install">インストール</string>
+    <string name="module_download">ダウンロード</string>
+    <string name="modules_page_installed_empty">モジュールが見つかりません</string>
+    <string name="module_remove">削除</string>
+    <string name="module_update">更新</string>
+    <string name="module_restore">復元</string>
+    <string name="modules_page_updates_empty">すべて最新</string>
+    <string name="modules_title_cloud">クラウド</string>
+</resources>
