@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.activity.setup
+package com.sanmer.mrepo.ui.activity.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

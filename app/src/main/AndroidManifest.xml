@@ -41,10 +41,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.setup.SetupActivity"
-            android:exported="false"
-            android:launchMode="singleTop"/>
-
         <activity android:name=".ui.activity.install.InstallActivity"
             android:label="@string/activity_install_label"
             android:exported="true"
