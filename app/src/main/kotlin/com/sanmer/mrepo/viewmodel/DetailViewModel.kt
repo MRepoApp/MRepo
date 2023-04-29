@@ -19,7 +19,6 @@ import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.expansion.update
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -138,9 +137,8 @@ class DetailViewModel @Inject constructor(
         context: Context,
         item: ModuleUpdateItem,
         install: Boolean = false
-    ) = viewModelScope.launch {
-        val userData = userData.last()
-        val path = userData.downloadPath.resolve(
+    ) {
+        val path = userDataRepository.downloadPath.resolve(
             "${module.name}_${item.version}_${item.versionCode}.zip"
                 .replace("[\\s+|/]".toRegex(), "_")
         )
@@ -154,9 +152,8 @@ class DetailViewModel @Inject constructor(
         )
     }
 
-    fun installer(context: Context) = viewModelScope.launch {
-        val userData = userData.last()
-        val path = userData.downloadPath.resolve(
+    fun installer(context: Context) {
+        val path = userDataRepository.downloadPath.resolve(
             "${module.name}_${module.version}_${module.versionCode}.zip"
                 .replace("[\\s+|/]".toRegex(), "_")
         )

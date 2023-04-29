@@ -23,7 +23,6 @@ import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.service.DownloadService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -124,9 +123,8 @@ class ModulesViewModel @Inject constructor(
         context: Context,
         module: OnlineModule,
         install: Boolean = false
-    ) = viewModelScope.launch {
-        val userData = userData.last()
-        val path = userData.downloadPath.resolve(
+    ) {
+        val path = userDataRepository.downloadPath.resolve(
             "${module.name}_${module.version}_${module.versionCode}.zip"
                 .replace("[\\s+|/]".toRegex(), "_")
         )

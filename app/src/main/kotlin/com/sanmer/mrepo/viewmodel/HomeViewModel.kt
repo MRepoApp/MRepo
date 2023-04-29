@@ -19,7 +19,6 @@ import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.HttpUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -70,10 +69,9 @@ class HomeViewModel @Inject constructor(
             }
     }
 
-    fun installer(context: Context) = viewModelScope.launch {
-        val userData = userData.last()
+    fun installer(context: Context) {
         val name = "MRepo-${update.version}(${update.versionCode})"
-        val path = userData.downloadPath.resolve("${name}.apk")
+        val path = userDataRepository.downloadPath.resolve("${name}.apk")
 
         DownloadService.start(
             context = context,
