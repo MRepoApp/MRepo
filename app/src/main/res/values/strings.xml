@@ -148,6 +148,10 @@
     <!-- Shortcut -->
     <string name="shortcut_log_label">Logs</string>
 
+    <!-- Menu -->
+    <string name="menu_scroll_top">Scroll to top</string>
+    <string name="menu_scroll_bottom">Scroll to bottom</string>
+
     <!-- Other -->
     <string name="unknown_error">Unknown error</string>
     <string name="device_name">Device</string>

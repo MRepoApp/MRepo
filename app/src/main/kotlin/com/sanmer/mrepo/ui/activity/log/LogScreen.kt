@@ -2,18 +2,45 @@ package com.sanmer.mrepo.ui.activity.log
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,23 +53,24 @@ import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.utils.log.LogText
 import com.sanmer.mrepo.utils.log.Logcat
 import com.sanmer.mrepo.utils.log.Logcat.toTextPriority
+import kotlinx.coroutines.launch
 
 private val priorities = listOf("VERBOSE", "DEBUG", "INFO", "WARN", "ERROR")
 
 @Composable
 fun LogScreen() {
+    val state = rememberLazyListState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var priority by remember { mutableStateOf("DEBUG") }
 
     val console by remember {
         derivedStateOf {
-            LogcatService.console
-                .asReversed()
-                .filter {
-                    it.priority >= priorities.indexOf(priority) + 2
-                }
+            LogcatService.console.filter {
+                it.priority >= priorities.indexOf(priority) + 2
+            }
         }
     }
+    val size by remember { derivedStateOf { console.size } }
 
     Scaffold(
         modifier = Modifier
@@ -50,19 +78,20 @@ fun LogScreen() {
         topBar = {
             LogTopBar(
                 scrollBehavior = scrollBehavior,
-                priority = priority
-            ) {
-                priority = it
-            }
+                priority = priority,
+                listState = state,
+                listSize = size,
+                onPriority = { priority = it }
+            )
         }
     ) {
         LazyColumn(
+            state = state,
             contentPadding = it
         ) {
             items(console) { value ->
                 Column(
-                    modifier = Modifier
-                        .padding(horizontal = 1.dp)
+                    modifier = Modifier.padding(horizontal = 1.dp)
                 ) {
                     LogItem(value)
                     Divider()
@@ -74,9 +103,11 @@ fun LogScreen() {
 
 @Composable
 private fun LogTopBar(
-    scrollBehavior: TopAppBarScrollBehavior,
     priority: String,
-    onClick: (String) -> Unit
+    listState: LazyListState,
+    listSize: Int,
+    onPriority: (String) -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) = NavigateUpTopBar(
     title = R.string.page_log_viewer,
     actions = {
@@ -90,9 +121,9 @@ private fun LogTopBar(
             )
         }
 
-        var expanded by remember { mutableStateOf(false) }
+        var prioritySelect by remember { mutableStateOf(false) }
         IconButton(
-            onClick = { expanded = true }
+            onClick = { prioritySelect = true }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.sort_outline),
@@ -100,10 +131,27 @@ private fun LogTopBar(
             )
 
             PrioritySelect(
-                expanded = expanded,
+                expanded = prioritySelect,
                 selected = priority,
-                onClose = { expanded = false },
-                onClick = onClick
+                onClose = { prioritySelect = false },
+                onClick = onPriority
+            )
+        }
+
+        var expanded by remember { mutableStateOf(false) }
+        IconButton(
+            onClick = { expanded = true }
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = null
+            )
+
+            MenuItem(
+                expanded = expanded,
+                state = listState,
+                size = listSize,
+                onClose = { expanded = false }
             )
         }
     },
@@ -198,30 +246,55 @@ private fun PrioritySelect(
     shape = RoundedCornerShape(15.dp)
 ) {
     priorities.forEach {
-        MenuItem(
-            value = it,
-            selected = selected
-        ) {
-            if (it != selected) onClick(it)
-            onClose()
-        }
+        DropdownMenuItem(
+            modifier = Modifier
+                .background(
+                    if (it == selected) {
+                        MaterialTheme.colorScheme.secondaryContainer
+                    } else {
+                        Color.Unspecified
+                    }
+                ),
+            text = { Text(text = it) },
+            onClick = {
+                if (it != selected) onClick(it)
+                onClose()
+            }
+        )
     }
 }
 
 @Composable
 private fun MenuItem(
-    value: String,
-    selected: String,
-    onClick: () -> Unit
-) = DropdownMenuItem(
-    modifier = Modifier
-        .background(
-            if (value == selected) {
-                MaterialTheme.colorScheme.secondaryContainer
-            } else {
-                Color.Unspecified
+    expanded: Boolean,
+    state: LazyListState,
+    size: Int,
+    onClose: () -> Unit
+) = DropdownMenu(
+    expanded = expanded,
+    onDismissRequest = onClose,
+    offset = DpOffset(0.dp, 5.dp),
+    shape = RoundedCornerShape(15.dp)
+) {
+    val scope = rememberCoroutineScope()
+
+    DropdownMenuItem(
+        text = { Text(text = stringResource(id = R.string.menu_scroll_top)) },
+        onClick = {
+            scope.launch {
+                state.scrollToItem(0)
             }
-        ),
-    text = { Text(text = value) },
-    onClick = onClick
-)
+            onClose()
+        }
+    )
+
+    DropdownMenuItem(
+        text = { Text(text = stringResource(id = R.string.menu_scroll_bottom)) },
+        onClick = {
+            scope.launch {
+                state.scrollToItem(size)
+            }
+            onClose()
+        }
+    )
+}

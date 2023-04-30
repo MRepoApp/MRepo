@@ -16,31 +16,34 @@ object Logcat {
     private val logFile by lazy { context.cacheDir.resolve("log/${fileName}") }
 
     init {
-        val logDir = context.cacheDir.resolve("log")
-        if (!logDir.exists()) {
-            logDir.mkdirs()
-        }
+        val appLogs = context.cacheDir.resolve("log")
+            .apply {
+                if (!exists()) mkdirs()
+            }
+            .walkBottomUp()
+            .filter {
+                it.name.startsWith("app")
+            }.sortedBy {
+                it.name.toDateTime()
+            }
 
-        initLogFile()
-    }
+        if (appLogs.count() > 0) {
+            if (appLogs.count() > 3) {
+                appLogs.first().delete()
+            }
 
-    private fun initLogFile() {
-        val appLogs = context.cacheDir.resolve("log").walkBottomUp().filter {
-            it.name.startsWith("app")
-        }.sortedBy {
-            it.name.toDateTime()
-        }
-
-        if (appLogs.count() == 0) return
-        if (appLogs.count() > 3) appLogs.first().delete()
-
-        val last = appLogs.last()
-        val date = last.name.toDateTime()
-        val isToday = date.date == LocalDateTime.now().date
-        if (isToday) {
-            fileName = last.name
+            appLogs.last().apply {
+                val date = name.toDateTime()
+                val isToday = date.date == LocalDateTime.now().date
+                if (isToday) fileName = name
+            }
         }
     }
+
+    private fun String.toDateTime() = LocalDateTime.parse(
+        replace("app_", "")
+            .replace(".log", "")
+    )
 
     fun getCurrent(): List<String> = try {
         val command = arrayOf(
@@ -64,34 +67,28 @@ object Logcat {
         listOf()
     }
 
-    fun readLogs(): List<LogText> {
-        return if (logFile.exists()) {
-            val logs = mutableListOf<LogText>()
-            logFile.readLines().forEach { text ->
-                runCatching {
-                    LogText.parse(text)
-                }.onSuccess {
-                    logs.add(it)
-                }.onFailure {
-                    val last = logs.last()
-                    val new = last.copy(message = "${last.message}\n${text}")
-                    logs[logs.size - 1] = new
-                }
+    fun readLogs(): List<LogText> = if (logFile.exists()) {
+        val logs = mutableListOf<LogText>()
+        logFile.readLines().forEach { text ->
+            runCatching {
+                LogText.parse(text)
+            }.onSuccess {
+                logs.add(it)
+            }.onFailure {
+                val last = logs.last()
+                val new = last.copy(message = "${last.message}\n${text}")
+                logs[logs.size - 1] = new
             }
-
-            logs.toList()
-        } else {
-            emptyList()
         }
+
+        logs.toList()
+    } else {
+        emptyList()
     }
 
-    fun writeLog(log: LogText) {
-        logFile.appendText("$log\n")
-    }
+    fun writeLog(log: LogText) = logFile.appendText("$log\n")
 
-    fun shareLogs(context: Context) {
-        context.shareFile(logFile, "text/plain")
-    }
+    fun shareLogs(context: Context) = context.shareFile(logFile, "text/plain")
 
     fun Collection<String>.toLogTextList(): List<LogText> {
         val tmp = map { it.split(": ", limit = 2) }
@@ -144,9 +141,4 @@ object Logcat {
         Log.ERROR -> "E"
         else -> "N"
     }
-
-    private fun String.toDateTime() = LocalDateTime.parse(
-        replace("app_", "")
-            .replace(".log", "")
-    )
 }

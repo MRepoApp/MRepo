@@ -149,6 +149,10 @@
     <!-- Shortcut -->
     <string name="shortcut_log_label">日志</string>
 
+    <!-- Menu -->
+    <string name="menu_scroll_top">滚动到顶部</string>
+    <string name="menu_scroll_bottom">滚动到底部</string>
+
     <!-- Other -->
     <string name="unknown_error">未知错误</string>
 
