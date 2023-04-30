@@ -48,7 +48,7 @@
     <string name="menu_reboot_download">اعادة التشغيل الى وضع التنزيل</string>
     <string name="menu_reboot_edl">اعادة التشغيل الى وضع EDL</string>
     <string name="modules_title_cloud">السحابة</string>
-    <string name="modules_title_updates">التحديثات</string>
+    <string name="modules_title_updatable">التحديثات</string>
     <string name="module_remove">حذف</string>
     <string name="about_source_code">عرض كود المصدر على %‬‬1$s</string>
     <string name="modules_page_updates_empty">كل الوحدات محدثة</string>

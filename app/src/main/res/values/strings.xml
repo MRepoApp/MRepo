@@ -63,7 +63,7 @@
     <!-- Modules -->
     <!-- Modules Title -->
     <string name="modules_title_cloud">Cloud</string>
-    <string name="modules_title_updates">Updates</string>
+    <string name="modules_title_updatable">Updates</string>
     <string name="modules_title_installed">Installed</string>
     <!-- Modules Menu -->
     <string name="modules_menu_cloud">Cloud</string>

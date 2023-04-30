@@ -3,18 +3,16 @@ package com.sanmer.mrepo.ui.screens.modules
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerSnapDistance
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -24,7 +22,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -44,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -59,22 +55,22 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
-import com.sanmer.mrepo.ui.animate.SlideIn
-import com.sanmer.mrepo.ui.animate.SlideOut
 import com.sanmer.mrepo.ui.navigation.navigateToHome
 import com.sanmer.mrepo.ui.screens.modules.pages.CloudPage
 import com.sanmer.mrepo.ui.screens.modules.pages.InstalledPage
-import com.sanmer.mrepo.ui.screens.modules.pages.UpdatesPage
+import com.sanmer.mrepo.ui.screens.modules.pages.UpdatablePage
+import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun ModulesScreen(
-    viewModel: ModulesViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) {
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val state = rememberPagerState(initialPage = Pages.Cloud.id)
+    val pagerState = rememberPagerState(initialPage = Pages.Cloud.id)
 
     BackHandler {
         if (viewModel.isSearch) {
@@ -93,9 +89,8 @@ fun ModulesScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             ModulesTopBar(
-                scrollBehavior = scrollBehavior,
-                state = state,
-                userData = userData
+                userData = userData,
+                scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = {
@@ -103,44 +98,40 @@ fun ModulesScreen(
                 InstallFloatingButton()
             }
         },
-        contentWindowInsets = WindowInsets(top = 0.dp, bottom = 0.dp)
+        contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
-        Box(
-            modifier = Modifier.padding(innerPadding)
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
         ) {
+            TabsItem(
+                state = pagerState,
+                userData = userData,
+                scrollBehavior = scrollBehavior
+            )
+
             HorizontalPager(
                 pageCount = pages.size,
-                state = state,
+                state = pagerState,
                 flingBehavior = PagerDefaults.flingBehavior(
-                    state = state,
+                    state = pagerState,
                     pagerSnapDistance = PagerSnapDistance.atMost(0)
                 ),
                 userScrollEnabled = if (viewModel.isSearch) false else userData.isRoot
             ) {
                 when (it) {
                     Pages.Cloud.id -> CloudPage(
-                        navController = navController,
-                        userData = userData
+                        userData = userData,
+                        navController = navController
                     )
 
                     Pages.Installed.id -> InstalledPage()
 
-                    Pages.Updates.id -> UpdatesPage(
+                    Pages.Updatable.id -> UpdatablePage(
                         navController = navController
                     )
                 }
-            }
-
-            AnimatedVisibility(
-                visible = viewModel.progress,
-                enter = SlideIn.topToBottom,
-                exit = SlideOut.bottomToTop
-            ) {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    strokeCap = StrokeCap.Round
-                )
             }
         }
     }
@@ -148,34 +139,28 @@ fun ModulesScreen(
 
 @Composable
 private fun ModulesTopBar(
+    userData: UserData,
     viewModel: ModulesViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
-    state: PagerState,
-    userData: UserData
 ) = if (viewModel.isSearch) {
     ModulesSearchTopBar(
         scrollBehavior = scrollBehavior
     )
 } else {
     ModulesNormalTopBar(
-        scrollBehavior = scrollBehavior,
-        state = state,
-        userData = userData
+        userData = userData,
+        scrollBehavior = scrollBehavior
     )
 }
 
 @Composable
 private fun ModulesNormalTopBar(
+    userData: UserData,
     viewModel: ModulesViewModel = hiltViewModel(),
-    scrollBehavior: TopAppBarScrollBehavior,
-    state: PagerState,
-    userData: UserData
+    scrollBehavior: TopAppBarScrollBehavior
 ) = TopAppBar(
     title = {
-        TabsItem(
-            state = state,
-            userData = userData
-        )
+        Text(text = stringResource(id = R.string.page_modules))
     },
     actions = {
         IconButton(

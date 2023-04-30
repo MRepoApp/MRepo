@@ -23,7 +23,7 @@
     <string name="menu_reboot_download">Repornire în Download</string>
     <string name="menu_reboot_edl">Repornire în EDL</string>
     <string name="modules_title_cloud">Cloud</string>
-    <string name="modules_title_updates">Actualizări</string>
+    <string name="modules_title_updatable">Actualizări</string>
     <string name="modules_title_installed">Instalat</string>
     <string name="modules_menu_cloud">Cloud</string>
     <string name="modules_menu_local">Local</string>

@@ -5,7 +5,7 @@
     <string name="settings_log_viewer_desc">Ver los registros de ejecución de la aplicación</string>
     <string name="menu_reboot_edl">Reiniciar a EDL</string>
     <string name="modules_title_cloud">Nube</string>
-    <string name="modules_title_updates">Actualizaciones</string>
+    <string name="modules_title_updatable">Actualizaciones</string>
     <string name="modules_title_installed">Instalado</string>
     <string name="modules_menu_cloud">Nube</string>
     <string name="modules_menu_local">Local</string>

@@ -45,7 +45,7 @@
     <string name="menu_reboot_download">Reiniciar em Download</string>
     <string name="menu_reboot_edl">Reiniciar em EDL</string>
     <string name="modules_title_cloud">Nuvem</string>
-    <string name="modules_title_updates">Atualizações</string>
+    <string name="modules_title_updatable">Atualizações</string>
     <string name="modules_title_installed">Instalado</string>
     <string name="modules_menu_cloud">Nuvem</string>
     <string name="modules_menu_local">Local</string>

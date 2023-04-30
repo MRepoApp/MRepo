@@ -65,7 +65,7 @@
     <!-- Modules Title -->
     <string name="modules_title_cloud">云端</string>
     <string name="modules_title_installed">已安装</string>
-    <string name="modules_title_updates">更新</string>
+    <string name="modules_title_updatable">可更新</string>
     <!-- Modules Menu -->
     <string name="modules_menu_cloud">云端</string>
     <string name="modules_menu_local">本地</string>

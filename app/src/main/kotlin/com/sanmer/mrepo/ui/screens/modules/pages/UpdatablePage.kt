@@ -45,9 +45,9 @@ import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
-fun UpdatesPage(
-    viewModel: ModulesViewModel = hiltViewModel(),
-    navController: NavController
+fun UpdatablePage(
+    navController: NavController,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) {
     val list = viewModel.updatableValue.sortedBy { it.name }
 
@@ -79,7 +79,7 @@ private fun ModulesList(
             items = list,
             key = { it.id }
         ) { module ->
-            OnlineModuleItem(module = module) {
+            OnlineModuleItem(module) {
                 navController.navigatePopUpTo(module.id.toRoute())
             }
         }
@@ -88,8 +88,8 @@ private fun ModulesList(
 
 @Composable
 private fun OnlineModuleItem(
-    viewModel: ModulesViewModel = hiltViewModel(),
     module: OnlineModule,
+    viewModel: ModulesViewModel = hiltViewModel(),
     onView: () -> Unit
 ) {
     val suState by viewModel.suState.collectAsStateWithLifecycle()
@@ -138,8 +138,8 @@ private fun OnlineModuleItem(
 
 @Composable
 private fun UpdateDialog(
-    viewModel: ModulesViewModel = hiltViewModel(),
     value: OnlineModule,
+    viewModel: ModulesViewModel = hiltViewModel(),
     onView: () -> Unit,
     onClose: () -> Unit
 ) = AlertDialog(

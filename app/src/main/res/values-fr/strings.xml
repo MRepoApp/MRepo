@@ -63,7 +63,7 @@
     <!-- Modules -->
     <!-- Modules Title -->
     <string name="modules_title_cloud">En ligne</string>
-    <string name="modules_title_updates">Mises à jours</string>
+    <string name="modules_title_updatable">Mises à jours</string>
     <string name="modules_title_installed">Installé</string>
     <!-- Modules Menu -->
     <string name="modules_menu_cloud">En ligne</string>
