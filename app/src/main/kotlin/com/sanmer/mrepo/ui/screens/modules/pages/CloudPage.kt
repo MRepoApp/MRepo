@@ -38,9 +38,9 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun CloudPage(
-    viewModel: ModulesViewModel = hiltViewModel(),
+    userData: UserData,
     navController: NavController,
-    userData: UserData
+    viewModel: ModulesViewModel = hiltViewModel(),
 ) {
     val list = viewModel.onlineValue.sortedBy { it.name }
 
@@ -51,19 +51,19 @@ fun CloudPage(
         )
     } else {
         ModulesList(
-            navController = navController,
+            list = list,
             userData = userData,
-            list = list
+            navController = navController,
         )
     }
 }
 
 @Composable
 private fun ModulesList(
-    viewModel: ModulesViewModel = hiltViewModel(),
-    navController: NavController,
+    list: List<OnlineModule>,
     userData: UserData,
-    list: List<OnlineModule>
+    navController: NavController,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) {
     LazyColumn(
         modifier = Modifier
@@ -79,7 +79,7 @@ private fun ModulesList(
             items = list,
             key = { it.id }
         )  { module ->
-            OnlineModuleItem(module = module) {
+            OnlineModuleItem(module) {
                 navController.navigatePopUpTo(module.id.toRoute())
             }
         }
@@ -144,7 +144,7 @@ private fun OnlineModuleItem(
             ) {
                 NormalChip(
                     painter = painterResource(id = R.drawable.document_code_outline),
-                    text = module.version
+                    text = module.versionDisplay
                 )
 
                 if (module.license.isNotBlank()) {

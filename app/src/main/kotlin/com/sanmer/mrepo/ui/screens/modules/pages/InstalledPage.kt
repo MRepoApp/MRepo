@@ -59,22 +59,22 @@ private fun ModulesList(
             items = list,
             key = { it.id }
         ) { module ->
-            LocalModuleItem(module = module)
+            LocalModuleItem(module)
         }
     }
 }
 
 @Composable
 private fun LocalModuleItem(
-    viewModel: ModulesViewModel = hiltViewModel(),
-    module: LocalModule
+    module: LocalModule,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.rememberLocalModuleState(module)
     val suState by viewModel.suState.collectAsStateWithLifecycle()
 
     ModuleCard(
         name = module.name,
-        version = module.version,
+        version = module.versionDisplay,
         author = module.author,
         description = module.description,
         alpha = uiState.alpha,
