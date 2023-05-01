@@ -16,16 +16,16 @@ MRepo is written with [Jetpack Compose](https://developer.android.com/jetpack/co
  - Support multiple repositories
 
 ## Supported Versions
-- Android: 8.0 ~ 13
-- [Magisk](https://github.com/topjohnwu/Magisk): 24.0 ~ latest
-- [KernelSU](https://github.com/tiann/KernelSU): 0.5.0 ~ latest
+- Android 8.0 ~ 13
+- Magisk 24.0 ~ latest
+- KernelSU 0.5.0 ~ latest
 
 ## Modules Repository
  - [magisk-modules-repo-util](https://github.com/ya0211/magisk-modules-repo-util): the util to help build modules repository
- - [ya0211/magisk-modules-alt-repo](https://github.com/ya0211/magisk-modules-alt-repo): a mirror of [Magisk-Modules-Alt-Repo](https://github.com/Magisk-Modules-Alt-Repo)
+ - [ya0211/magisk-modules-alt-repo](https://github.com/ya0211/magisk-modules-alt-repo): a mirror of Magisk-Modules-Alt-Repo
 
 ## Credits
-- [iconsax](https://iconsax.io): the official icons of the [Vuesax](https://vuesax.com) framework
+- [iconsax](https://iconsax.io): the icons of the Vuesax framework
 
 ## License
 
