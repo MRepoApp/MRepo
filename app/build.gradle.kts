@@ -11,7 +11,6 @@ plugins {
 }
 
 val baseVersionName = "1.2.4"
-val baseVersionCode = 124
 val commitId get() = "git rev-parse --short HEAD".exec()
 val commitCount get() = "git rev-list --count HEAD".exec()
 
@@ -20,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId = namespace
-        versionCode = baseVersionCode + commitCount.toInt()
+        versionCode = commitCount.toInt()
         versionName = "${baseVersionName}.r${commitCount}.${commitId}"
 
         resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es", "ar")
