@@ -25,7 +25,7 @@ abstract class BaseActivity : ComponentActivity() {
     }
 
     fun setActivityContent(
-        content: @Composable (userData: UserData) -> Unit
+        content: @Composable () -> Unit
     ) = setContent {
         val userData by userDataRepository.userData
             .collectAsStateWithLifecycle(UserData.default())
@@ -34,7 +34,7 @@ abstract class BaseActivity : ComponentActivity() {
             darkMode = userData.isDarkMode(),
             themeColor = userData.themeColor
         ) {
-            content(userData)
+            content()
         }
     }
 }
