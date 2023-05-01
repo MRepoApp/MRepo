@@ -70,7 +70,6 @@ fun LogScreen() {
             }
         }
     }
-    val size by remember { derivedStateOf { console.size } }
 
     Scaffold(
         modifier = Modifier
@@ -80,7 +79,6 @@ fun LogScreen() {
                 scrollBehavior = scrollBehavior,
                 priority = priority,
                 listState = state,
-                listSize = size,
                 onPriority = { priority = it }
             )
         }
@@ -105,7 +103,6 @@ fun LogScreen() {
 private fun LogTopBar(
     priority: String,
     listState: LazyListState,
-    listSize: Int,
     onPriority: (String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) = NavigateUpTopBar(
@@ -150,7 +147,6 @@ private fun LogTopBar(
             MenuItem(
                 expanded = expanded,
                 state = listState,
-                size = listSize,
                 onClose = { expanded = false }
             )
         }
@@ -161,75 +157,73 @@ private fun LogTopBar(
 @Composable
 private fun LogItem(
     value: LogText
+) = Row(
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(IntrinsicSize.Max),
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    verticalAlignment = Alignment.CenterVertically
 ) {
-    Row(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Max),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    color = when (value.priority) {
-                        Log.VERBOSE -> Color(0xFFD6D6D6)
-                        Log.DEBUG -> Color(0xFF6A8759)
-                        Log.INFO -> Color(0xFF305D78)
-                        Log.WARN -> Color(0xFFBBB529)
-                        Log.ERROR -> Color(0xFFCF5B56)
-                        else -> MaterialTheme.colorScheme.primary
-                    }
-                )
-                .fillMaxHeight()
-                .padding(horizontal = 4.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = value.priority.toTextPriority(),
-                fontFamily = FontFamily.Monospace,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
+            .background(
                 color = when (value.priority) {
-                    Log.VERBOSE -> Color(0xFF000000)
-                    Log.DEBUG -> Color(0xFFE9F5E6)
-                    Log.INFO -> Color(0xFFBBBBBB)
-                    Log.WARN -> Color(0xFF000000)
-                    Log.ERROR -> Color(0xFF000000)
-                    else -> MaterialTheme.colorScheme.onPrimary
-                }
-            )
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text = value.tag,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Medium
-            )
-
-            Text(
-                text = value.message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = when (value.priority) {
+                    Log.VERBOSE -> Color(0xFFD6D6D6)
+                    Log.DEBUG -> Color(0xFF6A8759)
+                    Log.INFO -> Color(0xFF305D78)
                     Log.WARN -> Color(0xFFBBB529)
                     Log.ERROR -> Color(0xFFCF5B56)
-                    else -> Color.Unspecified
+                    else -> MaterialTheme.colorScheme.primary
                 }
             )
+            .fillMaxHeight()
+            .padding(horizontal = 4.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = value.priority.toTextPriority(),
+            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            color = when (value.priority) {
+                Log.VERBOSE -> Color(0xFF000000)
+                Log.DEBUG -> Color(0xFFE9F5E6)
+                Log.INFO -> Color(0xFFBBBBBB)
+                Log.WARN -> Color(0xFF000000)
+                Log.ERROR -> Color(0xFF000000)
+                else -> MaterialTheme.colorScheme.onPrimary
+            }
+        )
+    }
 
-            Text(
-                text = "${value.time} ${value.process}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.outline
-            )
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = value.tag,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium
+        )
+
+        Text(
+            text = value.message,
+            style = MaterialTheme.typography.bodyMedium,
+            color = when (value.priority) {
+                Log.WARN -> Color(0xFFBBB529)
+                Log.ERROR -> Color(0xFFCF5B56)
+                else -> Color.Unspecified
+            }
+        )
+
+        Text(
+            text = "${value.time} ${value.process}",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.outline
+        )
     }
 }
 
@@ -268,7 +262,6 @@ private fun PrioritySelect(
 private fun MenuItem(
     expanded: Boolean,
     state: LazyListState,
-    size: Int,
     onClose: () -> Unit
 ) = DropdownMenu(
     expanded = expanded,
@@ -292,6 +285,7 @@ private fun MenuItem(
         text = { Text(text = stringResource(id = R.string.menu_scroll_bottom)) },
         onClick = {
             scope.launch {
+                val size = state.layoutInfo.totalItemsCount
                 state.scrollToItem(size)
             }
             onClose()
