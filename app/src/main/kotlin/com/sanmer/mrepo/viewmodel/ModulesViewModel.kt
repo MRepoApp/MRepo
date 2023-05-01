@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
@@ -37,9 +38,14 @@ class ModulesViewModel @Inject constructor(
     private val suRepository: SuRepository
 ) : ViewModel() {
 
-    val updatableValue get() = if (isSearch) _updatable else updatable
-    val localValue get() = if (isSearch) _local else local
-    val onlineValue get() = if (isSearch) _online else online
+    val updatableValue get() = (if (isSearch) _updatable else updatable)
+        .sortedBy { it.name }
+
+    val localValue get() = (if (isSearch) _local else local)
+        .sortedBy { it.name }
+
+    val onlineValue get() = (if (isSearch) _online else online)
+        .sortedBy { it.name }
 
     private val local = mutableStateListOf<LocalModule>()
     private val online = mutableStateListOf<OnlineModule>()
@@ -82,6 +88,24 @@ class ModulesViewModel @Inject constructor(
         progress  = true
         callback()
         progress = false
+    }
+
+    private val listSate = mutableMapOf<Int, LazyListState>()
+    fun updateListSate(value: Pair<Int, LazyListState>) {
+        Timber.d("updateListSate: ${value.first}")
+        listSate[value.first] = value.second
+    }
+    fun scrollToTop(page: Int) = viewModelScope.launch {
+        listSate[page]?.apply {
+            Timber.d("scrollToTop: $page")
+            scrollToItem(0)
+        }
+    }
+    fun scrollToBottom(page: Int) = viewModelScope.launch {
+        listSate[page]?.apply {
+            Timber.d("scrollToBottom: $page")
+            scrollToItem(layoutInfo.totalItemsCount)
+        }
     }
 
     init {

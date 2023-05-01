@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,6 +34,7 @@ import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
+import com.sanmer.mrepo.ui.screens.modules.Pages
 import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
@@ -42,7 +45,7 @@ fun CloudPage(
     navController: NavController,
     viewModel: ModulesViewModel = hiltViewModel(),
 ) {
-    val list = viewModel.onlineValue.sortedBy { it.name }
+    val list = viewModel.onlineValue
 
     if (list.isEmpty()) {
         PageIndicator(
@@ -65,9 +68,12 @@ private fun ModulesList(
     navController: NavController,
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
+    val state = rememberLazyListState()
+    SideEffect { viewModel.updateListSate(Pages.Cloud.id to state) }
+
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
+        state = state,
+        modifier = Modifier.fillMaxSize(),
         contentPadding = if (userData.isRoot && !viewModel.isSearch) {
             fabPadding(20.dp)
         } else {

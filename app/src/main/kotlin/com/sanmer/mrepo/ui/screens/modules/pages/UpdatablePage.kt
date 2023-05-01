@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
@@ -18,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +42,7 @@ import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
+import com.sanmer.mrepo.ui.screens.modules.Pages
 import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
@@ -49,7 +52,7 @@ fun UpdatablePage(
     navController: NavController,
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
-    val list = viewModel.updatableValue.sortedBy { it.name }
+    val list = viewModel.updatableValue
 
     if (list.isEmpty()) {
         PageIndicator(
@@ -67,11 +70,15 @@ fun UpdatablePage(
 @Composable
 private fun ModulesList(
     list: List<OnlineModule>,
-    navController: NavController
+    navController: NavController,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) {
+    val state = rememberLazyListState()
+    SideEffect { viewModel.updateListSate(Pages.Updatable.id to state) }
+
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
+        state = state,
+        modifier = Modifier.fillMaxSize(),
         contentPadding = fabPadding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {

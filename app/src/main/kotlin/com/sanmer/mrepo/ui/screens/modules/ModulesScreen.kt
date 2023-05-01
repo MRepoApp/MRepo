@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerSnapDistance
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -89,7 +90,7 @@ fun ModulesScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             ModulesTopBar(
-                userData = userData,
+                pagerState = pagerState,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -105,7 +106,7 @@ fun ModulesScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            TabsItem(
+            SegmentedButtonsItem(
                 state = pagerState,
                 userData = userData,
                 scrollBehavior = scrollBehavior
@@ -139,25 +140,25 @@ fun ModulesScreen(
 
 @Composable
 private fun ModulesTopBar(
-    userData: UserData,
-    viewModel: ModulesViewModel = hiltViewModel(),
+    pagerState: PagerState,
     scrollBehavior: TopAppBarScrollBehavior,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) = if (viewModel.isSearch) {
     ModulesSearchTopBar(
         scrollBehavior = scrollBehavior
     )
 } else {
     ModulesNormalTopBar(
-        userData = userData,
+        pagerState = pagerState,
         scrollBehavior = scrollBehavior
     )
 }
 
 @Composable
 private fun ModulesNormalTopBar(
-    userData: UserData,
-    viewModel: ModulesViewModel = hiltViewModel(),
-    scrollBehavior: TopAppBarScrollBehavior
+    pagerState: PagerState,
+    scrollBehavior: TopAppBarScrollBehavior,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) = TopAppBar(
     title = {
         Text(text = stringResource(id = R.string.page_modules))
@@ -172,6 +173,15 @@ private fun ModulesNormalTopBar(
             )
         }
 
+        IconButton(
+            onClick = {}
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.sort_outline),
+                contentDescription = null
+            )
+        }
+
         var expanded by remember { mutableStateOf(false) }
         IconButton(
             onClick = { expanded = true }
@@ -182,8 +192,8 @@ private fun ModulesNormalTopBar(
             )
 
             MenuItem(
-                userData = userData,
                 expanded = expanded,
+                pagerState = pagerState,
                 onClose = { expanded = false }
             )
         }

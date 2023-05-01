@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,6 +27,7 @@ import com.sanmer.mrepo.model.module.State
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.stateIndicator
+import com.sanmer.mrepo.ui.screens.modules.Pages
 import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
@@ -32,7 +35,7 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 fun InstalledPage(
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
-    val list = viewModel.localValue.sortedBy { it.name }
+    val list = viewModel.localValue
 
     if (list.isEmpty()) {
         PageIndicator(
@@ -48,9 +51,14 @@ fun InstalledPage(
 
 @Composable
 private fun ModulesList(
-    list: List<LocalModule>
+    list: List<LocalModule>,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) {
+    val state = rememberLazyListState()
+    SideEffect { viewModel.updateListSate(Pages.Installed.id to state) }
+
     LazyColumn(
+        state = state,
         modifier = Modifier.fillMaxSize(),
         contentPadding = fabPadding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),

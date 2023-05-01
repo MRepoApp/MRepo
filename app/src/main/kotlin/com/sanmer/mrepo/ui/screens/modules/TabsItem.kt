@@ -101,7 +101,7 @@ private fun TabsItem(
     ) {
         pages.forEachIndexed { id, page ->
             Tab(
-                modifier = Modifier.padding(vertical = 10.dp),
+                modifier = Modifier.padding(vertical = 12.dp),
                 selected = state.currentPage == id,
                 onClick = {
                     scope.launch {
