@@ -38,4 +38,21 @@
     <string name="module_restore">復元</string>
     <string name="modules_page_updates_empty">すべて最新</string>
     <string name="modules_title_cloud">クラウド</string>
+    <string name="settings_repo">リポジトリ</string>
+    <string name="app_theme_dark_theme_auto">自動</string>
+    <string name="app_theme_example">使用例</string>
+    <string name="repo_add_dialog_label">URL</string>
+    <string name="device_name">デバイス</string>
+    <string name="shortcut_log_label">ログ</string>
+    <string name="dialog_title_attention">注意</string>
+    <string name="repo_add_dialog_add">追加</string>
+    <string name="page_home">概要</string>
+    <string name="device_selinux_status">SELinuxの状態</string>
+    <string name="selinux_status_disabled">Disabled</string>
+    <string name="selinux_status_enforcing">Enforcing</string>
+    <string name="selinux_status_permissive">Permissive</string>
+    <string name="device_security_patch">セキュリティパッチ</string>
+    <string name="device_system_abi">システムABI</string>
+    <string name="device_system_version">システムバージョン</string>
+    <string name="non_root_desc">機能が制限されています</string>
 </resources>
