@@ -2,6 +2,7 @@ package com.sanmer.mrepo.ui.screens.modules.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,7 +44,6 @@ import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
 import com.sanmer.mrepo.ui.screens.modules.Pages
-import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
@@ -79,7 +79,7 @@ private fun ModulesList(
     LazyColumn(
         state = state,
         modifier = Modifier.fillMaxSize(),
-        contentPadding = fabPadding(20.dp),
+        contentPadding = PaddingValues(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         items(

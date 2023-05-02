@@ -35,7 +35,6 @@ import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph.View.toRoute
 import com.sanmer.mrepo.ui.screens.modules.Pages
-import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
@@ -74,17 +73,13 @@ private fun ModulesList(
     LazyColumn(
         state = state,
         modifier = Modifier.fillMaxSize(),
-        contentPadding = if (userData.isRoot && !viewModel.isSearch) {
-            fabPadding(20.dp)
-        } else {
-            PaddingValues(20.dp)
-        },
+        contentPadding = PaddingValues(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         items(
             items = list,
             key = { it.id }
-        )  { module ->
+        ) { module ->
             OnlineModuleItem(module) {
                 navController.navigatePopUpTo(module.id.toRoute())
             }

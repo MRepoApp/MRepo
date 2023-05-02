@@ -92,18 +92,16 @@ class ModulesViewModel @Inject constructor(
 
     private val listSate = mutableMapOf<Int, LazyListState>()
     fun updateListSate(value: Pair<Int, LazyListState>) {
-        Timber.d("updateListSate: ${value.first}")
         listSate[value.first] = value.second
     }
+    fun getListSate(index: Int) = listSate[index] ?: LazyListState(0, 0)
     fun scrollToTop(page: Int) = viewModelScope.launch {
         listSate[page]?.apply {
-            Timber.d("scrollToTop: $page")
             scrollToItem(0)
         }
     }
     fun scrollToBottom(page: Int) = viewModelScope.launch {
         listSate[page]?.apply {
-            Timber.d("scrollToBottom: $page")
             scrollToItem(layoutInfo.totalItemsCount)
         }
     }

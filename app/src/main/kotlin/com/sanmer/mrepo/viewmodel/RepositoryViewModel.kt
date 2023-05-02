@@ -22,8 +22,8 @@ class RepositoryViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
 
-    val list = localRepository.getRepoAllAsFlow().map {
-        it.toMutableStateList()
+    val list = localRepository.getRepoAllAsFlow().map { list ->
+        list.toMutableStateList().sortedBy { it.name }
     }
 
     var progress by mutableStateOf(false)

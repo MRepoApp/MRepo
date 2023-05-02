@@ -3,6 +3,9 @@ package com.sanmer.mrepo.ui.screens.modules
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Column
@@ -34,6 +37,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,10 +60,13 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
+import com.sanmer.mrepo.ui.animate.slideInBottomToTop
+import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.navigation.navigateToHome
 import com.sanmer.mrepo.ui.screens.modules.pages.CloudPage
 import com.sanmer.mrepo.ui.screens.modules.pages.InstalledPage
 import com.sanmer.mrepo.ui.screens.modules.pages.UpdatablePage
+import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
@@ -72,6 +79,13 @@ fun ModulesScreen(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val pagerState = rememberPagerState(initialPage = Pages.Cloud.id)
+
+    val isScrollingUp by viewModel.getListSate(pagerState.currentPage).isScrollingUp()
+    val showFab by remember(isScrollingUp) {
+        derivedStateOf {
+            isScrollingUp && userData.isRoot && !viewModel.isSearch
+        }
+    }
 
     BackHandler {
         if (viewModel.isSearch) {
@@ -95,7 +109,11 @@ fun ModulesScreen(
             )
         },
         floatingActionButton = {
-            if (userData.isRoot && !viewModel.isSearch) {
+            AnimatedVisibility(
+                visible = showFab,
+                enter = fadeIn() + slideInBottomToTop(),
+                exit = fadeOut() + slideOutTopToBottom()
+            ) {
                 InstallFloatingButton()
             }
         },

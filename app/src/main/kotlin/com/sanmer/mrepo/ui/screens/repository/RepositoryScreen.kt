@@ -2,6 +2,8 @@ package com.sanmer.mrepo.ui.screens.repository
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -54,12 +58,14 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toRepo
-import com.sanmer.mrepo.ui.animate.SlideIn
-import com.sanmer.mrepo.ui.animate.SlideOut
+import com.sanmer.mrepo.ui.animate.slideInBottomToTop
+import com.sanmer.mrepo.ui.animate.slideInTopToBottom
+import com.sanmer.mrepo.ui.animate.slideOutBottomToTop
+import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.HtmlText
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
-import com.sanmer.mrepo.ui.utils.fabPadding
+import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
@@ -72,6 +78,8 @@ fun RepositoryScreen(
     val list by viewModel.list.collectAsStateWithLifecycle(emptyList())
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val listSate = rememberLazyListState()
+    val showFab by listSate.isScrollingUp()
 
     BackHandler { navController.navigateBack() }
 
@@ -110,7 +118,13 @@ fun RepositoryScreen(
             )
         },
         floatingActionButton = {
-            RepositoryFloatingButton { add = true }
+            AnimatedVisibility(
+                visible = showFab,
+                enter = fadeIn() + slideInBottomToTop(),
+                exit = fadeOut() + slideOutTopToBottom()
+            ) {
+                RepositoryFloatingButton { add = true }
+            }
         },
         contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
@@ -124,12 +138,15 @@ fun RepositoryScreen(
                 )
             }
 
-            RepoList(list = list.sortedBy { it.name })
+            RepoList(
+                list = list,
+                state = listSate
+            )
 
             AnimatedVisibility(
                 visible = viewModel.progress,
-                enter = SlideIn.topToBottom,
-                exit = SlideOut.bottomToTop
+                enter = slideInTopToBottom(),
+                exit = slideOutBottomToTop()
             ) {
                 LinearProgressIndicator(
                     modifier = Modifier
@@ -143,11 +160,12 @@ fun RepositoryScreen(
 
 @Composable
 private fun RepoList(
-    list: List<Repo>
+    list: List<Repo>,
+    state: LazyListState
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = fabPadding()
+        state = state,
+        modifier = Modifier.fillMaxSize()
     ) {
         item {
             InfoItem()
