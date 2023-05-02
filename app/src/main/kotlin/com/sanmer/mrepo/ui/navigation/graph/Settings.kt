@@ -4,8 +4,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
-import com.sanmer.mrepo.ui.animate.SlideIn
-import com.sanmer.mrepo.ui.animate.SlideOut
+import com.sanmer.mrepo.ui.animate.slideInLeftToRight
+import com.sanmer.mrepo.ui.animate.slideInRightToLeft
+import com.sanmer.mrepo.ui.animate.slideOutLeftToRight
+import com.sanmer.mrepo.ui.animate.slideOutRightToLeft
 import com.sanmer.mrepo.ui.navigation.MainGraph
 import com.sanmer.mrepo.ui.screens.apptheme.AppThemeScreen
 import com.sanmer.mrepo.ui.screens.repository.RepositoryScreen
@@ -28,14 +30,14 @@ fun NavGraphBuilder.settingsGraph(
         enterTransition = {
             when (initialState.destination.route) {
                 SettingsGraph.AppTheme.route,
-                SettingsGraph.Repo.route -> SlideIn.leftToRight
+                SettingsGraph.Repo.route -> slideInLeftToRight()
                 else -> null
             }
         },
         exitTransition = {
             when (initialState.destination.route) {
                 SettingsGraph.AppTheme.route,
-                SettingsGraph.Repo.route -> SlideOut.rightToLeft
+                SettingsGraph.Repo.route -> slideOutRightToLeft()
                 else -> null
             }
         }
@@ -47,8 +49,8 @@ fun NavGraphBuilder.settingsGraph(
 
     composable(
         route = SettingsGraph.AppTheme.route,
-        enterTransition = { SlideIn.rightToLeft },
-        exitTransition = { SlideOut.leftToRight }
+        enterTransition = { slideInRightToLeft() },
+        exitTransition = { slideOutLeftToRight() }
     ) {
         AppThemeScreen(
             navController = navController
@@ -57,8 +59,8 @@ fun NavGraphBuilder.settingsGraph(
 
     composable(
         route = SettingsGraph.Repo.route,
-        enterTransition = { SlideIn.rightToLeft },
-        exitTransition = { SlideOut.leftToRight }
+        enterTransition = { slideInRightToLeft() },
+        exitTransition = { slideOutLeftToRight() }
     ) {
         RepositoryScreen(
             navController = navController

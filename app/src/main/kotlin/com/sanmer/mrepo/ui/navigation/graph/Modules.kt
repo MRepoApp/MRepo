@@ -6,8 +6,10 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
-import com.sanmer.mrepo.ui.animate.SlideIn
-import com.sanmer.mrepo.ui.animate.SlideOut
+import com.sanmer.mrepo.ui.animate.slideInLeftToRight
+import com.sanmer.mrepo.ui.animate.slideInRightToLeft
+import com.sanmer.mrepo.ui.animate.slideOutLeftToRight
+import com.sanmer.mrepo.ui.animate.slideOutRightToLeft
 import com.sanmer.mrepo.ui.navigation.MainGraph
 import com.sanmer.mrepo.ui.screens.modules.ModulesScreen
 import com.sanmer.mrepo.ui.screens.viewmodule.ViewModuleScreen
@@ -30,13 +32,13 @@ fun NavGraphBuilder.modulesGraph(
         route = ModulesGraph.Modules.route,
         enterTransition = {
             when (initialState.destination.route) {
-                ModulesGraph.View.way -> SlideIn.rightToLeft
+                ModulesGraph.View.way -> slideInRightToLeft()
                 else -> null
             }
         },
         exitTransition = {
             when (initialState.destination.route) {
-                ModulesGraph.View.way -> SlideOut.leftToRight
+                ModulesGraph.View.way -> slideOutLeftToRight()
                 else -> null
             }
         }
@@ -49,8 +51,8 @@ fun NavGraphBuilder.modulesGraph(
     composable(
         route = ModulesGraph.View.way,
         arguments = listOf(navArgument("id") { type = NavType.StringType }),
-        enterTransition = { SlideIn.leftToRight },
-        exitTransition = { SlideOut.rightToLeft }
+        enterTransition = { slideInLeftToRight() },
+        exitTransition = { slideOutRightToLeft() }
     ) {
         ViewModuleScreen(
             navController = navController
