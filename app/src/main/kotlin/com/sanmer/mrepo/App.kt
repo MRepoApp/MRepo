@@ -5,14 +5,12 @@ import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.sanmer.mrepo.app.Shortcut
-import com.sanmer.mrepo.app.isNotReady
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.event.isNotReady
+import com.sanmer.mrepo.app.event.isSucceeded
+import com.sanmer.mrepo.app.utils.ShortcutUtils
 import com.sanmer.mrepo.di.MainScope
 import com.sanmer.mrepo.provider.SuProviderImpl
 import com.sanmer.mrepo.repository.UserDataRepository
-import com.sanmer.mrepo.utils.MediaStoreUtils
-import com.sanmer.mrepo.utils.NotificationUtils
 import com.sanmer.mrepo.utils.timber.DebugTree
 import com.sanmer.mrepo.utils.timber.ReleaseTree
 import com.sanmer.mrepo.works.LocalWork
@@ -54,10 +52,7 @@ class App : Application(), Configuration.Provider {
         super.onCreate()
         app = this
 
-        MediaStoreUtils.init(this)
-        NotificationUtils.init(this)
-
-        Shortcut.push()
+        ShortcutUtils.push()
         initSuProviderImpl()
         workManger.enqueue(RepoWork.OneTimeWork)
     }

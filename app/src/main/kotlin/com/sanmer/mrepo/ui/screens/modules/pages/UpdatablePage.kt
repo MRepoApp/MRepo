@@ -37,7 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.ModuleCard

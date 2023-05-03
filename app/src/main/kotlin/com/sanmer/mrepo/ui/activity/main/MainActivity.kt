@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.activity.base.BaseActivity
-import com.sanmer.mrepo.utils.NotificationUtils
+import com.sanmer.mrepo.app.utils.NotificationUtils
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 

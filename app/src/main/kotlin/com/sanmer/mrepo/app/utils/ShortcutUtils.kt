@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.app
+package com.sanmer.mrepo.app.utils
 
 import android.content.Intent
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -9,7 +9,7 @@ import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 
-object Shortcut {
+object ShortcutUtils {
     private val context by lazy { App.context }
     private const val ID_LOGS = "logs"
     private const val ID_SETTINGS = "settings"

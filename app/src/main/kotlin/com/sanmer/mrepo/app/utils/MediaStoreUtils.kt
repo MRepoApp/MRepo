@@ -1,21 +1,17 @@
-package com.sanmer.mrepo.utils
+package com.sanmer.mrepo.app.utils
 
-import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import com.sanmer.mrepo.App
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
 object MediaStoreUtils {
-    private lateinit var cr: ContentResolver
-
-    fun init(context: Context) {
-        cr = context.contentResolver
-    }
+    private val context by lazy { App.context }
+    private val cr by lazy { context.contentResolver }
 
     val Uri.displayName: String get() {
         if (scheme == "file") {

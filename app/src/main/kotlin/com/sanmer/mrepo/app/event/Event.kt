@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.app
+package com.sanmer.mrepo.app.event
 
 enum class Event {
     NON,

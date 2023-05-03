@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.State
+import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.model.json.AppUpdate

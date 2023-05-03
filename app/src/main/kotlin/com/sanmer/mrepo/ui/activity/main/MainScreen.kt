@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.sanmer.mrepo.app.Shortcut
+import com.sanmer.mrepo.app.utils.ShortcutUtils
 import com.sanmer.mrepo.ui.navigation.BottomNav
 import com.sanmer.mrepo.ui.navigation.MainGraph
 import com.sanmer.mrepo.ui.navigation.graph.homeGraph
@@ -25,8 +25,8 @@ fun MainScreen() {
     val that = LocalContext.current as MainActivity
 
     val startDestination = when (that.intent.action) {
-        Shortcut.ACTION_MODULES -> MainGraph.Modules.route
-        Shortcut.ACTION_SETTINGS -> MainGraph.Settings.route
+        ShortcutUtils.ACTION_MODULES -> MainGraph.Modules.route
+        ShortcutUtils.ACTION_SETTINGS -> MainGraph.Settings.route
         else -> MainGraph.Home.route
     }
 

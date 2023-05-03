@@ -5,13 +5,13 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.State
+import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.utils.MediaStoreUtils.copyTo
-import com.sanmer.mrepo.utils.MediaStoreUtils.displayName
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.copyTo
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.displayName
 import com.sanmer.mrepo.utils.expansion.now
 import com.sanmer.mrepo.utils.expansion.shareFile
 import dagger.hilt.android.lifecycle.HiltViewModel

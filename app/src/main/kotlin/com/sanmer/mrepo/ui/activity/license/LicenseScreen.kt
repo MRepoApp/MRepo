@@ -35,8 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.State
+import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.model.json.License
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator

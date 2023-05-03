@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.viewmodel.HomeViewModel
 

@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.app
+package com.sanmer.mrepo.app.event
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue

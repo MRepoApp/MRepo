@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.utils
+package com.sanmer.mrepo.app.utils
 
 import android.Manifest
 import android.app.*
@@ -23,7 +23,7 @@ object NotificationUtils {
     val context by lazy { App.context }
     private val notificationManager by lazy { NotificationManagerCompat.from(context) }
 
-    fun init(context: Context) {
+    init {
         val channels = listOf(
             NotificationChannel(Const.CHANNEL_ID_DOWNLOAD,
                 context.getString(R.string.notification_name_download),
@@ -74,7 +74,8 @@ object NotificationUtils {
     }
 
     fun notify(notificationId: Int, notification: Notification) {
-        if (ActivityCompat.checkSelfPermission(context,
+        if (ActivityCompat.checkSelfPermission(
+                context,
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {

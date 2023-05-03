@@ -12,7 +12,7 @@ import com.sanmer.mrepo.api.local.KernelSuModulesApi
 import com.sanmer.mrepo.api.local.MagiskModulesApi
 import com.sanmer.mrepo.api.local.ModulesLocalApi
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.utils.expansion.toFile
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
@@ -97,7 +97,7 @@ class SuProviderImpl @Inject constructor(
     private class SuService : RootService() {
         override fun onBind(intent: Intent): IBinder = object : ISuProvider.Stub() {
             override fun getPid(): Int = Process.myPid()
-            override fun getContext(): String = getContextImpl(pid)
+            override fun getContext(): String = getContextImpl()
             override fun getEnforce(): Int = getEnforceImpl()
             override fun getFileSystemService(): IBinder = FileSystemManager.getService()
         }
@@ -111,8 +111,8 @@ class SuProviderImpl @Inject constructor(
             }
         }
 
-        private fun getContextImpl(pid: Int) = safe("unknown") {
-            "/proc/$pid/attr/current".toFile()
+        private fun getContextImpl() = safe("unknown") {
+            "/proc/self/attr/current".toFile()
                 .readText()
                 .replace("[^a-z0-9:_,]".toRegex(), "")
         }

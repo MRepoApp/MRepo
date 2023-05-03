@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.fabPadding
 import com.sanmer.mrepo.utils.SvcPower

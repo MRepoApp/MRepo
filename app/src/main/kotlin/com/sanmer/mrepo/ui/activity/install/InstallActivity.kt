@@ -9,7 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.ui.activity.base.BaseActivity
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import kotlinx.coroutines.flow.launchIn
