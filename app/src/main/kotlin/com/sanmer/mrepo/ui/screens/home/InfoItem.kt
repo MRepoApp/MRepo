@@ -106,7 +106,7 @@ private fun InfoItem(
 private fun getDevice(): String {
     var manufacturer =
         Build.MANUFACTURER[0].uppercaseChar().toString() + Build.MANUFACTURER.substring(1)
-    if (Build.BRAND != Build.MANUFACTURER) {
+    if (Build.BRAND.lowercase() != Build.MANUFACTURER.lowercase()) {
         manufacturer += " " + Build.BRAND[0].uppercaseChar() + Build.BRAND.substring(1)
     }
     manufacturer += " " + Build.MODEL + " "
