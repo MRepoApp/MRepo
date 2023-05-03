@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.ui.screens.modules
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -8,6 +9,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,8 +23,12 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +49,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -87,6 +95,16 @@ fun ModulesScreen(
         }
     }
 
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewModel.progress,
+        onRefresh = {
+            when (pagerState.currentPage) {
+                Pages.Cloud.id -> viewModel.getOnlineAll()
+                Pages.Installed.id -> viewModel.getLocalAll()
+            }
+        }
+    )
+
     BackHandler {
         if (viewModel.isSearch) {
             viewModel.closeSearch()
@@ -119,10 +137,9 @@ fun ModulesScreen(
         },
         contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
+        Column(modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize()
         ) {
             SegmentedButtonsItem(
                 state = pagerState,
@@ -130,29 +147,53 @@ fun ModulesScreen(
                 scrollBehavior = scrollBehavior
             )
 
-            HorizontalPager(
-                pageCount = pages.size,
-                state = pagerState,
-                flingBehavior = PagerDefaults.flingBehavior(
-                    state = pagerState,
-                    pagerSnapDistance = PagerSnapDistance.atMost(0)
-                ),
-                userScrollEnabled = if (viewModel.isSearch) false else userData.isRoot
+            Box(modifier = Modifier
+                .pullRefresh(
+                    state = pullRefreshState,
+                    enabled = !viewModel.isSearch &&
+                            pagerState.currentPage != Pages.Updatable.id
+                )
             ) {
-                when (it) {
-                    Pages.Cloud.id -> CloudPage(
-                        userData = userData,
-                        navController = navController
-                    )
+                ModulesPager(
+                    state = pagerState,
+                    userData = userData,
+                    navController = navController
+                )
 
-                    Pages.Installed.id -> InstalledPage()
-
-                    Pages.Updatable.id -> UpdatablePage(
-                        navController = navController
-                    )
-                }
+                PullRefreshIndicator(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    refreshing = viewModel.progress,
+                    state = pullRefreshState,
+                    backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    scale = true
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun ModulesPager(
+    state: PagerState,
+    userData: UserData,
+    navController: NavController,
+    viewModel: ModulesViewModel = hiltViewModel()
+) = HorizontalPager(
+    pageCount = pages.size,
+    state = state,
+    flingBehavior = PagerDefaults.flingBehavior(
+        state = state,
+        pagerSnapDistance = PagerSnapDistance.atMost(0)
+    ),
+    userScrollEnabled = if (viewModel.isSearch) false else userData.isRoot
+) {
+    when (it) {
+        Pages.Cloud.id -> CloudPage(navController)
+
+        Pages.Installed.id -> InstalledPage()
+
+        Pages.Updatable.id -> UpdatablePage(navController)
     }
 }
 
@@ -191,8 +232,11 @@ private fun ModulesNormalTopBar(
             )
         }
 
+        val context = LocalContext.current
         IconButton(
-            onClick = {}
+            onClick = {
+                Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
+            }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.sort_outline),

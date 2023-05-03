@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
@@ -40,7 +39,6 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun CloudPage(
-    userData: UserData,
     navController: NavController,
     viewModel: ModulesViewModel = hiltViewModel(),
 ) {
@@ -54,7 +52,6 @@ fun CloudPage(
     } else {
         ModulesList(
             list = list,
-            userData = userData,
             navController = navController,
         )
     }
@@ -63,7 +60,6 @@ fun CloudPage(
 @Composable
 private fun ModulesList(
     list: List<OnlineModule>,
-    userData: UserData,
     navController: NavController,
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
