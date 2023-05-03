@@ -42,6 +42,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
                 sourceSets.all {
                     languageSettings {
+                        optIn("androidx.compose.material.ExperimentalMaterialApi")
                         optIn("androidx.compose.material3.ExperimentalMaterial3Api")
                         optIn("androidx.compose.ui.ExperimentalComposeUiApi")
                         optIn("androidx.compose.animation.ExperimentalAnimationApi")
