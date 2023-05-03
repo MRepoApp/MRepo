@@ -65,7 +65,7 @@ fun SettingsScreen(
             SettingTitleItem(text = stringResource(id = R.string.settings_title_normal))
 
             SettingNormalItem(
-                iconRes = R.drawable.brush_outline,
+                iconRes = R.drawable.bucket_outline,
                 text = stringResource(id = R.string.settings_app_theme),
                 subText = stringResource(id = R.string.settings_app_theme_desc),
                 onClick = {
@@ -85,10 +85,11 @@ fun SettingsScreen(
             SettingTitleItem(text = stringResource(id = R.string.settings_title_app))
 
             DownloadPathItem(
-                userData = userData
-            ) {
-                viewModel.setDownloadPath(it)
-            }
+                userData = userData,
+                onChange = {
+                    viewModel.setDownloadPath(it)
+                }
+            )
 
             SettingNormalItem(
                 iconRes = R.drawable.hierarchy_outline,
