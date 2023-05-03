@@ -12,29 +12,30 @@ import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.newOutputStream
+import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
-import com.sanmer.mrepo.app.utils.MediaStoreUtils.newOutputStream
-import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.utils.expansion.parcelable
 import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.io.File
 
 class DownloadService : LifecycleService() {
-    val context by lazy { this }
+    private val context by lazy { this }
     private val tasks = mutableListOf<Task>()
+    private var lastTime = System.currentTimeMillis()
 
     init {
         val notification = NotificationUtils
@@ -47,14 +48,15 @@ class DownloadService : LifecycleService() {
         progress.sample(500)
             .flowOn(Dispatchers.IO)
             .onEach { (value, task) ->
+                lastTime = System.currentTimeMillis()
+
                 val p = (value * 100).toInt()
                 if (p == 100 || p == 0) {
                     return@onEach
                 }
 
                 NotificationUtils.notify(task!!.id,
-                    notification
-                        .setContentTitle(task.name)
+                    notification.setContentTitle(task.name)
                         .setProgress(100, p, false)
                         .build()
                 )
@@ -64,6 +66,14 @@ class DownloadService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         setForeground()
+
+        lifecycleScope.launch(Dispatchers.Default) {
+            while (isActive) {
+                System.currentTimeMillis().let {
+                    if (it - lastTime >= 30 * 1000) stopSelf()
+                }
+            }
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -89,9 +99,10 @@ class DownloadService : LifecycleService() {
         val notificationIdFinish = notificationId + 1
 
         Timber.d("download: ${task.url} to ${task.path}")
-        val path = task.path.toFile()
-        path.parentFile!!.let {
-            if (!it.exists()) it.mkdirs()
+        val path = task.path.toFile().apply {
+            parentFile!!.let {
+                if (!it.exists()) it.mkdirs()
+            }
         }
 
         val succeeded: () -> Unit = {
@@ -105,19 +116,19 @@ class DownloadService : LifecycleService() {
                 silent = true
             )
 
-            if (task.install) {
-                if (path.name.endsWith("zip")) {
-                    InstallActivity.start(context = context, path = path)
-                }
+            if (task.install && path.name.endsWith("zip")) {
+                InstallActivity.start(context = context, path = path)
+            }
 
-                if (path.name.endsWith("apk")) {
-                    runCatching {
-                        apkInstall(path)
-                    }.onFailure {
-                        Timber.e(it, "apk install failed")
-                    }
+            if (task.install && path.name.endsWith("apk")) {
+                runCatching {
+                    apkInstall(path)
+                }.onFailure {
+                    Timber.e(it, "apk install failed")
                 }
             }
+
+            tasks.remove(task)
         }
 
         val failed: (String?) -> Unit = {
@@ -130,31 +141,25 @@ class DownloadService : LifecycleService() {
                 name = task.name,
                 message = message
             )
+
+            tasks.remove(task)
+        }
+
+        val output = try {
+            path.newOutputStream()!!
+        } catch (e: Exception) {
+            failed(e.message)
+            return@launch
         }
 
         HttpUtils.downloader(
             url = task.url,
-            output = path.newOutputStream()!!,
-            onProgress = {
-                updateProgress(it, task)
-            }
+            output = output,
+            onProgress = { updateProgress(it, task) }
         ).onSuccess {
             succeeded()
-
-            tasks.remove(task)
-            stopIt()
         }.onFailure {
             failed(it.message)
-
-            tasks.remove(task)
-            stopIt()
-        }
-    }
-
-    private fun stopIt() = tasks.isEmpty().let {
-        if (it) lifecycleScope.launch {
-            delay(5000)
-            if (tasks.isEmpty()) stopSelf()
         }
     }
 
