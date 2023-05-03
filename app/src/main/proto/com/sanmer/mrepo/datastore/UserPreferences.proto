@@ -20,4 +20,5 @@ message UserPreferences {
   DarkMode darkMode = 2;
   int32 themeColor = 3;
   string downloadPath = 4;
+  bool deleteZipFile = 5;
 }

@@ -101,6 +101,8 @@
     <string name="settings_download_path">Download Path</string>
     <string name="settings_repo">Repository</string>
     <string name="settings_repo_desc">Manage Magisk modules repository</string>
+    <string name="settings_delete_zip">Delete Zip File</string>
+    <string name="settings_delete_zip_desc">Delete zip after the installation is successful, note that this is a best effort and will not work if app does not have permission to delete</string>
     <!-- Others -->
     <string name="settings_title_others">Others</string>
     <string name="settings_translate">Participate in Translation</string>

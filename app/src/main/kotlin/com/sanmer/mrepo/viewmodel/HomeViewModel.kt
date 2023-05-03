@@ -86,4 +86,5 @@ class HomeViewModel @Inject constructor(
     fun setDarkTheme(value: DarkMode) = userDataRepository.setDarkTheme(value)
     fun setThemeColor(value: Int) = userDataRepository.setThemeColor(value)
     fun setDownloadPath(value: String) = userDataRepository.setDownloadPath(value)
+    fun setDeleteZipFile(value: Boolean) = userDataRepository.setDeleteZipFile(value)
 }

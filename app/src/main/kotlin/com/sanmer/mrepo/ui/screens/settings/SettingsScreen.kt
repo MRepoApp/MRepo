@@ -28,6 +28,7 @@ import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.SettingMenuItem
 import com.sanmer.mrepo.ui.component.SettingNormalItem
+import com.sanmer.mrepo.ui.component.SettingSwitchItem
 import com.sanmer.mrepo.ui.component.SettingTitleItem
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
 import com.sanmer.mrepo.ui.navigation.navigateToHome
@@ -110,6 +111,16 @@ fun SettingsScreen(
                 selected = userData.workingMode,
                 onChange = { value, _ ->
                     viewModel.setWorkingMode(value)
+                }
+            )
+
+            SettingSwitchItem(
+                iconRes = R.drawable.box_remove_outline,
+                text = stringResource(id = R.string.settings_delete_zip),
+                subText = stringResource(id = R.string.settings_delete_zip_desc),
+                checked = userData.deleteZipFile,
+                onChange = {
+                    viewModel.setDeleteZipFile(it)
                 }
             )
 

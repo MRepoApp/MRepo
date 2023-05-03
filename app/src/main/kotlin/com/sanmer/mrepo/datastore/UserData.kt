@@ -12,17 +12,18 @@ data class UserData(
     val isRoot: Boolean = workingMode == WorkingMode.MODE_ROOT,
     val isNonRoot: Boolean = workingMode == WorkingMode.MODE_NON_ROOT,
     val isSetup: Boolean = workingMode == WorkingMode.FIRST_SETUP,
-
     val darkMode: DarkMode,
     val themeColor: Int,
-    val downloadPath: File
+    val downloadPath: File,
+    val deleteZipFile: Boolean
 ) {
     companion object {
         fun default() = UserData(
             workingMode = WorkingMode.FIRST_SETUP,
             darkMode = DarkMode.FOLLOW_SYSTEM,
             themeColor = if (Const.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
-            downloadPath = Const.DIR_PUBLIC_DOWNLOADS
+            downloadPath = Const.DIR_PUBLIC_DOWNLOADS,
+            deleteZipFile = true
         )
     }
 }
@@ -39,11 +40,13 @@ fun UserData.toPreferences(): UserPreferences = UserPreferences.newBuilder()
     .setDarkMode(darkMode)
     .setThemeColor(themeColor)
     .setDownloadPath(downloadPath.absolutePath)
+    .setDeleteZipFile(deleteZipFile)
     .build()
 
 fun UserPreferences.toUserData() = UserData(
     workingMode = workingMode,
     darkMode = darkMode,
     themeColor = themeColor,
-    downloadPath = downloadPath.toFile()
+    downloadPath = downloadPath.toFile(),
+    deleteZipFile = deleteZipFile
 )

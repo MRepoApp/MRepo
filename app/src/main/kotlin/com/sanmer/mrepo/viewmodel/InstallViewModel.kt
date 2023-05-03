@@ -7,11 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.State
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.copyTo
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.displayName
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.app.utils.MediaStoreUtils.copyTo
-import com.sanmer.mrepo.app.utils.MediaStoreUtils.displayName
+import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.utils.expansion.now
 import com.sanmer.mrepo.utils.expansion.shareFile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
+    private val userDataRepository: UserDataRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
 
@@ -62,11 +64,21 @@ class InstallViewModel @Inject constructor(
         suRepository.install(
             zipFile = file,
             console = { console.add(it) },
-            onSuccess = onSucceeded,
+            onSuccess = {
+                onSucceeded(it)
+                context.cacheDir.resolve("install.zip").delete()
+                if (userDataRepository.deleteZipFile) path.safeDelete(context)
+            },
             onFailure = {
                 state.setFailed()
             }
         )
+    }
+
+    private fun Uri.safeDelete(context: Context) = try {
+        context.contentResolver.delete(this, null, null)
+    } catch (e: Exception) {
+        Timber.e(e)
     }
 
     fun sendLogFile(context: Context) {

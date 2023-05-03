@@ -1,7 +1,7 @@
 package com.sanmer.mrepo.repository
 
-import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.datastore.DarkMode
+import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.datastore.UserPreferencesDataSource
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.di.ApplicationScope
@@ -20,14 +20,18 @@ class UserDataRepository @Inject constructor(
 ) {
     val userData get() = userPreferencesDataSource.userData
 
-    private var _downloadPath = Const.DIR_PUBLIC_DOWNLOADS
+    private val default = UserData.default()
+    private var _downloadPath = default.downloadPath
+    private var _deleteZipFile = default.deleteZipFile
     val downloadPath get() = _downloadPath
+    val deleteZipFile get() = _deleteZipFile
 
     init {
         userPreferencesDataSource.userData
             .distinctUntilChanged()
             .onEach {
                 _downloadPath = it.downloadPath
+                _deleteZipFile = it.deleteZipFile
             }.launchIn(applicationScope)
     }
 
@@ -45,5 +49,9 @@ class UserDataRepository @Inject constructor(
 
     fun setDownloadPath(value: String) = applicationScope.launch {
         userPreferencesDataSource.setDownloadPath(value)
+    }
+
+    fun setDeleteZipFile(value: Boolean) = applicationScope.launch {
+        userPreferencesDataSource.setDeleteZipFile(value)
     }
 }

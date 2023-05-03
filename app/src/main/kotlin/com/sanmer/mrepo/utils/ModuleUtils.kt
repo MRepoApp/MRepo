@@ -26,8 +26,10 @@ object ModuleUtils {
         })
         .submit {
             if (it.isSuccess) {
-                val tmp = context.cacheDir.resolve("tmp")
-                if (!tmp.exists()) tmp.mkdirs()
+                val tmp = context.cacheDir.resolve("tmp").apply {
+                    if (!exists()) mkdirs()
+                }
+
                 zipFile.unzip(tmp, "module.prop", true)
 
                 getModule(
@@ -43,8 +45,6 @@ object ModuleUtils {
             } else {
                 onFailure()
             }
-
-            context.cacheDir.resolve("install.zip").delete()
         }
 
     fun getModule(prop: File) = runCatching {

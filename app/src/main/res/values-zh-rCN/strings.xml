@@ -102,6 +102,8 @@
     <string name="settings_download_path">下载路径</string>
     <string name="settings_repo">存储库</string>
     <string name="settings_repo_desc">管理 Magisk 模块存储库</string>
+        <string name="settings_delete_zip">删除压缩包</string>
+    <string name="settings_delete_zip_desc">安装成功后删除压缩包，请注意这是尽力而为的，如果应用没有删除权限将无法执行</string>
     <!-- Others -->
     <string name="settings_title_others">其他</string>
     <string name="settings_translate">参与翻译</string>

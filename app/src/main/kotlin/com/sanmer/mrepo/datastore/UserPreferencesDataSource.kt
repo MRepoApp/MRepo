@@ -42,4 +42,12 @@ class UserPreferencesDataSource @Inject constructor(
             }
         }
     }
+
+    suspend fun setDeleteZipFile(value: Boolean) = withContext(Dispatchers.IO) {
+        userPreferences.updateData {
+            it.copy {
+                deleteZipFile = value
+            }
+        }
+    }
 }
