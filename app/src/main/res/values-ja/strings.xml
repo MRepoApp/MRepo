@@ -55,4 +55,27 @@
     <string name="device_system_abi">システムABI</string>
     <string name="device_system_version">システムバージョン</string>
     <string name="non_root_desc">機能が制限されています</string>
+    <string name="settings_log_viewer">ログビューワー</string>
+    <string name="settings_translate">翻訳に参加</string>
+    <string name="settings_translate_desc">MRepo の言語翻訳にご協力ください</string>
+    <string name="settings_title_others">その他</string>
+    <string name="settings_log_viewer_desc">アプリケーションの実行ログを表示する</string>
+    <string name="settings_download_path">ダウンロード場所</string>
+    <string name="app_theme_dark_theme">ダークテーマ</string>
+    <string name="app_theme_dark_theme_dark">ダーク</string>
+    <string name="repo_options_update">更新</string>
+    <string name="app_theme_dark_theme_light">ライト</string>
+    <string name="repo_options_share">共有</string>
+    <string name="settings_follow_updates">最新情報をフォロー</string>
+    <string name="settings_follow_updates_desc">Telegram チャンネルに参加する</string>
+    <string name="message_download_success">ダウンロードに成功</string>
+    <string name="message_download_failed">ダウンロードに失敗: %1$s</string>
+    <string name="message_loading">読み込み中…</string>
+    <string name="menu_reboot_recovery">Recovery へ再起動</string>
+    <string name="menu_reboot_edl">EDL へ再起動</string>
+    <string name="menu_reboot_download">Download へ再起動</string>
+    <string name="menu_reboot_bootloader">Bootloader へ再起動</string>
+    <string name="menu_reboot_userspace">ソフトリブート</string>
+    <string name="menu_scroll_bottom">下にスクロール</string>
+    <string name="menu_scroll_top">上にスクロール</string>
 </resources>
