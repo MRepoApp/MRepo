@@ -26,10 +26,9 @@ import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.activity.log.LogActivity
-import com.sanmer.mrepo.ui.component.EditItemForSetting
-import com.sanmer.mrepo.ui.component.MenuItemForSetting
-import com.sanmer.mrepo.ui.component.NormalItemForSetting
-import com.sanmer.mrepo.ui.component.TitleItemForSetting
+import com.sanmer.mrepo.ui.component.SettingMenuItem
+import com.sanmer.mrepo.ui.component.SettingNormalItem
+import com.sanmer.mrepo.ui.component.SettingTitleItem
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
 import com.sanmer.mrepo.ui.navigation.navigateToHome
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
@@ -63,9 +62,9 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ) {
-            TitleItemForSetting(text = stringResource(id = R.string.settings_title_normal))
+            SettingTitleItem(text = stringResource(id = R.string.settings_title_normal))
 
-            NormalItemForSetting(
+            SettingNormalItem(
                 iconRes = R.drawable.brush_outline,
                 text = stringResource(id = R.string.settings_app_theme),
                 subText = stringResource(id = R.string.settings_app_theme_desc),
@@ -74,7 +73,7 @@ fun SettingsScreen(
                 }
             )
 
-            NormalItemForSetting(
+            SettingNormalItem(
                 iconRes = R.drawable.health_outline,
                 text = stringResource(id = R.string.settings_log_viewer),
                 subText = stringResource(id = R.string.settings_log_viewer_desc),
@@ -83,20 +82,15 @@ fun SettingsScreen(
                 }
             )
 
-            TitleItemForSetting(text = stringResource(id = R.string.settings_title_app))
+            SettingTitleItem(text = stringResource(id = R.string.settings_title_app))
 
-            EditItemForSetting(
-                iconRes = R.drawable.cube_scan_outline,
-                title = stringResource(id = R.string.settings_download_path),
-                text = userData.downloadPath.absolutePath,
-                supportingText = { Text(text = stringResource(id = R.string.dialog_empty_default)) },
-                onChange = {
-                    val value = it.ifEmpty { Const.DIR_PUBLIC_DOWNLOADS.absolutePath }
-                    viewModel.setDownloadPath(value)
-                }
-            )
+            DownloadPathItem(
+                userData = userData
+            ) {
+                viewModel.setDownloadPath(it)
+            }
 
-            NormalItemForSetting(
+            SettingNormalItem(
                 iconRes = R.drawable.hierarchy_outline,
                 text = stringResource(id = R.string.settings_repo),
                 subText = stringResource(id = R.string.settings_repo_desc),
@@ -105,7 +99,7 @@ fun SettingsScreen(
                 }
             )
 
-            MenuItemForSetting(
+            SettingMenuItem(
                 iconRes = R.drawable.main_component_outline,
                 title = stringResource(id = R.string.settings_mode),
                 items = mapOf(
@@ -118,9 +112,9 @@ fun SettingsScreen(
                 }
             )
 
-            TitleItemForSetting(text = stringResource(id = R.string.settings_title_others))
+            SettingTitleItem(text = stringResource(id = R.string.settings_title_others))
 
-            NormalItemForSetting(
+            SettingNormalItem(
                 iconRes = R.drawable.translate_outline,
                 text = stringResource(id = R.string.settings_translate),
                 subText = stringResource(id = R.string.settings_translate_desc),
@@ -129,7 +123,7 @@ fun SettingsScreen(
                 }
             )
 
-            NormalItemForSetting(
+            SettingNormalItem(
                 iconRes = R.drawable.flag_outline,
                 text = stringResource(id = R.string.settings_bug_tracker),
                 subText = Const.ISSUES_URL,
@@ -138,7 +132,7 @@ fun SettingsScreen(
                 }
             )
 
-            NormalItemForSetting(
+            SettingNormalItem(
                 iconRes = R.drawable.star_outline,
                 text = stringResource(id = R.string.settings_follow_updates),
                 subText = stringResource(id = R.string.settings_follow_updates_desc),

@@ -15,7 +15,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.ui.component.TitleItemForSetting
+import com.sanmer.mrepo.ui.component.SettingTitleItem
 import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
@@ -44,13 +44,13 @@ fun AppThemeScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding),
         ) {
-            TitleItemForSetting(text = stringResource(id = R.string.app_theme_example))
+            SettingTitleItem(text = stringResource(id = R.string.app_theme_example))
             ExampleItem()
 
-            TitleItemForSetting(text = stringResource(id = R.string.app_theme_palette))
+            SettingTitleItem(text = stringResource(id = R.string.app_theme_palette))
             ThemePaletteItem()
 
-            TitleItemForSetting(text = stringResource(id = R.string.app_theme_dark_theme))
+            SettingTitleItem(text = stringResource(id = R.string.app_theme_dark_theme))
             DarkModeItem()
         }
     }

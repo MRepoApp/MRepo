@@ -3,25 +3,24 @@ package com.sanmer.mrepo.ui.component
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,58 +31,120 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.sanmer.mrepo.R
 
 @Composable
-fun NormalItemForSetting(
+fun SettingTitleItem(
+    text: String
+) = Text(
+    text = text,
+    modifier = Modifier.padding(start = 18.dp, top = 18.dp),
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.primary
+)
+
+@Composable
+fun SettingNormalItem(
     text: String,
     subText: String,
     modifier: Modifier = Modifier,
     @DrawableRes iconRes: Int? = null,
     enabled: Boolean = true,
     onClick: () -> Unit,
+) = Row(modifier = modifier
+    .alpha(alpha = if (enabled) 1f else 0.5f )
+    .clickable(
+        enabled = enabled,
+        onClick = onClick
+    )
+) {
+    Row(
+        modifier = Modifier
+            .padding(all = 18.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        iconRes?.let {
+            Icon(
+                modifier = Modifier
+                    .size(24.dp),
+                painter = painterResource(id = iconRes),
+                contentDescription = null,
+                tint = LocalContentColor.current
+            )
+
+            Spacer(modifier = Modifier.width(18.dp))
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Text(
+                text = subText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+        }
+    }
+}
+
+@Composable
+fun SettingSwitchItem(
+    modifier: Modifier = Modifier,
+    text: String,
+    checked: Boolean,
+    subText: String? = null,
+    @DrawableRes iconRes: Int? = null,
+    enabled: Boolean = true,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onChange: (Boolean) -> Unit,
 ) {
     Row(
         modifier = modifier
             .alpha(alpha = if (enabled) 1f else 0.5f )
-            .clickable(
+            .toggleable(
+                value = checked,
                 enabled = enabled,
-                onClick = onClick
-            ),
+                onValueChange = onChange,
+                role = Role.Switch,
+                interactionSource = interactionSource,
+                indication = rememberRipple()
+            )
+            .padding(all = 18.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .padding(all = 18.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            iconRes?.let {
-                Icon(
-                    modifier = Modifier
-                        .size(24.dp),
-                    painter = painterResource(id = iconRes),
-                    contentDescription = null,
-                    tint = LocalContentColor.current
-                )
-
-                Spacer(modifier = Modifier.width(18.dp))
-            }
-
-            Column(
+        iconRes?.let {
+            Icon(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.bodyLarge,
-                )
+                    .size(24.dp),
+                painter = painterResource(id = iconRes),
+                contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.width(18.dp))
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 18.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            subText?.let {
                 Text(
                     text = subText,
                     style = MaterialTheme.typography.bodyMedium,
@@ -91,125 +152,24 @@ fun NormalItemForSetting(
                 )
             }
         }
-    }
-}
 
-@Composable
-fun TitleItemForSetting(
-    text: String
-) {
-    Spacer(modifier = Modifier.height(18.dp))
-    Row {
-        Spacer(modifier = Modifier.width(18.dp))
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary
+        Switch(
+            checked = checked,
+            onCheckedChange = null
         )
+
     }
 }
 
 @Composable
-fun EditItemForSetting(
-    @DrawableRes iconRes: Int? = null,
-    title: String,
-    text: String,
-    supportingText: @Composable (() -> Unit)? = null,
-    enabled: Boolean = true,
-    onChange: (String) -> Unit,
-) {
-    var edit by remember { mutableStateOf(false) }
-    var value by remember { mutableStateOf(text) }
-    if (edit) {
-        EditDialog(
-            title = title,
-            text = text,
-            onClose = { edit = false },
-            onConfirm = {
-                value = it
-                if (it != text) {
-                    onChange(value)
-                }
-            },
-            supportingText = supportingText
-        )
-    }
-
-    NormalItemForSetting(
-        enabled = enabled,
-        iconRes = iconRes,
-        text = title,
-        subText = text
-    ) {
-        edit = true
-    }
-}
-
-@Composable
-private fun EditDialog(
-    onClose: () -> Unit,
-    onConfirm: (String) -> Unit,
-    onCancel: () -> Unit = {},
-    title: String,
-    text: String,
-    supportingText: @Composable (() -> Unit)? = null
-) {
-    var value by remember { mutableStateOf(text) }
-
-    AlertDialog(
-        shape = RoundedCornerShape(25.dp),
-        onDismissRequest = onClose,
-        title = { Text(text = title) },
-        text = {
-            OutlinedTextField(
-                modifier = Modifier,
-                textStyle = MaterialTheme.typography.bodyLarge,
-                value = value,
-                onValueChange = { value = it },
-                shape = RoundedCornerShape(15.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                supportingText = supportingText
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirm(value)
-                    onClose()
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.dialog_ok)
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onCancel()
-                    onClose()
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.dialog_cancel)
-                )
-            }
-        }
-    )
-}
-
-@Composable
-fun <T> MenuItemForSetting(
+fun <T> SettingMenuItem(
     @DrawableRes iconRes: Int? = null,
     items: Map<T, String>,
     title: String,
     selected: T,
     enabled: Boolean = true,
     onChange: (T, String) -> Unit
-) = MenuItemForSetting(
+) = SettingMenuItem(
     iconRes = iconRes,
     items = items,
     title = title,
@@ -219,7 +179,7 @@ fun <T> MenuItemForSetting(
 )
 
 @Composable
-fun <T> MenuItemForSetting(
+fun <T> SettingMenuItem(
     @DrawableRes iconRes: Int? = null,
     items: Map<T, String>,
     title: String,
@@ -236,7 +196,7 @@ fun <T> MenuItemForSetting(
         onDismissRequest = { expanded = false },
         contentAlignment = Alignment.TopStart,
         surface = {
-            NormalItemForSetting(
+            SettingNormalItem(
                 enabled = enabled,
                 iconRes = iconRes,
                 text = title,
