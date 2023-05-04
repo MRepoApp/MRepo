@@ -111,4 +111,8 @@
     <string name="notification_name_download">Serviciu de descărcare</string>
     <string name="shortcut_log_label">Jurnale</string>
     <string name="unknown_error">Eroare necunoscută</string>
+    <string name="settings_delete_zip">Șterge fișierul Zip</string>
+    <string name="settings_delete_zip_desc">Ștergere zip după ce instalarea a reușit, reține că acesta este cel mai bun efort și nu va funcționa dacă aplicația nu are permisiunea de a șterge</string>
+    <string name="menu_scroll_top">Derulează sus</string>
+    <string name="menu_scroll_bottom">Derulează jos</string>
 </resources>
