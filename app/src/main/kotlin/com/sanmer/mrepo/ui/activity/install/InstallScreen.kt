@@ -24,6 +24,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
@@ -127,7 +128,7 @@ private fun RebootButton() = ExtendedFloatingActionButton(
 @Composable
 private fun ConsoleList(
     contentPadding: PaddingValues,
-    list: SnapshotStateList<String>
+    list: SnapshotStateList<InstallViewModel.ProcessedLine>
 ) {
     val state = rememberLazyListState()
     LaunchedEffect(list.toList()) {
@@ -143,18 +144,28 @@ private fun ConsoleList(
         contentPadding = fabPadding(2.dp),
     ) {
         items(list) {
-            ConsoleItem(text = it)
+            ConsoleItem(processedLine = it)
         }
     }
 }
 
 @Composable
 private fun ConsoleItem(
-    text: String
+    processedLine: InstallViewModel.ProcessedLine
 ) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface
-    )
+    val styled: AnnotatedString? = processedLine.styledText
+    if (styled != null) {
+        Text(
+            text = styled,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    } else {
+        Text(
+            text = processedLine.text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }
+

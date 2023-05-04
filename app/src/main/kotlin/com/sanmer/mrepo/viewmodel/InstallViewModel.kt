@@ -3,8 +3,11 @@ package com.sanmer.mrepo.viewmodel
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fox2code.androidansi.AnsiContext
+import com.fox2code.androidansi.ktx.parseAsAnsiAnnotatedString
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.copyTo
@@ -28,7 +31,7 @@ class InstallViewModel @Inject constructor(
     private val suRepository: SuRepository
 ) : ViewModel() {
 
-    val console = mutableStateListOf<String>()
+    val console = mutableStateListOf<ProcessedLine>()
 
     val state = object : State(initial = Event.LOADING) {
         override fun setFailed(value: Any?) {
@@ -43,7 +46,7 @@ class InstallViewModel @Inject constructor(
         Timber.d("InstallViewModel init")
     }
 
-    fun send(message: String) = console.add("- $message")
+    fun send(message: String) = console.add(ProcessedLine("- $message"))
 
     private val onSucceeded: (LocalModule) -> Unit = {
         viewModelScope.launch {
@@ -57,13 +60,14 @@ class InstallViewModel @Inject constructor(
         path: Uri
     ) {
         val file = context.cacheDir.resolve("install.zip")
+        val ansiContext: AnsiContext = AnsiContext.DARK.asMutable()
         path.copyTo(file)
         send("Copying zip to temp directory")
         send("Installing ${path.displayName}")
 
         suRepository.install(
             zipFile = file,
-            console = { console.add(it) },
+            console = { console.add(ProcessedLine(it, ansiContext)) },
             onSuccess = {
                 onSucceeded(it)
                 context.cacheDir.resolve("install.zip").delete()
@@ -90,5 +94,20 @@ class InstallViewModel @Inject constructor(
                 writeText(text)
             }
         context.shareFile(logFile, "text/plain")
+    }
+
+    class ProcessedLine {
+        val text: String
+        val styledText: AnnotatedString?
+
+        constructor(data: String, ansiContext: AnsiContext? = null) {
+            if (ansiContext == null) {
+                this.text = data
+                this.styledText = null
+                return
+            }
+            this.styledText = data.parseAsAnsiAnnotatedString(ansiContext)
+            this.text = this.styledText.toString()
+        }
     }
 }

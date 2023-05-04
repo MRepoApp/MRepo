@@ -117,6 +117,7 @@ dependencies {
     implementation(libs.protobuf.kotlin.lite)
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.moshi)
+    implementation(libs.androidANSI)
 
     implementation(libs.square.moshi)
     ksp(libs.square.moshi.kotlin)

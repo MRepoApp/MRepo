@@ -24,6 +24,7 @@ protobuf = "3.22.3"
 protobufPlugin = "0.9.1"
 squareRetrofit = "2.9.0"
 squareMoshi = "1.14.0"
+androidANSI = "1.2.1"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -64,6 +65,7 @@ square-retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-mo
 square-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "squareMoshi" }
 square-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "squareMoshi" }
 work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
+androidANSI = { group = "com.github.Fox2Code.AndroidANSI", name = "library-ktx", version.ref = "androidANSI" }
 
 google-material = "com.google.android.material:material:1.8.0"
 markwon-core = "io.noties.markwon:core:4.6.2"

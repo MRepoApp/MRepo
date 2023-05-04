@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.utils
 
 import android.content.Context
+import com.fox2code.androidansi.AnsiConstants
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
 import com.sanmer.mrepo.utils.expansion.unzip
@@ -18,7 +19,7 @@ object ModuleUtils {
         onFailure: () -> Unit = {},
         zipFile: File,
         cmd: String
-    ) = Shell.cmd(cmd)
+    ) = Shell.cmd(AnsiConstants.ANSI_CMD_SUPPORT, cmd)
         .to(object : CallbackList<String?>() {
             override fun onAddElement(str: String?) {
                 str?.let(console)
