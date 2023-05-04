@@ -4,11 +4,10 @@
     <string name="setup_mode">Traitement en cours</string>
     <string name="setup_root_title">Raçine</string>
     <string name="setup_root_desc1">Accès à la racine requis via Magisk ou KernelSU</string>
-    <string name="setup_root_desc2">Disponible: Toutes les fonctionnalités</string>
+    <string name="setup_root_desc2">Disponible  : toutes les fonctionnalités</string>
     <string name="setup_non_root_title">Sans racine</string>
     <string name="setup_non_root_desc1">Accès à la racine non requis</string>
-    <string name="setup_non_root_desc2">Disponible: téléchargement de module</string>
-
+    <string name="setup_non_root_desc2">Disponible : téléchargement de modules</string>
     <!-- Install -->
     <string name="activity_install_label">Installateur de Module</string>
     <string name="install_title">Installer</string>
@@ -16,22 +15,19 @@
     <string name="install_done">Terminé</string>
     <string name="install_failure">Échec</string>
     <string name="install_reboot">Redémarrage</string>
-
     <!-- License -->
     <string name="license_title">Afficher Licence</string>
     <string name="license_osi_approved">OSI Approuvé</string>
-    <string name="license_fsf_libre">FSF Libre</string>
-
+    <string name="license_fsf_libre">Licence publique générale GNU version 3 (GPLv3)</string>
     <!-- Page -->
     <string name="page_modules">Modules</string>
     <string name="page_home">Apperçu</string>
     <string name="page_settings">Réglages</string>
     <string name="page_view_module">Afficher Module</string>
-
     <!-- Overview -->
     <!-- Root Card -->
-    <string name="root_status_access">Accès Racine: %1$s</string>
-    <string name="root_status_provider">Fournisseur: %1$s</string>
+    <string name="root_status_access">Accès Administrateur : %1$s</string>
+    <string name="root_status_provider">Fournisseur : %1$s</string>
     <string name="root_status_granted">Permis</string>
     <string name="root_status_not_available">Non disponible</string>
     <string name="root_status_none">Aucun</string>
@@ -59,7 +55,6 @@
     <string name="menu_reboot_bootloader">Redémarrer en mode amorçage</string>
     <string name="menu_reboot_download">Redémarrer en mode téléchargement</string>
     <string name="menu_reboot_edl">Redémarrer en mode EDL</string>
-
     <!-- Modules -->
     <!-- Modules Title -->
     <string name="modules_title_cloud">En ligne</string>
@@ -83,12 +78,11 @@
     <string name="modules_page_updates_empty">Tout est à jour</string>
     <string name="modules_page_search_empty">Liste vide</string>
     <string name="modules_page_search_placeholder">Recherche…</string>
-    <string name="modules_version_dialog_desc">Voulez-vous %1$s ou télécharger cette version de ce module?</string>
+    <string name="modules_version_dialog_desc">Voulez-vous %1$s ou télécharger cette version du module \?</string>
     <!-- View Module -->
     <string name="view_module_versions">Versions</string>
     <string name="view_module_provided">Fournis par %1$s</string>
     <string name="view_module_changelog">Journal des changements</string>
-
     <!-- Settings -->
     <!-- Normal -->
     <string name="settings_title_normal">Normal</string>
@@ -117,36 +111,35 @@
     <string name="app_theme_dark_theme_dark">Noir</string>
     <!-- Repo -->
     <string name="repo_modules">%1$d modules</string>
-    <string name="repo_last_update">Dernière mise à jour: %1$s</string>
+    <string name="repo_last_update">Dernière mise à jour : %1$s</string>
     <string name="repo_options_update">Mise à jour</string>
     <string name="repo_options_share">Partager</string>
     <string name="repo_options_delete">Supprimer</string>
-    <string name="repo_options_delete_dialog_desc1">Êtes-vous sûr de supprimer %1$s?</string>
-    <string name="repo_options_delete_dialog_desc2">Astuce: Tous les modules installés resteront sur votre périphérique.</string>
+    <string name="repo_options_delete_dialog_desc1">Êtes-vous sûr de supprimer %1$s \?</string>
+    <string name="repo_options_delete_dialog_desc2">Astuce : Tous les modules installés resteront sur votre périphérique.</string>
     <string name="repo_add_dialog_title">ajouter dépôt</string>
     <string name="repo_add_dialog_label">URL</string>
     <string name="repo_add_dialog_label_support">Vous pouvez vous référer à %1$s.</string>
     <string name="repo_add_dialog_add">Ajouter</string>
-    <string name="repo_update_dialog_failure">Échec de la mise à jour: %1$s</string>
+    <string name="repo_update_dialog_failure">Échec de la mise à jour : %1$s</string>
     <string name="repo_notification_desc">L\’examen de contenu des modules est de la responsabilité des propriétaires du dépôt. Pour tout problème à propos de ce dépôt, merci de contacter son propriétaire.</string>
-
     <!-- Dialog -->
     <string name="dialog_title_attention">Attention</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="dialog_ok">OK</string>
     <!-- Text Field Dialog -->
     <string name="dialog_empty_default">Laisser vide pour restaurer par défaut</string>
-
     <!-- Message -->
-    <string name="message_download_failed">Échec du téléchargement: %1$s</string>
+    <string name="message_download_failed">Échec du téléchargement : %1$s</string>
     <string name="message_download_success">téléchargement réussi</string>
     <string name="message_loading">Chargement…</string>
-
     <!-- Shortcut -->
     <string name="notification_name_download">Service de téléchargement</string>
     <string name="shortcut_log_label">Journaux</string>
-
     <!-- Other -->
     <string name="unknown_error">Erreur inconnue</string>
-
+    <string name="settings_delete_zip">Supprimer le fichier zip</string>
+    <string name="settings_delete_zip_desc">Supprimer le fichier zip une fois l\'installation réussie, notez que cela peut ne pas fonctionner si l\'application n\'a pas l\'autorisation de supprimer</string>
+    <string name="menu_scroll_bottom">Défiler vers le bas</string>
+    <string name="menu_scroll_top">Défiler vers le haut</string>
 </resources>
