@@ -50,7 +50,7 @@
     <string name="modules_title_cloud">السحابة</string>
     <string name="modules_title_updatable">التحديثات</string>
     <string name="module_remove">حذف</string>
-    <string name="about_source_code">عرض كود المصدر على %‬‬1$s</string>
+    <string name="about_source_code">عرض كود المصدر على %1$s</string>
     <string name="modules_page_updates_empty">كل الوحدات محدثة</string>
     <string name="modules_menu_cloud">السحابة</string>
     <string name="modules_menu_local">محلي</string>
@@ -111,4 +111,8 @@
     <string name="settings_follow_updates_desc">انضم إلى قناة تيليجرام الخاصة بنا</string>
     <string name="repo_options_delete_dialog_desc1">هل انت متأكد من حذف %1$s؟</string>
     <string name="repo_update_dialog_failure">فشل تحديث: %1$s</string>
+    <string name="settings_delete_zip_desc">احذف الملف المضغوط بعد نجاح التثبيت ، لاحظ أن هذا هو أفضل جهد ولن يتم إذا لم يكن لدى التطبيق إذن بالحذف</string>
+    <string name="settings_delete_zip">حذف الملف المضغوط</string>
+    <string name="menu_scroll_bottom">انتقل إلى الأسفل</string>
+    <string name="menu_scroll_top">انتقل إلى أعلى</string>
 </resources>
