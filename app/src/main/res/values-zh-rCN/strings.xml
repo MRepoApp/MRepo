@@ -20,7 +20,7 @@
     <!-- License -->
     <string name="license_title">查看许可证</string>
     <string name="license_osi_approved">OSI 获批</string>
-    <string name="license_fsf_libre">FSF 自由</string>
+    <string name="license_fsf_libre">自由软件</string>
 
     <!-- Page -->
     <string name="page_modules">模块</string>

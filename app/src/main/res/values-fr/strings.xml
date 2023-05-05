@@ -18,7 +18,7 @@
     <!-- License -->
     <string name="license_title">Afficher Licence</string>
     <string name="license_osi_approved">OSI Approuvé</string>
-    <string name="license_fsf_libre">Licence publique générale GNU version 3 (GPLv3)</string>
+    <string name="license_fsf_libre">FSF Libre</string>
     <!-- Page -->
     <string name="page_modules">Modules</string>
     <string name="page_home">Apperçu</string>
