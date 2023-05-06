@@ -78,4 +78,23 @@
     <string name="menu_reboot_userspace">ソフトリブート</string>
     <string name="menu_scroll_bottom">下にスクロール</string>
     <string name="menu_scroll_top">上にスクロール</string>
+    <string name="settings_app_theme_desc">ナイトモードとテーマパレットの変更</string>
+    <string name="settings_title_normal">一般</string>
+    <string name="settings_repo_desc">Magisk モジュール リポジトリを管理</string>
+    <string name="settings_title_app">アプリ</string>
+    <string name="app_theme_palette">テーマパレット</string>
+    <string name="settings_app_theme">アプリテーマ</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_empty_default">デフォルトに戻す場合は、空のままにしてください</string>
+    <string name="notification_name_download">Download Service</string>
+    <string name="repo_update_dialog_failure">更新に失敗: %1$s</string>
+    <string name="modules_page_search_empty">空のリスト</string>
+    <string name="modules_status_module">ローカルにあるモジュール / クラウドにあるモジュール</string>
+    <string name="root_status_none">無し</string>
+    <string name="root_status_not_available">利用不可</string>
+    <string name="modules_title_updatable">更新可能</string>
+    <string name="settings_delete_zip">Zipファイルを削除</string>
+    <string name="settings_delete_zip_desc">インストールが成功した後、ZIPファイルを削除します。アプリに削除権限がない場合は動作しませんのでご注意ください</string>
+    <string name="repo_options_delete_dialog_desc2">Tip: インストールされたモジュールは、すべて端末に残ります。</string>
 </resources>
