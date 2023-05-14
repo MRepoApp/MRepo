@@ -22,7 +22,7 @@ data class UserData(
             workingMode = WorkingMode.FIRST_SETUP,
             darkMode = DarkMode.FOLLOW_SYSTEM,
             themeColor = if (Const.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
-            downloadPath = Const.DIR_PUBLIC_DOWNLOADS,
+            downloadPath = Const.DIR_PUBLIC_DOWNLOADS.resolve("MRepo"),
             deleteZipFile = true
         )
     }
