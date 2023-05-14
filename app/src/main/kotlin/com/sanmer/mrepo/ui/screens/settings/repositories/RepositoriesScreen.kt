@@ -68,16 +68,16 @@ import com.sanmer.mrepo.ui.animate.slideInBottomToTop
 import com.sanmer.mrepo.ui.animate.slideInTopToBottom
 import com.sanmer.mrepo.ui.animate.slideOutBottomToTop
 import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
-import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
+import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.viewmodel.RepositoryViewModel
+import com.sanmer.mrepo.viewmodel.RepositoriesViewModel
 
 @Composable
 fun RepositoriesScreen(
-    viewModel: RepositoryViewModel = hiltViewModel(),
+    viewModel: RepositoriesViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val list by viewModel.list.collectAsStateWithLifecycle(emptyList())
@@ -94,9 +94,9 @@ fun RepositoriesScreen(
     var failure by remember { mutableStateOf(false) }
     if (failure) {
         FailureDialog(
-            onClose = { failure = false },
             repo = value,
-            message = message
+            message = message,
+            onClose = { failure = false }
         )
     }
 
@@ -177,7 +177,7 @@ private fun RepoList(
         items = list,
         key = { it.name }
     ) { repo ->
-        RepoItem(repo = repo)
+        RepositoryItem(repo = repo)
     }
 }
 

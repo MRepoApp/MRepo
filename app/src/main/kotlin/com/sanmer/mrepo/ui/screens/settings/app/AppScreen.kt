@@ -3,6 +3,7 @@ package com.sanmer.mrepo.ui.screens.settings.app
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,16 +20,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.UserData
-import com.sanmer.mrepo.ui.component.SettingSwitchItem
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
+import com.sanmer.mrepo.ui.component.SettingSwitchItem
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.viewmodel.HomeViewModel
+import com.sanmer.mrepo.viewmodel.SettingsViewModel
 
 @Composable
 fun AppScreen(
     navController: NavController,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -49,11 +50,20 @@ fun AppScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
+                .fillMaxSize()
         ) {
-            AppThemeItem()
+            AppThemeItem(
+                userData = userData,
+                onThemeColorChange = {
+                    viewModel.setThemeColor(it)
+                },
+                onDarkModeChange = {
+                    viewModel.setDarkTheme(it)
+                }
+            )
 
             DownloadPathItem(
-                downloadPath = userData.downloadPath,
+                userData = userData,
                 onChange = {
                     viewModel.setDownloadPath(it)
                 }

@@ -33,12 +33,12 @@ import com.sanmer.mrepo.model.json.ModuleUpdateItem
 import com.sanmer.mrepo.model.json.versionDisplay
 import com.sanmer.mrepo.ui.component.ExpandableItem
 import com.sanmer.mrepo.utils.expansion.toDate
-import com.sanmer.mrepo.viewmodel.DetailViewModel
+import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
 fun VersionsItem(
     isRoot: Boolean,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: ModuleViewModel = hiltViewModel()
 ) {
     var expanded by remember { mutableStateOf(true) }
     ExpandableItem(
@@ -70,7 +70,7 @@ fun VersionsItem(
 private fun UpdateItem(
     value: ModuleUpdateItem,
     isRoot: Boolean,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: ModuleViewModel = hiltViewModel()
 ) {
     var repo: Repo? by remember { mutableStateOf(null) }
     LaunchedEffect(value) {
@@ -123,7 +123,7 @@ private fun UpdateItem(
 private fun UpdateItemDialog(
     value: ModuleUpdateItem,
     isRoot: Boolean,
-    viewModel: DetailViewModel = hiltViewModel(),
+    viewModel: ModuleViewModel = hiltViewModel(),
     onClose: () -> Unit
 ) = AlertDialog(
     onDismissRequest = onClose

@@ -67,7 +67,7 @@ class InstallViewModel @Inject constructor(
             onSuccess = {
                 onSucceeded(it)
                 context.cacheDir.resolve("install.zip").delete()
-                if (userDataRepository.deleteZipFile) path.safeDelete(context)
+                if (userDataRepository.value.deleteZipFile) path.safeDelete(context)
             },
             onFailure = {
                 state.setFailed()

@@ -13,7 +13,6 @@ import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.model.json.AppUpdate
-import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.service.DownloadService
@@ -24,8 +23,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val localRepository: LocalRepository,
+class SettingsViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
@@ -33,6 +31,7 @@ class HomeViewModel @Inject constructor(
     var update by mutableStateOf(AppUpdate.empty())
         private set
     val isUpdatable get() = state.isSucceeded && update.versionCode > BuildConfig.VERSION_CODE
+    val progress get() = DownloadService.getProgress { it.url == update.apkUrl }
 
     val state = object : State(initial = Event.LOADING) {
         override fun setSucceeded(value: Any?) {
@@ -44,17 +43,12 @@ class HomeViewModel @Inject constructor(
     val userData get() = userDataRepository.userData
     val suState get() = suRepository.state
     val apiVersion get() = suRepository.version
-    val enforce get() = suRepository.enforce
-    val count get() = localRepository.count
-
-    val progress get() = DownloadService.getProgress { it.url == update.apkUrl }
 
     init {
-        Timber.d("HomeViewModel init")
-        getAppUpdate()
+        Timber.d("SettingsViewModel init")
     }
 
-    private fun getAppUpdate() = viewModelScope.launch {
+    fun getAppUpdate() = viewModelScope.launch {
         HttpUtils.requestJson<AppUpdate>(Const.UPDATE_URL.format("stable"))
             .onSuccess {
                 HttpUtils.requestString(update.changelog)
@@ -71,7 +65,7 @@ class HomeViewModel @Inject constructor(
 
     fun installer(context: Context) {
         val name = "MRepo-${update.version}(${update.versionCode})"
-        val path = userDataRepository.downloadPath.resolve("${name}.apk")
+        val path = userDataRepository.value.downloadPath.resolve("${name}.apk")
 
         DownloadService.start(
             context = context,

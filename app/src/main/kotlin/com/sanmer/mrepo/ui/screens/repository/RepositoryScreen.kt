@@ -42,19 +42,19 @@ import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.screens.modules.MenuItem
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.utils.expansion.navigateToLauncher
-import com.sanmer.mrepo.viewmodel.ModulesViewModel
+import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
 fun RepositoryScreen(
     navController: NavController,
-    viewModel: ModulesViewModel = hiltViewModel()
+    viewModel: RepositoryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = viewModel.progress,
+        refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.getOnlineAll() }
     )
 
@@ -102,7 +102,7 @@ fun RepositoryScreen(
 
             PullRefreshIndicator(
                 modifier = Modifier.align(Alignment.TopCenter),
-                refreshing = viewModel.progress,
+                refreshing = viewModel.isRefreshing,
                 state = pullRefreshState,
                 backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                 contentColor = MaterialTheme.colorScheme.primary,
@@ -116,7 +116,7 @@ fun RepositoryScreen(
 private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     listState: LazyListState,
-    viewModel: ModulesViewModel = hiltViewModel()
+    viewModel: RepositoryViewModel = hiltViewModel()
 ) = if (viewModel.isSearch) {
     SearchTopBar(
         query = viewModel.key,
@@ -135,7 +135,7 @@ private fun TopBar(
 private fun NormalTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     listState: LazyListState,
-    viewModel: ModulesViewModel = hiltViewModel()
+    viewModel: RepositoryViewModel = hiltViewModel()
 ) = TopAppBar(
     title = {
         Text(text = stringResource(id = R.string.page_repository))

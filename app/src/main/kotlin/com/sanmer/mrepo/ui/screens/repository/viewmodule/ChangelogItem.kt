@@ -35,11 +35,11 @@ import com.sanmer.mrepo.model.json.ModuleUpdateItem
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.ui.component.ExpandableItem
 import com.sanmer.mrepo.ui.component.MarkdownText
-import com.sanmer.mrepo.viewmodel.DetailViewModel
+import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
 fun ChangelogItem(
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: ModuleViewModel = hiltViewModel()
 ) {
     var expanded by remember { mutableStateOf(false) }
     var versionCode by remember { mutableStateOf(viewModel.module.versionCode) }
@@ -88,7 +88,7 @@ private fun ChangeItem(
 @Composable
 fun UpdateItemSelect(
     versionCode: Int,
-    viewModel: DetailViewModel = hiltViewModel(),
+    viewModel: ModuleViewModel = hiltViewModel(),
     onClick: (ModuleUpdateItem) -> Unit
 ) {
     val selectedValue = viewModel.versions.find {

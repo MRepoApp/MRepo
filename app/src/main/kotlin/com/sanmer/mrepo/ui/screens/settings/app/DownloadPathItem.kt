@@ -19,15 +19,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.component.SettingNormalItem
-import java.io.File
 
 @Composable
 fun DownloadPathItem(
-    downloadPath: File,
+    userData: UserData,
     onChange: (String) -> Unit
 ) {
-    val path = downloadPath.absolutePath
+    val path = userData.downloadPath.absolutePath
     var edit by remember { mutableStateOf(false) }
     if (edit) {
         EditDialog(

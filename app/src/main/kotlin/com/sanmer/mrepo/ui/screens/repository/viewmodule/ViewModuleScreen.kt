@@ -18,8 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,13 +26,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,19 +39,18 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.datastore.UserData
-import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
+import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.viewmodel.DetailViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
 fun ViewModuleScreen(
     navController: NavController,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: ModuleViewModel = hiltViewModel()
 ) {
+    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     BackHandler { navController.navigateBack() }
@@ -78,14 +73,15 @@ fun ViewModuleScreen(
                     Loading()
                 }
                 Event.SUCCEEDED -> {
-                    ViewModule()
+                    ViewModule(
+                        isRoot = userData.isRoot,
+                        hasChangelog = viewModel.hasChangelog
+                    )
                 }
                 Event.FAILED -> {
                     Failed()
                 }
-                Event.NON -> {
-                    Failed()
-                }
+                Event.NON -> {}
             }
         }
     }
@@ -93,29 +89,26 @@ fun ViewModuleScreen(
 
 @Composable
 private fun ViewModule(
-    viewModel: DetailViewModel = hiltViewModel()
+    isRoot: Boolean,
+    hasChangelog: Boolean
+) = Column(
+    modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .padding(all = 20.dp)
+        .fillMaxSize(),
+    verticalArrangement = Arrangement.spacedBy(10.dp),
+    horizontalAlignment = Alignment.CenterHorizontally
 ) {
-    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
-
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(all = 20.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ModuleInfoItem()
-        ProgressItem()
-        InstallButton(isRoot = userData.isRoot)
-        VersionsItem(isRoot = userData.isRoot)
-        if (viewModel.hasChangelog) ChangelogItem()
-    }
+    ModuleInfoItem()
+    ProgressItem()
+    InstallButton(isRoot = isRoot)
+    VersionsItem(isRoot = isRoot)
+    if (hasChangelog) ChangelogItem()
 }
 
 @Composable
 private fun ProgressItem(
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: ModuleViewModel = hiltViewModel()
 ) {
     val progress by viewModel.progress.collectAsStateWithLifecycle(0f)
 
@@ -139,26 +132,14 @@ private fun ProgressItem(
 
 @Composable
 private fun ViewModuleTopBar(
-    viewModel: DetailViewModel = hiltViewModel(),
     scrollBehavior: TopAppBarScrollBehavior,
-    navController: NavController
+    navController: NavController,
+    viewModel: ModuleViewModel = hiltViewModel()
 ) = NavigateUpTopBar(
-    title = R.string.page_view_module,
-    actions = {
-        val scope = rememberCoroutineScope()
-        IconButton(
-            onClick = {
-                scope.launch(Dispatchers.IO) {
-                    viewModel.state.setLoading()
-                    viewModel.getUpdates()
-                }
-            }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.rotate_left_outline),
-                contentDescription = null
-            )
-        }
+    title = if (viewModel.state.isSucceeded) {
+        viewModel.module.name
+    } else {
+        stringResource(id = R.string.page_view_module)
     },
     scrollBehavior = scrollBehavior,
     navController = navController
@@ -168,7 +149,7 @@ private fun ViewModuleTopBar(
 private fun InstallButton(
     isRoot: Boolean,
     context: Context = LocalContext.current,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: ModuleViewModel = hiltViewModel()
 ) = Button(
     modifier = Modifier.fillMaxWidth(),
     shape = RoundedCornerShape(20.dp),
@@ -204,7 +185,7 @@ private fun Loading() = PageIndicator(
 
 @Composable
 private fun Failed(
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: ModuleViewModel = hiltViewModel()
 ) = PageIndicator(
     icon = R.drawable.danger_outline,
     text = viewModel.message ?: stringResource(id = R.string.unknown_error)

@@ -16,7 +16,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,12 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.DarkMode
-import com.sanmer.mrepo.datastore.UserData
-import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 private enum class DarkModeItem(
     val value: DarkMode,
@@ -63,49 +58,42 @@ private val modes = listOf(
 
 @Composable
 fun DarkModeItem(
-    viewModel: HomeViewModel = hiltViewModel()
+    darkMode: DarkMode,
+    onChange: (DarkMode) -> Unit
+) = LazyRow(
+    contentPadding = PaddingValues(horizontal = 18.dp, vertical = 16.dp),
+    horizontalArrangement = Arrangement.spacedBy(15.dp)
 ) {
-    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
-
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(15.dp)
+    items(
+        items = modes,
+        key = { it.value }
     ) {
-        items(
-            items = modes,
-            key = { it.value }
-        ) {
-            DarkModeItem(
-                userData = userData,
-                item = it
-            ) { value ->
-                viewModel.setDarkTheme(value)
-            }
+        DarkModeItem(
+            item = it,
+            darkMode = darkMode
+        ) { value ->
+            onChange(value)
         }
     }
 }
 
 @Composable
 private fun DarkModeItem(
-    userData: UserData,
     item: DarkModeItem,
+    darkMode: DarkMode,
     onClick: (DarkMode) -> Unit
 ) {
-    val selected = item.value == userData.darkMode
+    val selected = item.value == darkMode
 
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
-            .clickable(
-                onClick = { onClick(item.value) }
-            )
-            .background(
-                color = if (selected) {
-                    MaterialTheme.colorScheme.surfaceVariant.copy(0.45f)
-                } else {
-                    MaterialTheme.colorScheme.outline.copy(0.1f)
-                }
-            ),
+            .clickable(onClick = { onClick(item.value) })
+            .background(color = if (selected) {
+                MaterialTheme.colorScheme.surfaceVariant.copy(0.45f)
+            } else {
+                MaterialTheme.colorScheme.outline.copy(0.1f)
+            }),
         contentAlignment = Alignment.Center
     ){
         Row(

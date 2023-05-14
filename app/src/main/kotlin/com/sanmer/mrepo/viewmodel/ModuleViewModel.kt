@@ -24,14 +24,15 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(
+class ModuleViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository,
     private val userDataRepository: UserDataRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val id: String? = savedStateHandle["id"]
+    private val moduleId: String = checkNotNull(savedStateHandle["moduleId"])
+
     var module = OnlineModule()
         private set
     val hasLicense get() = module.license.isNotBlank()
@@ -56,29 +57,27 @@ class DetailViewModel @Inject constructor(
     val userData get() = userDataRepository.userData
 
     init {
-        Timber.d("DetailViewModel init: $id")
-        getModule()
+        Timber.d("ModuleViewModel init")
+        getModule(moduleId)
     }
 
-    private fun getModule() = viewModelScope.launch {
-        if (id.isNullOrBlank()) {
-            state.setFailed("The id is null or blank")
-        } else {
-            runCatching {
-                localRepository.getOnlineAll().first { it.id == id }
-            }.onSuccess {
-                module = it
-                getUpdates()
-            }.onFailure {
-                Timber.e(it, "getModule")
-                state.setFailed(it.message)
-            }
+    private fun getModule(moduleId: String) = viewModelScope.launch {
+        Timber.d("getModule: $moduleId")
+
+        runCatching {
+            localRepository.online.first { it.id == moduleId }
+        }.onSuccess {
+            module = it
+            getUpdates()
+        }.onFailure {
+            Timber.e(it, "getModule")
+            state.setFailed(it.message)
         }
     }
 
     suspend fun getRepoByUrl(url: String) = localRepository.getRepoByUrl(url)
 
-    suspend fun getUpdates() {
+    private suspend fun getUpdates() {
         val update: (ModuleUpdate) -> Unit = { update ->
             update.versions.forEach { item ->
                 val versionCodes = versions.map { it.versionCode }
@@ -138,7 +137,7 @@ class DetailViewModel @Inject constructor(
         item: ModuleUpdateItem,
         install: Boolean = false
     ) {
-        val path = userDataRepository.downloadPath.resolve(
+        val path = userDataRepository.value.downloadPath.resolve(
             "${module.name}_${item.version}_${item.versionCode}.zip"
                 .replace("[\\s+|/]".toRegex(), "_")
         )
@@ -153,7 +152,7 @@ class DetailViewModel @Inject constructor(
     }
 
     fun installer(context: Context) {
-        val path = userDataRepository.downloadPath.resolve(
+        val path = userDataRepository.value.downloadPath.resolve(
             "${module.name}_${module.version}_${module.versionCode}.zip"
                 .replace("[\\s+|/]".toRegex(), "_")
         )

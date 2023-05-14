@@ -1,31 +1,22 @@
 package com.sanmer.mrepo.viewmodel
 
-import android.content.Context
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.module.LocalModule
-import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.model.module.State
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
-import com.sanmer.mrepo.service.DownloadService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,99 +28,32 @@ class ModulesViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
-
-    val updatableValue get() = (if (isSearch) _updatable else updatable)
-        .sortedBy { it.name }
-
     val localValue get() = (if (isSearch) _local else local)
         .sortedBy { it.name }
 
-    val onlineValue get() = (if (isSearch) _online else online)
-        .sortedBy { it.name }
-
-    private val local = mutableStateListOf<LocalModule>()
-    private val online = mutableStateListOf<OnlineModule>()
-    private val updatable by derivedStateOf {
-        online.filter { module ->
-            module.versionCode > (local
-                .find {
-                    module.id == it.id
-                }?.versionCode ?: Int.MAX_VALUE)
-        }
-    }
+    private val local get() = localRepository.local
 
     var isSearch by mutableStateOf(false)
     var key by mutableStateOf("")
-    private val _updatable by derivedStateOf {
-        updatable.filter {
-            if (key.isBlank()) return@filter true
-            key.uppercase() in "${it.name}${it.author}".uppercase()
-        }
-    }
     private val _local by derivedStateOf {
         local.filter {
             if (key.isBlank()) return@filter true
             key.uppercase() in "${it.name}${it.author}".uppercase()
         }
     }
-    private val _online by derivedStateOf {
-        online.filter {
-            if (key.isBlank()) return@filter true
-            key.uppercase() in "${it.name}${it.author}".uppercase()
-        }
-    }
 
-    val userData get() = userDataRepository.userData
     val suState get() = suRepository.state
 
-    var progress by mutableStateOf(false)
+    var isRefreshing by mutableStateOf(false)
         private set
-    private inline fun <T> T.updateProgress(callback: T.() -> Unit) {
-        progress  = true
+    private inline fun <T> T.refreshing(callback: T.() -> Unit) {
+        isRefreshing = true
         callback()
-        progress = false
-    }
-
-    private val listSate = mutableMapOf<Int, LazyListState>()
-    fun updateListSate(value: Pair<Int, LazyListState>) {
-        listSate[value.first] = value.second
-    }
-    fun getListSate(index: Int) = listSate[index] ?: LazyListState(0, 0)
-    fun scrollToTop(page: Int) = viewModelScope.launch {
-        listSate[page]?.apply {
-            scrollToItem(0)
-        }
-    }
-    fun scrollToBottom(page: Int) = viewModelScope.launch {
-        listSate[page]?.apply {
-            scrollToItem(layoutInfo.totalItemsCount)
-        }
+        isRefreshing = false
     }
 
     init {
         Timber.d("ModulesViewModel init")
-
-        localRepository.getLocalAllAsFlow()
-            .distinctUntilChanged()
-            .onEach { list ->
-                if (list.isEmpty()) return@onEach
-
-                if (local.isNotEmpty()) local.clear()
-                local.addAll(list)
-                Timber.i("ModulesViewModel: updateLocal")
-
-            }.launchIn(viewModelScope)
-
-        localRepository.getOnlineAllAsFlow()
-            .distinctUntilChanged()
-            .onEach { list ->
-                if (list.isEmpty()) return@onEach
-
-                if (online.isNotEmpty()) online.clear()
-                online.addAll(list)
-                Timber.i("ModulesViewModel: updateOnline")
-
-            }.launchIn(viewModelScope)
     }
 
     fun closeSearch() {
@@ -137,46 +61,9 @@ class ModulesViewModel @Inject constructor(
         key = ""
     }
 
-    fun getProgress(
-        value: OnlineModule
-    ) = DownloadService.getProgress { it.name == value.name }
-
-    fun downloader(
-        context: Context,
-        module: OnlineModule,
-        install: Boolean = false
-    ) {
-        val path = userDataRepository.downloadPath.resolve(
-            "${module.name}_${module.version}_${module.versionCode}.zip"
-                .replace("[\\s+|/]".toRegex(), "_")
-        )
-
-        DownloadService.start(
-            context = context,
-            name = module.name,
-            path = path.absolutePath,
-            url = module.states.zipUrl,
-            install = install
-        )
-    }
-
-    fun getRepoByUrl(
-        url: String,
-        callback: (Repo) -> Unit
-    ) = viewModelScope.launch {
-        val repo = localRepository.getRepoByUrl(url)
-        callback(repo)
-    }
-
     fun getLocalAll() = viewModelScope.launch {
-        updateProgress {
+        refreshing {
             modulesRepository.getLocalAll()
-        }
-    }
-
-    fun getOnlineAll() = viewModelScope.launch {
-        updateProgress {
-            modulesRepository.getRepoAll()
         }
     }
 
@@ -222,7 +109,7 @@ class ModulesViewModel @Inject constructor(
 
     @Composable
     fun rememberLocalModuleState(module: LocalModule): LocalModuleState {
-        return remember(key1 = module.state, key2 = progress) {
+        return remember(key1 = module.state, key2 = isRefreshing) {
             createLocalModuleState(module)
         }
     }

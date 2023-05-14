@@ -19,11 +19,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.datastore.DarkMode
+import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppThemeItem() {
+fun AppThemeItem(
+    userData: UserData,
+    onThemeColorChange: (Int) -> Unit,
+    onDarkModeChange: (DarkMode) -> Unit
+) {
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
@@ -42,7 +49,15 @@ fun AppThemeItem() {
     )
 
     if (openBottomSheet) {
-        BottomSheet(bottomSheetState) { openBottomSheet = false }
+        BottomSheet(
+            state = bottomSheetState,
+            onClose = { openBottomSheet = false },
+            themeColor = userData.themeColor,
+            darkMode = userData.darkMode,
+            isDarkMode = userData.isDarkMode(),
+            onThemeColorChange =onThemeColorChange,
+            onDarkModeChange = onDarkModeChange
+        )
     }
 }
 
@@ -50,7 +65,12 @@ fun AppThemeItem() {
 @Composable
 private fun BottomSheet(
     state: SheetState,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    themeColor: Int,
+    darkMode: DarkMode,
+    isDarkMode: Boolean,
+    onThemeColorChange: (Int) -> Unit,
+    onDarkModeChange: (DarkMode) -> Unit,
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
     sheetState = state,
@@ -58,10 +78,17 @@ private fun BottomSheet(
     scrimColor = Color.Transparent // TODO: Wait for the windowInsets parameter to be set
 ) {
     TitleItem(text = stringResource(id = R.string.app_theme_palette))
-    ThemePaletteItem()
+    ThemePaletteItem(
+        themeColor = themeColor,
+        isDarkMode = isDarkMode,
+        onChange = onThemeColorChange
+    )
 
     TitleItem(text = stringResource(id = R.string.app_theme_dark_theme))
-    DarkModeItem()
+    DarkModeItem(
+        darkMode = darkMode,
+        onChange = onDarkModeChange
+    )
 }
 
 @Composable

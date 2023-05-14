@@ -24,11 +24,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.activity.license.LicenseActivity
 import com.sanmer.mrepo.ui.component.NormalChip
-import com.sanmer.mrepo.viewmodel.DetailViewModel
+import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
 fun ModuleInfoItem(
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: ModuleViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 

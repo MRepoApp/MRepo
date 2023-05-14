@@ -24,11 +24,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.isSucceeded
-import com.sanmer.mrepo.viewmodel.HomeViewModel
+import com.sanmer.mrepo.viewmodel.SettingsViewModel
 
 @Composable
 fun RootItem(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel()
 ) = Surface(
     modifier = Modifier.padding(all = 18.dp),
     shape = RoundedCornerShape(15.dp),

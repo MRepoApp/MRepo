@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,12 +39,12 @@ import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.viewmodel.HomeViewModel
+import com.sanmer.mrepo.viewmodel.SettingsViewModel
 
 @Composable
 fun WorkingModeScreen(
     navController: NavController,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -65,7 +66,7 @@ fun WorkingModeScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
                 .padding(top = 20.dp)
-                .fillMaxWidth(),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

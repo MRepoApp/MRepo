@@ -43,7 +43,7 @@ import com.sanmer.mrepo.ui.component.Checkbox
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.utils.expansion.shareText
 import com.sanmer.mrepo.utils.expansion.toDateTime
-import com.sanmer.mrepo.viewmodel.RepositoryViewModel
+import com.sanmer.mrepo.viewmodel.RepositoriesViewModel
 
 private enum class Menu(
     @StringRes val label: Int,
@@ -72,9 +72,9 @@ private val options = listOf(
 )
 
 @Composable
-fun RepoItem(
-    viewModel: RepositoryViewModel = hiltViewModel(),
-    repo: Repo
+fun RepositoryItem(
+    repo: Repo,
+    viewModel: RepositoriesViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -94,12 +94,12 @@ fun RepoItem(
     var message: String? by remember { mutableStateOf(null) }
     if (failure) {
         FailureDialog(
+            repo = repo,
+            message = message,
             onClose = {
                 failure = false
                 message = null
-            },
-            repo = repo,
-            message = message
+            }
         )
     }
 
@@ -222,9 +222,9 @@ private fun MenuItem(
 
 @Composable
 private fun DeleteDialog(
+    repo: Repo,
     onClose: () -> Unit,
-    onConfirm: () -> Unit,
-    repo: Repo
+    onConfirm: () -> Unit
 ) = AlertDialog(
     shape = RoundedCornerShape(20.dp),
     onDismissRequest = onClose,
@@ -260,17 +260,16 @@ private fun DeleteDialog(
 
 @Composable
 fun FailureDialog(
-    onClose: () -> Unit,
     repo: Repo,
-    message: String?
+    message: String?,
+    onClose: () -> Unit
 ) = AlertDialog(
     shape = RoundedCornerShape(20.dp),
     onDismissRequest = onClose,
     title = { Text(text = repo.name) },
     text = {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = stringResource(id = R.string.repo_update_dialog_failure, message.toString()),
@@ -280,9 +279,7 @@ fun FailureDialog(
     },
     confirmButton = {
         TextButton(
-            onClick = {
-                onClose()
-            }
+            onClick = onClose
         ) {
             Text(text = stringResource(id = R.string.dialog_ok))
         }
