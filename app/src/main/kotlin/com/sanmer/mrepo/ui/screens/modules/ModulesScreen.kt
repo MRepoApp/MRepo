@@ -53,7 +53,7 @@ import com.sanmer.mrepo.ui.animate.slideInBottomToTop
 import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
-import com.sanmer.mrepo.ui.navigation.navigateToRepo
+import com.sanmer.mrepo.ui.navigation.navigateToRepository
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
@@ -73,7 +73,7 @@ fun ModulesScreen(
     }
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = viewModel.progress,
+        refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.getLocalAll() }
     )
 
@@ -81,7 +81,7 @@ fun ModulesScreen(
         if (viewModel.isSearch) {
             viewModel.closeSearch()
         } else {
-            navController.navigateToRepo()
+            navController.navigateToRepository()
         }
     }
 
@@ -130,7 +130,7 @@ fun ModulesScreen(
 
             PullRefreshIndicator(
                 modifier = Modifier.align(Alignment.TopCenter),
-                refreshing = viewModel.progress,
+                refreshing = viewModel.isRefreshing,
                 state = pullRefreshState,
                 backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                 contentColor = MaterialTheme.colorScheme.primary,

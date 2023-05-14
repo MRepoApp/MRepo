@@ -11,10 +11,10 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.navigation.BottomNav
-import com.sanmer.mrepo.ui.navigation.MainGraph
-import com.sanmer.mrepo.ui.navigation.graph.modulesGraph
-import com.sanmer.mrepo.ui.navigation.graph.repoGraph
-import com.sanmer.mrepo.ui.navigation.graph.settingsGraph
+import com.sanmer.mrepo.ui.navigation.MainScreen
+import com.sanmer.mrepo.ui.navigation.graph.modulesScreen
+import com.sanmer.mrepo.ui.navigation.graph.repositoryScreen
+import com.sanmer.mrepo.ui.navigation.graph.settingsScreen
 
 @Composable
 fun MainScreen(
@@ -33,17 +33,17 @@ fun MainScreen(
         AnimatedNavHost(
             modifier = Modifier.padding(bottom = it.calculateBottomPadding()),
             navController = navController,
-            startDestination = MainGraph.Repo.route,
+            startDestination = MainScreen.Repository.route,
             enterTransition = { fadeIn(animationSpec = tween(400)) },
             exitTransition = { fadeOut(animationSpec = tween(300)) }
         ) {
-            repoGraph(
+            repositoryScreen(
                 navController = navController
             )
-            modulesGraph(
+            modulesScreen(
                 navController = navController
             )
-            settingsGraph(
+            settingsScreen(
                 navController = navController
             )
         }

@@ -2,33 +2,38 @@ package com.sanmer.mrepo.ui.navigation.graph
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
+import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.animate.slideInLeftToRight
 import com.sanmer.mrepo.ui.animate.slideInRightToLeft
 import com.sanmer.mrepo.ui.animate.slideOutLeftToRight
 import com.sanmer.mrepo.ui.animate.slideOutRightToLeft
-import com.sanmer.mrepo.ui.navigation.MainGraph
+import com.sanmer.mrepo.ui.navigation.MainScreen
 import com.sanmer.mrepo.ui.screens.repository.RepositoryScreen
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.ViewModuleScreen
 
-enum class RepoGraph(val route: String) {
-    Repo("Repository"),
-    View("ViewOnlineModule")
+enum class RepositoryScreen(val route: String) {
+    Home("Repository"),
+    View("View/{moduleId}")
 }
 
+fun createViewRoute(module: OnlineModule) = "View/${module.id}"
+
 private val subScreens = listOf(
-    RepoGraph.View.route
+    RepositoryScreen.View.route
 )
 
-fun NavGraphBuilder.repoGraph(
+fun NavGraphBuilder.repositoryScreen(
     navController: NavController
 ) = navigation(
-    startDestination = RepoGraph.Repo.route,
-    route = MainGraph.Repo.route
+    startDestination = RepositoryScreen.Home.route,
+    route = MainScreen.Repository.route
 ) {
     composable(
-        route = RepoGraph.Repo.route,
+        route = RepositoryScreen.Home.route,
         enterTransition = {
             if (initialState.destination.route in subScreens) {
                 slideInRightToLeft()
@@ -50,7 +55,8 @@ fun NavGraphBuilder.repoGraph(
     }
 
     composable(
-        route = RepoGraph.View.route,
+        route = RepositoryScreen.View.route,
+        arguments = listOf(navArgument("moduleId") { type = NavType.StringType }),
         enterTransition = { slideInLeftToRight() },
         exitTransition = { slideOutRightToLeft() }
     ) {

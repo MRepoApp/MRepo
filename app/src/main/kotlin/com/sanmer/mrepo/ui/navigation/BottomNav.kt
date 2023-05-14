@@ -27,7 +27,7 @@ fun BottomNav(
     NavigationBar(
         modifier = Modifier.imePadding()
     ) {
-        mainGraphs.forEach { screen ->
+        mainScreens.forEach { screen ->
             val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
 
             NavigationBarItem(
@@ -50,7 +50,7 @@ fun BottomNav(
                 alwaysShowLabel = true,
                 selected = selected,
                 onClick = { if (!selected) navController.navigatePopUpTo(screen.route) },
-                enabled = if (screen == MainGraph.Modules) isRoot else true
+                enabled = if (screen == MainScreen.Modules) isRoot else true
             )
         }
     }

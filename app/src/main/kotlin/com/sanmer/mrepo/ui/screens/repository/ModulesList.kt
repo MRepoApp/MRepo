@@ -26,6 +26,8 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.Logo
+import com.sanmer.mrepo.ui.navigation.graph.createViewRoute
+import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 
 @Composable
 fun ModulesList(
@@ -42,7 +44,7 @@ fun ModulesList(
         key = { it.id }
     ) { module ->
         ModuleItem(module) {
-
+            navController.navigatePopUpTo(createViewRoute(module))
         }
     }
 }
