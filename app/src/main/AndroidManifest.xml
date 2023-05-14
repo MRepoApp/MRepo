@@ -31,20 +31,12 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <intent-filter>
-                <action android:name="${applicationId}.shortcut.MODULES"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="${applicationId}.shortcut.SETTINGS"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
         </activity>
 
         <activity android:name=".ui.activity.install.InstallActivity"
-            android:label="@string/activity_install_label"
+            android:label="@string/install_activity_label"
             android:exported="true"
-            android:launchMode="singleTop">
+            android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -56,12 +48,12 @@
         <activity android:name=".ui.activity.log.LogActivity"
             android:label="@string/page_log_viewer"
             android:exported="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="standard"/>
 
         <activity android:name=".ui.activity.license.LicenseActivity"
             android:label="@string/license_title"
             android:exported="true"
-            android:launchMode="singleTop"/>
+            android:launchMode="standard"/>
 
         <service android:name=".service.DownloadService"
             android:exported="false"/>

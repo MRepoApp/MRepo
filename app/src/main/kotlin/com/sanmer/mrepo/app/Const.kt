@@ -18,9 +18,9 @@ object Const {
     const val CHANNEL_ID_DOWNLOAD = "module_download"
 
     // URL
-    const val TRANSLATE_URL = "https://weblate.sanmer.dev/engage/mrepo/"
-    const val ISSUES_URL = "https://github.com/ya0211/MRepo/issues"
-    const val TELEGRAM_CHANNEL_URL = "https://t.me/mrepo_news"
+    const val TRANSLATE_URL = "https://weblate.sanmer.dev/engage/mrepo"
+    const val GITHUB_URL = "https://github.com/ya0211/MRepo"
+    const val TELEGRAM_URL = "https://t.me/mrepo_news"
     const val MY_REPO_URL = "https://ya0211.github.io/magisk-modules-repo/"
     const val SPDX_URL = "https://spdx.org/licenses/%s.json"
     const val UPDATE_URL = "https://ya0211.github.io/mrepo-files/%s.json"

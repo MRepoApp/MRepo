@@ -38,10 +38,10 @@ import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.model.json.License
-import com.sanmer.mrepo.ui.component.NormalChip
-import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.MarkdownText
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
+import com.sanmer.mrepo.ui.component.NormalChip
+import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.utils.HttpUtils
 import timber.log.Timber
 
@@ -93,9 +93,7 @@ fun LicenseScreen(
                 Event.FAILED -> {
                     Failed(message = message)
                 }
-                Event.NON -> {
-                    Failed(message = message)
-                }
+                Event.NON -> {}
             }
         }
     }
