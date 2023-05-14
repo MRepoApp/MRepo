@@ -1,11 +1,11 @@
 [versions]
-accompanist = "0.30.1"
+accompanist = "0.31.2-alpha"
 androidGradlePlugin = "8.0.1"
 androidxActivity = "1.7.1"
-androidxCompose = "1.4.2"
-androidxComposeCompiler = "1.4.6"
-androidxComposeMaterial = "1.4.2"
-androidxComposeMaterial3 = "1.1.0-rc01"
+androidxCompose = "1.5.0-alpha04"
+androidxComposeCompiler = "1.4.7"
+androidxComposeMaterial = "1.4.3"
+androidxComposeMaterial3 = "1.2.0-alpha01"
 androidxHiltNavigationCompose = "1.0.0"
 androidxCore = "1.10.0"
 androidxDataStore = "1.0.0"
@@ -14,21 +14,22 @@ androidxLifecycle = "2.6.1"
 androidxNavigation = "2.5.3"
 androidxRoom = "2.5.1"
 androidxWork = "2.8.1"
-hilt = "2.45"
-kotlin = "1.8.20"
-kotlinxCoroutines = "1.6.4"
+hilt = "2.46"
+kotlin = "1.8.21"
+kotlinxCoroutines = "1.7.1"
 kotlinxDatetime = "0.4.0"
-ksp = "1.8.20-1.0.11"
+ksp = "1.8.21-1.0.11"
 libsu = "5.0.5"
-protobuf = "3.22.3"
-protobufPlugin = "0.9.1"
+protobuf = "3.23.0"
+protobufPlugin = "0.9.3"
 squareRetrofit = "2.9.0"
 squareMoshi = "1.14.0"
 
 [libraries]
+accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanist" }
+accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
-accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 compose-material = { group = "androidx.compose.material", name = "material" , version.ref = "androidxComposeMaterial" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxComposeMaterial3" }

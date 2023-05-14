@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId = namespace
         versionCode = commitCount.toInt()
-        versionName = "${baseVersionName}.r${commitCount}.${commitId}"
+        versionName = "${baseVersionName}.${commitId}"
 
         resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es", "ar")
         multiDexEnabled = true
@@ -98,9 +98,10 @@ protobuf {
 }
 
 dependencies {
+    implementation(libs.accompanist.drawablepainter)
+    implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.navigation.animation)
     implementation(libs.activity.compose)
     implementation(libs.core.ktx)
     implementation(libs.datastore.core)
