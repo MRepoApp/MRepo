@@ -5,24 +5,19 @@
     <!-- Page -->
     <string name="page_app_theme" translatable="false">@string/settings_app_theme</string>
     <string name="page_log_viewer" translatable="false">@string/settings_log_viewer</string>
-    <string name="page_repository" translatable="false">@string/settings_repo</string>
-
-    <!-- Overview -->
-    <!-- Non Root Card -->
-    <string name="non_root_title" translatable="false">@string/setup_non_root_title</string>
-    <!-- App Update Card -->
-    <string name="app_update_update" translatable="false">@string/module_update</string>
+    <string name="page_repositories" translatable="false">@string/settings_repo</string>
 
     <!-- Settings -->
-    <!-- App -->
     <string name="settings_mode" translatable="false">@string/setup_mode</string>
     <string name="settings_mode_root" translatable="false">@string/setup_root_title</string>
     <string name="settings_mode_non_root" translatable="false">@string/setup_non_root_title</string>
+    <!-- Non Root Card -->
+    <string name="settings_non_root_title" translatable="false">@string/setup_non_root_title</string>
     <!-- Repo -->
-    <string name="repo_empty" translatable="false">@string/modules_page_cloud_empty</string>
-
-    <!-- Shortcut -->
-    <string name="shortcut_modules_label" translatable="false">@string/page_modules</string>
-    <string name="shortcut_settings_label" translatable="false">@string/page_settings</string>
+    <string name="repo_empty" translatable="false">@string/repository_empty</string>
+    <!-- About -->
+    <string name="about_github" translatable="false">GitHub</string>
+    <string name="about_weblate" translatable="false">Weblate</string>
+    <string name="about_telegram" translatable="false">Telegram</string>
 
 </resources>

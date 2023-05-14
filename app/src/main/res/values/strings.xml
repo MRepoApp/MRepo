@@ -10,7 +10,7 @@
     <string name="setup_non_root_desc2">Available: download module</string>
 
     <!-- Install -->
-    <string name="activity_install_label">Module Installer</string>
+    <string name="install_activity_label">Module Installer</string>
     <string name="install_title">Install</string>
     <string name="install_flashing">Flashing</string>
     <string name="install_done">Done</string>
@@ -23,121 +23,88 @@
     <string name="license_fsf_libre">FSF Libre</string>
 
     <!-- Page -->
+    <string name="page_repository">Repository</string>
     <string name="page_modules">Modules</string>
-    <string name="page_home">Overview</string>
     <string name="page_settings">Settings</string>
     <string name="page_view_module">View Module</string>
 
-    <!-- Overview -->
-    <!-- Root Card -->
-    <string name="root_status_access">Root Access: %1$s</string>
-    <string name="root_status_provider">Provider: %1$s</string>
-    <string name="root_status_granted">Granted</string>
-    <string name="root_status_not_available">Not available</string>
-    <string name="root_status_none">None</string>
-    <!-- Non Root Card -->
-    <string name="non_root_desc">Functionality is limited</string>
-    <!-- App Update Card -->
-    <string name="app_update_latest">Latest: %1$s</string>
-    <string name="app_update_installed">Installed: %1$s</string>
-    <!-- Info Card -->
-    <string name="modules_status_repo">Enabled Repositories / All Repositories</string>
-    <string name="modules_status_module">Modules in Local / Modules in  Cloud</string>
-    <string name="device_system_version">System Version</string>
-    <string name="device_system_abi">System ABI</string>
-    <string name="device_security_patch">Security Patch</string>
-    <string name="device_selinux_status">SELinux Status</string>
-    <string name="selinux_status_disabled">Disabled</string>
-    <string name="selinux_status_enforcing">Enforcing</string>
-    <string name="selinux_status_permissive">Permissive</string>
-    <!-- About -->
-    <string name="about_source_code">View source code at %1$s</string>
-    <!-- Menu -->
-    <string name="menu_reboot">Reboot</string>
-    <string name="menu_reboot_userspace">Soft Reboot</string>
-    <string name="menu_reboot_recovery">Reboot to Recovery</string>
-    <string name="menu_reboot_bootloader">Reboot to Bootloader</string>
-    <string name="menu_reboot_download">Reboot to Download</string>
-    <string name="menu_reboot_edl">Reboot to EDL</string>
+    <!-- Repository -->
+    <string name="repository_empty">Repository is empty</string>
+    <!-- View Module -->
+    <string name="view_module_author">By %1$s</string>
+    <string name="view_module_versions">Versions</string>
+    <string name="view_module_provided">Provided by %1$s</string>
+    <string name="view_module_changelog">Changelog</string>
+    <string name="view_module_version_dialog_desc">Do you want to install or download this version of the module?</string>
 
     <!-- Modules -->
-    <!-- Modules Title -->
-    <string name="modules_title_cloud">Cloud</string>
-    <string name="modules_title_updatable">Updates</string>
-    <string name="modules_title_installed">Installed</string>
-    <!-- Modules Menu -->
-    <string name="modules_menu_cloud">Cloud</string>
-    <string name="modules_menu_local">Local</string>
+    <string name="modules_empty">No modules found</string>
     <!-- Module Card -->
     <string name="module_version_author">%1$s by %2$s</string>
-    <string name="module_author">by %1$s</string>
     <string name="module_update">Update</string>
     <string name="module_remove">Remove</string>
     <string name="module_restore">Restore</string>
     <string name="module_install">Install</string>
     <string name="module_download">Download</string>
     <string name="module_view">View</string>
-    <!-- Modules Page -->
-    <string name="modules_page_cloud_empty">Repositories is empty</string>
-    <string name="modules_page_installed_empty">No modules found</string>
-    <string name="modules_page_updates_empty">All up to date</string>
-    <string name="modules_page_search_empty">Empty list</string>
-    <string name="modules_page_search_placeholder">Search…</string>
-    <string name="modules_version_dialog_desc">Do you want to %1$s or download this version of the module?</string>
-    <!-- View Module -->
-    <string name="view_module_versions">Versions</string>
-    <string name="view_module_provided">Provided by %1$s</string>
-    <string name="view_module_changelog">Changelog</string>
 
     <!-- Settings -->
-    <!-- Normal -->
-    <string name="settings_title_normal">Normal</string>
-    <string name="settings_app_theme">App Theme</string>
-    <string name="settings_app_theme_desc">Change night mode and theme platte</string>
     <string name="settings_log_viewer">Log Viewer</string>
     <string name="settings_log_viewer_desc">View application runtime logs</string>
+    <string name="settings_repo">Repositories</string>
+    <string name="settings_repo_desc">Manage Magisk modules repositories</string>
+    <string name="settings_app">App</string>
+    <string name="settings_app_desc">Settings about MRepo app itself</string>
+    <string name="settings_about">About</string>
+    <!-- Root Card -->
+    <string name="settings_root_access">Root Access: %1$s</string>
+    <string name="settings_root_provider">Provider: %1$s</string>
+    <string name="settings_root_granted">Granted</string>
+    <string name="settings_root_not_available">Not available</string>
+    <string name="settings_root_none">None</string>
+    <!-- Non Root Card -->
+    <string name="settings_non_root_desc">Functionality is limited</string>
+    <!-- Menu -->
+    <string name="settings_menu_reboot">Reboot</string>
+    <string name="settings_menu_reboot_userspace">Soft Reboot</string>
+    <string name="settings_menu_reboot_recovery">Reboot to Recovery</string>
+    <string name="settings_menu_reboot_bootloader">Reboot to Bootloader</string>
+    <string name="settings_menu_reboot_download">Reboot to Download</string>
+    <string name="settings_menu_reboot_edl">Reboot to EDL</string>
     <!-- App -->
-    <string name="settings_title_app">App</string>
+    <string name="settings_app_theme">App Theme</string>
+    <string name="settings_app_theme_desc">Change night mode and theme platte</string>
     <string name="settings_download_path">Download Path</string>
-    <string name="settings_repo">Repository</string>
-    <string name="settings_repo_desc">Manage Magisk modules repository</string>
     <string name="settings_delete_zip">Delete Zip File</string>
     <string name="settings_delete_zip_desc">Delete zip after the installation is successful, note that this is a best effort and will not work if app does not have permission to delete</string>
-    <!-- Others -->
-    <string name="settings_title_others">Others</string>
-    <string name="settings_translate">Participate in Translation</string>
-    <string name="settings_translate_desc">Help us translate MRepo into your language</string>
-    <string name="settings_bug_tracker">Bug Tracker</string>
-    <string name="settings_follow_updates">Follow Updates</string>
-    <string name="settings_follow_updates_desc">Join our Telegram channel</string>
     <!-- App Theme -->
-    <string name="app_theme_example">Example</string>
     <string name="app_theme_palette">Theme Palette</string>
     <string name="app_theme_dark_theme">Dark Theme</string>
     <string name="app_theme_dark_theme_auto">Auto</string>
     <string name="app_theme_dark_theme_light">Light</string>
     <string name="app_theme_dark_theme_dark">Dark</string>
     <!-- Repo -->
-    <string name="repo_modules">%1$d modules</string>
+    <string name="repo_metadata">%1$d modules</string>
     <string name="repo_last_update">Last update: %1$s</string>
     <string name="repo_options_update">Update</string>
     <string name="repo_options_share">Share</string>
     <string name="repo_options_delete">Delete</string>
-    <string name="repo_options_delete_dialog_desc1">Are you sure to delete %1$s?</string>
-    <string name="repo_options_delete_dialog_desc2">Tip: All installed modules will remain on your device.</string>
+    <string name="repo_delete_dialog_desc1">Are you sure to delete %1$s?</string>
+    <string name="repo_delete_dialog_desc2">Tip: All installed modules will remain on your device.</string>
     <string name="repo_add_dialog_title">Add repository</string>
-    <string name="repo_add_dialog_label">URL</string>
-    <string name="repo_add_dialog_label_support">You can refer to %1$s.</string>
     <string name="repo_add_dialog_add">Add</string>
     <string name="repo_update_dialog_failure">Update failed: %1$s</string>
-    <string name="repo_notification_desc">Content review of modules is the responsibility of the repository owner. For any issues about this repository, please contact its owner.</string>
+    <string name="repo_notification_title">Content Review of Modules</string>
+    <string name="repo_notification_desc">It is the responsibility of the repository owner. For any issues about this repository, please contact its owner.</string>
+    <!-- About -->
+    <string name="about_app_version">Version %1$s (%2$s)</string>
+    <string name="about_desc1">Manage modules and provide modules repositories for Magisk and KernelSU.</string>
+    <string name="about_desc2">Made with ❤️ by %1$s</string>
 
     <!-- Dialog -->
-    <string name="dialog_title_attention">Attention</string>
+    <string name="dialog_attention">Attention</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_ok">OK</string>
-    <!-- Text Field Dialog -->
-    <string name="dialog_empty_default">Leave empty to restore default</string>
 
     <!-- Message -->
     <string name="message_download_failed">Download failed: %1$s</string>
@@ -154,8 +121,11 @@
     <string name="menu_scroll_top">Scroll to top</string>
     <string name="menu_scroll_bottom">Scroll to bottom</string>
 
+    <!-- Search -->
+    <string name="search_empty">Empty list</string>
+    <string name="search_placeholder">Search…</string>
+
     <!-- Other -->
     <string name="unknown_error">Unknown error</string>
-    <string name="device_name">Device</string>
 
 </resources>

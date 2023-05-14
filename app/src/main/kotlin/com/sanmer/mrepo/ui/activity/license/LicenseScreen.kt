@@ -40,13 +40,15 @@ import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.model.json.License
 import com.sanmer.mrepo.ui.component.NormalChip
 import com.sanmer.mrepo.ui.component.PageIndicator
-import com.sanmer.mrepo.ui.utils.MarkdownText
-import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
+import com.sanmer.mrepo.ui.component.MarkdownText
+import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.utils.HttpUtils
 import timber.log.Timber
 
 @Composable
-fun LicenseScreen(licenseId: String) {
+fun LicenseScreen(
+    licenseId: String
+) {
     var license: License? by remember { mutableStateOf(null) }
     var message: String? by remember { mutableStateOf(null) }
     val state = object : State(initial = Event.LOADING) {
@@ -73,8 +75,7 @@ fun LicenseScreen(licenseId: String) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LicenseTopBar(scrollBehavior = scrollBehavior)
         }
@@ -111,77 +112,79 @@ private fun LicenseTopBar(
 @Composable
 private fun ViewLicense(
     license: License
+) = Column(
+    modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .padding(all = 20.dp)
+        .fillMaxSize(),
+    verticalArrangement = Arrangement.spacedBy(10.dp),
+    horizontalAlignment = Alignment.CenterHorizontally
 ) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(all = 20.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    OutlinedCard(
+        shape = RoundedCornerShape(20.dp)
     ) {
-        OutlinedCard(
-            shape = RoundedCornerShape(20.dp)
+        Column(
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(all = 16.dp)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(
-                    text = license.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium
-                )
+            Text(
+                text = license.name,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium
+            )
 
-                if (license.seeAlso.isNotEmpty()) {
-                    val text = license.seeAlso
-                        .joinToString(separator = "\n") {
+            if (license.seeAlso.isNotEmpty()) {
+                val text = license.seeAlso
+                    .joinToString(separator = "\n") {
                         " - [${it}](${it})"
                     }
 
-                    MarkdownText(
-                        text = text,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+                MarkdownText(
+                    text = text,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
 
-                if (license.hasLabel()) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        if (license.isFsfLibre) {
-                            NormalChip(
-                                painter = painterResource(id = R.drawable.people_bold),
-                                text = stringResource(id = R.string.license_fsf_libre)
-                            )
-                        }
-
-                        if (license.isOsiApproved) {
-                            NormalChip(
-                                painter = painterResource(id = R.drawable.osi),
-                                text = stringResource(id = R.string.license_osi_approved)
-                            )
-                        }
-                    }
-                }
+            if (license.hasLabel()) {
+                LabelsItem(license = license)
             }
         }
+    }
 
-        Text(
-            modifier = Modifier
-                .padding(top = 10.dp)
-                .padding(horizontal = 5.dp)
-                .fillMaxWidth(),
-            text = license.licenseText,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.outline
+    Text(
+        modifier = Modifier
+            .padding(top = 10.dp)
+            .padding(horizontal = 5.dp)
+            .fillMaxWidth(),
+        text = license.licenseText,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.outline
+    )
+}
+
+@Composable
+private fun LabelsItem(
+    license: License
+) = Row(
+    modifier = Modifier.fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(10.dp)
+) {
+    Spacer(modifier = Modifier.weight(1f))
+
+    if (license.isFsfLibre) {
+        NormalChip(
+            painter = painterResource(id = R.drawable.people_bold),
+            text = stringResource(id = R.string.license_fsf_libre)
+        )
+    }
+
+    if (license.isOsiApproved) {
+        NormalChip(
+            painter = painterResource(id = R.drawable.ic_osi),
+            text = stringResource(id = R.string.license_osi_approved)
         )
     }
 }
@@ -190,8 +193,7 @@ private fun ViewLicense(
 private fun Loading() = PageIndicator(
     icon = {
         CircularProgressIndicator(
-            modifier = Modifier
-                .size(50.dp),
+            modifier = Modifier.size(50.dp),
             strokeWidth = 5.dp,
             strokeCap = StrokeCap.Round
         )

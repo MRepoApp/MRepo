@@ -2,9 +2,20 @@ package com.sanmer.mrepo.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -29,8 +40,7 @@ fun NormalChip(
     modifier = modifier,
     leadingIcon = {
         Icon(
-            modifier = Modifier
-                .size(18.dp),
+            modifier = Modifier.size(ButtonDefaults.IconSize),
             painter = painter,
             contentDescription = null
         )
@@ -56,35 +66,32 @@ fun NormalChip(
     shape: Shape = RoundedCornerShape(10.dp),
     enabled: Boolean = false,
     onClick: () -> Unit = {}
+) = Surface(
+    modifier = modifier
+        .clip(shape)
+        .clickable(
+            enabled = enabled,
+            onClick = onClick
+        ),
+    shape = shape,
+    color = containerColor,
+    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
 ) {
-    Surface(
-        modifier = modifier
-            .clip(shape)
-            .clickable(
-                enabled = enabled,
-                onClick = onClick
-            ),
-        shape = shape,
-        color = containerColor,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+    Row(
+        modifier = Modifier.padding(all = 8.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .padding(all = 8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CompositionLocalProvider(
-                LocalContentColor provides MaterialTheme.colorScheme.primary,
-                content = leadingIcon
-            )
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.primary,
+            content = leadingIcon
+        )
 
-            Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
 
-            ProvideTextStyle(
-                value = MaterialTheme.typography.labelMedium,
-                content = label
-            )
-        }
+        ProvideTextStyle(
+            value = MaterialTheme.typography.labelMedium,
+            content = label
+        )
     }
 }

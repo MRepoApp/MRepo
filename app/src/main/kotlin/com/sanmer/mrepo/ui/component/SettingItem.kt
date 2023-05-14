@@ -36,16 +36,6 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SettingTitleItem(
-    text: String
-) = Text(
-    text = text,
-    modifier = Modifier.padding(start = 18.dp, top = 18.dp),
-    style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.primary
-)
-
-@Composable
 fun SettingNormalItem(
     text: String,
     subText: String,
@@ -53,54 +43,50 @@ fun SettingNormalItem(
     @DrawableRes iconRes: Int? = null,
     enabled: Boolean = true,
     onClick: () -> Unit,
-) = Row(modifier = modifier
-    .alpha(alpha = if (enabled) 1f else 0.5f )
-    .clickable(
-        enabled = enabled,
-        onClick = onClick
-    )
+) = Row(
+    modifier = modifier
+        .alpha(alpha = if (enabled) 1f else 0.5f )
+        .clickable(
+            enabled = enabled,
+            onClick = onClick
+        )
+        .padding(vertical = 16.dp,  horizontal = 25.dp)
+        .fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
 ) {
-    Row(
-        modifier = Modifier
-            .padding(all = 18.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+    iconRes?.let {
+        Icon(
+            modifier = Modifier.size(22.dp),
+            painter = painterResource(id = iconRes),
+            contentDescription = null,
+            tint = LocalContentColor.current
+        )
+
+        Spacer(modifier = Modifier.width(25.dp))
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
     ) {
-        iconRes?.let {
-            Icon(
-                modifier = Modifier
-                    .size(24.dp),
-                painter = painterResource(id = iconRes),
-                contentDescription = null,
-                tint = LocalContentColor.current
-            )
-
-            Spacer(modifier = Modifier.width(18.dp))
-        }
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            Text(
-                text = subText,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
-            )
-        }
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        Text(
+            text = subText,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.outline
+        )
     }
 }
 
 @Composable
 fun SettingSwitchItem(
-    modifier: Modifier = Modifier,
     text: String,
     checked: Boolean,
+    modifier: Modifier = Modifier,
     subText: String? = null,
     @DrawableRes iconRes: Int? = null,
     enabled: Boolean = true,
@@ -118,19 +104,18 @@ fun SettingSwitchItem(
                 interactionSource = interactionSource,
                 indication = rememberRipple()
             )
-            .padding(all = 18.dp)
+            .padding(vertical = 16.dp, horizontal = 25.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         iconRes?.let {
             Icon(
-                modifier = Modifier
-                    .size(24.dp),
+                modifier = Modifier.size(24.dp),
                 painter = painterResource(id = iconRes),
                 contentDescription = null
             )
 
-            Spacer(modifier = Modifier.width(18.dp))
+            Spacer(modifier = Modifier.width(25.dp))
         }
 
         Column(

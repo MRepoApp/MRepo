@@ -9,7 +9,7 @@
     <string name="setup_non_root_desc1">Accès à la racine non requis</string>
     <string name="setup_non_root_desc2">Disponible : téléchargement de modules</string>
     <!-- Install -->
-    <string name="activity_install_label">Installateur de Module</string>
+    <string name="install_activity_label">Installateur de Module</string>
     <string name="install_title">Installer</string>
     <string name="install_flashing">Flashage</string>
     <string name="install_done">Terminé</string>
@@ -21,51 +21,31 @@
     <string name="license_fsf_libre">FSF Libre</string>
     <!-- Page -->
     <string name="page_modules">Modules</string>
-    <string name="page_home">Apperçu</string>
     <string name="page_settings">Réglages</string>
     <string name="page_view_module">Afficher Module</string>
     <!-- Overview -->
     <!-- Root Card -->
-    <string name="root_status_access">Accès Administrateur : %1$s</string>
-    <string name="root_status_provider">Fournisseur : %1$s</string>
-    <string name="root_status_granted">Permis</string>
-    <string name="root_status_not_available">Non disponible</string>
-    <string name="root_status_none">Aucun</string>
+    <string name="settings_root_access">Accès Administrateur : %1$s</string>
+    <string name="settings_root_provider">Fournisseur : %1$s</string>
+    <string name="settings_root_granted">Permis</string>
+    <string name="settings_root_not_available">Non disponible</string>
+    <string name="settings_root_none">Aucun</string>
     <!-- Non Root Card -->
-    <string name="non_root_desc">Le fonctionnement est limité</string>
+    <string name="settings_non_root_desc">Le fonctionnement est limité</string>
     <!-- Info Card -->
-    <string name="app_update_latest">Dernier : %1$s</string>
-    <string name="app_update_installed">Installé : %1$s</string>
-    <string name="modules_status_repo">Activer dépôts / Tous les dépôt</string>
-    <string name="modules_status_module">Modules locaux / Modules en ligne</string>
-    <string name="device_name">Appareil</string>
-    <string name="device_system_version">Version du système</string>
-    <string name="device_system_abi">ABI du système</string>
-    <string name="device_security_patch">Correctif de sécurité</string>
-    <string name="device_selinux_status">Status SELinux</string>
-    <string name="selinux_status_disabled">Désactivé</string>
-    <string name="selinux_status_enforcing">Renforçé</string>
-    <string name="selinux_status_permissive">Permissif</string>
     <!-- About -->
-    <string name="about_source_code">Afficher code source de %1$s</string>
     <!-- Menu -->
-    <string name="menu_reboot">Redémarrer</string>
-    <string name="menu_reboot_userspace">Rédémarrer en espace utilisateur</string>
-    <string name="menu_reboot_recovery">Redémarrer en mode de récupération</string>
-    <string name="menu_reboot_bootloader">Redémarrer en mode amorçage</string>
-    <string name="menu_reboot_download">Redémarrer en mode téléchargement</string>
-    <string name="menu_reboot_edl">Redémarrer en mode EDL</string>
+    <string name="settings_menu_reboot">Redémarrer</string>
+    <string name="settings_menu_reboot_userspace">Rédémarrer en espace utilisateur</string>
+    <string name="settings_menu_reboot_recovery">Redémarrer en mode de récupération</string>
+    <string name="settings_menu_reboot_bootloader">Redémarrer en mode amorçage</string>
+    <string name="settings_menu_reboot_download">Redémarrer en mode téléchargement</string>
+    <string name="settings_menu_reboot_edl">Redémarrer en mode EDL</string>
     <!-- Modules -->
     <!-- Modules Title -->
-    <string name="modules_title_cloud">En ligne</string>
-    <string name="modules_title_updatable">Mises à jours</string>
-    <string name="modules_title_installed">Installé</string>
     <!-- Modules Menu -->
-    <string name="modules_menu_cloud">En ligne</string>
-    <string name="modules_menu_local">Locale</string>
     <!-- Module Card -->
     <string name="module_version_author">%1$s par %2$s</string>
-    <string name="module_author">par %1$s</string>
     <string name="module_update">Mise à jour</string>
     <string name="module_remove">Supprimer</string>
     <string name="module_restore">Restaurer</string>
@@ -73,62 +53,49 @@
     <string name="module_download">Télécharger</string>
     <string name="module_view">Afficher</string>
     <!-- Modules Page -->
-    <string name="modules_page_cloud_empty">Dépôt vide</string>
-    <string name="modules_page_installed_empty">Aucun module trouvé</string>
-    <string name="modules_page_updates_empty">Tout est à jour</string>
-    <string name="modules_page_search_empty">Liste vide</string>
-    <string name="modules_page_search_placeholder">Recherche…</string>
-    <string name="modules_version_dialog_desc">Voulez-vous %1$s ou télécharger cette version du module \?</string>
+    <string name="repository_empty">Dépôt vide</string>
+    <string name="modules_empty">Aucun module trouvé</string>
+    <string name="search_empty">Liste vide</string>
+    <string name="search_placeholder">Recherche…</string>
     <!-- View Module -->
     <string name="view_module_versions">Versions</string>
     <string name="view_module_provided">Fournis par %1$s</string>
     <string name="view_module_changelog">Journal des changements</string>
     <!-- Settings -->
     <!-- Normal -->
-    <string name="settings_title_normal">Normal</string>
     <string name="settings_app_theme">Thème de l\’application</string>
     <string name="settings_app_theme_desc">Changer le mode nuit et le thème platte</string>
     <string name="settings_log_viewer">Journal</string>
     <string name="settings_log_viewer_desc">Afficher les journaux du fonctionnement de l\’application</string>
     <!-- App -->
-    <string name="settings_title_app">Application</string>
+    <string name="settings_app">Application</string>
     <string name="settings_download_path">Emplacement des téléchargements</string>
     <string name="settings_repo">Dépôt</string>
     <string name="settings_repo_desc">Gérrer le dépôt des modules Magisk</string>
     <!-- Others -->
-    <string name="settings_title_others">autres</string>
-    <string name="settings_translate">Participer à la traduction</string>
-    <string name="settings_translate_desc">Aidez nous à traduire MRepo dans votre language</string>
-    <string name="settings_bug_tracker">Bug du traqueur</string>
-    <string name="settings_follow_updates">Suivre les mises à jours</string>
-    <string name="settings_follow_updates_desc">Nous rejoindre sur le canal Telegram</string>
     <!-- App Theme -->
-    <string name="app_theme_example">Exemple</string>
     <string name="app_theme_palette">Palette du thème</string>
     <string name="app_theme_dark_theme">Thème sombre</string>
     <string name="app_theme_dark_theme_auto">Automatique</string>
     <string name="app_theme_dark_theme_light">Clair</string>
     <string name="app_theme_dark_theme_dark">Noir</string>
     <!-- Repo -->
-    <string name="repo_modules">%1$d modules</string>
+    <string name="repo_metadata">%1$d modules</string>
     <string name="repo_last_update">Dernière mise à jour : %1$s</string>
     <string name="repo_options_update">Mise à jour</string>
     <string name="repo_options_share">Partager</string>
     <string name="repo_options_delete">Supprimer</string>
-    <string name="repo_options_delete_dialog_desc1">Êtes-vous sûr de supprimer %1$s \?</string>
-    <string name="repo_options_delete_dialog_desc2">Astuce : Tous les modules installés resteront sur votre périphérique.</string>
+    <string name="repo_delete_dialog_desc1">Êtes-vous sûr de supprimer %1$s \?</string>
+    <string name="repo_delete_dialog_desc2">Astuce : Tous les modules installés resteront sur votre périphérique.</string>
     <string name="repo_add_dialog_title">ajouter dépôt</string>
-    <string name="repo_add_dialog_label">URL</string>
-    <string name="repo_add_dialog_label_support">Vous pouvez vous référer à %1$s.</string>
     <string name="repo_add_dialog_add">Ajouter</string>
     <string name="repo_update_dialog_failure">Échec de la mise à jour : %1$s</string>
     <string name="repo_notification_desc">L\’examen de contenu des modules est de la responsabilité des propriétaires du dépôt. Pour tout problème à propos de ce dépôt, merci de contacter son propriétaire.</string>
     <!-- Dialog -->
-    <string name="dialog_title_attention">Attention</string>
+    <string name="dialog_attention">Attention</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="dialog_ok">OK</string>
     <!-- Text Field Dialog -->
-    <string name="dialog_empty_default">Laisser vide pour restaurer par défaut</string>
     <!-- Message -->
     <string name="message_download_failed">Échec du téléchargement : %1$s</string>
     <string name="message_download_success">téléchargement réussi</string>

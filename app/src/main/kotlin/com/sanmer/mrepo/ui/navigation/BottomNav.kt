@@ -1,7 +1,11 @@
 package com.sanmer.mrepo.ui.navigation
 
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -10,50 +14,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sanmer.mrepo.ui.navigation.graph.HomeGraph
-import com.sanmer.mrepo.ui.navigation.graph.ModulesGraph
-import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
-
-private val mainGraph = listOf(
-    MainGraph.Modules,
-    MainGraph.Home,
-    MainGraph.Settings
-)
-
-private val homeGraph = listOf(
-    HomeGraph.Home.route
-)
-
-private val modulesGraph = listOf(
-    ModulesGraph.Modules.route,
-    ModulesGraph.View.way
-)
-
-private val settingsGraph = listOf(
-    SettingsGraph.Settings.route,
-    SettingsGraph.AppTheme.route,
-    SettingsGraph.Repo.route
-)
 
 @Composable
 fun BottomNav(
-    navController: NavController
+    navController: NavController,
+    isRoot: Boolean
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar(
-        modifier = Modifier
-            .imePadding()
+        modifier = Modifier.imePadding()
     ) {
-        mainGraph.forEach { screen ->
+        mainGraphs.forEach { screen ->
             val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
-            val enable = when (screen) {
-                is MainGraph.Home -> currentDestination?.route !in homeGraph
-                is MainGraph.Modules -> currentDestination?.route !in modulesGraph
-                is MainGraph.Settings -> currentDestination?.route !in settingsGraph
-            }
 
             NavigationBarItem(
                 icon = {
@@ -74,11 +49,8 @@ fun BottomNav(
                 },
                 alwaysShowLabel = true,
                 selected = selected,
-                onClick = {
-                    if (enable) {
-                        navController.navigatePopUpTo(screen.route)
-                    }
-                }
+                onClick = { if (!selected) navController.navigatePopUpTo(screen.route) },
+                enabled = if (screen == MainGraph.Modules) isRoot else true
             )
         }
     }

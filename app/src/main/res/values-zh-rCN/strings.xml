@@ -10,7 +10,7 @@
     <string name="setup_non_root_desc2">可用：下载模块</string>
 
     <!-- Install -->
-    <string name="activity_install_label">模块安装器</string>
+    <string name="install_activity_label">模块安装器</string>
     <string name="install_title">安装</string>
     <string name="install_flashing">正在刷入</string>
     <string name="install_done">完成</string>
@@ -23,122 +23,88 @@
     <string name="license_fsf_libre">自由软件</string>
 
     <!-- Page -->
+    <string name="page_repository">存储库</string>
     <string name="page_modules">模块</string>
-    <string name="page_home">概览</string>
     <string name="page_settings">设置</string>
     <string name="page_view_module">查看模块</string>
 
-    <!-- Overview -->
-    <!-- Root Card -->
-    <string name="root_status_access">Root 权限：%1$s</string>
-    <string name="root_status_provider">授权应用：%1$s</string>
-    <string name="root_status_granted">已授权</string>
-    <string name="root_status_not_available">不可用</string>
-    <string name="root_status_none">无</string>
-    <!-- Non Root Card -->
-    <string name="non_root_desc">功能受到限制</string>
-    <!-- App Update Card -->
-    <string name="app_update_latest">最新: %1$s</string>
-    <string name="app_update_installed">当前: %1$s</string>
-    <!-- Info Card -->
-    <string name="modules_status_repo">已启用 / 存储库</string>
-    <string name="modules_status_module">本地模块 / 云端模块</string>
-    <string name="device_name">设备</string>
-    <string name="device_system_version">系统版本</string>
-    <string name="device_system_abi">系统架构</string>
-    <string name="device_security_patch">安全补丁</string>
-    <string name="device_selinux_status">SELinux 状态</string>
-    <string name="selinux_status_disabled">被禁用</string>
-    <string name="selinux_status_enforcing">强制执行</string>
-    <string name="selinux_status_permissive">宽容模式</string>
-    <!-- About -->
-    <string name="about_source_code">在 %1$s 查看源码</string>
-    <!-- Menu -->
-    <string name="menu_reboot">重启</string>
-    <string name="menu_reboot_userspace">软重启</string>
-    <string name="menu_reboot_recovery">重启到 Recovery</string>
-    <string name="menu_reboot_bootloader">重启到 BootLoader</string>
-    <string name="menu_reboot_download">重启到 Download</string>
-    <string name="menu_reboot_edl">重启到 EDL</string>
+    <!-- Repository -->
+    <string name="repository_empty">存储库为空</string>
+    <!-- View Module -->
+    <string name="view_module_author">作者 %1$s</string>
+    <string name="view_module_versions">版本</string>
+    <string name="view_module_provided">由 %1$s 提供</string>
+    <string name="view_module_changelog">更新日志</string>
+    <string name="view_module_version_dialog_desc">是否安装或下载该版本的模块？</string>
 
     <!-- Modules -->
-    <!-- Modules Title -->
-    <string name="modules_title_cloud">云端</string>
-    <string name="modules_title_installed">已安装</string>
-    <string name="modules_title_updatable">可更新</string>
-    <!-- Modules Menu -->
-    <string name="modules_menu_cloud">云端</string>
-    <string name="modules_menu_local">本地</string>
+    <string name="modules_empty">没找到任何模块</string>
     <!-- Module Card -->
     <string name="module_version_author">%1$s，作者 %2$s</string>
-    <string name="module_author">作者 %1$s</string>
     <string name="module_update">更新</string>
     <string name="module_remove">移除</string>
     <string name="module_restore">还原</string>
     <string name="module_install">安装</string>
     <string name="module_download">下载</string>
     <string name="module_view">查看</string>
-    <!-- Modules Page -->
-    <string name="modules_page_cloud_empty">存储库为空</string>
-    <string name="modules_page_installed_empty">没找到任何模块</string>
-    <string name="modules_page_updates_empty">所有模块已是最新</string>
-    <string name="modules_page_search_empty">空列表</string>
-    <string name="modules_page_search_placeholder">搜索…</string>
-    <string name="modules_version_dialog_desc">是否%1$s或下载该版本的模块？</string>
-    <!-- View Module -->
-    <string name="view_module_versions">版本</string>
-    <string name="view_module_provided">由 %1$s 提供</string>
-    <string name="view_module_changelog">更新日志</string>
 
     <!-- Settings-->
-    <!-- Normal -->
-    <string name="settings_title_normal">常规</string>
-    <string name="settings_app_theme">应用主题</string>
-    <string name="settings_app_theme_desc">更改深色模式和主题调色板</string>
     <string name="settings_log_viewer">日志查看器</string>
     <string name="settings_log_viewer_desc">查看应用运行时日志</string>
-    <!-- App -->
-    <string name="settings_title_app">应用</string>
-    <string name="settings_download_path">下载路径</string>
     <string name="settings_repo">存储库</string>
     <string name="settings_repo_desc">管理 Magisk 模块存储库</string>
-        <string name="settings_delete_zip">删除压缩包</string>
+    <string name="settings_app">应用</string>
+    <string name="settings_app_desc">关于 MRepo 应用本身的设置</string>
+    <string name="settings_about">关于</string>
+    <!-- Root Card -->
+    <string name="settings_root_access">Root 权限：%1$s</string>
+    <string name="settings_root_provider">授权应用：%1$s</string>
+    <string name="settings_root_granted">已授权</string>
+    <string name="settings_root_not_available">不可用</string>
+    <string name="settings_root_none">无</string>
+    <!-- Non Root Card -->
+    <string name="settings_non_root_desc">功能受到限制</string>
+    <!-- Menu -->
+    <string name="settings_menu_reboot">重启</string>
+    <string name="settings_menu_reboot_userspace">软重启</string>
+    <string name="settings_menu_reboot_recovery">重启到 Recovery</string>
+    <string name="settings_menu_reboot_bootloader">重启到 BootLoader</string>
+    <string name="settings_menu_reboot_download">重启到 Download</string>
+    <string name="settings_menu_reboot_edl">重启到 EDL</string>
+    <!-- App -->
+    <string name="settings_app_theme">主题</string>
+    <string name="settings_app_theme_desc">更改深色模式和主题调色板</string>
+    <string name="settings_download_path">下载路径</string>
+    <string name="settings_delete_zip">删除压缩包</string>
     <string name="settings_delete_zip_desc">安装成功后删除压缩包，请注意这是尽力而为的，如果应用没有删除权限将无法执行</string>
-    <!-- Others -->
-    <string name="settings_title_others">其他</string>
-    <string name="settings_translate">参与翻译</string>
-    <string name="settings_translate_desc">帮助我们把 MRepo 翻译到你的语言</string>
-    <string name="settings_bug_tracker">错误追踪</string>
-    <string name="settings_follow_updates">关注更新</string>
-    <string name="settings_follow_updates_desc">加入我们的 Telegram 频道</string>
     <!-- App Theme -->
-    <string name="app_theme_example">示例</string>
     <string name="app_theme_palette">主题调色板</string>
     <string name="app_theme_dark_theme">深色主题</string>
     <string name="app_theme_dark_theme_auto">自动</string>
     <string name="app_theme_dark_theme_light">浅色</string>
     <string name="app_theme_dark_theme_dark">深色</string>
     <!-- Repo -->
-    <string name="repo_modules">%1$d 个模块</string>
+    <string name="repo_metadata">%1$d 个模块</string>
     <string name="repo_last_update">上次更新：%1$s</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_share">分享</string>
     <string name="repo_options_delete">删除</string>
-    <string name="repo_options_delete_dialog_desc1">你确定要删除 %1$s？</string>
-    <string name="repo_options_delete_dialog_desc2">提示：已安装的所有模块会保留在你的设备上。</string>
+    <string name="repo_delete_dialog_desc1">你确定要删除 %1$s？</string>
+    <string name="repo_delete_dialog_desc2">提示：已安装的所有模块会保留在你的设备上。</string>
     <string name="repo_add_dialog_title">添加存储库</string>
-    <string name="repo_add_dialog_label">链接</string>
-    <string name="repo_add_dialog_label_support">你可以参考 %1$s。</string>
     <string name="repo_add_dialog_add">添加</string>
     <string name="repo_update_dialog_failure">更新失败：%1$s</string>
-    <string name="repo_notification_desc">模块的内容审查由存储库所有者负责。关于该存储库的任何问题，请联系其所有者。</string>
+    <string name="repo_notification_title">模块的内容审查</string>
+    <string name="repo_notification_desc">由存储库所有者负责。关于该存储库的任何问题，请联系其所有者。</string>
+    <!-- About -->
+    <string name="about_app_version">版本 %1$s (%2$s)</string>
+    <string name="about_desc1">为 Magisk 和 KernelSU 管理模块以及提供模块存储库。</string>
+    <string name="about_desc2">由 %1$s 用 ❤️ 制作</string>
 
     <!-- Dialog-->
-    <string name="dialog_title_attention">注意</string>
+    <string name="dialog_attention">注意</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">确定</string>
-    <!-- Text Field Dialog -->
-    <string name="dialog_empty_default">留空恢复默认值</string>
 
     <!-- Message -->
     <string name="message_download_failed">下载失败：%1$s</string>
@@ -154,6 +120,10 @@
     <!-- Menu -->
     <string name="menu_scroll_top">滚动到顶部</string>
     <string name="menu_scroll_bottom">滚动到底部</string>
+
+    <!-- Search -->
+    <string name="search_empty">空列表</string>
+    <string name="search_placeholder">搜索…</string>
 
     <!-- Other -->
     <string name="unknown_error">未知错误</string>

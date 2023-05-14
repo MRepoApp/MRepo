@@ -2,8 +2,6 @@ package com.sanmer.mrepo.ui.navigation.graph
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.sanmer.mrepo.ui.animate.slideInLeftToRight
@@ -12,15 +10,16 @@ import com.sanmer.mrepo.ui.animate.slideOutLeftToRight
 import com.sanmer.mrepo.ui.animate.slideOutRightToLeft
 import com.sanmer.mrepo.ui.navigation.MainGraph
 import com.sanmer.mrepo.ui.screens.modules.ModulesScreen
-import com.sanmer.mrepo.ui.screens.viewmodule.ViewModuleScreen
+import com.sanmer.mrepo.ui.screens.repository.viewmodule.ViewModuleScreen
 
-sealed class ModulesGraph(val route: String) {
-    object Modules : ModulesGraph("modules")
-    object View : ModulesGraph("view") {
-        val way: String = "${route}/{id}"
-        fun String.toRoute() = "${route}/${this}"
-    }
+enum class ModulesGraph(val route: String) {
+    Modules("Modules"),
+    View("ViewLocalModule")
 }
+
+private val subScreens = listOf(
+    ModulesGraph.View.route
+)
 
 fun NavGraphBuilder.modulesGraph(
     navController: NavController
@@ -31,15 +30,17 @@ fun NavGraphBuilder.modulesGraph(
     composable(
         route = ModulesGraph.Modules.route,
         enterTransition = {
-            when (initialState.destination.route) {
-                ModulesGraph.View.way -> slideInRightToLeft()
-                else -> null
+            if (initialState.destination.route in subScreens) {
+                slideInRightToLeft()
+            } else {
+                null
             }
         },
         exitTransition = {
-            when (initialState.destination.route) {
-                ModulesGraph.View.way -> slideOutLeftToRight()
-                else -> null
+            if (initialState.destination.route in subScreens) {
+                slideOutLeftToRight()
+            } else {
+                null
             }
         }
     ) {
@@ -49,8 +50,7 @@ fun NavGraphBuilder.modulesGraph(
     }
 
     composable(
-        route = ModulesGraph.View.way,
-        arguments = listOf(navArgument("id") { type = NavType.StringType }),
+        route = ModulesGraph.View.route,
         enterTransition = { slideInLeftToRight() },
         exitTransition = { slideOutRightToLeft() }
     ) {

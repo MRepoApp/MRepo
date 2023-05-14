@@ -77,8 +77,7 @@ fun ExpandableItem(
             )
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
+                modifier = Modifier.weight(1f)
             ) {
                 ProvideTextStyle(
                     value = MaterialTheme.typography.titleMedium,

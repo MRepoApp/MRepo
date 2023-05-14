@@ -2,18 +2,31 @@ package com.sanmer.mrepo.ui.activity.install
 
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.*
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -28,8 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
-import com.sanmer.mrepo.ui.utils.fabPadding
+import com.sanmer.mrepo.ui.animate.slideInBottomToTop
+import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
+import com.sanmer.mrepo.ui.component.NavigateUpTopBar
+import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.utils.SvcPower
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 
@@ -38,8 +53,19 @@ fun InstallScreen(
     viewModel: InstallViewModel = hiltViewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
     val focusRequester = remember { FocusRequester() }
+    val listState = rememberLazyListState()
+    val isScrollingUp = listState.isScrollingUp()
+    val showFab by remember(isScrollingUp) {
+        derivedStateOf {
+            isScrollingUp && viewModel.state.isSucceeded
+        }
+    }
+
+    LaunchedEffect(viewModel.console.toList()) {
+        listState.scrollToItem(viewModel.console.size)
+    }
+
     LaunchedEffect(focusRequester) {
         focusRequester.requestFocus()
     }
@@ -62,27 +88,54 @@ fun InstallScreen(
             .focusable()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            InstallTopBar(
+            TopBar(
                 scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = {
-            if (viewModel.state.isSucceeded) {
-                RebootButton()
+            AnimatedVisibility(
+                visible = showFab,
+                enter = fadeIn() + slideInBottomToTop(),
+                exit = fadeOut() + slideOutTopToBottom()
+            ) {
+                FloatingButton()
             }
-        },
+        }
     ) {
-        ConsoleList(
+        Console(
             list = viewModel.console,
-            contentPadding = it
+            contentPadding = it,
+            state = listState
         )
     }
 }
 
 @Composable
-private fun InstallTopBar(
-    viewModel: InstallViewModel = hiltViewModel(),
-    scrollBehavior: TopAppBarScrollBehavior
+private fun Console(
+    list: SnapshotStateList<String>,
+    contentPadding: PaddingValues,
+    state: LazyListState
+) = LazyColumn(
+    state = state,
+    modifier = Modifier
+        .horizontalScroll(rememberScrollState())
+        .fillMaxWidth()
+        .padding(contentPadding),
+    contentPadding = PaddingValues(all = 5.dp)
+) {
+    items(list) {
+        Text(
+            text = it,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Composable
+private fun TopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    viewModel: InstallViewModel = hiltViewModel()
 ) = NavigateUpTopBar(
     title = R.string.install_title,
     subtitle = when (viewModel.state.event) {
@@ -91,10 +144,9 @@ private fun InstallTopBar(
         else -> R.string.install_done
     },
     scrollBehavior = scrollBehavior,
-    enable = viewModel.state.isSucceeded,
+    enable = viewModel.state.isFinished,
     actions = {
         val context = LocalContext.current
-
         if (viewModel.state.isFinished) {
             IconButton(
                 onClick = { viewModel.sendLogFile(context) }
@@ -109,7 +161,7 @@ private fun InstallTopBar(
 )
 
 @Composable
-private fun RebootButton() = ExtendedFloatingActionButton(
+private fun FloatingButton() = ExtendedFloatingActionButton(
     onClick = {
         SvcPower.reboot()
     },
@@ -123,38 +175,3 @@ private fun RebootButton() = ExtendedFloatingActionButton(
         )
     }
 )
-
-@Composable
-private fun ConsoleList(
-    contentPadding: PaddingValues,
-    list: SnapshotStateList<String>
-) {
-    val state = rememberLazyListState()
-    LaunchedEffect(list.toList()) {
-        state.animateScrollToItem(list.size)
-    }
-
-    LazyColumn(
-        state = state,
-        modifier = Modifier
-            .horizontalScroll(rememberScrollState())
-            .fillMaxWidth()
-            .padding(contentPadding),
-        contentPadding = fabPadding(2.dp),
-    ) {
-        items(list) {
-            ConsoleItem(text = it)
-        }
-    }
-}
-
-@Composable
-private fun ConsoleItem(
-    text: String
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface
-    )
-}

@@ -1,320 +1,182 @@
 package com.sanmer.mrepo.ui.screens.repository
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.database.entity.toRepo
-import com.sanmer.mrepo.ui.animate.slideInBottomToTop
-import com.sanmer.mrepo.ui.animate.slideInTopToBottom
-import com.sanmer.mrepo.ui.animate.slideOutBottomToTop
-import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.PageIndicator
-import com.sanmer.mrepo.ui.utils.HtmlText
-import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
-import com.sanmer.mrepo.ui.utils.isScrollingUp
-import com.sanmer.mrepo.ui.utils.navigateBack
+import com.sanmer.mrepo.ui.component.SearchTopBar
+import com.sanmer.mrepo.ui.screens.modules.MenuItem
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.viewmodel.RepositoryViewModel
+import com.sanmer.mrepo.utils.expansion.navigateToLauncher
+import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun RepositoryScreen(
-    viewModel: RepositoryViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    viewModel: ModulesViewModel = hiltViewModel()
 ) {
-    val list by viewModel.list.collectAsStateWithLifecycle(emptyList())
-
+    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val listSate = rememberLazyListState()
-    val showFab by listSate.isScrollingUp()
+    val listState = rememberLazyListState()
 
-    BackHandler { navController.navigateBack() }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewModel.progress,
+        onRefresh = { viewModel.getOnlineAll() }
+    )
 
-    var value = Const.MY_REPO_URL.toRepo()
-    var message: String? by remember { mutableStateOf(null) }
-
-    var failure by remember { mutableStateOf(false) }
-    if (failure) {
-        FailureDialog(
-            onClose = { failure = false },
-            repo = value,
-            message = message
-        )
+    BackHandler {
+        if (viewModel.isSearch) {
+            viewModel.closeSearch()
+        } else {
+            context.navigateToLauncher()
+        }
     }
 
-    var add by remember { mutableStateOf(false) }
-    if (add) {
-        AddDialog(
-            onClose = { add = false }
-        ) {
-            viewModel.insert(it) { repo, e ->
-                value = repo
-                failure = true
-                message = e.message
-            }
-        }
+    DisposableEffect(viewModel) {
+        onDispose { viewModel.closeSearch() }
     }
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            RepositoryTopBar(
+            TopBar(
                 scrollBehavior = scrollBehavior,
-                navController = navController
+                listState = listState
             )
-        },
-        floatingActionButton = {
-            AnimatedVisibility(
-                visible = showFab,
-                enter = fadeIn() + slideInBottomToTop(),
-                exit = fadeOut() + slideOutTopToBottom()
-            ) {
-                RepositoryFloatingButton { add = true }
-            }
         },
         contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
-        Box(
-            modifier = Modifier.padding(innerPadding)
+        Box(modifier = Modifier
+            .padding(innerPadding)
+            .pullRefresh(
+                state = pullRefreshState,
+                enabled = !viewModel.isSearch
+            )
         ) {
-            if (list.isEmpty()) {
+            if (viewModel.onlineValue.isEmpty()) {
                 PageIndicator(
-                    icon = R.drawable.hierarchy_outline,
-                    text = R.string.repo_empty
+                    icon = R.drawable.box_outline,
+                    text = if (viewModel.isSearch) R.string.search_empty else R.string.repository_empty,
                 )
             }
 
-            RepoList(
-                list = list,
-                state = listSate
+            ModulesList(
+                list = viewModel.onlineValue,
+                state = listState,
+                navController = navController
             )
 
-            AnimatedVisibility(
-                visible = viewModel.progress,
-                enter = slideInTopToBottom(),
-                exit = slideOutBottomToTop()
-            ) {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    strokeCap = StrokeCap.Round
-                )
-            }
+            PullRefreshIndicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                refreshing = viewModel.progress,
+                state = pullRefreshState,
+                backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+                contentColor = MaterialTheme.colorScheme.primary,
+                scale = true
+            )
         }
     }
 }
 
 @Composable
-private fun RepoList(
-    list: List<Repo>,
-    state: LazyListState
-) {
-    LazyColumn(
-        state = state,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        item {
-            InfoItem()
-        }
-        items(
-            items = list,
-            key = { it.name }
-        ) { repo ->
-            RepoItem(repo = repo)
-        }
-    }
+private fun TopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    listState: LazyListState,
+    viewModel: ModulesViewModel = hiltViewModel()
+) = if (viewModel.isSearch) {
+    SearchTopBar(
+        query = viewModel.key,
+        onQueryChange = { viewModel.key = it },
+        onClose = { viewModel.closeSearch() },
+        scrollBehavior = scrollBehavior
+    )
+} else {
+    NormalTopBar(
+        scrollBehavior = scrollBehavior,
+        listState = listState
+    )
 }
 
 @Composable
-private fun InfoItem() {
-    Surface(
-        modifier = Modifier
-            .padding(all = 16.dp),
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 2.dp,
-        shape = RoundedCornerShape(20.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+private fun NormalTopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    listState: LazyListState,
+    viewModel: ModulesViewModel = hiltViewModel()
+) = TopAppBar(
+    title = {
+        Text(text = stringResource(id = R.string.page_repository))
+    },
+    actions = {
+        IconButton(
+            onClick = { viewModel.isSearch = true }
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.information_outline),
+                painter = painterResource(id = R.drawable.search_normal_outline),
                 contentDescription = null
             )
-            Text(
-                text = stringResource(id = R.string.repo_notification_desc),
-                style = MaterialTheme.typography.bodyMedium
+        }
+
+        val context = LocalContext.current
+        IconButton(
+            onClick = {
+                Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
+            }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.sort_outline),
+                contentDescription = null
             )
         }
-    }
-}
 
-@Composable
-private fun AddDialog(
-    onClose: () -> Unit,
-    onAdd: (String) -> Unit
-) {
-    var url by rememberSaveable { mutableStateOf("") }
-
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(focusRequester) {
-        focusRequester.requestFocus()
-        keyboardController?.show()
-    }
-
-    AlertDialog(
-        shape = RoundedCornerShape(25.dp),
-        onDismissRequest = onClose,
-        title = { Text(text = stringResource(id = R.string.repo_add_dialog_title)) },
-        text = {
-            OutlinedTextField(
-                modifier = Modifier
-                    .focusRequester(focusRequester),
-                textStyle = MaterialTheme.typography.bodyLarge,
-                value = url,
-                onValueChange = { url = it },
-                placeholder = { Text(text = stringResource(id = R.string.repo_add_dialog_label)) },
-                singleLine = false,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions {
-                    defaultKeyboardAction(ImeAction.Done)
-                    focusManager.clearFocus()
-                },
-                shape = RoundedCornerShape(15.dp),
-                supportingText = {
-                    HtmlText(
-                        text = stringResource(
-                            id = R.string.repo_add_dialog_label_support,
-                            "<b><a href=\"https://github.com/ya0211/magisk-modules-repo-util\">magisk-modules-repo-util</a></b>"
-                        )
-                    )
-                },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.link_outline),
-                        contentDescription = null
-                    )
-                }
+        var expanded by remember { mutableStateOf(false) }
+        IconButton(
+            onClick = { expanded = true }
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = null
             )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    if (url.isBlank()) return@TextButton
-                    if (!url.endsWith("/")) url += "/"
 
-                    onAdd(url)
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
-                    onClose()
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.repo_add_dialog_add)
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onClose()
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.dialog_cancel)
-                )
-            }
+            MenuItem(
+                expanded = expanded,
+                listState = listState,
+                onClose = { expanded = false }
+            )
         }
-    )
-}
-
-@Composable
-private fun RepositoryTopBar(
-    scrollBehavior: TopAppBarScrollBehavior,
-    navController: NavController
-) = NavigateUpTopBar(
-    title = R.string.page_repository,
-    scrollBehavior = scrollBehavior,
-    navController = navController
+    },
+    scrollBehavior = scrollBehavior
 )
-
-@Composable
-private fun RepositoryFloatingButton(
-    onClick: () -> Unit
-) = FloatingActionButton(
-    onClick = onClick,
-    contentColor = MaterialTheme.colorScheme.onPrimary,
-    containerColor = MaterialTheme.colorScheme.primary
-) {
-    Icon(
-        modifier = Modifier.size(28.dp),
-        painter = painterResource(id = R.drawable.add_outline),
-        contentDescription = null
-    )
-}

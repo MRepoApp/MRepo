@@ -3,10 +3,12 @@ package com.sanmer.mrepo.ui.screens.settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -14,45 +16,44 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.datastore.UserData
-import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.activity.log.LogActivity
-import com.sanmer.mrepo.ui.component.SettingMenuItem
 import com.sanmer.mrepo.ui.component.SettingNormalItem
-import com.sanmer.mrepo.ui.component.SettingSwitchItem
-import com.sanmer.mrepo.ui.component.SettingTitleItem
 import com.sanmer.mrepo.ui.navigation.graph.SettingsGraph
-import com.sanmer.mrepo.ui.navigation.navigateToHome
+import com.sanmer.mrepo.ui.navigation.navigateToRepo
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.utils.expansion.openUrl
 import com.sanmer.mrepo.viewmodel.HomeViewModel
 
 @Composable
 fun SettingsScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val context = LocalContext.current
 
-    BackHandler { navController.navigateToHome() }
+    BackHandler { navController.navigateToRepo() }
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsTopBar(
+                userData = userData,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -62,17 +63,12 @@ fun SettingsScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
+                .fillMaxWidth()
         ) {
-            SettingTitleItem(text = stringResource(id = R.string.settings_title_normal))
-
-            SettingNormalItem(
-                iconRes = R.drawable.bucket_outline,
-                text = stringResource(id = R.string.settings_app_theme),
-                subText = stringResource(id = R.string.settings_app_theme_desc),
-                onClick = {
-                    navController.navigatePopUpTo(SettingsGraph.AppTheme.route)
-                }
-            )
+            when {
+                userData.isRoot -> RootItem()
+                userData.isNonRoot -> NonRootItem()
+            }
 
             SettingNormalItem(
                 iconRes = R.drawable.health_outline,
@@ -80,15 +76,6 @@ fun SettingsScreen(
                 subText = stringResource(id = R.string.settings_log_viewer_desc),
                 onClick = {
                     LogActivity.start(context)
-                }
-            )
-
-            SettingTitleItem(text = stringResource(id = R.string.settings_title_app))
-
-            DownloadPathItem(
-                userData = userData,
-                onChange = {
-                    viewModel.setDownloadPath(it)
                 }
             )
 
@@ -101,55 +88,34 @@ fun SettingsScreen(
                 }
             )
 
-            SettingMenuItem(
+            SettingNormalItem(
+                iconRes = R.drawable.layer_outline,
+                text = stringResource(id = R.string.settings_app),
+                subText = stringResource(id = R.string.settings_app_desc),
+                onClick = {
+                    navController.navigatePopUpTo(SettingsGraph.App.route)
+                }
+            )
+
+            SettingNormalItem(
                 iconRes = R.drawable.main_component_outline,
-                title = stringResource(id = R.string.settings_mode),
-                items = mapOf(
-                    WorkingMode.MODE_ROOT to stringResource(id = R.string.settings_mode_root),
-                    WorkingMode.MODE_NON_ROOT to stringResource(id = R.string.settings_mode_non_root)
-                ),
-                selected = userData.workingMode,
-                onChange = { value, _ ->
-                    viewModel.setWorkingMode(value)
-                }
-            )
-
-            SettingSwitchItem(
-                iconRes = R.drawable.box_remove_outline,
-                text = stringResource(id = R.string.settings_delete_zip),
-                subText = stringResource(id = R.string.settings_delete_zip_desc),
-                checked = userData.deleteZipFile,
-                onChange = {
-                    viewModel.setDeleteZipFile(it)
-                }
-            )
-
-            SettingTitleItem(text = stringResource(id = R.string.settings_title_others))
-
-            SettingNormalItem(
-                iconRes = R.drawable.translate_outline,
-                text = stringResource(id = R.string.settings_translate),
-                subText = stringResource(id = R.string.settings_translate_desc),
+                text = stringResource(id = R.string.settings_mode),
+                subText = if (userData.isRoot) {
+                    stringResource(id = R.string.settings_mode_root)
+                } else {
+                    stringResource(id = R.string.settings_mode_non_root)
+                },
                 onClick = {
-                    context.openUrl(Const.TRANSLATE_URL)
+                    navController.navigatePopUpTo(SettingsGraph.WorkingMode.route)
                 }
             )
 
             SettingNormalItem(
-                iconRes = R.drawable.flag_outline,
-                text = stringResource(id = R.string.settings_bug_tracker),
-                subText = Const.ISSUES_URL,
+                iconRes = R.drawable.ic_logo,
+                text = stringResource(id = R.string.settings_about),
+                subText = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                 onClick = {
-                    context.openUrl(Const.ISSUES_URL)
-                }
-            )
-
-            SettingNormalItem(
-                iconRes = R.drawable.star_outline,
-                text = stringResource(id = R.string.settings_follow_updates),
-                subText = stringResource(id = R.string.settings_follow_updates_desc),
-                onClick = {
-                    context.openUrl(Const.TELEGRAM_CHANNEL_URL)
+                    navController.navigatePopUpTo(SettingsGraph.About.route)
                 }
             )
         }
@@ -158,13 +124,29 @@ fun SettingsScreen(
 
 @Composable
 private fun SettingsTopBar(
+    userData: UserData,
     scrollBehavior: TopAppBarScrollBehavior
 ) = TopAppBar(
     title = {
-        Text(
-            text = stringResource(id = R.string.page_settings),
-            style = MaterialTheme.typography.titleLarge
-        )
+        Text(text = stringResource(id = R.string.page_settings))
+    },
+    actions = {
+        var expanded by remember { mutableStateOf(false) }
+
+        IconButton(
+            onClick = { expanded = true },
+            enabled = userData.isRoot
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.refresh_outline),
+                contentDescription = null
+            )
+
+            MenuItem(
+                expanded = expanded,
+                onClose = { expanded = false }
+            )
+        }
     },
     scrollBehavior = scrollBehavior
 )

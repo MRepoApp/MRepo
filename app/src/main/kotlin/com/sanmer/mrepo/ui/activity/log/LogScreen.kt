@@ -49,7 +49,7 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.service.LogcatService
 import com.sanmer.mrepo.ui.component.DropdownMenu
-import com.sanmer.mrepo.ui.utils.NavigateUpTopBar
+import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.utils.log.LogText
 import com.sanmer.mrepo.utils.log.Logcat
 import com.sanmer.mrepo.utils.log.Logcat.toTextPriority
@@ -72,8 +72,7 @@ fun LogScreen() {
     }
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LogTopBar(
                 scrollBehavior = scrollBehavior,

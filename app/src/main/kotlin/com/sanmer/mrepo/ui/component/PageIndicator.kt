@@ -2,7 +2,14 @@ package com.sanmer.mrepo.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -48,8 +55,7 @@ fun PageIndicator(
             painter = painterResource(id = icon),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.outline.copy(0.2f),
-            modifier = Modifier
-                .size(80.dp)
+            modifier = Modifier.size(80.dp)
         )
     },
     text = {
