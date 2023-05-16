@@ -59,9 +59,21 @@
     <string name="app_theme_palette">テーマパレット</string>
     <string name="settings_app_theme">アプリテーマ</string>
     <string name="dialog_ok">OK</string>
-    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_cancel">キャンセル</string>
     <string name="notification_name_download">Download Service</string>
     <string name="repo_update_dialog_failure">更新に失敗: %1$s</string>
     <string name="settings_delete_zip">Zipファイルを削除</string>
     <string name="settings_delete_zip_desc">インストールが成功した後、ZIPファイルを削除します。アプリに削除権限がない場合は動作しませんのでご注意ください</string>
+    <string name="about_desc1">Magisk、KernelSUのモジュール管理、モジュールリポジトリの提供。</string>
+    <string name="settings_app">アプリ</string>
+    <string name="settings_app_desc">MRepo アプリの設定</string>
+    <string name="page_repository">リポジトリ</string>
+    <string name="settings_root_access">Root 権限: %1$s</string>
+    <string name="settings_root_provider">プロバイダー: %1$s</string>
+    <string name="module_label_installed">インストール済</string>
+    <string name="view_module_page_overview">概要</string>
+    <string name="view_module_description">説明</string>
+    <string name="view_module_last_modified">最終更新日</string>
+    <string name="view_module_local">ローカル</string>
+    <string name="view_module_version">バージョン</string>
 </resources>
