@@ -1,6 +1,8 @@
 package com.sanmer.mrepo.ui.screens.repository
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,15 +21,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.navigation.graph.createViewRoute
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
+import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
 fun ModulesList(
@@ -52,19 +57,22 @@ fun ModulesList(
 @Composable
 private fun ModuleItem(
     module: OnlineModule,
+    viewModel: RepositoryViewModel = hiltViewModel(),
     onClick: () -> Unit
 ) = Surface(
     modifier = Modifier.fillMaxWidth(),
     onClick = onClick,
     shape = RoundedCornerShape(10.dp)
 ) {
+    val uiState = viewModel.rememberOnlineModuleState(module)
+
     Row(
         modifier = Modifier.padding(all = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Logo(
             iconRes = R.drawable.box_outline,
-            modifier = Modifier.size(35.dp),
+            modifier = Modifier.size(40.dp),
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
@@ -91,6 +99,22 @@ private fun ModuleItem(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.outline
             )
+        }
+
+        if (uiState.installed) {
+            Box(modifier = Modifier.background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(6.dp)
+            )) {
+                Text(
+                    text = stringResource(id = R.string.module_label_installed),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .padding(all = 3.dp)
+                        .align(Alignment.Center)
+                )
+            }
         }
     }
 }

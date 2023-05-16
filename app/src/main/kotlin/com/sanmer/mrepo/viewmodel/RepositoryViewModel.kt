@@ -1,11 +1,15 @@
 package com.sanmer.mrepo.viewmodel
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,6 +57,25 @@ class RepositoryViewModel @Inject constructor(
     fun getOnlineAll() = viewModelScope.launch {
         refreshing {
             modulesRepository.getRepoAll()
+        }
+    }
+
+    @Stable
+    data class OnlineModuleState(
+        val installed: Boolean
+    )
+
+    private fun createOnlineModuleState(module: OnlineModule): OnlineModuleState {
+        val installed = localRepository.local.any { it.id == module.id }
+        return OnlineModuleState(
+            installed = installed
+        )
+    }
+
+    @Composable
+    fun rememberOnlineModuleState(module: OnlineModule): OnlineModuleState {
+        return remember(key1 = module, key2 = isRefreshing) {
+            createOnlineModuleState(module)
         }
     }
 }
