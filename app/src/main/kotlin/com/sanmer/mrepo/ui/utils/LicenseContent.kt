@@ -1,5 +1,11 @@
-package com.sanmer.mrepo.ui.activity.license
+package com.sanmer.mrepo.ui.utils
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,118 +14,97 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.app.event.State
+import com.sanmer.mrepo.app.event.isFailed
+import com.sanmer.mrepo.app.event.isLoading
+import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.model.json.License
+import com.sanmer.mrepo.ui.component.Failed
+import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
-import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.NormalChip
-import com.sanmer.mrepo.ui.component.PageIndicator
-import com.sanmer.mrepo.utils.HttpUtils
 import timber.log.Timber
 
 @Composable
-fun LicenseScreen(
+fun LicenseContent(
     licenseId: String
 ) {
     var license: License? by remember { mutableStateOf(null) }
     var message: String? by remember { mutableStateOf(null) }
-    val state = object : State(initial = Event.LOADING) {
-        override fun setSucceeded(value: Any?) {
-            license = value as License
-            super.setSucceeded(value)
-        }
-
-        override fun setFailed(value: Any?) {
-            message = value.toString()
-            super.setFailed(value)
-        }
-    }
-
-    LaunchedEffect(licenseId) {
-        HttpUtils.requestJson<License>(Const.SPDX_URL.format(licenseId)).onSuccess {
-            state.setSucceeded(it)
-        }.onFailure {
-            state.setFailed(it)
+    val event = rememberJsonDataRequest<License>(
+        url = Const.SPDX_URL.format(licenseId),
+        onSuccess = { license = it },
+        onFailure = {
+            message = it.message
             Timber.e(it, "getLicense: $licenseId")
         }
-    }
+    )
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            LicenseTopBar(scrollBehavior = scrollBehavior)
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier.padding(innerPadding)
+    Box(
+        modifier = Modifier
+            .animateContentSize(spring(stiffness = Spring.StiffnessLow))
+    ) {
+        AnimatedVisibility(
+            visible = event.isLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
-            when (state.event) {
-                Event.LOADING -> {
-                    Loading()
-                }
-                Event.SUCCEEDED -> {
-                    ViewLicense(license = license!!)
-                }
-                Event.FAILED -> {
-                    Failed(message = message)
-                }
-                Event.NON -> {}
-            }
+            Loading(minHeight = 200.dp)
+        }
+
+        AnimatedVisibility(
+            visible = event.isSucceeded,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            ViewLicense(license = license!!)
+        }
+
+        AnimatedVisibility(
+            visible = event.isFailed,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Failed(message = message, minHeight = 200.dp)
         }
     }
 }
-
-@Composable
-private fun LicenseTopBar(
-    scrollBehavior: TopAppBarScrollBehavior
-) = NavigateUpTopBar(
-    title = R.string.license_title,
-    scrollBehavior = scrollBehavior
-)
 
 @Composable
 private fun ViewLicense(
     license: License
 ) = Column(
     modifier = Modifier
-        .verticalScroll(rememberScrollState())
-        .padding(all = 20.dp)
+        .padding(top = 18.dp, start = 18.dp, end = 18.dp)
         .fillMaxSize(),
-    verticalArrangement = Arrangement.spacedBy(10.dp),
+    verticalArrangement = Arrangement.spacedBy(18.dp),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
     OutlinedCard(
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     ) {
         Column(
             modifier = Modifier
@@ -153,9 +138,9 @@ private fun ViewLicense(
 
     Text(
         modifier = Modifier
-            .padding(top = 10.dp)
-            .padding(horizontal = 5.dp)
-            .fillMaxWidth(),
+            .padding(bottom = 18.dp)
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
         text = license.licenseText,
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.outline
@@ -186,29 +171,3 @@ private fun LabelsItem(
         )
     }
 }
-
-@Composable
-private fun Loading() = PageIndicator(
-    icon = {
-        CircularProgressIndicator(
-            modifier = Modifier.size(50.dp),
-            strokeWidth = 5.dp,
-            strokeCap = StrokeCap.Round
-        )
-    },
-    text = {
-        Text(
-            text = stringResource(id = R.string.message_loading),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.outline
-        )
-    }
-)
-
-@Composable
-private fun Failed(
-    message: String?
-) = PageIndicator(
-    icon = R.drawable.danger_outline,
-    text = message ?: stringResource(id = R.string.unknown_error)
-)

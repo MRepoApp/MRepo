@@ -50,11 +50,6 @@
             android:exported="true"
             android:launchMode="standard"/>
 
-        <activity android:name=".ui.activity.license.LicenseActivity"
-            android:label="@string/license_title"
-            android:exported="true"
-            android:launchMode="standard"/>
-
         <service android:name=".service.DownloadService"
             android:exported="false"/>
 
