@@ -1,10 +1,9 @@
 package com.sanmer.mrepo.app.event
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlin.reflect.KProperty
 
 open class State(
     initial: Event = Event.NON
@@ -21,22 +20,16 @@ open class State(
 
     open fun setSucceeded(value: Any? = null) {
         event = Event.SUCCEEDED
+        state.value = Event.SUCCEEDED
     }
 
     open fun setFailed(value: Any? = null) {
         event = Event.FAILED
+        state.value = Event.FAILED
     }
 
     open fun setLoading(value: Any? = null) {
         event = Event.LOADING
-    }
-
-    private operator fun MutableState<Event>.setValue(
-        thisObj: Any?,
-        property: KProperty<*>,
-        value: Event
-    ) {
-        this.value = value
-        state.value = value
+        state.value = Event.LOADING
     }
 }

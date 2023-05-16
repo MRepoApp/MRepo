@@ -48,9 +48,9 @@ fun AppScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             AppThemeItem(
                 userData = userData,

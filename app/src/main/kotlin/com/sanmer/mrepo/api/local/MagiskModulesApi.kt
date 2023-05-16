@@ -2,6 +2,7 @@ package com.sanmer.mrepo.api.local
 
 import android.content.Context
 import com.sanmer.mrepo.api.ApiInitializerListener
+import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
 import com.sanmer.mrepo.utils.ModuleUtils
@@ -18,7 +19,6 @@ class MagiskModulesApi(
 ) : ModulesLocalApi {
 
     override var version = "magisk"
-    private val path = "/data/adb/modules"
     private var isZygiskEnabled = false
 
     fun build(listener: ApiInitializerListener): ModulesLocalApi {
@@ -89,10 +89,10 @@ class MagiskModulesApi(
     }
 
     override suspend fun getModules() = runCatching {
-        Timber.i("getLocal: $path")
+        Timber.i("getLocal: ${Const.MODULE_PATH}")
 
         val modules = mutableListOf<LocalModule>()
-        fs.getFile(path).listFiles().orEmpty()
+        fs.getFile(Const.MODULE_PATH).listFiles().orEmpty()
             .filter { !it.isFile && !it.isHidden }
             .forEach { path ->
                 ModuleUtils.getModule(
@@ -106,7 +106,7 @@ class MagiskModulesApi(
         return@runCatching modules.toList()
     }
 
-    private val LocalModule.path get() = "${this@MagiskModulesApi.path}/${id}"
+    private val LocalModule.path get() = "${Const.MODULE_PATH}/${id}"
 
     override fun enable(module: LocalModule) {
         when (module.state) {

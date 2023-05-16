@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.utils.navigateBack
@@ -31,23 +32,8 @@ fun NavigateUpTopBar(
     navController: NavController? = null,
     enable: Boolean = true
 ) = NavigateUpTopBar(
-    title = {
-        Column(
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = stringResource(id = title),
-                style = MaterialTheme.typography.titleLarge
-            )
-            subtitle?.let {
-                Text(
-                    text = stringResource(id = subtitle),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
-        }
-    },
+    title = stringResource(id = title),
+    subtitle = if (subtitle != null) stringResource(id = subtitle) else null,
     actions = actions,
     scrollBehavior = scrollBehavior,
     context = context,
@@ -71,13 +57,17 @@ fun NavigateUpTopBar(
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             subtitle?.let {
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.outline
+                    color = MaterialTheme.colorScheme.outline,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

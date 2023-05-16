@@ -52,7 +52,7 @@ fun SettingsScreen(
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            SettingsTopBar(
+            TopBar(
                 userData = userData,
                 scrollBehavior = scrollBehavior
             )
@@ -61,9 +61,9 @@ fun SettingsScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
         ) {
             when {
                 userData.isRoot -> RootItem()
@@ -123,7 +123,7 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsTopBar(
+private fun TopBar(
     userData: UserData,
     scrollBehavior: TopAppBarScrollBehavior
 ) = TopAppBar(

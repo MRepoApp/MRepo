@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.settings.app
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -11,9 +10,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -23,7 +22,6 @@ import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.ui.component.SettingNormalItem
-import kotlinx.coroutines.launch
 
 @Composable
 fun AppThemeItem(
@@ -32,14 +30,7 @@ fun AppThemeItem(
     onDarkModeChange: (DarkMode) -> Unit
 ) {
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-
-    val scope = rememberCoroutineScope()
-    BackHandler(bottomSheetState.isVisible) {
-        scope.launch {
-            bottomSheetState.hide()
-        }
-    }
+    val bottomSheetState = rememberModalBottomSheetState()
 
     SettingNormalItem(
         iconRes = R.drawable.color_swatch_outline,
@@ -77,6 +68,12 @@ private fun BottomSheet(
     shape = RoundedCornerShape(15.dp),
     scrimColor = Color.Transparent // TODO: Wait for the windowInsets parameter to be set
 ) {
+    Text(
+        text = stringResource(id = R.string.settings_app_theme),
+        style = MaterialTheme.typography.headlineSmall,
+        modifier = Modifier.align(Alignment.CenterHorizontally)
+    )
+
     TitleItem(text = stringResource(id = R.string.app_theme_palette))
     ThemePaletteItem(
         themeColor = themeColor,
