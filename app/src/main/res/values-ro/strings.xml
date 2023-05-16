@@ -25,7 +25,7 @@
     <string name="settings_log_viewer_desc">Vizualizează jurnalele de rulare a aplicației</string>
     <string name="settings_app">Aplicație</string>
     <string name="settings_download_path">Calea de descărcare</string>
-    <string name="settings_repo">Depozit</string>
+    <string name="settings_repo">Depozite</string>
     <string name="app_theme_palette">Paleta temei</string>
     <string name="app_theme_dark_theme_auto">Automat</string>
     <string name="app_theme_dark_theme_light">Luminoasă</string>
@@ -57,7 +57,7 @@
     <string name="view_module_page_versions">Versiuni</string>
     <string name="repo_options_share">Partajează</string>
     <string name="settings_app_theme_desc">Schimbă modul de noapte și paleta tematică</string>
-    <string name="settings_repo_desc">Gestionează depozitul de module Magisk</string>
+    <string name="settings_repo_desc">Gestionează depozitele de module Magisk</string>
     <string name="app_theme_dark_theme">Tema întunecată</string>
     <string name="app_theme_dark_theme_dark">Întunecată</string>
     <string name="repo_metadata">%1$d module</string>
@@ -67,7 +67,7 @@
     <string name="repo_add_dialog_title">Adaugă un depozit</string>
     <string name="repo_add_dialog_add">Adaugă</string>
     <string name="repo_update_dialog_failure">Actualizare eșuată: %1$s</string>
-    <string name="repo_notification_desc">Revizuirea conținutului modulelor este responsabilitatea proprietarului depozitului. Pentru orice probleme legate de acest depozit, contactează proprietarul acestuia.</string>
+    <string name="repo_notification_desc">Este responsabilitatea proprietarului depozitului. Pentru orice probleme legate de acest depozit, contactează proprietarul acestuia.</string>
     <string name="dialog_attention">Atenție</string>
     <string name="dialog_cancel">Anulează</string>
     <string name="dialog_ok">OK</string>
@@ -81,4 +81,20 @@
     <string name="settings_delete_zip_desc">Ștergere zip după ce instalarea a reușit, reține că acesta este cel mai bun efort și nu va funcționa dacă aplicația nu are permisiunea de a șterge</string>
     <string name="menu_scroll_top">Derulează sus</string>
     <string name="menu_scroll_bottom">Derulează jos</string>
+    <string name="page_repository">Depozit</string>
+    <string name="view_module_version_dialog_desc">Dorești să instalezi sau să descarci această versiune a modulului\?</string>
+    <string name="settings_app_desc">Setările despre aplicația MRepo în sine</string>
+    <string name="settings_about">Despre</string>
+    <string name="module_label_installed">Instalat</string>
+    <string name="view_module_page_overview">General</string>
+    <string name="view_module_page_about">Despre</string>
+    <string name="view_module_description">Descriere</string>
+    <string name="view_module_local">Local</string>
+    <string name="view_module_version">Versiune</string>
+    <string name="view_module_module_directory">Locația modulelor</string>
+    <string name="view_module_last_modified">Ultima modificare</string>
+    <string name="repo_notification_title">Revizuirea conținutului modulelor</string>
+    <string name="about_app_version">Versiunea %1$s (%2$s)</string>
+    <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
+    <string name="about_desc2">Făcut cu ❤️ de %1$s</string>
 </resources>
