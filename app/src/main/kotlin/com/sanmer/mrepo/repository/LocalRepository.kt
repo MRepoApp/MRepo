@@ -108,30 +108,26 @@ class LocalRepository @Inject constructor(
     }
 
     private suspend fun List<OnlineModuleEntity>.toModuleList() = withContext(Dispatchers.Default) {
-        val list = mutableListOf<OnlineModule>()
-
-        forEach { item ->
-            val module = item.toModule()
-            if (module !in list) {
-                list.add(module)
-            } else {
-                val old = list.first { it == module }
-
-                old.repoUrls.update(item.repoUrl)
-                old.repoUrls.sortByDescending {
-                    first {
-                        it.id == item.id && it.repoUrl == item.repoUrl
-                    }.versionCode
-                }
-
-                val new = first {
-                    it.id == item.id && it.repoUrl == old.repoUrl
-                }.toModule()
-
-                list.update(new.copy(repoUrls = old.repoUrls))
-            }
+        val values = map { it.toModule() }
+        val selector: (String, String) -> OnlineModule = { i, r ->
+            values.first { it.id == i && it.repoUrl == r }
         }
 
-        return@withContext list.toList()
+        return@withContext mutableListOf<OnlineModule>().apply {
+            values.forEach { module ->
+                if (contains(module)) {
+                    val old = first { it == module }
+                    old.repoUrls.update(module.repoUrl)
+                    old.repoUrls.sortByDescending { repoUrl ->
+                        selector(old.id, repoUrl).versionCode
+                    }
+
+                    val new = selector(old.id, old.repoUrl)
+                    update(new.copy(repoUrls = old.repoUrls))
+                } else {
+                    add(module)
+                }
+            }
+        }
     }
 }
