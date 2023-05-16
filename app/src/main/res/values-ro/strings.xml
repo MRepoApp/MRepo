@@ -20,7 +20,6 @@
     <string name="modules_empty">Nu s-au găsit module</string>
     <string name="search_empty">Listă goală</string>
     <string name="view_module_provided">Furnizat de %1$s</string>
-    <string name="view_module_changelog">Jurnalul modificărilor</string>
     <string name="settings_app_theme">Tema aplicației</string>
     <string name="settings_log_viewer">Vizualizator de jurnale</string>
     <string name="settings_log_viewer_desc">Vizualizează jurnalele de rulare a aplicației</string>
@@ -55,7 +54,7 @@
     <string name="settings_menu_reboot_bootloader">Repornire în Bootloader</string>
     <string name="module_download">Descarcă</string>
     <string name="search_placeholder">Căutare…</string>
-    <string name="view_module_versions">Versiuni</string>
+    <string name="view_module_page_versions">Versiuni</string>
     <string name="repo_options_share">Partajează</string>
     <string name="settings_app_theme_desc">Schimbă modul de noapte și paleta tematică</string>
     <string name="settings_repo_desc">Gestionează depozitul de module Magisk</string>

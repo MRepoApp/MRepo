@@ -40,9 +40,8 @@
     <string name="modules_empty">Nenhum módulo encontrado</string>
     <string name="search_empty">Vazio</string>
     <string name="search_placeholder">Buscar…</string>
-    <string name="view_module_versions">Versões</string>
+    <string name="view_module_page_versions">Versões</string>
     <string name="view_module_provided">Disponibilizado por %1$s</string>
-    <string name="view_module_changelog">Registro de Mudanças</string>
     <string name="settings_app_theme">Tema do Aplicativo</string>
     <string name="settings_app_theme_desc">Mudar paleta de cores e modo escuro</string>
     <string name="settings_log_viewer">Visualizador de Registros</string>

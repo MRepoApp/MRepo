@@ -58,9 +58,8 @@
     <string name="search_empty">Liste vide</string>
     <string name="search_placeholder">Recherche…</string>
     <!-- View Module -->
-    <string name="view_module_versions">Versions</string>
+    <string name="view_module_page_versions">Versions</string>
     <string name="view_module_provided">Fournis par %1$s</string>
-    <string name="view_module_changelog">Journal des changements</string>
     <!-- Settings -->
     <!-- Normal -->
     <string name="settings_app_theme">Thème de l\’application</string>

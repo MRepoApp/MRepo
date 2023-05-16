@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="unknown_error">不明なエラー</string>
-    <string name="view_module_changelog">更新履歴</string>
     <string name="repo_add_dialog_title">リポジトリの追加</string>
     <string name="repo_options_delete">削除</string>
     <string name="setup_non_root_desc2">利用可能: モジュールのダウンロード</string>
     <string name="repository_empty">リポジトリは空です</string>
-    <string name="view_module_versions">バージョン</string>
+    <string name="view_module_page_versions">バージョン</string>
     <string name="search_placeholder">検索…</string>
     <string name="page_settings">設定</string>
     <string name="install_title">インストール</string>

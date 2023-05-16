@@ -14,9 +14,8 @@
     <string name="modules_empty">No se han encontrado módulos</string>
     <string name="search_empty">Lista vacía</string>
     <string name="search_placeholder">Buscar…</string>
-    <string name="view_module_versions">Versiones</string>
+    <string name="view_module_page_versions">Versiones</string>
     <string name="view_module_provided">Proporcionado por %1$s</string>
-    <string name="view_module_changelog">Registro de cambios</string>
     <string name="settings_app_theme">Temas de la App</string>
     <string name="settings_menu_reboot_download">Reiniciar a Download</string>
     <string name="settings_log_viewer">Visor de registros</string>

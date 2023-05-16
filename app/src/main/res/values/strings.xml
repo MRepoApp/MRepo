@@ -30,11 +30,17 @@
 
     <!-- Repository -->
     <string name="repository_empty">Repository is empty</string>
+    <string name="module_label_installed">Installed</string>
     <!-- View Module -->
-    <string name="view_module_author">By %1$s</string>
-    <string name="view_module_versions">Versions</string>
+    <string name="view_module_page_overview">Overview</string>
+    <string name="view_module_page_versions">Versions</string>
+    <string name="view_module_page_about">About</string>
+    <string name="view_module_description">Description</string>
+    <string name="view_module_local">Local</string>
+    <string name="view_module_version">Version</string>
+    <string name="view_module_module_directory">Module Directory</string>
+    <string name="view_module_last_modified">Last Modified</string>
     <string name="view_module_provided">Provided by %1$s</string>
-    <string name="view_module_changelog">Changelog</string>
     <string name="view_module_version_dialog_desc">Do you want to install or download this version of the module?</string>
 
     <!-- Modules -->

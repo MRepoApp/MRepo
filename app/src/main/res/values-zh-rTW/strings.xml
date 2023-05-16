@@ -64,9 +64,8 @@
     <string name="search_empty">空列表</string>
     <string name="search_placeholder">搜尋…</string>
     <!-- View Module -->
-    <string name="view_module_versions">版本</string>
+    <string name="view_module_page_versions">版本</string>
     <string name="view_module_provided">由 %1$s 提供</string>
-    <string name="view_module_changelog">更新日誌</string>
 
     <!-- Settings-->
     <!-- Normal -->

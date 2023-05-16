@@ -42,9 +42,8 @@
     <string name="modules_empty">لم يتم العثور على وحدات</string>
     <string name="repository_empty">المستودعات فارغة</string>
     <string name="search_placeholder">بحث…</string>
-    <string name="view_module_versions">الإصدار</string>
+    <string name="view_module_page_versions">الإصدار</string>
     <string name="view_module_provided">مقدم بواسطة%1$s</string>
-    <string name="view_module_changelog">سجل التغييرات</string>
     <string name="settings_app_theme">سمة التطبيق</string>
     <string name="settings_log_viewer">عارض السجل</string>
     <string name="settings_log_viewer_desc">عرض سجلات وقت تشغيل التطبيق</string>

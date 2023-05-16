@@ -30,11 +30,17 @@
 
     <!-- Repository -->
     <string name="repository_empty">存储库为空</string>
+    <string name="module_label_installed">已安装</string>
     <!-- View Module -->
-    <string name="view_module_author">作者 %1$s</string>
-    <string name="view_module_versions">版本</string>
+    <string name="view_module_page_overview">概览</string>
+    <string name="view_module_page_versions">版本</string>
+    <string name="view_module_page_about">关于</string>
+    <string name="view_module_description">描述</string>
+    <string name="view_module_local">本地</string>
+    <string name="view_module_version">版本</string>
+    <string name="view_module_module_directory">模块目录</string>
+    <string name="view_module_last_modified">最后修改</string>
     <string name="view_module_provided">由 %1$s 提供</string>
-    <string name="view_module_changelog">更新日志</string>
     <string name="view_module_version_dialog_desc">是否安装或下载该版本的模块？</string>
 
     <!-- Modules -->
