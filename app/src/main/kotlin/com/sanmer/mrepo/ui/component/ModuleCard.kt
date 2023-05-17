@@ -2,6 +2,7 @@ package com.sanmer.mrepo.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -15,9 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,10 +42,8 @@ fun ModuleCard(
     modifier: Modifier = Modifier,
     alpha: Float = 1f,
     decoration: TextDecoration = TextDecoration.None,
-    progress: Float = 0f,
     switch: @Composable (() -> Unit?)? = null,
-    indicator: @Composable (() -> Unit?)? = null,
-    message: @Composable (BoxScope.() -> Unit)? = null,
+    indicator: @Composable (BoxScope.() -> Unit?)? = null,
     buttons: @Composable RowScope.() -> Unit,
 )  = Surface(
     modifier = modifier,
@@ -63,9 +60,7 @@ fun ModuleCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp, bottom = 10.dp),
+                modifier = Modifier.padding(all = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
@@ -81,6 +76,7 @@ fun ModuleCard(
                         textDecoration = decoration,
                         overflow = TextOverflow.Ellipsis
                     )
+                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = stringResource(id = R.string.module_version_author,
                             version, author),
@@ -101,46 +97,25 @@ fun ModuleCard(
                 textDecoration = decoration
             )
 
-            Box(
-                modifier = Modifier.padding(top = 10.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Divider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.background
-                )
-                if (progress != 0f) {
-                    LinearProgressIndicator(
-                        progress = progress,
-                        modifier = Modifier
-                            .height(3.5.dp)
-                            .fillMaxWidth(),
-                        trackColor = MaterialTheme.colorScheme.background,
-                    )
-                }
-            }
+            Divider(
+                thickness = 1.5.dp,
+                color = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
 
             Row(
                 modifier = Modifier
-                    .padding(start = 16.dp,end = 4.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                if (message != null) {
-                    ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
-                        Box(
-                            modifier = Modifier.weight(1f),
-                            content = message
-                        )
-                    }
-                } else {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
+                Spacer(modifier = Modifier.weight(1f))
                 buttons()
             }
         }
 
-        indicator?.invoke()
+        indicator?.invoke(this)
     }
 }
 
@@ -148,7 +123,7 @@ fun ModuleCard(
 fun stateIndicator(
     @DrawableRes id: Int,
     color: Color = MaterialTheme.colorScheme.onSurfaceVariant
-) = @Composable {
+): @Composable BoxScope.() -> Unit = {
     Image(
         modifier = Modifier.fillMaxSize(),
         painter = painterResource(id = id),
