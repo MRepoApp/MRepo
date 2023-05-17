@@ -138,9 +138,9 @@ private fun ViewLicense(
 
     Text(
         modifier = Modifier
+            .verticalScroll(rememberScrollState())
             .padding(bottom = 18.dp)
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
+            .fillMaxWidth(),
         text = license.licenseText,
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.outline
