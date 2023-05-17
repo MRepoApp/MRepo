@@ -5,7 +5,8 @@ import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.sanmer.mrepo.app.event.isNotReady
+import com.sanmer.mrepo.app.event.isFailed
+import com.sanmer.mrepo.app.event.isNon
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.app.utils.ShortcutUtils
 import com.sanmer.mrepo.di.MainScope
@@ -17,7 +18,9 @@ import com.sanmer.mrepo.works.LocalWork
 import com.sanmer.mrepo.works.RepoWork
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
@@ -65,15 +68,17 @@ class App : Application(), Configuration.Provider {
     private fun initSuProviderImpl() {
         userDataRepository.userData
             .map { it.isRoot }
+            .distinctUntilChanged()
             .combine(suProviderImpl.state) { isRoot, state ->
-                if (state.isNotReady && isRoot) {
-                    suProviderImpl.init()
+                when {
+                    state.isNon && isRoot -> suProviderImpl.init()
+                    state.isSucceeded -> workManger.enqueue(LocalWork.OneTimeWork)
+                    state.isFailed -> {
+                        delay(15000)
+                        suProviderImpl.init()
+                    }
+                    else -> {}
                 }
-
-                if (state.isSucceeded) {
-                    workManger.enqueue(LocalWork.OneTimeWork)
-                }
-
             }.launchIn(mainScope)
     }
 

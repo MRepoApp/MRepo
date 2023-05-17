@@ -14,6 +14,7 @@ import com.sanmer.mrepo.api.local.ModulesLocalApi
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.utils.expansion.toFile
+import com.topjohnwu.superuser.NoShellException
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
@@ -25,9 +26,21 @@ import javax.inject.Singleton
 
 @Singleton
 class SuProviderImpl @Inject constructor(
-    @ApplicationContext private val appContext: Context
+    @ApplicationContext private val app: Context
 ) : SuProvider {
     override val state = MutableStateFlow(Event.NON)
+    private val listener = object : ApiInitializerListener {
+        override fun onSuccess() {
+            state.value = Event.SUCCEEDED
+            Timber.i("SuProvider created")
+        }
+
+        override fun onFailure() {
+            state.value = Event.FAILED
+            Timber.w("SuProvider destroyed")
+        }
+
+    }
 
     private lateinit var mProvider: ISuProvider
     private lateinit var mApi: ModulesLocalApi
@@ -43,41 +56,42 @@ class SuProviderImpl @Inject constructor(
     }
 
     private class SuShellInitializer : Shell.Initializer() {
-        override fun onInit(context: Context, shell: Shell): Boolean = shell.isRoot
+        override fun onInit(context: Context, shell: Shell): Boolean = true
     }
 
     fun init() {
-        val intent = Intent(appContext, SuService::class.java)
-        RootService.bind(intent, connection)
+        Timber.d("SuProviderImpl init")
+
+        runCatching {
+            Shell.getShell().apply {
+                if (!isRoot) throw NoShellException(
+                    "su request rejected (${app.applicationInfo.uid})"
+                )
+            }
+
+            Intent(app, SuService::class.java).apply {
+                RootService.bind(this, connection)
+            }
+        }.onFailure {
+            Timber.e(it, "SuProviderImpl init")
+            listener.onFailure()
+        }
     }
 
     private val connection = object : ServiceConnection {
-
-        private val listener = object : ApiInitializerListener {
-            override fun onSuccess() {
-                state.value = Event.SUCCEEDED
-            }
-
-            override fun onFailure() {
-                state.value = Event.FAILED
-            }
-
-        }
-
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
-            Timber.i("SuProvider init")
             mProvider = ISuProvider.Stub.asInterface(binder)
 
             when (context) {
                 Const.KSU_CONTEXT -> {
                     mApi = KernelSuModulesApi(
-                        context = appContext
+                        context = app
                     ).build(listener)
                 }
 
                 Const.MAGISK_CONTEXT -> {
                     mApi = MagiskModulesApi(
-                        context = appContext,
+                        context = app,
                         fs = getFileSystemManager()
                     ).build(listener)
                 }
@@ -89,8 +103,7 @@ class SuProviderImpl @Inject constructor(
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
-            Timber.w("SuProvider disable")
-            state.value = Event.FAILED
+            listener.onFailure()
         }
     }
 
