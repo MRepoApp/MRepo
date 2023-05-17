@@ -2,16 +2,17 @@ package com.sanmer.mrepo.ui.screens.modules
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -35,8 +36,8 @@ fun ModulesList(
 ) = LazyColumn(
     state = state,
     modifier = Modifier.fillMaxSize(),
-    contentPadding = PaddingValues(20.dp),
-    verticalArrangement = Arrangement.spacedBy(20.dp),
+    contentPadding = PaddingValues(16.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp),
 ) {
     items(
         items = list,
@@ -77,28 +78,41 @@ private fun ModuleItem(
             else -> null
         },
         buttons = {
-            TextButton(
+            RemoveOrRestore(
+                module = module,
                 onClick = uiState.change,
                 enabled = suState.isSucceeded
-            ) {
-                Text(
-                    modifier = Modifier.padding(end = 6.dp),
-                    text = stringResource(id = if (module.state == State.REMOVE) {
-                        R.string.module_restore
-                    } else {
-                        R.string.module_remove
-                    })
-                )
-                Icon(
-                    modifier = Modifier.size(22.dp),
-                    painter = painterResource(id = if (module.state == State.REMOVE) {
-                        R.drawable.refresh_outline
-                    } else {
-                        R.drawable.trash_outline
-                    }),
-                    contentDescription = null
-                )
-            }
+            )
         }
+    )
+}
+
+@Composable
+private fun RemoveOrRestore(
+    module: LocalModule,
+    onClick: () -> Unit,
+    enabled: Boolean
+) = FilledTonalButton(
+    onClick = onClick,
+    enabled = enabled,
+    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 10.dp)
+) {
+    Icon(
+        modifier = Modifier.size(20.dp),
+        painter = painterResource(id = if (module.state == State.REMOVE) {
+            R.drawable.refresh_outline
+        } else {
+            R.drawable.trash_outline
+        }),
+        contentDescription = null
+    )
+
+    Spacer(modifier = Modifier.width(6.dp))
+    Text(
+        text = stringResource(id = if (module.state == State.REMOVE) {
+            R.string.module_restore
+        } else {
+            R.string.module_remove
+        })
     )
 }
