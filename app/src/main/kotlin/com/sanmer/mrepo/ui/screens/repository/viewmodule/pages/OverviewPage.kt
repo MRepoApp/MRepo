@@ -51,9 +51,11 @@ fun OverviewPage(
     }
 
     if (viewModel.installed) {
-        Divider(thickness = 0.8.dp)
+        Divider(thickness = 0.9.dp)
         LocalItem()
     }
+
+    Divider(thickness = 0.9.dp)
 }
 
 @Composable
@@ -64,15 +66,14 @@ private fun LocalItem(
 
     Column(
         modifier = Modifier
-            .padding(top = 16.dp)
+            .padding(all = 16.dp)
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = stringResource(id = R.string.view_module_local),
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(start = 16.dp)
+            color = MaterialTheme.colorScheme.primary
         )
 
         ValueItem(
@@ -102,9 +103,7 @@ private fun ValueItem(
     key: String,
     value: String,
 )  = Column(
-    modifier = Modifier
-        .padding(vertical = 8.dp, horizontal = 16.dp)
-        .fillMaxWidth(),
+    modifier = Modifier.fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(4.dp)
 ) {
     Text(
