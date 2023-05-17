@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Modules(
+data class ModulesJson(
     val name: String,
     val timestamp: Float,
     val modules: List<OnlineModule>,
@@ -13,7 +13,7 @@ data class Modules(
 ) {
     override fun equals(other: Any?): Boolean {
         return when (other) {
-            is Modules -> url == other.url
+            is ModulesJson -> url == other.url
             else -> false
         }
     }

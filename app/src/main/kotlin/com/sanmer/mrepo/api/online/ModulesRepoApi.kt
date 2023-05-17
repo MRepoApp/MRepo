@@ -1,8 +1,8 @@
 package com.sanmer.mrepo.api.online
 
 import com.sanmer.mrepo.BuildConfig
-import com.sanmer.mrepo.model.json.ModuleUpdate
-import com.sanmer.mrepo.model.json.Modules
+import com.sanmer.mrepo.model.json.ModulesJson
+import com.sanmer.mrepo.model.json.UpdateJson
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -13,10 +13,10 @@ import timber.log.Timber
 
 interface ModulesRepoApi {
     @GET("json/modules.json")
-    fun getModules(): Call<Modules>
+    fun getModules(): Call<ModulesJson>
 
     @GET("modules/{id}/update.json")
-    fun getUpdate(@Path("id") id: String): Call<ModuleUpdate>
+    fun getUpdate(@Path("id") id: String): Call<UpdateJson>
 
     companion object {
         fun build(repoUrl: String): ModulesRepoApi {

@@ -8,8 +8,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.model.json.ModuleUpdate
-import com.sanmer.mrepo.model.json.ModuleUpdateItem
+import com.sanmer.mrepo.model.json.UpdateJson
+import com.sanmer.mrepo.model.json.VersionItem
+import com.sanmer.mrepo.model.json.versionDisplay
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.repository.LocalRepository
@@ -36,7 +37,7 @@ class ModuleViewModel @Inject constructor(
     private val moduleId: String = checkNotNull(savedStateHandle["moduleId"])
     var online by mutableStateOf(OnlineModule())
         private set
-    val versions = mutableListOf<ModuleUpdateItem>()
+    val versions = mutableListOf<VersionItem>()
 
     var local by mutableStateOf(LocalModule())
         private set
@@ -67,7 +68,7 @@ class ModuleViewModel @Inject constructor(
     suspend fun getRepoByUrl(url: String) = localRepository.getRepoByUrl(url)
 
     private suspend fun getUpdates(module: OnlineModule) { // TODO: TODO: Waiting for version 2.0 of util
-        val update: (ModuleUpdate) -> Unit = { update ->
+        val update: (UpdateJson) -> Unit = { update ->
             update.versions.forEach { item ->
                 val versionCodes = versions.map { it.versionCode }
                 if (item.versionCode !in versionCodes) {
@@ -100,12 +101,13 @@ class ModuleViewModel @Inject constructor(
 
     fun downloader(
         context: Context,
-        item: ModuleUpdateItem,
+        item: VersionItem,
         install: Boolean = false
     ) {
         val path = userDataRepository.value.downloadPath.resolve(
-            "${online.name}_${item.version}_${item.versionCode}.zip"
+            "${online.name}_${item.versionDisplay}.zip"
                 .replace("[\\s+|/]".toRegex(), "_")
+                .replace("[^a-zA-Z0-9\\-._]".toRegex(), "")
         )
 
         DownloadService.start(

@@ -52,7 +52,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.isLoading
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.model.json.ModuleUpdateItem
+import com.sanmer.mrepo.model.json.VersionItem
 import com.sanmer.mrepo.model.json.versionDisplay
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
@@ -72,37 +72,37 @@ fun VersionsPage(
         key = { it.versionCode }
     ) {
         VersionItem(
-            value = it,
+            item = it,
             isRoot = isRoot
         )
 
-        Divider(thickness = 0.8.dp)
+        Divider(thickness = 0.9.dp)
     }
 }
 
 @Composable
 private fun VersionItem(
-    value: ModuleUpdateItem,
+    item: VersionItem,
     isRoot: Boolean,
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
-    val hasChangelog = value.changelog.isNotBlank()
+    val hasChangelog = item.changelog.isNotBlank()
     var repo: Repo? by remember { mutableStateOf(null) }
-    LaunchedEffect(value) {
-        repo = viewModel.getRepoByUrl(value.repoUrl)
+    LaunchedEffect(item) {
+        repo = viewModel.getRepoByUrl(item.repoUrl)
     }
 
     var show by remember { mutableStateOf(false) }
     if (show && !hasChangelog) {
         VersionItemDialog(
-            value = value,
+            item = item,
             isRoot = isRoot,
             onClose = { show = false }
         )
     }
     if (show && hasChangelog) {
         VersionItemBottomSheet(
-            value = value,
+            item = item,
             isRoot = isRoot,
             onClose = { show = false }
         )
@@ -120,7 +120,7 @@ private fun VersionItem(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = value.versionDisplay,
+                text = item.versionDisplay,
                 style = MaterialTheme.typography.bodyMedium,
             )
 
@@ -134,7 +134,7 @@ private fun VersionItem(
         }
 
         Text(
-            text = value.timestamp.toDate(),
+            text = item.timestamp.toDate(),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.outline
         )
@@ -143,7 +143,7 @@ private fun VersionItem(
 
 @Composable
 private fun VersionItemDialog(
-    value: ModuleUpdateItem,
+    item: VersionItem,
     isRoot: Boolean,
     viewModel: ModuleViewModel = hiltViewModel(),
     onClose: () -> Unit
@@ -162,7 +162,7 @@ private fun VersionItemDialog(
         ) {
             Text(
                 modifier = Modifier.padding(bottom = 16.dp),
-                text = value.versionDisplay,
+                text = item.versionDisplay,
                 color = AlertDialogDefaults.titleContentColor,
                 style = MaterialTheme.typography.headlineSmall
             )
@@ -189,7 +189,7 @@ private fun VersionItemDialog(
                     onClick = {
                         viewModel.downloader(
                             context = context,
-                            item = value
+                            item = item
                         )
                         onClose()
                     }
@@ -203,7 +203,7 @@ private fun VersionItemDialog(
                     onClick = {
                         viewModel.downloader(
                             context = context,
-                            item = value,
+                            item = item,
                             install = true
                         )
                         onClose()
@@ -219,7 +219,7 @@ private fun VersionItemDialog(
 
 @Composable
 private fun VersionItemBottomSheet(
-    value: ModuleUpdateItem,
+    item: VersionItem,
     isRoot: Boolean,
     state: SheetState = rememberModalBottomSheetState(),
     viewModel: ModuleViewModel = hiltViewModel(),
@@ -243,7 +243,7 @@ private fun VersionItemBottomSheet(
             onClick = {
                 viewModel.downloader(
                     context = context,
-                    item = value,
+                    item = item,
                     install = true
                 )
             },
@@ -263,7 +263,7 @@ private fun VersionItemBottomSheet(
             onClick = {
                 viewModel.downloader(
                     context = context,
-                    item = value
+                    item = item
                 )
             }
         ) {
@@ -278,7 +278,7 @@ private fun VersionItemBottomSheet(
         }
     }
 
-    ChangelogItem(url = value.changelog)
+    ChangelogItem(url = item.changelog)
 
 }
 
@@ -314,8 +314,8 @@ private fun ChangelogItem(
                 color = AlertDialogDefaults.textContentColor,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
-                    .padding(bottom = 18.dp, start = 18.dp, end = 18.dp)
                     .verticalScroll(rememberScrollState())
+                    .padding(bottom = 18.dp, start = 18.dp, end = 18.dp)
             )
         }
     }

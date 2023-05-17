@@ -4,14 +4,14 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ModuleUpdate(
+data class UpdateJson(
     val timestamp: Float,
-    val versions: List<ModuleUpdateItem>,
+    val versions: List<VersionItem>,
     @Json(ignore = true) val repoUrl: String = ""
 )
 
 @JsonClass(generateAdapter = true)
-data class ModuleUpdateItem(
+data class VersionItem(
     val timestamp: Float,
     val version: String,
     val versionCode: Int,
@@ -20,7 +20,7 @@ data class ModuleUpdateItem(
     @Json(ignore = true) val repoUrl: String = ""
 )
 
-val ModuleUpdateItem.versionDisplay get() = if ("(${versionCode})" in version) {
+val VersionItem.versionDisplay get() = if ("(${versionCode})" in version) {
     version
 } else {
     "$version (${versionCode})"
