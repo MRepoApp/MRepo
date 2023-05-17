@@ -7,7 +7,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,6 +25,16 @@ fun BottomNav(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
+    val mainScreens by remember(isRoot) {
+        derivedStateOf {
+            if (isRoot) {
+                listOf(MainScreen.Repository, MainScreen.Modules, MainScreen.Settings)
+            } else {
+                listOf(MainScreen.Repository, MainScreen.Settings)
+            }
+        }
+    }
 
     NavigationBar(
         modifier = Modifier.imePadding()
@@ -49,8 +61,7 @@ fun BottomNav(
                 },
                 alwaysShowLabel = true,
                 selected = selected,
-                onClick = { if (!selected) navController.navigatePopUpTo(screen.route) },
-                enabled = if (screen == MainScreen.Modules) isRoot else true
+                onClick = { if (!selected) navController.navigatePopUpTo(screen.route) }
             )
         }
     }

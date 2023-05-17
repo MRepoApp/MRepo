@@ -34,12 +34,6 @@ enum class MainScreen(
     )
 }
 
-val mainScreens = listOf(
-    MainScreen.Repository,
-    MainScreen.Modules,
-    MainScreen.Settings
-)
-
 fun NavController.navigateToRepository() = navigatePopUpTo(MainScreen.Repository.route)
 fun NavController.navigateToModules() = navigatePopUpTo(MainScreen.Modules.route)
 fun NavController.navigateToSettings() = navigatePopUpTo(MainScreen.Settings.route)
