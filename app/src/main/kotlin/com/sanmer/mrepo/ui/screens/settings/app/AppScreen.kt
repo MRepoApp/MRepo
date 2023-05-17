@@ -79,6 +79,15 @@ fun AppScreen(
                 }
             )
 
+            SettingSwitchItem(
+                iconRes = R.drawable.convertshape_2_outline,
+                text = stringResource(id = R.string.settings_navigation_animation),
+                subText = stringResource(id = R.string.settings_navigation_animation_desc),
+                checked = userData.enableNavigationAnimation,
+                onChange = {
+                    viewModel.setEnableNavigationAnimation(it)
+                }
+            )
         }
     }
 }

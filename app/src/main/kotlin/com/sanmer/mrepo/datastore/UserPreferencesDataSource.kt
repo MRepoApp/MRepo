@@ -50,4 +50,12 @@ class UserPreferencesDataSource @Inject constructor(
             }
         }
     }
+
+    suspend fun setEnableNavigationAnimation(value: Boolean) = withContext(Dispatchers.IO) {
+        userPreferences.updateData {
+            it.copy {
+                enableNavigationAnimation = value
+            }
+        }
+    }
 }

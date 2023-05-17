@@ -59,4 +59,8 @@ class UserDataRepository @Inject constructor(
     fun setDeleteZipFile(value: Boolean) = applicationScope.launch {
         userPreferencesDataSource.setDeleteZipFile(value)
     }
+
+    fun setEnableNavigationAnimation(value: Boolean) = applicationScope.launch {
+        userPreferencesDataSource.setEnableNavigationAnimation(value)
+    }
 }

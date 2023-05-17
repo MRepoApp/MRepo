@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.Logo
-import com.sanmer.mrepo.ui.navigation.graph.createViewRoute
+import com.sanmer.mrepo.ui.navigation.animated.createViewRoute
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 

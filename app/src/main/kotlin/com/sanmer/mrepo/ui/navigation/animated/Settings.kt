@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.navigation.graph
+package com.sanmer.mrepo.ui.navigation.animated
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

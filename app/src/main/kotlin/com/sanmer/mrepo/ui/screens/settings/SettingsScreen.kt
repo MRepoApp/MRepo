@@ -32,7 +32,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.SettingNormalItem
-import com.sanmer.mrepo.ui.navigation.graph.SettingsScreen
+import com.sanmer.mrepo.ui.navigation.animated.SettingsScreen
 import com.sanmer.mrepo.ui.navigation.navigateToRepository
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.ui.utils.none

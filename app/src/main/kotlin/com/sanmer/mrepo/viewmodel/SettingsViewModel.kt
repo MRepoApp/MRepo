@@ -27,4 +27,5 @@ class SettingsViewModel @Inject constructor(
     fun setThemeColor(value: Int) = userDataRepository.setThemeColor(value)
     fun setDownloadPath(value: String) = userDataRepository.setDownloadPath(value)
     fun setDeleteZipFile(value: Boolean) = userDataRepository.setDeleteZipFile(value)
+    fun setEnableNavigationAnimation(value: Boolean) = userDataRepository.setEnableNavigationAnimation(value)
 }
