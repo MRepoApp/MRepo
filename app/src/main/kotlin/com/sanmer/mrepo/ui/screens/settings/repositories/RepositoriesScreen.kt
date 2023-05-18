@@ -324,7 +324,7 @@ private fun FloatingButton(
     containerColor = MaterialTheme.colorScheme.primary
 ) {
     Icon(
-        modifier = Modifier.size(28.dp),
+        modifier = Modifier.size(30.dp),
         painter = painterResource(id = R.drawable.add_outline),
         contentDescription = null
     )

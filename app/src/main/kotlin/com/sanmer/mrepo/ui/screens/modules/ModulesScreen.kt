@@ -12,7 +12,6 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -235,8 +234,7 @@ private fun FloatingButton() {
         containerColor = MaterialTheme.colorScheme.primary,
         icon = {
             Icon(
-                modifier = Modifier.size(28.dp),
-                painter = painterResource(id = R.drawable.add_outline),
+                painter = painterResource(id = R.drawable.import_outline),
                 contentDescription = null
             )
         },
