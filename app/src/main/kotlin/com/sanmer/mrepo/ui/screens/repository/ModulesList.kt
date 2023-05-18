@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
@@ -78,43 +79,62 @@ private fun ModuleItem(
         )
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 10.dp)
+            modifier = Modifier.padding(start = 10.dp)
         ) {
             Text(
                 text = module.name,
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.titleSmall
+                    .copy(fontWeight = FontWeight.Bold),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = module.author,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium.copy(),
             )
             Text(
                 text = module.versionDisplay,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.outline
             )
-        }
 
-        if (uiState.installed) {
-            Box(modifier = Modifier.background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(6.dp)
-            )) {
-                Text(
-                    text = stringResource(id = R.string.module_label_installed),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .padding(all = 3.dp)
-                        .align(Alignment.Center)
-                )
+            if (uiState.hasLabel) {
+                Row(
+                    modifier = Modifier.padding(top = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    if (uiState.hasLicense) {
+                        LabelItem(text = module.license)
+                    }
+
+                    if (uiState.installed) {
+                        LabelItem(text = stringResource(id = R.string.module_label_installed))
+                    }
+                }
             }
         }
     }
+}
+
+@Composable
+private fun LabelItem(
+    text: String
+) = Box(
+    modifier = Modifier.background(
+        color = MaterialTheme.colorScheme.primary,
+        shape = RoundedCornerShape(3.dp)
+    )
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelSmall
+            .copy(fontSize = 8.sp),
+        color = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier
+            .padding(horizontal = 3.dp, vertical = 1.dp)
+            .align(Alignment.Center)
+    )
 }

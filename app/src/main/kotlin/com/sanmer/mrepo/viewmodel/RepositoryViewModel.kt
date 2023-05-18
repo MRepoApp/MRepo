@@ -62,13 +62,17 @@ class RepositoryViewModel @Inject constructor(
 
     @Stable
     data class OnlineModuleState(
-        val installed: Boolean
-    )
+        val installed: Boolean,
+        val hasLicense: Boolean
+    ) {
+        val hasLabel get() = installed or hasLicense
+    }
 
     private fun createOnlineModuleState(module: OnlineModule): OnlineModuleState {
         val installed = localRepository.local.any { it.id == module.id }
         return OnlineModuleState(
-            installed = installed
+            installed = installed,
+            hasLicense = module.license.isNotBlank()
         )
     }
 
