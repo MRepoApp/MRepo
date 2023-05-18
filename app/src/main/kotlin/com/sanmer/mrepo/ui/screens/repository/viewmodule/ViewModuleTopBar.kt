@@ -2,6 +2,7 @@ package com.sanmer.mrepo.ui.screens.repository.viewmodule
 
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
@@ -102,14 +104,14 @@ private fun topBarContent(
             Text(
                 text = module.name,
                 style = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                modifier = Modifier.horizontalScroll(rememberScrollState())
             )
 
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = module.author,
                 style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.horizontalScroll(rememberScrollState())
             )
             Text(
                 text = if (hasLicense) {
