@@ -56,7 +56,7 @@ fun SettingNormalItem(
 ) {
     iconRes?.let {
         Icon(
-            modifier = Modifier.size(22.dp),
+            modifier = Modifier.size(24.dp),
             painter = painterResource(id = iconRes),
             contentDescription = null,
             tint = LocalContentColor.current
