@@ -19,11 +19,14 @@ import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.expansion.toDateTime
+import com.sanmer.mrepo.utils.expansion.totalSize
 import com.sanmer.mrepo.utils.expansion.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.log10
+import kotlin.math.pow
 
 @HiltViewModel
 class ModuleViewModel @Inject constructor(
@@ -130,6 +133,29 @@ class ModuleViewModel @Inject constructor(
         }
 
     } catch (e: Exception) {
+        Timber.e(e, "getLastModified")
         null
+    }
+
+    fun getDirSize(): String? = try {
+        val modulePath = suRepository.fs.getFile(modulePath)
+
+        if (modulePath.exists()) {
+            modulePath.totalSize.formatFileSize()
+        } else {
+            null
+        }
+
+    } catch (e: Exception) {
+        Timber.e(e, "getDirSize")
+        null
+    }
+
+    private fun Long.formatFileSize() = if (this < 0){
+        "0 B"
+    } else {
+        val units = listOf("B", "KB", "MB")
+        val group = (log10(toDouble()) / log10(1024.0)).toInt()
+        String.format("%.2f %s", this / 1024.0.pow(group.toDouble()), units[group])
     }
 }

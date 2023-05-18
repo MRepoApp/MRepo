@@ -40,6 +40,7 @@
     <string name="view_module_version">Version</string>
     <string name="view_module_module_directory">Module Directory</string>
     <string name="view_module_last_modified">Last Modified</string>
+    <string name="view_module_dir_size">Directory Size</string>
     <string name="view_module_provided">Provided by %1$s</string>
     <string name="view_module_version_dialog_desc">Do you want to install or download this version of the module?</string>
 
