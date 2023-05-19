@@ -2,7 +2,6 @@ package com.sanmer.mrepo.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -44,7 +43,8 @@ fun ModuleCard(
     decoration: TextDecoration = TextDecoration.None,
     switch: @Composable (() -> Unit?)? = null,
     indicator: @Composable (BoxScope.() -> Unit?)? = null,
-    buttons: @Composable RowScope.() -> Unit,
+    leadingButton: @Composable (RowScope.() -> Unit)? = null,
+    trailingButton: @Composable RowScope.() -> Unit,
 )  = Surface(
     modifier = modifier,
     color = MaterialTheme.colorScheme.surface,
@@ -107,11 +107,11 @@ fun ModuleCard(
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                leadingButton?.invoke(this)
                 Spacer(modifier = Modifier.weight(1f))
-                buttons()
+                trailingButton()
             }
         }
 

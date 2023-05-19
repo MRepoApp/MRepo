@@ -2,6 +2,7 @@ package com.sanmer.mrepo.ui.screens.modules
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -77,7 +79,12 @@ private fun ModuleItem(
             State.ZYGISK_DISABLE -> stateIndicator(R.drawable.danger_outline)
             else -> null
         },
-        buttons = {
+        leadingButton = if (uiState.manager != null) {
+            manager(uiState.manager)
+        } else {
+            null
+        },
+        trailingButton = {
             RemoveOrRestore(
                 module = module,
                 onClick = uiState.change,
@@ -95,7 +102,7 @@ private fun RemoveOrRestore(
 ) = FilledTonalButton(
     onClick = onClick,
     enabled = enabled,
-    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 10.dp)
+    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 12.dp)
 ) {
     Icon(
         modifier = Modifier.size(20.dp),
@@ -115,4 +122,18 @@ private fun RemoveOrRestore(
             R.string.module_remove
         })
     )
+}
+
+@Composable
+private fun manager(
+    onClick: () -> Unit
+): @Composable RowScope.() -> Unit = {
+    FilledTonalIconButton(
+        onClick = onClick
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.setting_outline),
+            contentDescription = null,
+        )
+    }
 }

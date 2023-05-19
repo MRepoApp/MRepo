@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
@@ -7,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +17,7 @@ import com.sanmer.mrepo.model.module.State
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.repository.UserDataRepository
+import com.sanmer.mrepo.utils.ModuleUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -25,7 +27,6 @@ import javax.inject.Inject
 class ModulesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository,
-    private val userDataRepository: UserDataRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
     val localValue get() = (if (isSearch) _local else local)
@@ -73,44 +74,47 @@ class ModulesViewModel @Inject constructor(
         val decoration: TextDecoration = TextDecoration.None,
         val toggle: (Boolean) -> Unit = {},
         val change: () -> Unit = {},
+        val manager: (() -> Unit)? = null
     )
 
-    private fun createLocalModuleState(module: LocalModule): LocalModuleState {
-        var alpha = 1f
-        var decoration = TextDecoration.None
-        var toggle: (Boolean) -> Unit = {}
-        var change = {}
+    private fun createLocalModuleState(
+        context: Context,
+        module: LocalModule
+    ): LocalModuleState = when (module.state) {
+        State.ENABLE -> LocalModuleState(
+            alpha = 1f,
+            decoration = TextDecoration.None,
+            toggle = { suRepository.disable(module) },
+            change = { suRepository.remove(module) },
+            manager = ModuleUtils.launchManger(context, module)
+        )
 
-        when (module.state) {
-            State.ENABLE -> {
-                toggle = { suRepository.disable(module) }
-                change = { suRepository.remove(module) }
-            }
-            State.DISABLE -> {
-                alpha = 0.5f
-                toggle = { suRepository.enable(module) }
-                change = { suRepository.remove(module) }
-            }
-            State.REMOVE -> {
-                alpha = 0.5f
-                decoration = TextDecoration.LineThrough
-                change = { suRepository.enable(module) }
-            }
-            State.ZYGISK_UNLOADED,
-            State.RIRU_DISABLE,
-            State.ZYGISK_DISABLE -> {
-                alpha = 0.5f
-            }
-            State.UPDATE -> {}
-        }
+        State.DISABLE -> LocalModuleState(
+            alpha = 0.5f,
+            toggle = { suRepository.enable(module) },
+            change = { suRepository.remove(module) },
+            manager = ModuleUtils.launchManger(context, module)
+        )
 
-        return LocalModuleState(alpha, decoration, toggle, change)
+        State.REMOVE -> LocalModuleState(
+            alpha = 0.5f,
+            decoration = TextDecoration.LineThrough,
+            change = { suRepository.enable(module) }
+        )
+        State.ZYGISK_UNLOADED,
+        State.RIRU_DISABLE,
+        State.ZYGISK_DISABLE -> LocalModuleState(
+            alpha = 0.5f
+        )
+        State.UPDATE -> LocalModuleState()
     }
 
     @Composable
     fun rememberLocalModuleState(module: LocalModule): LocalModuleState {
+        val context = LocalContext.current
+
         return remember(key1 = module.state, key2 = isRefreshing) {
-            createLocalModuleState(module)
+            createLocalModuleState(context, module)
         }
     }
 }

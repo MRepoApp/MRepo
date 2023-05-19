@@ -3,6 +3,7 @@ package com.sanmer.mrepo.utils
 import android.content.Context
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
+import com.sanmer.mrepo.utils.expansion.output
 import com.sanmer.mrepo.utils.expansion.unzip
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
@@ -10,7 +11,6 @@ import timber.log.Timber
 import java.io.File
 
 object ModuleUtils {
-
     fun install(
         context: Context,
         console: (console: String) -> Unit = {},
@@ -75,5 +75,39 @@ object ModuleUtils {
         }
     }.onFailure {
         Timber.e(it, "parseProps")
+    }
+
+    fun launchManger(
+        context: Context,
+        module: LocalModule
+    ): (() -> Unit)? = if (module.isLsposed) {
+        { launchLSPManger(context) }
+    } else {
+        null
+    }
+
+    private val  LocalModule.isLsposed get() =
+        id == "zygisk_lsposed" || id == "riru_lsposed"
+
+    private fun launchLSPManger(
+        context: Context,
+        onFailure: (String) -> Unit = {},
+    ) {
+        context.packageManager
+            .getLaunchIntentForPackage("org.lsposed.manager")
+            ?.let {
+                context.startActivity(it)
+                return
+            }
+
+        Shell.cmd("am start " +
+                "-a android.intent.action.MAIN " +
+                "-c org.lsposed.manager.LAUNCH_MANAGER com.android.shell/.BugreportWarningActivity")
+            .submit {
+                if (!it.isSuccess) {
+                    Timber.e("launchLSPManger failed: ${it.output}")
+                    onFailure(it.output)
+                }
+            }
     }
 }
