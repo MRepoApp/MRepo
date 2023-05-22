@@ -107,7 +107,7 @@
     <string name="repo_notification_desc">由存储库所有者负责。关于该存储库的任何问题，请联系其所有者。</string>
     <!-- About -->
     <string name="about_app_version">版本 %1$s (%2$s)</string>
-    <string name="about_desc1">为 Magisk 和 KernelSU 管理模块以及提供模块存储库。</string>
+    <string name="about_desc1">为 Magisk 和 KernelSU 提供模块存储库以及模块管理。</string>
     <string name="about_desc2">由 %1$s 用 ❤️ 制作</string>
 
     <!-- Dialog-->

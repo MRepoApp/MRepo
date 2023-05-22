@@ -107,7 +107,7 @@
     <string name="repo_notification_desc">It is the responsibility of the repository owner. For any issues about this repository, please contact its owner.</string>
     <!-- About -->
     <string name="about_app_version">Version %1$s (%2$s)</string>
-    <string name="about_desc1">Manage modules and provide modules repositories for Magisk and KernelSU.</string>
+    <string name="about_desc1">Provide modules repositories and Manage modules for Magisk and KernelSU.</string>
     <string name="about_desc2">Made with ❤️ by %1$s</string>
 
     <!-- Dialog -->
