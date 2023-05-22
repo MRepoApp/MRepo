@@ -8,6 +8,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.json.VersionItem
 import com.sanmer.mrepo.model.json.versionDisplay
@@ -70,7 +72,9 @@ class ModuleViewModel @Inject constructor(
 
     suspend fun getRepoByUrl(url: String) = localRepository.getRepoByUrl(url)
 
-    private suspend fun getUpdates(module: OnlineModule) { // TODO: TODO: Waiting for version 2.0 of util
+    // TODO: TODO: Waiting for version 2.0 of util
+    val state = State(initial = Event.LOADING)
+    private suspend fun getUpdates(module: OnlineModule) {
         val update: (UpdateJson) -> Unit = { update ->
             update.versions.forEach { item ->
                 val versionCodes = versions.map { it.versionCode }
@@ -90,7 +94,10 @@ class ModuleViewModel @Inject constructor(
                 }
         }
 
-        if (result.all { it.isFailure }) return
+        if (result.all { it.isFailure }) {
+            state.setFailed()
+            return
+        }
 
         result.mapNotNull { it.getOrNull() }.let { list ->
             list.sortedByDescending { it.timestamp }
@@ -100,6 +107,8 @@ class ModuleViewModel @Inject constructor(
                 versions.sortedByDescending { it.versionCode }
             }
         }
+
+        state.setSucceeded()
     }
 
     fun downloader(

@@ -39,6 +39,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,19 +57,57 @@ import com.sanmer.mrepo.model.json.VersionItem
 import com.sanmer.mrepo.model.json.versionDisplay
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
+import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.rememberStringDataRequest
 import com.sanmer.mrepo.utils.expansion.toDate
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun VersionsPage(
     isRoot: Boolean,
     viewModel: ModuleViewModel = hiltViewModel()
+) = Box {
+    AnimatedVisibility(
+        visible = viewModel.state.isLoading,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        Loading()
+    }
+
+    AnimatedVisibility(
+        visible = viewModel.state.isSucceeded,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        VersionList(
+            versions = viewModel.versions,
+            isRoot = isRoot
+        )
+    }
+
+    AnimatedVisibility(
+        visible = viewModel.state.isFailed,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        PageIndicator(
+            icon = R.drawable.box_outline,
+            text = stringResource(id = R.string.search_empty)
+        )
+    }
+}
+
+@Composable
+private fun VersionList(
+    versions: List<VersionItem>,
+    isRoot: Boolean
 ) = LazyColumn(
     modifier = Modifier.fillMaxSize()
 ) {
     items(
-        items = viewModel.versions,
+        items = versions,
         key = { it.versionCode }
     ) {
         VersionItem(
@@ -231,6 +270,7 @@ private fun VersionItemBottomSheet(
     scrimColor = Color.Transparent // TODO: Wait for the windowInsets parameter to be set
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Row(
         modifier = Modifier
@@ -246,6 +286,10 @@ private fun VersionItemBottomSheet(
                     item = item,
                     install = true
                 )
+                scope.launch {
+                    onClose()
+                    state.hide()
+                }
             },
             enabled = isRoot
         ) {
@@ -265,6 +309,10 @@ private fun VersionItemBottomSheet(
                     context = context,
                     item = item
                 )
+                scope.launch {
+                    onClose()
+                    state.hide()
+                }
             }
         ) {
             Icon(
