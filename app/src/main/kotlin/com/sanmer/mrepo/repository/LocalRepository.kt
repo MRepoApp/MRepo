@@ -29,8 +29,8 @@ class LocalRepository @Inject constructor(
     private val repoDao: RepoDao,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) {
-    private val _online = mutableListOf<OnlineModule>()
-    private val _local = mutableListOf<LocalModule>()
+    private var _online = listOf<OnlineModule>()
+    private var _local = listOf<LocalModule>()
     val online get() = _online.toMutableStateList()
     val local get() = _local.toMutableStateList()
 
@@ -40,8 +40,7 @@ class LocalRepository @Inject constructor(
             .onEach { list ->
                 if (list.isEmpty()) return@onEach
 
-                _local.clear()
-                _local.addAll(list)
+                _local = list
                 Timber.d("update local list")
             }.launchIn(applicationScope)
 
@@ -50,8 +49,7 @@ class LocalRepository @Inject constructor(
             .onEach { list ->
                 if (list.isEmpty()) return@onEach
 
-                _online.clear()
-                _online.addAll(list)
+                _online = list
                 Timber.d("update online list")
 
             }.launchIn(applicationScope)
