@@ -11,7 +11,9 @@ import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,9 +24,15 @@ class RepositoriesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
 
-    val list = localRepository.getRepoAllAsFlow().map { list ->
-        list.sortedBy { it.name }.toMutableStateList()
-    }
+    val list = localRepository.getRepoAllAsFlow()
+        .map { list ->
+            list.sortedBy { it.name }
+                .toMutableStateList()
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     var progress by mutableStateOf(false)
         private set

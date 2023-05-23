@@ -80,7 +80,7 @@ fun RepositoriesScreen(
     viewModel: RepositoriesViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val list by viewModel.list.collectAsStateWithLifecycle(emptyList())
+    val list by viewModel.list.collectAsStateWithLifecycle()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listSate = rememberLazyListState()
@@ -175,7 +175,7 @@ private fun RepoList(
 
     items(
         items = list,
-        key = { it.name }
+        key = { it.url }
     ) { repo ->
         RepositoryItem(repo = repo)
     }
