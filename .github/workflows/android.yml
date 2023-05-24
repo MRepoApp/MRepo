@@ -53,5 +53,12 @@ jobs:
       if: success()
       uses: actions/upload-artifact@v3
       with:
-        name: Apk
+        name: apk
         path: ${{ github.workspace }}/app/build/outputs/apk/release/*.apk
+    
+    - name: Upload mappings
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: mapping
+        path: ${{ github.workspace }}/app/build/outputs/mapping/release
