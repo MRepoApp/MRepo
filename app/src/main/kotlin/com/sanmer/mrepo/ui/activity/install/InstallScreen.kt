@@ -7,7 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,6 +34,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,6 +55,7 @@ fun InstallScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val focusRequester = remember { FocusRequester() }
+    val scrollState = rememberScrollState()
     val listState = rememberLazyListState()
     val isScrollingUp = listState.isScrollingUp()
     val showFab by remember(isScrollingUp) {
@@ -62,8 +64,18 @@ fun InstallScreen(
         }
     }
 
-    LaunchedEffect(viewModel.console.toList()) {
-        listState.scrollToItem(viewModel.console.size)
+    LaunchedEffect(viewModel.console.size, viewModel.state) {
+        listState.apply {
+            animateScrollToItem(layoutInfo.totalItemsCount)
+        }
+
+        scrollState.apply {
+            if (viewModel.state.isFinished) {
+                animateScrollTo(0)
+            } else {
+                animateScrollTo(maxValue)
+            }
+        }
     }
 
     LaunchedEffect(focusRequester) {
@@ -79,8 +91,9 @@ fun InstallScreen(
         modifier = Modifier
             .onKeyEvent {
                 when (it.nativeKeyEvent.keyCode) {
-                    KeyEvent.KEYCODE_VOLUME_UP -> viewModel.state.isLoading
+                    KeyEvent.KEYCODE_VOLUME_UP,
                     KeyEvent.KEYCODE_VOLUME_DOWN -> viewModel.state.isLoading
+
                     else -> false
                 }
             }
@@ -104,8 +117,11 @@ fun InstallScreen(
     ) {
         Console(
             list = viewModel.console,
-            contentPadding = it,
-            state = listState
+            state = listState,
+            modifier = Modifier
+                .padding(it)
+                .fillMaxWidth()
+                .horizontalScroll(scrollState)
         )
     }
 }
@@ -113,22 +129,26 @@ fun InstallScreen(
 @Composable
 private fun Console(
     list: SnapshotStateList<String>,
-    contentPadding: PaddingValues,
-    state: LazyListState
-) = LazyColumn(
-    state = state,
-    modifier = Modifier
-        .horizontalScroll(rememberScrollState())
-        .fillMaxWidth()
-        .padding(contentPadding),
-    contentPadding = PaddingValues(all = 5.dp)
+    state: LazyListState,
+    modifier: Modifier = Modifier,
 ) {
-    items(list) {
-        Text(
-            text = it,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+    val configuration = LocalConfiguration.current
+    val minWidth = remember(configuration) { configuration.screenWidthDp.dp }
+
+    LazyColumn(
+        state = state,
+        modifier = modifier
+    ) {
+        items(list) {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .defaultMinSize(minWidth = minWidth)
+                    .padding(horizontal = 5.dp)
+            )
+        }
     }
 }
 
