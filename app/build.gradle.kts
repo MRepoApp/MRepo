@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import java.time.Instant
 
 plugins {
     id("mrepo.android.application")
@@ -10,44 +11,53 @@ plugins {
     alias(libs.plugins.protobuf)
 }
 
-val baseVersionName = "1.2.4"
-val commitId get() = "git rev-parse --short HEAD".exec()
-val commitCount get() = "git rev-list --count HEAD".exec()
+val baseVersionName = "1.5.0-alpha02"
+val isDevVersion: Boolean get() = exec("git tag -l v${baseVersionName}").isEmpty()
+val verNameSuffix: String get() = if (isDevVersion) ".dev" else ""
 
 android {
     namespace = "com.sanmer.mrepo"
 
     defaultConfig {
         applicationId = namespace
-        versionCode = commitCount.toInt()
-        versionName = "${baseVersionName}.${commitId}"
+        versionName = "${baseVersionName}${verNameSuffix}.${commitId}"
+        versionCode = commitCount
 
-        resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es", "ar")
+        resourceConfigurations += arrayOf("en", "zh-rCN", "zh-rTW", "fr", "ro", "es", "ar", "ja")
         multiDexEnabled = true
     }
 
-    signingConfigs {
-        create("release") {
+    val releaseSigning = if (project.hasReleaseKeyStore) {
+        signingConfigs.create("release") {
+            storeFile = project.releaseKeyStore
+            storePassword = project.releaseKeyStorePassword
+            keyAlias = project.releaseKeyAlias
+            keyPassword = project.releaseKeyPassword
             enableV2Signing = true
             enableV3Signing = true
         }
+    } else {
+        signingConfigs.getByName("debug")
     }
 
     buildTypes {
         debug {
-            versionNameSuffix = ".dev"
-            isMinifyEnabled = false
-            isShrinkResources = false
+            versionNameSuffix = ".debug"
         }
 
         release {
-            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        all {
+            signingConfig = releaseSigning
+            buildConfigField("Boolean", "IS_DEV_VERSION", isDevVersion.toString())
+            buildConfigField("String", "BUILD_TIME", "\"${Instant.now()}\"")
         }
     }
 
@@ -73,7 +83,7 @@ android {
     applicationVariants.configureEach {
         outputs.configureEach {
             (this as ApkVariantOutputImpl).outputFileName =
-                "mrepo-v${versionName}-${name}.apk"
+                "mrepo-v${versionName}-${versionCode}-${name}.apk"
         }
     }
 }
@@ -127,9 +137,3 @@ dependencies {
     implementation(libs.markwon.core)
     implementation(libs.timber)
 }
-
-fun Project.exec(command: String): String = providers.exec {
-    commandLine(command.split(" "))
-}.standardOutput.asText.get().trim()
-
-fun String.exec() = exec(this)
