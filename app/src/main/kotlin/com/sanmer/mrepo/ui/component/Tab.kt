@@ -67,6 +67,7 @@ private fun TabTransition(
 ) {
     val transition = updateTransition(selected, label = "Tab")
     val color by transition.animateColor(
+        label = "color",
         transitionSpec = {
             if (false isTransitioningTo true) {
                 tween(
@@ -80,7 +81,7 @@ private fun TabTransition(
                     easing = LinearEasing
                 )
             }
-        }, label = "Tab"
+        }
     ) {
         if (it) activeColor else inactiveColor
     }

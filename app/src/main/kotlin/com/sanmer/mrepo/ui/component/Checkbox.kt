@@ -34,7 +34,8 @@ fun Checkbox(
         animationSpec = tween(
             durationMillis = 400,
             easing = FastOutSlowInEasing
-        )
+        ),
+        label = "alpha"
     )
 
     Box(modifier = modifier

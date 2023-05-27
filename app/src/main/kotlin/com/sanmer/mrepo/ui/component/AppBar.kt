@@ -24,7 +24,8 @@ fun AppBarContainerColor(
     val fraction = if (colorTransitionFraction > 0.01f) 1f else 0f
     val containerColor by animateColorAsState(
         targetValue = containerColor(fraction),
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "containerColor"
     )
 
     content(containerColor)

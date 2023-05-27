@@ -48,7 +48,8 @@ fun ExpandableItem(
         animationSpec = tween(
             durationMillis = 400,
             easing = FastOutSlowInEasing
-        )
+        ),
+        label = "animateZ"
     )
 
     Column(
