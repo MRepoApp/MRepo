@@ -55,7 +55,6 @@ fun InstallScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val focusRequester = remember { FocusRequester() }
-    val scrollState = rememberScrollState()
     val listState = rememberLazyListState()
     val isScrollingUp = listState.isScrollingUp()
     val showFab by remember(isScrollingUp) {
@@ -64,17 +63,9 @@ fun InstallScreen(
         }
     }
 
-    LaunchedEffect(viewModel.console.size, viewModel.state) {
+    LaunchedEffect(viewModel.console.size) {
         listState.apply {
             animateScrollToItem(layoutInfo.totalItemsCount)
-        }
-
-        scrollState.apply {
-            if (viewModel.state.isFinished) {
-                animateScrollTo(0)
-            } else {
-                animateScrollTo(maxValue)
-            }
         }
     }
 
@@ -121,7 +112,7 @@ fun InstallScreen(
             modifier = Modifier
                 .padding(it)
                 .fillMaxWidth()
-                .horizontalScroll(scrollState)
+                .horizontalScroll(rememberScrollState())
         )
     }
 }
