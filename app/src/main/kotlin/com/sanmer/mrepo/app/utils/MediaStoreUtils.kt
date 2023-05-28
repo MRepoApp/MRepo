@@ -2,9 +2,12 @@ package com.sanmer.mrepo.app.utils
 
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.system.Os
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
 import com.sanmer.mrepo.App
+import com.sanmer.mrepo.utils.expansion.toFile
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -39,4 +42,26 @@ object MediaStoreUtils {
     fun File.newInputStream(): InputStream? = cr.openInputStream(toUri())
 
     fun File.newOutputStream(): OutputStream? = cr.openOutputStream(toUri())
+
+    val Uri.absolutePath: String? get() = run {
+        val df = DocumentFile.fromTreeUri(context, this)
+
+        val file = when {
+            df?.isDirectory == true -> df.createFile("", ".tmp")
+            df?.isFile == true -> df
+            else -> null
+        } ?: return null
+
+        val path = cr.openFileDescriptor(file.uri, "r")?.use {
+            return@use Os.readlink("/proc/self/fd/${it.fd}")
+                .toFile()
+                .parent
+        }?: return null
+
+        if (file.name == ".tmp") file.delete()
+
+        return path
+    }
+
+    val Uri.absoluteFile get() = absolutePath?.toFile()
 }
