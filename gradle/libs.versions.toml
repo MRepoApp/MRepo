@@ -1,13 +1,13 @@
 [versions]
 accompanist = "0.31.2-alpha"
 androidGradlePlugin = "8.0.2"
-androidxActivity = "1.7.1"
-androidxCompose = "1.5.0-alpha04"
+androidxActivity = "1.7.2"
+androidxCompose = "1.5.0-beta01"
 androidxComposeCompiler = "1.4.7"
 androidxComposeMaterial = "1.4.3"
-androidxComposeMaterial3 = "1.2.0-alpha01"
+androidxComposeMaterial3 = "1.2.0-alpha02"
 androidxHiltNavigationCompose = "1.0.0"
-androidxCore = "1.10.0"
+androidxCore = "1.10.1"
 androidxDataStore = "1.0.0"
 androidxHilt = "1.0.0"
 androidxLifecycle = "2.6.1"
@@ -66,7 +66,7 @@ square-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "sq
 square-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "squareMoshi" }
 work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 
-google-material = "com.google.android.material:material:1.8.0"
+google-material = "com.google.android.material:material:1.9.0"
 markwon-core = "io.noties.markwon:core:4.6.2"
 timber = "com.jakewharton.timber:timber:5.0.1"
 
