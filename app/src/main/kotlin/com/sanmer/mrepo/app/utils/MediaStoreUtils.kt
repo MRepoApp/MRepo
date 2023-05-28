@@ -44,21 +44,11 @@ object MediaStoreUtils {
     fun File.newOutputStream(): OutputStream? = cr.openOutputStream(toUri())
 
     val Uri.absolutePath: String? get() = run {
-        val df = DocumentFile.fromTreeUri(context, this)
+        val df = DocumentFile.fromTreeUri(context, this) ?: return null
 
-        val file = when {
-            df?.isDirectory == true -> df.createFile("", ".tmp")
-            df?.isFile == true -> df
-            else -> null
-        } ?: return null
-
-        val path = cr.openFileDescriptor(file.uri, "r")?.use {
-            return@use Os.readlink("/proc/self/fd/${it.fd}")
-                .toFile()
-                .parent
+        val path = cr.openFileDescriptor(df.uri, "r")?.use {
+            Os.readlink("/proc/self/fd/${it.fd}")
         }?: return null
-
-        if (file.name == ".tmp") file.delete()
 
         return path
     }
