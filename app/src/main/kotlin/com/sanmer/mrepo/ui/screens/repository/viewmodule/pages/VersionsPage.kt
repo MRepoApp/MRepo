@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,7 +44,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -58,6 +58,7 @@ import com.sanmer.mrepo.model.json.versionDisplay
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
 import com.sanmer.mrepo.ui.component.PageIndicator
+import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.ui.utils.rememberStringDataRequest
 import com.sanmer.mrepo.utils.expansion.toDate
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
@@ -267,7 +268,7 @@ private fun VersionItemBottomSheet(
     onDismissRequest = onClose,
     sheetState = state,
     shape = RoundedCornerShape(15.dp),
-    scrimColor = Color.Transparent // TODO: Wait for the windowInsets parameter to be set
+    windowInsets = WindowInsets.none
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()

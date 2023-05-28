@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,7 +31,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +45,7 @@ import com.sanmer.mrepo.ui.component.CollapsedTopAppBarDefaults
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.utils.LicenseContent
 import com.sanmer.mrepo.ui.utils.navigateBack
+import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
@@ -179,7 +180,7 @@ private fun LicenseItem(
             onDismissRequest = { openBottomSheet = false },
             sheetState = bottomSheetState,
             shape = RoundedCornerShape(15.dp),
-            scrimColor = Color.Transparent // TODO: Wait for the windowInsets parameter to be set
+            windowInsets = WindowInsets.none
         ) {
             Text(
                 text = stringResource(id = R.string.license_title),
