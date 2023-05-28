@@ -5,10 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -23,10 +20,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -39,7 +32,6 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
-import com.sanmer.mrepo.ui.screens.modules.MenuItem
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.utils.expansion.navigateToLauncher
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
@@ -74,8 +66,7 @@ fun RepositoryScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
-                scrollBehavior = scrollBehavior,
-                listState = listState
+                scrollBehavior = scrollBehavior
             )
         },
         contentWindowInsets = WindowInsets.none
@@ -115,7 +106,6 @@ fun RepositoryScreen(
 @Composable
 private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    listState: LazyListState,
     viewModel: RepositoryViewModel = hiltViewModel()
 ) = if (viewModel.isSearch) {
     SearchTopBar(
@@ -126,15 +116,13 @@ private fun TopBar(
     )
 } else {
     NormalTopBar(
-        scrollBehavior = scrollBehavior,
-        listState = listState
+        scrollBehavior = scrollBehavior
     )
 }
 
 @Composable
 private fun NormalTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    listState: LazyListState,
     viewModel: RepositoryViewModel = hiltViewModel()
 ) = TopAppBar(
     title = {
@@ -160,22 +148,6 @@ private fun NormalTopBar(
             Icon(
                 painter = painterResource(id = R.drawable.sort_outline),
                 contentDescription = null
-            )
-        }
-
-        var expanded by remember { mutableStateOf(false) }
-        IconButton(
-            onClick = { expanded = true }
-        ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null
-            )
-
-            MenuItem(
-                expanded = expanded,
-                listState = listState,
-                onClose = { expanded = false }
             )
         }
     },

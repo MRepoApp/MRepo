@@ -5,12 +5,14 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -68,11 +70,14 @@ import com.sanmer.mrepo.ui.animate.slideInBottomToTop
 import com.sanmer.mrepo.ui.animate.slideInTopToBottom
 import com.sanmer.mrepo.ui.animate.slideOutBottomToTop
 import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
+import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
+import com.sanmer.mrepo.ui.utils.rememberFastScroller
+import com.sanmer.mrepo.ui.utils.scrollbarState
 import com.sanmer.mrepo.viewmodel.RepositoriesViewModel
 
 @Composable
@@ -88,7 +93,7 @@ fun RepositoriesScreen(
 
     BackHandler { navController.navigateBack() }
 
-    var value = Const.MY_REPO_URL.toRepo()
+    var value by remember { mutableStateOf(Const.MY_REPO_URL.toRepo()) }
     var message: String? by remember { mutableStateOf(null) }
 
     var failure by remember { mutableStateOf(false) }
@@ -165,20 +170,34 @@ fun RepositoriesScreen(
 private fun RepoList(
     list: List<Repo>,
     state: LazyListState
-) = LazyColumn(
-    state = state,
+) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
-    item {
-        NotificationItem()
+    LazyColumn(
+        state = state,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        item {
+            NotificationItem()
+        }
+
+        items(
+            items = list,
+            key = { it.url }
+        ) { repo ->
+            RepositoryItem(repo = repo)
+        }
     }
 
-    items(
-        items = list,
-        key = { it.url }
-    ) { repo ->
-        RepositoryItem(repo = repo)
-    }
+    FastScrollbar(
+        modifier = Modifier
+            .fillMaxHeight()
+            .align(Alignment.CenterEnd),
+        state = state.scrollbarState(),
+        orientation = Orientation.Vertical,
+        scrollInProgress = state.isScrollInProgress,
+        onThumbDisplaced = state.rememberFastScroller(),
+    )
 }
 
 @Composable

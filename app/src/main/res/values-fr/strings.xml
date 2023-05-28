@@ -106,6 +106,4 @@
     <string name="unknown_error">Erreur inconnue</string>
     <string name="settings_delete_zip">Supprimer le fichier zip</string>
     <string name="settings_delete_zip_desc">Supprimer le fichier zip une fois l\'installation réussie, notez que cela peut ne pas fonctionner si l\'application n\'a pas l\'autorisation de supprimer</string>
-    <string name="menu_scroll_bottom">Défiler vers le bas</string>
-    <string name="menu_scroll_top">Défiler vers le haut</string>
 </resources>

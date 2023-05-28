@@ -2,22 +2,21 @@ package com.sanmer.mrepo.ui.activity.log
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -32,7 +31,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,11 +46,13 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.service.LogcatService
 import com.sanmer.mrepo.ui.component.DropdownMenu
+import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
+import com.sanmer.mrepo.ui.utils.rememberFastScroller
+import com.sanmer.mrepo.ui.utils.scrollbarState
 import com.sanmer.mrepo.utils.log.LogText
 import com.sanmer.mrepo.utils.log.Logcat
 import com.sanmer.mrepo.utils.log.Logcat.toTextPriority
-import kotlinx.coroutines.launch
 
 private val priorities = listOf("VERBOSE", "DEBUG", "INFO", "WARN", "ERROR")
 
@@ -77,23 +76,37 @@ fun LogScreen() {
             LogTopBar(
                 scrollBehavior = scrollBehavior,
                 priority = priority,
-                listState = state,
                 onPriority = { priority = it }
             )
         }
-    ) {
-        LazyColumn(
-            state = state,
-            contentPadding = it
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
         ) {
-            items(console) { value ->
-                Column(
-                    modifier = Modifier.padding(horizontal = 1.dp)
-                ) {
-                    LogItem(value)
-                    Divider()
+            LazyColumn(
+                state = state
+            ) {
+                items(console) { value ->
+                    Column(
+                        modifier = Modifier.padding(horizontal = 1.dp)
+                    ) {
+                        LogItem(value)
+                        Divider()
+                    }
                 }
             }
+
+            FastScrollbar(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.CenterEnd),
+                state = state.scrollbarState(),
+                orientation = Orientation.Vertical,
+                scrollInProgress = state.isScrollInProgress,
+                onThumbDisplaced = state.rememberFastScroller(),
+            )
         }
     }
 }
@@ -101,7 +114,6 @@ fun LogScreen() {
 @Composable
 private fun LogTopBar(
     priority: String,
-    listState: LazyListState,
     onPriority: (String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) = NavigateUpTopBar(
@@ -133,22 +145,6 @@ private fun LogTopBar(
                 onClick = onPriority
             )
         }
-
-        var expanded by remember { mutableStateOf(false) }
-        IconButton(
-            onClick = { expanded = true }
-        ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null
-            )
-
-            MenuItem(
-                expanded = expanded,
-                state = listState,
-                onClose = { expanded = false }
-            )
-        }
     },
     scrollBehavior = scrollBehavior
 )
@@ -160,7 +156,6 @@ private fun LogItem(
     modifier = Modifier
         .fillMaxWidth()
         .height(IntrinsicSize.Max),
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
     verticalAlignment = Alignment.CenterVertically
 ) {
     Box(
@@ -199,7 +194,7 @@ private fun LogItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(all = 8.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
@@ -255,39 +250,4 @@ private fun PrioritySelect(
             }
         )
     }
-}
-
-@Composable
-private fun MenuItem(
-    expanded: Boolean,
-    state: LazyListState,
-    onClose: () -> Unit
-) = DropdownMenu(
-    expanded = expanded,
-    onDismissRequest = onClose,
-    offset = DpOffset(0.dp, 5.dp),
-    shape = RoundedCornerShape(15.dp)
-) {
-    val scope = rememberCoroutineScope()
-
-    DropdownMenuItem(
-        text = { Text(text = stringResource(id = R.string.menu_scroll_top)) },
-        onClick = {
-            scope.launch {
-                state.scrollToItem(0)
-            }
-            onClose()
-        }
-    )
-
-    DropdownMenuItem(
-        text = { Text(text = stringResource(id = R.string.menu_scroll_bottom)) },
-        onClick = {
-            scope.launch {
-                val size = state.layoutInfo.totalItemsCount
-                state.scrollToItem(size)
-            }
-            onClose()
-        }
-    )
 }

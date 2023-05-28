@@ -98,6 +98,4 @@
     <string name="settings_about">حول</string>
     <string name="repo_notification_title">عرض محتويات الوحدات</string>
     <string name="about_app_version">الإصدار %1$s (%2$s)</string>
-    <string name="menu_scroll_top">انتقل إلى أعلى</string>
-    <string name="menu_scroll_bottom">انتقل إلى الأسفل</string>
 </resources>

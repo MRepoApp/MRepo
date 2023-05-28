@@ -12,10 +12,7 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -34,9 +31,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -93,8 +88,7 @@ fun ModulesScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
-                scrollBehavior = scrollBehavior,
-                listState = listState
+                scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = {
@@ -142,7 +136,6 @@ fun ModulesScreen(
 @Composable
 private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    listState: LazyListState,
     viewModel: ModulesViewModel = hiltViewModel()
 ) = if (viewModel.isSearch) {
     SearchTopBar(
@@ -153,15 +146,13 @@ private fun TopBar(
     )
 } else {
     NormalTopBar(
-        scrollBehavior = scrollBehavior,
-        listState = listState
+        scrollBehavior = scrollBehavior
     )
 }
 
 @Composable
 private fun NormalTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    listState: LazyListState,
     viewModel: ModulesViewModel = hiltViewModel()
 ) = TopAppBar(
     title = {
@@ -187,22 +178,6 @@ private fun NormalTopBar(
             Icon(
                 painter = painterResource(id = R.drawable.sort_outline),
                 contentDescription = null
-            )
-        }
-
-        var expanded by remember { mutableStateOf(false) }
-        IconButton(
-            onClick = { expanded = true }
-        ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null
-            )
-
-            MenuItem(
-                expanded = expanded,
-                listState = listState,
-                onClose = { expanded = false }
             )
         }
     },

@@ -126,10 +126,6 @@
     <!-- Shortcut -->
     <string name="shortcut_log_label">Logs</string>
 
-    <!-- Menu -->
-    <string name="menu_scroll_top">Scroll to top</string>
-    <string name="menu_scroll_bottom">Scroll to bottom</string>
-
     <!-- Search -->
     <string name="search_empty">Empty list</string>
     <string name="search_placeholder">Search…</string>

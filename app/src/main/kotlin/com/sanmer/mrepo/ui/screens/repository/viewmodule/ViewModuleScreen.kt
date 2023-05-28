@@ -46,14 +46,13 @@ fun ViewModuleScreen(
         contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
+            modifier = Modifier.padding(innerPadding)
         ) {
             TabsItem(state = pagerState)
 
             HorizontalPager(
-                state = pagerState
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
             ) {
                 when (it) {
                     0 -> OverviewPage()

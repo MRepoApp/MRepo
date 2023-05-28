@@ -1,11 +1,13 @@
 package com.sanmer.mrepo.ui.screens.repository
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,9 +32,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.module.OnlineModule
+import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.navigation.animated.createViewRoute
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
+import com.sanmer.mrepo.ui.utils.rememberFastScroller
+import com.sanmer.mrepo.ui.utils.scrollbarState
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
@@ -40,19 +45,33 @@ fun ModulesList(
     list: List<OnlineModule>,
     state: LazyListState,
     navController: NavController
-) = LazyColumn(
-    state = state,
-    modifier = Modifier.fillMaxSize(),
-    verticalArrangement = Arrangement.spacedBy(5.dp),
+) = Box(
+    modifier = Modifier.fillMaxSize()
 ) {
-    items(
-        items = list,
-        key = { it.id }
-    ) { module ->
-        ModuleItem(module) {
-            navController.navigatePopUpTo(createViewRoute(module))
+    LazyColumn(
+        state = state,
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(5.dp),
+    ) {
+        items(
+            items = list,
+            key = { it.id }
+        ) { module ->
+            ModuleItem(module) {
+                navController.navigatePopUpTo(createViewRoute(module))
+            }
         }
     }
+
+    FastScrollbar(
+        modifier = Modifier
+            .fillMaxHeight()
+            .align(Alignment.CenterEnd),
+        state = state.scrollbarState(),
+        orientation = Orientation.Vertical,
+        scrollInProgress = state.isScrollInProgress,
+        onThumbDisplaced = state.rememberFastScroller(),
+    )
 }
 
 @Composable

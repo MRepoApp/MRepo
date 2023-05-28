@@ -1,9 +1,12 @@
 package com.sanmer.mrepo.ui.screens.modules
 
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,6 +20,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,26 +31,43 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
+import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.stateIndicator
+import com.sanmer.mrepo.ui.utils.rememberFastScroller
+import com.sanmer.mrepo.ui.utils.scrollbarState
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun ModulesList(
     list: List<LocalModule>,
     state: LazyListState
-) = LazyColumn(
-    state = state,
-    modifier = Modifier.fillMaxSize(),
-    contentPadding = PaddingValues(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
+) = Box(
+    modifier = Modifier.fillMaxSize()
 ) {
-    items(
-        items = list,
-        key = { it.id }
-    ) { module ->
-        ModuleItem(module)
+    LazyColumn(
+        state = state,
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        items(
+            items = list,
+            key = { it.id }
+        ) { module ->
+            ModuleItem(module)
+        }
     }
+
+    FastScrollbar(
+        modifier = Modifier
+            .fillMaxHeight()
+            .align(Alignment.CenterEnd),
+        state = state.scrollbarState(),
+        orientation = Orientation.Vertical,
+        scrollInProgress = state.isScrollInProgress,
+        onThumbDisplaced = state.rememberFastScroller(),
+    )
 }
 
 @Composable

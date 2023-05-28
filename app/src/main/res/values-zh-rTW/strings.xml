@@ -65,8 +65,6 @@
     <string name="repository_empty">儲存庫為空</string>
     <string name="view_module_version_dialog_desc">是否安裝或下載該模組的版本？</string>
     <string name="modules_empty">沒找到任何模組</string>
-    <string name="menu_scroll_top">滾動到頂部</string>
-    <string name="menu_scroll_bottom">滾動到底部</string>
     <string name="search_empty">空列表</string>
     <string name="search_placeholder">搜尋…</string>
     <!-- View Module -->

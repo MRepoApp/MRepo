@@ -52,8 +52,6 @@
     <string name="settings_menu_reboot_download">Download へ再起動</string>
     <string name="settings_menu_reboot_bootloader">Bootloader へ再起動</string>
     <string name="settings_menu_reboot_userspace">ソフトリブート</string>
-    <string name="menu_scroll_bottom">下にスクロール</string>
-    <string name="menu_scroll_top">上にスクロール</string>
     <string name="settings_app_theme_desc">ナイトモードとテーマパレットの変更</string>
     <string name="settings_repo_desc">Magisk モジュール リポジトリを管理</string>
     <string name="app_theme_palette">テーマパレット</string>
