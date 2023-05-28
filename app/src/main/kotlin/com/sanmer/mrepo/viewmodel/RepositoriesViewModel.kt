@@ -59,6 +59,7 @@ class RepositoriesViewModel @Inject constructor(
                     localRepository.insertRepo(it)
                 }.onFailure {
                     onFailure(repo, it)
+                    Timber.e(it, "getRepo: $repoUrl")
                 }
         }
     }
@@ -80,7 +81,10 @@ class RepositoriesViewModel @Inject constructor(
             modulesRepository.getRepo(repo)
                 .onSuccess {
                     localRepository.updateRepo(it)
-                }.onFailure(onFailure)
+                }.onFailure {
+                    onFailure(it)
+                    Timber.e(it, "getUpdate: ${repo.url}")
+                }
         }
     }
 }
