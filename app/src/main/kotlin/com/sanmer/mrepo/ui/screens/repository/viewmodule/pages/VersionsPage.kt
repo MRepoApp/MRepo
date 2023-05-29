@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -58,7 +60,7 @@ import com.sanmer.mrepo.model.json.versionDisplay
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
 import com.sanmer.mrepo.ui.component.PageIndicator
-import com.sanmer.mrepo.ui.utils.none
+import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.rememberStringDataRequest
 import com.sanmer.mrepo.utils.expansion.toDate
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
@@ -267,8 +269,8 @@ private fun VersionItemBottomSheet(
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
     sheetState = state,
-    shape = RoundedCornerShape(15.dp),
-    windowInsets = WindowInsets.none
+    shape = BottomSheetDefaults.expandedShape(15.dp),
+    windowInsets = WindowInsets.navigationBars
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()

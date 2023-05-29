@@ -1,8 +1,9 @@
 package com.sanmer.mrepo.ui.screens.settings.app
 
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -22,7 +23,7 @@ import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.ui.component.SettingNormalItem
-import com.sanmer.mrepo.ui.utils.none
+import com.sanmer.mrepo.ui.utils.expandedShape
 
 @Composable
 fun AppThemeItem(
@@ -66,8 +67,8 @@ private fun BottomSheet(
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
     sheetState = state,
-    shape = RoundedCornerShape(15.dp),
-    windowInsets = WindowInsets.none
+    shape = BottomSheetDefaults.expandedShape(15.dp),
+    windowInsets = WindowInsets.navigationBars
 ) {
     Text(
         text = stringResource(id = R.string.settings_app_theme),

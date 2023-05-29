@@ -11,10 +11,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,8 +45,8 @@ import com.sanmer.mrepo.ui.component.CollapsedTopAppBar
 import com.sanmer.mrepo.ui.component.CollapsedTopAppBarDefaults
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.utils.LicenseContent
+import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.navigateBack
-import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
@@ -179,8 +180,8 @@ private fun LicenseItem(
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet = false },
             sheetState = bottomSheetState,
-            shape = RoundedCornerShape(15.dp),
-            windowInsets = WindowInsets.none
+            shape = BottomSheetDefaults.expandedShape(15.dp),
+            windowInsets = WindowInsets.navigationBars
         ) {
             Text(
                 text = stringResource(id = R.string.license_title),
