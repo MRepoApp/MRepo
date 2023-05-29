@@ -71,7 +71,6 @@ square-retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-mo
 square-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "squareMoshi" }
 square-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "squareMoshi" }
 
-google-material = "com.google.android.material:material:1.9.0"
 markwon-core = "io.noties.markwon:core:4.6.2"
 timber = "com.jakewharton.timber:timber:5.0.1"
 

@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.App" parent="Theme.Material3.DynamicColors.DayNight">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+    <style name="NightAdjusted.Theme.MRepo" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
 
-    <style name="Theme" parent="Base.Theme.App"/>
-    <style name="AppTheme" parent="Theme"/>
+    <style name="PlatformAdjusted.Theme.MRepo" parent="NightAdjusted.Theme.MRepo"/>
+    <style name="Theme.MRepo" parent="PlatformAdjusted.Theme.MRepo" />
+
+    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+    </style>
+
+    <style name="AppTheme" parent="NightAdjusted.Theme.Splash">
+        <item name="postSplashScreenTheme">@style/Theme.MRepo</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

@@ -136,7 +136,6 @@ dependencies {
     implementation(libs.square.moshi)
     ksp(libs.square.moshi.kotlin)
 
-    implementation(libs.google.material)
     implementation(libs.markwon.core)
     implementation(libs.timber)
 }
