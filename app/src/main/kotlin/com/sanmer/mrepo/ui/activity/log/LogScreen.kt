@@ -152,7 +152,7 @@ private fun LogTopBar(
     onPriority: (String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) = NavigateUpTopBar(
-    title = R.string.page_log_viewer,
+    title = R.string.settings_log_viewer,
     actions = {
         val context = LocalContext.current
         IconButton(

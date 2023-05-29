@@ -22,7 +22,7 @@ object ShortcutUtils {
         ShortcutInfoCompat.Builder(context, ID_LOGS)
             .setShortLabel(context.getString(R.string.shortcut_log_label))
             .setLongLabel(context.getString(R.string.shortcut_log_label))
-            .setIcon(IconCompat.createWithResource(context, R.drawable.shortcut_log))
+            .setIcon(IconCompat.createWithResource(context, R.drawable.ic_shortcut_log))
             .setIntent(activity)
             .build()
     }

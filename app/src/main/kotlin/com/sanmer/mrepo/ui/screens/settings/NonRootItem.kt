@@ -46,7 +46,7 @@ fun NonRootItem() = Surface(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = stringResource(id = R.string.settings_non_root_title),
+                text = stringResource(id = R.string.settings_non_root),
                 style = MaterialTheme.typography.titleMedium
             )
             Text(

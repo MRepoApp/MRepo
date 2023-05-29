@@ -14,7 +14,6 @@
     <string name="install_reboot">再起動</string>
     <string name="license_title">ライセンスを表示</string>
     <string name="page_modules">モジュール</string>
-    <string name="page_view_module">モジュールを表示</string>
     <string name="setup_mode">動作モード</string>
     <string name="setup_root_title">Root</string>
     <string name="setup_root_desc1">Magisk または KernelSU からRootアクセスする必要があります</string>
@@ -28,7 +27,6 @@
     <string name="module_download">ダウンロード</string>
     <string name="modules_empty">モジュールが見つかりません</string>
     <string name="module_remove">削除</string>
-    <string name="module_update">更新</string>
     <string name="module_restore">復元</string>
     <string name="settings_repo">リポジトリ</string>
     <string name="app_theme_dark_theme_auto">自動</string>

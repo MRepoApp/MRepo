@@ -19,7 +19,6 @@
     <string name="license_fsf_libre">Livre FSF</string>
     <string name="page_modules">Módulos</string>
     <string name="page_settings">Opções</string>
-    <string name="page_view_module">Visualizar Módulo</string>
     <string name="settings_root_provider">Provedor: %1$s</string>
     <string name="settings_root_granted">Concedido</string>
     <string name="settings_root_not_available">Indisponível</string>
@@ -31,12 +30,10 @@
     <string name="settings_menu_reboot_download">Reiniciar em Download</string>
     <string name="settings_menu_reboot_edl">Reiniciar em EDL</string>
     <string name="module_version_author">%1$s por %2$s</string>
-    <string name="module_update">Atualizar</string>
     <string name="module_remove">Remover</string>
     <string name="module_restore">Restaurar</string>
     <string name="module_install">Instalar</string>
     <string name="module_download">Baixar</string>
-    <string name="module_view">Visualizar</string>
     <string name="modules_empty">Nenhum módulo encontrado</string>
     <string name="search_empty">Vazio</string>
     <string name="search_placeholder">Buscar…</string>

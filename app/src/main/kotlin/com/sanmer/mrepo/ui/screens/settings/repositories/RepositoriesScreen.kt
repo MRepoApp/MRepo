@@ -296,7 +296,7 @@ private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
 ) = NavigateUpTopBar(
-    title = R.string.page_repositories,
+    title = R.string.settings_repo,
     actions = {
 
         val context = LocalContext.current

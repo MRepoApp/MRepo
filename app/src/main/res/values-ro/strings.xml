@@ -11,11 +11,9 @@
     <string name="settings_menu_reboot_download">Repornire în Download</string>
     <string name="settings_menu_reboot_edl">Repornire în EDL</string>
     <string name="module_version_author">%1$s de %2$s</string>
-    <string name="module_update">Actualizare</string>
     <string name="module_remove">Elimină</string>
     <string name="module_restore">Restabilește</string>
     <string name="module_install">Instalează</string>
-    <string name="module_view">Vizualizare</string>
     <string name="repository_empty">Depozitul este gol</string>
     <string name="modules_empty">Nu s-au găsit module</string>
     <string name="search_empty">Listă goală</string>
@@ -48,7 +46,6 @@
     <string name="repo_options_update">Actualizare</string>
     <string name="setup_mode">Mod de funcționare</string>
     <string name="setup_non_root_desc2">Disponibil: descărcare modul</string>
-    <string name="page_view_module">Vizualizare modul</string>
     <string name="settings_non_root_desc">Funcționalitatea este limitată</string>
     <string name="settings_menu_reboot_userspace">Repornire rapidă</string>
     <string name="settings_menu_reboot_bootloader">Repornire în Bootloader</string>

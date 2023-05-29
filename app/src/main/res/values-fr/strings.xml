@@ -22,7 +22,6 @@
     <!-- Page -->
     <string name="page_modules">Modules</string>
     <string name="page_settings">Réglages</string>
-    <string name="page_view_module">Afficher Module</string>
     <!-- Overview -->
     <!-- Root Card -->
     <string name="settings_root_access">Accès Administrateur : %1$s</string>
@@ -46,12 +45,10 @@
     <!-- Modules Menu -->
     <!-- Module Card -->
     <string name="module_version_author">%1$s par %2$s</string>
-    <string name="module_update">Mise à jour</string>
     <string name="module_remove">Supprimer</string>
     <string name="module_restore">Restaurer</string>
     <string name="module_install">Installer</string>
     <string name="module_download">Télécharger</string>
-    <string name="module_view">Afficher</string>
     <!-- Modules Page -->
     <string name="repository_empty">Dépôt vide</string>
     <string name="modules_empty">Aucun module trouvé</string>

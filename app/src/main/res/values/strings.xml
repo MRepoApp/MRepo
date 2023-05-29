@@ -26,7 +26,6 @@
     <string name="page_repository">Repository</string>
     <string name="page_modules">Modules</string>
     <string name="page_settings">Settings</string>
-    <string name="page_view_module">View Module</string>
 
     <!-- Repository -->
     <string name="repository_empty">Repository is empty</string>
@@ -48,12 +47,10 @@
     <string name="modules_empty">No modules found</string>
     <!-- Module Card -->
     <string name="module_version_author">%1$s by %2$s</string>
-    <string name="module_update">Update</string>
     <string name="module_remove">Remove</string>
     <string name="module_restore">Restore</string>
     <string name="module_install">Install</string>
     <string name="module_download">Download</string>
-    <string name="module_view">View</string>
 
     <!-- Settings -->
     <string name="settings_log_viewer">Log Viewer</string>

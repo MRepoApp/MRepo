@@ -14,7 +14,6 @@
     <string name="license_title">عرض الترخيص</string>
     <string name="license_osi_approved">تراخيص معتمدة</string>
     <string name="page_modules">الملفات</string>
-    <string name="page_view_module">عرض تفاصيل الملف</string>
     <string name="settings_root_provider">المزود%1$s</string>
     <string name="settings_root_none">غير متوفر</string>
     <string name="settings_non_root_desc">الوظائف محدودة</string>
@@ -34,11 +33,9 @@
     <string name="settings_menu_reboot_download">اعادة التشغيل الى وضع التنزيل</string>
     <string name="settings_menu_reboot_edl">اعادة التشغيل الى وضع EDL</string>
     <string name="module_remove">حذف</string>
-    <string name="module_update">تحديث</string>
     <string name="module_restore">استرجاع</string>
     <string name="module_install">تثبيت</string>
     <string name="module_download">تنزيل</string>
-    <string name="module_view">عرض</string>
     <string name="modules_empty">لم يتم العثور على وحدات</string>
     <string name="repository_empty">المستودعات فارغة</string>
     <string name="search_placeholder">بحث…</string>

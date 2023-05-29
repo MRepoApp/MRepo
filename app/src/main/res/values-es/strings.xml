@@ -5,11 +5,9 @@
     <string name="settings_log_viewer_desc">Ver los registros de ejecución de la aplicación</string>
     <string name="settings_menu_reboot_edl">Reiniciar a EDL</string>
     <string name="module_version_author">%1$s por %2$s</string>
-    <string name="module_update">Actualización</string>
     <string name="module_remove">Eliminar</string>
     <string name="module_restore">Restaurar</string>
     <string name="module_install">Instalar</string>
-    <string name="module_view">Ver</string>
     <string name="repository_empty">Repositorios está vacío</string>
     <string name="modules_empty">No se han encontrado módulos</string>
     <string name="search_empty">Lista vacía</string>
@@ -43,7 +41,6 @@
     <string name="license_fsf_libre">FSF Libre</string>
     <string name="page_modules">Módulos</string>
     <string name="page_settings">Configuración</string>
-    <string name="page_view_module">Ver Módulo</string>
     <string name="settings_root_access">Acceso Root: %1$s</string>
     <string name="settings_root_provider">Proveedor: %1$s</string>
     <string name="settings_root_granted">Concedido</string>

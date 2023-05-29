@@ -26,7 +26,6 @@
     <string name="page_repository">存储库</string>
     <string name="page_modules">模块</string>
     <string name="page_settings">设置</string>
-    <string name="page_view_module">查看模块</string>
 
     <!-- Repository -->
     <string name="repository_empty">存储库为空</string>
@@ -48,12 +47,10 @@
     <string name="modules_empty">没找到任何模块</string>
     <!-- Module Card -->
     <string name="module_version_author">%1$s，作者 %2$s</string>
-    <string name="module_update">更新</string>
     <string name="module_remove">移除</string>
     <string name="module_restore">还原</string>
     <string name="module_install">安装</string>
     <string name="module_download">下载</string>
-    <string name="module_view">查看</string>
 
     <!-- Settings-->
     <string name="settings_log_viewer">日志查看器</string>

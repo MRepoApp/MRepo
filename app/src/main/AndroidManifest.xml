@@ -50,7 +50,7 @@
         </activity>
 
         <activity android:name=".ui.activity.log.LogActivity"
-            android:label="@string/page_log_viewer"
+            android:label="@string/settings_log_viewer"
             android:exported="true"
             android:launchMode="singleTask"/>
 

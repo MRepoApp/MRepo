@@ -26,7 +26,6 @@
     <string name="page_repository">儲存庫</string>
     <string name="page_modules">模組</string>
     <string name="page_settings">設定</string>
-    <string name="page_view_module">檢視模組</string>
 
     <!-- Overview -->
     <!-- Root Card -->
@@ -55,12 +54,10 @@
     <!-- Modules Menu -->
     <!-- Module Card -->
     <string name="module_version_author">%1$s，作者 %2$s</string>
-    <string name="module_update">更新</string>
     <string name="module_remove">移除</string>
     <string name="module_restore">還原</string>
     <string name="module_install">安裝</string>
     <string name="module_download">下載</string>
-    <string name="module_view">檢視</string>
     <!-- Modules Page -->
     <string name="repository_empty">儲存庫為空</string>
     <string name="view_module_version_dialog_desc">是否安裝或下載該模組的版本？</string>

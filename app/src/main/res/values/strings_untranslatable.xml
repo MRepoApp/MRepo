@@ -2,17 +2,12 @@
 <resources>
     <string name="app_name" translatable="false">MRepo</string>
 
-    <!-- Page -->
-    <string name="page_app_theme" translatable="false">@string/settings_app_theme</string>
-    <string name="page_log_viewer" translatable="false">@string/settings_log_viewer</string>
-    <string name="page_repositories" translatable="false">@string/settings_repo</string>
-
     <!-- Settings -->
     <string name="settings_mode" translatable="false">@string/setup_mode</string>
     <string name="settings_mode_root" translatable="false">@string/setup_root_title</string>
     <string name="settings_mode_non_root" translatable="false">@string/setup_non_root_title</string>
     <!-- Non Root Card -->
-    <string name="settings_non_root_title" translatable="false">@string/setup_non_root_title</string>
+    <string name="settings_non_root" translatable="false">@string/setup_non_root_title</string>
     <!-- Repo -->
     <string name="repo_empty" translatable="false">@string/repository_empty</string>
     <!-- About -->
