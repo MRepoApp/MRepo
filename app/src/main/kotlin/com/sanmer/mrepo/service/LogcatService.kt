@@ -25,17 +25,20 @@ class LogcatService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         lifecycleScope.launch(Dispatchers.Default) {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val old = Logcat.readLogs()
-                console.addAll(
-                    old.filter { it !in console }
-                )
+                Logcat.readLogs().apply {
+                    console.addAll(
+                        filter { it !in console }
+                    )
+                }
 
                 while (isActive) {
-                    val logs = Logcat.getCurrent().toLogTextList()
-                    val new = logs.filter { it !in console }
-                    console.addAll(new)
-                    new.forEach {
-                        Logcat.writeLog(it)
+                    val new = Logcat.getCurrent()
+                        .toLogTextList()
+                        .filter { it !in console }
+
+                    if (new.isNotEmpty()) {
+                        console.addAll(new)
+                        Logcat.writeLogs(new)
                     }
 
                     delay(1000)

@@ -7,6 +7,17 @@ import androidx.core.content.FileProvider
 import com.sanmer.mrepo.BuildConfig
 import java.io.File
 
+val Context.logDir get() = cacheDir.resolve("log")
+
+fun Context.deleteLog(name: String) {
+    logDir.listFiles().orEmpty()
+        .forEach {
+            if (it.name.startsWith(name) && it.isFile) {
+                it.delete()
+            }
+        }
+}
+
 fun Context.openUrl(url: String) {
     Intent.parseUri(url, Intent.URI_INTENT_SCHEME).apply {
         startActivity(this)

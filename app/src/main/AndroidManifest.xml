@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="29"/>
@@ -18,7 +19,7 @@
         android:name=".App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Theme.Material3.DynamicColors.DayNight"
         android:localeConfig="@xml/locales_config"
         android:enableOnBackInvokedCallback="true"
         android:supportsRtl="true"
@@ -49,15 +50,27 @@
         </activity>
 
         <activity android:name=".ui.activity.log.LogActivity"
+            android:icon="@drawable/shortcut_log"
             android:label="@string/page_log_viewer"
+            android:theme="@style/Theme.Material3.DynamicColors.DayNight"
             android:exported="true"
-            android:launchMode="standard"/>
+            android:launchMode="singleTask"
+            android:taskAffinity="${applicationId}.log"/>
 
         <service android:name=".service.DownloadService"
             android:exported="false"/>
 
         <service android:name=".service.LogcatService"
             android:exported="false"/>
+
+        <receiver
+            android:name=".receiver.LogcatReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"

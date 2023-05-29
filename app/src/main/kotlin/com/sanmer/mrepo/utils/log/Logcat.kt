@@ -3,6 +3,7 @@ package com.sanmer.mrepo.utils.log
 import android.content.Context
 import android.util.Log
 import com.sanmer.mrepo.App
+import com.sanmer.mrepo.utils.expansion.logDir
 import com.sanmer.mrepo.utils.expansion.now
 import com.sanmer.mrepo.utils.expansion.shareFile
 import kotlinx.datetime.LocalDateTime
@@ -12,38 +13,15 @@ object Logcat {
     private val uid by lazy { context.applicationInfo.uid }
     private val date by lazy { LocalDateTime.now() }
 
-    private var fileName = "app_${date}.log"
-    private val logFile by lazy { context.cacheDir.resolve("log/${fileName}") }
-
-    init {
-        val appLogs = context.cacheDir.resolve("log")
-            .apply {
-                if (!exists()) mkdirs()
-            }
-            .walkBottomUp()
-            .filter {
-                it.name.startsWith("app")
-            }.sortedBy {
-                it.name.toDateTime()
-            }
-
-        if (appLogs.count() > 0) {
-            if (appLogs.count() > 3) {
-                appLogs.first().delete()
-            }
-
-            appLogs.last().apply {
-                val date = name.toDateTime()
-                val isToday = date.date == LocalDateTime.now().date
-                if (isToday) fileName = name
-            }
-        }
+    private val fileName by lazy {
+        context.logDir.listFiles()
+            .orEmpty()
+            .find {
+                it.isFile && it.name.startsWith("app")
+            }?.name ?: "app_${date}.log"
     }
 
-    private fun String.toDateTime() = LocalDateTime.parse(
-        replace("app_", "")
-            .replace(".log", "")
-    )
+    private val logFile by lazy { context.logDir.resolve(fileName) }
 
     fun getCurrent(): List<String> = try {
         val command = arrayOf(
@@ -64,7 +42,7 @@ object Logcat {
         process.waitFor()
         result
     } catch (e: Exception) {
-        listOf()
+        emptyList()
     }
 
     fun readLogs(): List<LogText> = if (logFile.exists()) {
@@ -86,11 +64,18 @@ object Logcat {
         emptyList()
     }
 
-    fun writeLog(log: LogText) = logFile.appendText("$log\n")
+    fun writeLogs(logs: List<LogText>) {
+        if (logs.isEmpty()) return
 
-    fun shareLogs(context: Context) = context.shareFile(logFile, "text/plain")
+        val texts = logs.joinToString(separator = "\n", postfix = "\n")
+        logFile.appendText(texts)
+    }
 
-    fun Collection<String>.toLogTextList(): List<LogText> {
+    fun shareLogs(context: Context) {
+        context.shareFile(logFile, "text/plain")
+    }
+
+    fun List<String>.toLogTextList(): List<LogText> {
         val tmp = map { it.split(": ", limit = 2) }
         val tags = tmp.map { it.first() }.distinct()
         val logs = tags.map { tag ->
@@ -98,9 +83,9 @@ object Logcat {
                 it.first() == tag
             }.map { it.last() }.reduceOrNull { b, e ->
                 "$b\n$e"
-            }
+            } ?: ""
 
-            return@map tag.toLogText().copy(message = message ?: "")
+            tag.toLogText().copy(message = message.trim())
         }
 
         return logs

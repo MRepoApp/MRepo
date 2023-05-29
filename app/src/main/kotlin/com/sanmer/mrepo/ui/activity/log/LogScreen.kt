@@ -21,6 +21,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -55,6 +56,40 @@ import com.sanmer.mrepo.utils.log.Logcat
 import com.sanmer.mrepo.utils.log.Logcat.toTextPriority
 
 private val priorities = listOf("VERBOSE", "DEBUG", "INFO", "WARN", "ERROR")
+object LogColors {
+    @Composable
+    fun priorityContainer(priority: Int) = when (priority) {
+        Log.VERBOSE -> Color(0xFFD6D6D6)
+        Log.DEBUG -> Color(0xFF305D78)
+        Log.INFO -> Color(0xFF6A8759)
+        Log.WARN -> Color(0xFFBBB529)
+        Log.ERROR -> Color(0xFFCF5B56)
+        Log.ASSERT -> Color(0xFF8B3C3C)
+        else -> MaterialTheme.colorScheme.primary
+    }
+
+    @Composable
+    fun priorityContent(priority: Int) = when (priority) {
+        Log.VERBOSE -> Color(0xFF000000)
+        Log.DEBUG -> Color(0xFFBBBBBB)
+        Log.INFO -> Color(0xFFE9F5E6)
+        Log.WARN -> Color(0xFF000000)
+        Log.ERROR -> Color(0xFF000000)
+        Log.ASSERT -> Color(0xFFFFFFFF)
+        else -> MaterialTheme.colorScheme.onPrimary
+    }
+
+    @Composable
+    fun message(priority: Int) = when (priority) {
+        Log.VERBOSE -> Color(0xFFBBBBBB)
+        Log.DEBUG -> Color(0xFF299999)
+        Log.INFO -> Color(0xFFABC023)
+        Log.WARN -> Color(0xFFBBB529)
+        Log.ERROR -> Color(0xFFFF6B68)
+        Log.ASSERT -> Color(0xFFFF6B68)
+        else -> LocalContentColor.current
+    }
+}
 
 @Composable
 fun LogScreen() {
@@ -161,14 +196,7 @@ private fun LogItem(
     Box(
         modifier = Modifier
             .background(
-                color = when (value.priority) {
-                    Log.VERBOSE -> Color(0xFFD6D6D6)
-                    Log.DEBUG -> Color(0xFF6A8759)
-                    Log.INFO -> Color(0xFF305D78)
-                    Log.WARN -> Color(0xFFBBB529)
-                    Log.ERROR -> Color(0xFFCF5B56)
-                    else -> MaterialTheme.colorScheme.primary
-                }
+                color = LogColors.priorityContainer(value.priority)
             )
             .fillMaxHeight()
             .padding(horizontal = 4.dp),
@@ -176,18 +204,12 @@ private fun LogItem(
     ) {
         Text(
             text = value.priority.toTextPriority(),
-            fontFamily = FontFamily.Monospace,
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.Bold
+            ),
             textAlign = TextAlign.Center,
-            color = when (value.priority) {
-                Log.VERBOSE -> Color(0xFF000000)
-                Log.DEBUG -> Color(0xFFE9F5E6)
-                Log.INFO -> Color(0xFFBBBBBB)
-                Log.WARN -> Color(0xFF000000)
-                Log.ERROR -> Color(0xFF000000)
-                else -> MaterialTheme.colorScheme.onPrimary
-            }
+            color = LogColors.priorityContent(value.priority)
         )
     }
 
@@ -199,23 +221,25 @@ private fun LogItem(
     ) {
         Text(
             text = value.tag,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium
+            style = MaterialTheme.typography.bodyMedium.copy(
+                    fontFamily = FontFamily.Monospace
+                ),
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Text(
             text = value.message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = when (value.priority) {
-                Log.WARN -> Color(0xFFBBB529)
-                Log.ERROR -> Color(0xFFCF5B56)
-                else -> Color.Unspecified
-            }
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontFamily = FontFamily.Monospace
+            ),
+            color = LogColors.message(value.priority)
         )
 
         Text(
             text = "${value.time} ${value.process}",
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontFamily = FontFamily.Serif
+            ),
             color = MaterialTheme.colorScheme.outline
         )
     }
