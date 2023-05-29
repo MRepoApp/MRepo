@@ -13,6 +13,7 @@ import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
+import com.sanmer.mrepo.utils.expansion.logDir
 import com.sanmer.mrepo.utils.expansion.now
 import com.sanmer.mrepo.utils.expansion.shareFile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -66,11 +67,12 @@ class InstallViewModel @Inject constructor(
             console = { console.add(it) },
             onSuccess = {
                 onSucceeded(it)
-                context.cacheDir.resolve("install.zip").delete()
+                file.delete()
                 if (userDataRepository.value.deleteZipFile) path.safeDelete(context)
             },
             onFailure = {
                 state.setFailed()
+                file.delete()
             }
         )
     }
@@ -84,11 +86,12 @@ class InstallViewModel @Inject constructor(
     fun sendLogFile(context: Context) {
         val text = console.joinToString(separator = "\n")
         val date = LocalDateTime.now()
-        val logFile = context.cacheDir
-            .resolve("log/module_${date}.log")
+        val logFile = context.logDir
+            .resolve("module_${date}.log")
             .apply {
                 writeText(text)
             }
+
         context.shareFile(logFile, "text/plain")
     }
 }

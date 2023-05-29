@@ -6,6 +6,7 @@ import com.sanmer.mrepo.database.ModuleDatabase
 import com.sanmer.mrepo.database.RepoDatabase
 import com.sanmer.mrepo.database.dao.ModuleDao
 import com.sanmer.mrepo.database.dao.RepoDao
+import com.sanmer.mrepo.utils.expansion.renameDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +25,7 @@ object DatabaseModule {
         @ApplicationContext context: Context
     ): ModuleDatabase {
         // MIGRATION
-        dbRename(context, "mrepo", "module")
+        context.renameDatabase("mrepo", "module")
 
         return Room.databaseBuilder(context,
             ModuleDatabase::class.java, "module")
@@ -52,15 +53,4 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun providesRepoDao(db: RepoDatabase): RepoDao = db.repoDao()
-
-    @Suppress("SameParameterValue")
-    private fun dbRename(context: Context, old: String, new: String) {
-        context.databaseList().forEach {
-            if (it.startsWith(old)) {
-                val oldFile = context.getDatabasePath(it)
-                val newFile = context.getDatabasePath(it.replace(old, new))
-                oldFile.renameTo(newFile)
-            }
-        }
-    }
 }

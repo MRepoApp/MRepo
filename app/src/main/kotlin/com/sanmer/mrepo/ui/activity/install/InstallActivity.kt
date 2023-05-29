@@ -11,29 +11,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.ui.activity.base.BaseActivity
+import com.sanmer.mrepo.utils.expansion.deleteLog
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 import java.io.File
 
 class InstallActivity : BaseActivity() {
     private val viewModel: InstallViewModel by viewModels()
 
-    init {
-        Timber.d("InstallActivity init")
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        cacheDir.resolve("log")
-            .walkBottomUp()
-            .forEach {
-                if (it.name.startsWith("module")) {
-                    it.delete()
-                }
-            }
+        deleteLog("module")
 
         viewModel.suState.onEach {
             if (it.isSucceeded) {

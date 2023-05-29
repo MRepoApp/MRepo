@@ -5,11 +5,9 @@ import android.content.Intent
 import android.os.Parcelable
 import android.os.Process
 import androidx.core.app.ServiceCompat
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.newOutputStream
@@ -17,6 +15,7 @@ import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
+import com.sanmer.mrepo.utils.expansion.getUriForFile
 import com.sanmer.mrepo.utils.expansion.parcelable
 import com.sanmer.mrepo.utils.expansion.toFile
 import kotlinx.coroutines.Dispatchers
@@ -172,13 +171,12 @@ class DownloadService : LifecycleService() {
         }
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            setDataAndType(
+                context.getUriForFile(apk),
+                "application/vnd.android.package-archive"
+            )
         }
-
-        val apkUri = FileProvider.getUriForFile(context,
-            "${BuildConfig.APPLICATION_ID}.provider", apk)
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.setDataAndType(apkUri, "application/vnd.android.package-archive")
 
         startActivity(intent)
     }

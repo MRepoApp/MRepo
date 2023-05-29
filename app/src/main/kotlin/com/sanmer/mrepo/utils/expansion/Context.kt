@@ -2,6 +2,7 @@ package com.sanmer.mrepo.utils.expansion
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import com.sanmer.mrepo.BuildConfig
@@ -18,6 +19,16 @@ fun Context.deleteLog(name: String) {
         }
 }
 
+fun Context.renameDatabase(old: String, new: String) {
+    databaseList().forEach {
+        if (it.startsWith(old)) {
+            val oldFile = getDatabasePath(it)
+            val newFile = getDatabasePath(it.replace(old, new))
+            oldFile.renameTo(newFile)
+        }
+    }
+}
+
 fun Context.openUrl(url: String) {
     Intent.parseUri(url, Intent.URI_INTENT_SCHEME).apply {
         startActivity(this)
@@ -31,13 +42,16 @@ fun Context.shareText(text: String) {
         .startChooser()
 }
 
-fun Context.shareFile(file: File, mimeType: String) {
-    val uri = FileProvider.getUriForFile(this,
-        "${BuildConfig.APPLICATION_ID}.provider", file)
+fun Context.getUriForFile(file: File): Uri {
+    return FileProvider.getUriForFile(this,
+        "${BuildConfig.APPLICATION_ID}.provider", file
+    )
+}
 
+fun Context.shareFile(file: File, mimeType: String) {
     ShareCompat.IntentBuilder(this)
         .setType(mimeType)
-        .addStream(uri)
+        .addStream(getUriForFile(file))
         .startChooser()
 }
 
