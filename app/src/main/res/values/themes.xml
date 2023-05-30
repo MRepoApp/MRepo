@@ -5,7 +5,11 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
 
-    <style name="PlatformAdjusted.Theme.MRepo" parent="NightAdjusted.Theme.MRepo"/>
+    <style name="PlatformAdjusted.Theme.MRepo" parent="NightAdjusted.Theme.MRepo">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
     <style name="Theme.MRepo" parent="PlatformAdjusted.Theme.MRepo" />
 
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
