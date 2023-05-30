@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.ui.theme.Colors
-import com.sanmer.mrepo.ui.theme.getColor
-import com.sanmer.mrepo.ui.theme.getColors
 
 @Composable
 fun ThemePaletteItem(
@@ -49,7 +47,7 @@ fun ThemePaletteItem(
         }
     }
     items(
-        items = getColors(),
+        items = Colors.getColorIds(),
         key = { it }
     ) {
         ThemeColorItem(
@@ -69,7 +67,7 @@ private fun ThemeColorItem(
     isDarkMode: Boolean,
     onClick: (Int) -> Unit
 ) {
-    val color = getColor(id)
+    val color = Colors.getColor(id)
     val colorScheme = if (isDarkMode) color.darkColorScheme else color.lightColorScheme
     val selected = id == themeColor
 

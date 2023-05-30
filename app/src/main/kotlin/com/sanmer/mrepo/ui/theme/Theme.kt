@@ -21,7 +21,7 @@ fun AppTheme(
         )
     }
 
-    val color = getColor(id = themeColor)
+    val color = Colors.getColor(id = themeColor)
     val colorScheme = when {
         darkMode -> color.darkColorScheme
         else -> color.lightColorScheme

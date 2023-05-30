@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.ui.theme
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -22,6 +23,7 @@ sealed class Colors(
     val lightColorScheme: ColorScheme,
     val darkColorScheme: ColorScheme
 ) {
+    @SuppressLint("NewApi")
     class Dynamic(context: Context) : Colors(
         id = -1,
         lightColorScheme = dynamicLightColorScheme(context),
@@ -56,27 +58,29 @@ sealed class Colors(
         lightColorScheme = OrangeLightColorScheme,
         darkColorScheme = OrangeDarkColorScheme
     )
-}
 
-private val colors = listOf(
-    Colors.Sakura,
-    Colors.DeepPurple,
-    Colors.Blue,
-    Colors.Cyan,
-    Colors.Orange,
-)
+    companion object {
+        private val mColors = listOf(
+            Sakura,
+            DeepPurple,
+            Blue,
+            Cyan,
+            Orange,
+        )
 
-fun getColors(): List<Int> {
-    return colors.map { it.id }
-}
+        fun getColorIds(): List<Int> {
+            return mColors.map { it.id }
+        }
 
-@Composable
-fun getColor(id: Int): Colors {
-    val context = LocalContext.current
+        @Composable
+        fun getColor(id: Int): Colors {
+            val context = LocalContext.current
 
-    return if (id == Colors.Dynamic.id) {
-        Colors.Dynamic(context)
-    } else {
-        colors[id]
+            return if (id == Dynamic.id) {
+                Dynamic(context)
+            } else {
+                mColors[id]
+            }
+        }
     }
 }
