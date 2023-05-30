@@ -1,11 +1,11 @@
 package com.sanmer.mrepo.utils.log
 
 import android.content.Context
-import android.util.Log
 import com.sanmer.mrepo.App
 import com.sanmer.mrepo.utils.expansion.logDir
 import com.sanmer.mrepo.utils.expansion.now
 import com.sanmer.mrepo.utils.expansion.shareFile
+import com.sanmer.mrepo.utils.log.LogText.Companion.toLogPriority
 import kotlinx.datetime.LocalDateTime
 
 object Logcat {
@@ -107,23 +107,5 @@ object Logcat {
         }
     } catch (e: Exception) {
         LogText(0, "", "", "","")
-    }
-
-    fun String.toLogPriority() = when (this) {
-        "V" -> Log.VERBOSE
-        "D" -> Log.DEBUG
-        "I" -> Log.INFO
-        "W" -> Log.WARN
-        "E" -> Log.ERROR
-        else -> 0
-    }
-
-    fun Int.toTextPriority() = when (this) {
-        Log.VERBOSE -> "V"
-        Log.DEBUG -> "D"
-        Log.INFO -> "I"
-        Log.WARN -> "W"
-        Log.ERROR -> "E"
-        else -> "N"
     }
 }

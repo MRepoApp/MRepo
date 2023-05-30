@@ -52,8 +52,8 @@ import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.rememberFastScroller
 import com.sanmer.mrepo.ui.utils.scrollbarState
 import com.sanmer.mrepo.utils.log.LogText
+import com.sanmer.mrepo.utils.log.LogText.Companion.toTextPriority
 import com.sanmer.mrepo.utils.log.Logcat
-import com.sanmer.mrepo.utils.log.Logcat.toTextPriority
 
 private val priorities = listOf("VERBOSE", "DEBUG", "INFO", "WARN", "ERROR")
 object LogColors {
