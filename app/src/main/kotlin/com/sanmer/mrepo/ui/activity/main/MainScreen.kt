@@ -1,8 +1,5 @@
 package com.sanmer.mrepo.ui.activity.main
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -38,9 +35,7 @@ fun AnimatedMainScreen(
         AnimatedNavHost(
             modifier = Modifier.padding(bottom = it.calculateBottomPadding()),
             navController = navController,
-            startDestination = MainScreen.Repository.route,
-            enterTransition = { fadeIn(animationSpec = tween(400)) },
-            exitTransition = { fadeOut(animationSpec = tween(300)) }
+            startDestination = MainScreen.Repository.route
         ) {
             animatedRepositoryScreen(
                 navController = navController

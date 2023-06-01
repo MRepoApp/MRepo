@@ -1,5 +1,7 @@
 package com.sanmer.mrepo.ui.navigation.animated
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -36,16 +38,16 @@ fun NavGraphBuilder.repositoryScreen(
         route = RepositoryScreen.Home.route,
         enterTransition = {
             if (initialState.destination.route in subScreens) {
-                slideInRightToLeft()
+                slideInRightToLeft() + fadeIn()
             } else {
-                null
+               fadeIn()
             }
         },
         exitTransition = {
-            if (initialState.destination.route in subScreens) {
-                slideOutLeftToRight()
+            if (targetState.destination.route in subScreens) {
+                slideOutLeftToRight() +  fadeOut()
             } else {
-                null
+                fadeOut()
             }
         }
     ) {
@@ -57,8 +59,8 @@ fun NavGraphBuilder.repositoryScreen(
     composable(
         route = RepositoryScreen.View.route,
         arguments = listOf(navArgument("moduleId") { type = NavType.StringType }),
-        enterTransition = { slideInLeftToRight() },
-        exitTransition = { slideOutRightToLeft() }
+        enterTransition = { slideInLeftToRight() + fadeIn() },
+        exitTransition = { slideOutRightToLeft() + fadeOut() }
     ) {
         ViewModuleScreen(
             navController = navController
