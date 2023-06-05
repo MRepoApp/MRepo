@@ -18,7 +18,7 @@ object Const {
         )
 
     // NOTIFICATION
-    const val CHANNEL_ID_DOWNLOAD = "module_download"
+    const val CHANNEL_ID_DOWNLOAD = "download_service"
 
     // URL
     const val TRANSLATE_URL = "https://weblate.sanmer.dev/engage/mrepo"
