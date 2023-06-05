@@ -92,58 +92,55 @@ fun SettingSwitchItem(
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onChange: (Boolean) -> Unit,
+) = Row(
+    modifier = modifier
+        .alpha(alpha = if (enabled) 1f else 0.5f )
+        .toggleable(
+            value = checked,
+            enabled = enabled,
+            onValueChange = onChange,
+            role = Role.Switch,
+            interactionSource = interactionSource,
+            indication = rememberRipple()
+        )
+        .padding(vertical = 16.dp, horizontal = 25.dp)
+        .fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
 ) {
-    Row(
-        modifier = modifier
-            .alpha(alpha = if (enabled) 1f else 0.5f )
-            .toggleable(
-                value = checked,
-                enabled = enabled,
-                onValueChange = onChange,
-                role = Role.Switch,
-                interactionSource = interactionSource,
-                indication = rememberRipple()
-            )
-            .padding(vertical = 16.dp, horizontal = 25.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        iconRes?.let {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = iconRes),
-                contentDescription = null
-            )
-
-            Spacer(modifier = Modifier.width(25.dp))
-        }
-
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 18.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            subText?.let {
-                Text(
-                    text = subText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
-        }
-
-        Switch(
-            checked = checked,
-            onCheckedChange = null
+    iconRes?.let {
+        Icon(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(id = iconRes),
+            contentDescription = null
         )
 
+        Spacer(modifier = Modifier.width(25.dp))
     }
+
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .padding(end = 18.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        subText?.let {
+            Text(
+                text = subText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+        }
+    }
+
+    Switch(
+        checked = checked,
+        onCheckedChange = null
+    )
 }
 
 @Composable

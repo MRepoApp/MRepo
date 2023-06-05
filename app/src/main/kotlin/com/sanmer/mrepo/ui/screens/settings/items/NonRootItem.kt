@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.settings
+package com.sanmer.mrepo.ui.screens.settings.items
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,28 +14,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.event.isSucceeded
-import com.sanmer.mrepo.viewmodel.SettingsViewModel
 
 @Composable
-fun RootItem(
-    viewModel: SettingsViewModel = hiltViewModel()
-) = Surface(
+fun NonRootItem() = Surface(
     modifier = Modifier.padding(all = 18.dp),
     shape = RoundedCornerShape(15.dp),
     color = MaterialTheme.colorScheme.surfaceVariant
 ) {
-    val suEvent by viewModel.suState.collectAsStateWithLifecycle()
-
     Row(
         modifier = Modifier
             .padding(all = 20.dp)
@@ -44,11 +35,7 @@ fun RootItem(
     ) {
         Icon(
             modifier = Modifier.size(30.dp),
-            painter = painterResource(id = if (suEvent.isSucceeded) {
-                R.drawable.verify_bold
-            } else {
-                R.drawable.information_bold
-            }),
+            painter = painterResource(id = R.drawable.information_bold),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary
         )
@@ -59,24 +46,11 @@ fun RootItem(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = if (suEvent.isSucceeded) {
-                    stringResource(id = R.string.settings_root_access,
-                        stringResource(id = R.string.settings_root_granted))
-                } else {
-                    stringResource(id = R.string.settings_root_access,
-                        stringResource(id = R.string.settings_root_none))
-                },
+                text = stringResource(id = R.string.settings_non_root),
                 style = MaterialTheme.typography.titleMedium
             )
-
             Text(
-                text = if (suEvent.isSucceeded) {
-                    stringResource(id = R.string.settings_root_provider,
-                        viewModel.apiVersion)
-                } else {
-                    stringResource(id = R.string.settings_root_provider,
-                        stringResource(id = R.string.settings_root_not_available))
-                },
+                text = stringResource(id = R.string.settings_non_root_desc),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

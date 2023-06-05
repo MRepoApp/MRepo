@@ -60,7 +60,7 @@ private val options = mutableListOf(
 )
 
 @Composable
-fun MenuItem(
+fun SettingsMenu(
     expanded: Boolean,
     onClose: () -> Unit
 ) = DropdownMenu(

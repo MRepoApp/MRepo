@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.settings.app
+package com.sanmer.mrepo.ui.screens.settings.app.items
 
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult

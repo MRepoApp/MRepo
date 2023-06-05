@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.settings.app
+package com.sanmer.mrepo.ui.screens.settings.app.items
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars

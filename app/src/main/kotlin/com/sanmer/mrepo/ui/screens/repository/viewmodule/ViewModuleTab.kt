@@ -39,7 +39,7 @@ val pages = listOf(
 )
 
 @Composable
-fun TabsItem(
+fun ViewModuleTab(
     state: PagerState,
     modifier: Modifier = Modifier
 ) {

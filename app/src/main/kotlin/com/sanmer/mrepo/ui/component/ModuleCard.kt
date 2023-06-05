@@ -45,7 +45,7 @@ fun ModuleCard(
     indicator: @Composable (BoxScope.() -> Unit?)? = null,
     leadingButton: @Composable (RowScope.() -> Unit)? = null,
     trailingButton: @Composable RowScope.() -> Unit,
-)  = Surface(
+) = Surface(
     modifier = modifier,
     color = MaterialTheme.colorScheme.surface,
     tonalElevation = 1.dp,

@@ -34,6 +34,8 @@ import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.navigation.animated.SettingsScreen
 import com.sanmer.mrepo.ui.navigation.navigateToRepository
+import com.sanmer.mrepo.ui.screens.settings.items.NonRootItem
+import com.sanmer.mrepo.ui.screens.settings.items.RootItem
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.SettingsViewModel
@@ -142,7 +144,7 @@ private fun TopBar(
                 contentDescription = null
             )
 
-            MenuItem(
+            SettingsMenu(
                 expanded = expanded,
                 onClose = { expanded = false }
             )

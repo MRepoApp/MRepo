@@ -48,7 +48,7 @@ fun ViewModuleScreen(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            TabsItem(state = pagerState)
+            ViewModuleTab(state = pagerState)
 
             HorizontalPager(
                 state = pagerState,

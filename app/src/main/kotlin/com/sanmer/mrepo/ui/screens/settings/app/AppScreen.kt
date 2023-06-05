@@ -22,6 +22,8 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.SettingSwitchItem
+import com.sanmer.mrepo.ui.screens.settings.app.items.AppThemeItem
+import com.sanmer.mrepo.ui.screens.settings.app.items.DownloadPathItem
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.SettingsViewModel
