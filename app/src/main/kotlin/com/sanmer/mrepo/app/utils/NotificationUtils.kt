@@ -1,7 +1,11 @@
 package com.sanmer.mrepo.app.utils
 
 import android.Manifest
-import android.app.*
+import android.app.Activity
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -31,8 +35,8 @@ object NotificationUtils {
             )
         )
 
-        NotificationManagerCompat.from(context)
-            .createNotificationChannels(channels)
+        notificationManager.createNotificationChannels(channels)
+        notificationManager.deleteUnlistedNotificationChannels(channels.map { it.id })
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
