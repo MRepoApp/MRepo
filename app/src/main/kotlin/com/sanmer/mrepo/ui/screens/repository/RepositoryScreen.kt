@@ -42,6 +42,7 @@ fun RepositoryScreen(
     viewModel: RepositoryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
 
@@ -88,7 +89,8 @@ fun RepositoryScreen(
             ModulesList(
                 list = viewModel.onlineValue,
                 state = listState,
-                navController = navController
+                navController = navController,
+                getModuleState = { viewModel.rememberModuleState(it) }
             )
 
             PullRefreshIndicator(

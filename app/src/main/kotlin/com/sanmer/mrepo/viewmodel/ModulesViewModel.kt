@@ -69,7 +69,7 @@ class ModulesViewModel @Inject constructor(
     }
 
     @Stable
-    data class LocalModuleState(
+    data class ModuleState(
         val alpha: Float = 1f,
         val decoration: TextDecoration = TextDecoration.None,
         val toggle: (Boolean) -> Unit = {},
@@ -77,11 +77,11 @@ class ModulesViewModel @Inject constructor(
         val manager: (() -> Unit)? = null
     )
 
-    private fun createLocalModuleState(
+    private fun createModuleState(
         context: Context,
         module: LocalModule
-    ): LocalModuleState = when (module.state) {
-        State.ENABLE -> LocalModuleState(
+    ): ModuleState = when (module.state) {
+        State.ENABLE -> ModuleState(
             alpha = 1f,
             decoration = TextDecoration.None,
             toggle = { suRepository.disable(module) },
@@ -89,32 +89,32 @@ class ModulesViewModel @Inject constructor(
             manager = ModuleUtils.launchManger(context, module)
         )
 
-        State.DISABLE -> LocalModuleState(
+        State.DISABLE -> ModuleState(
             alpha = 0.5f,
             toggle = { suRepository.enable(module) },
             change = { suRepository.remove(module) },
             manager = ModuleUtils.launchManger(context, module)
         )
 
-        State.REMOVE -> LocalModuleState(
+        State.REMOVE -> ModuleState(
             alpha = 0.5f,
             decoration = TextDecoration.LineThrough,
             change = { suRepository.enable(module) }
         )
         State.ZYGISK_UNLOADED,
         State.RIRU_DISABLE,
-        State.ZYGISK_DISABLE -> LocalModuleState(
+        State.ZYGISK_DISABLE -> ModuleState(
             alpha = 0.5f
         )
-        State.UPDATE -> LocalModuleState()
+        State.UPDATE -> ModuleState()
     }
 
     @Composable
-    fun rememberLocalModuleState(module: LocalModule): LocalModuleState {
+    fun rememberModuleState(module: LocalModule): ModuleState {
         val context = LocalContext.current
 
         return remember(key1 = module.state, key2 = isRefreshing) {
-            createLocalModuleState(context, module)
+            createModuleState(context, module)
         }
     }
 }

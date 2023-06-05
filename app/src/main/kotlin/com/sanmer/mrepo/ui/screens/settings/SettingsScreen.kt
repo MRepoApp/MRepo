@@ -45,9 +45,11 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val context = LocalContext.current
+    val suState by viewModel.suState.collectAsStateWithLifecycle()
+    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
+
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     BackHandler { navController.navigateToRepository() }
 
@@ -55,7 +57,7 @@ fun SettingsScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
-                userData = userData,
+                isRoot = userData.isRoot,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -68,7 +70,10 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             when {
-                userData.isRoot -> RootItem()
+                userData.isRoot -> RootItem(
+                    suState = suState,
+                    apiVersion = viewModel.apiVersion
+                )
                 userData.isNonRoot -> NonRootItem()
             }
 
@@ -126,7 +131,7 @@ fun SettingsScreen(
 
 @Composable
 private fun TopBar(
-    userData: UserData,
+    isRoot: Boolean,
     scrollBehavior: TopAppBarScrollBehavior
 ) = TopAppBar(
     title = {
@@ -137,7 +142,7 @@ private fun TopBar(
 
         IconButton(
             onClick = { expanded = true },
-            enabled = userData.isRoot
+            enabled = isRoot
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.refresh_outline),

@@ -7,6 +7,7 @@ import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +26,7 @@ class SettingsViewModel @Inject constructor(
     fun setWorkingMode(value: WorkingMode) = userDataRepository.setWorkingMode(value)
     fun setDarkTheme(value: DarkMode) = userDataRepository.setDarkTheme(value)
     fun setThemeColor(value: Int) = userDataRepository.setThemeColor(value)
-    fun setDownloadPath(value: String) = userDataRepository.setDownloadPath(value)
+    fun setDownloadPath(value: File) = userDataRepository.setDownloadPath(value)
     fun setDeleteZipFile(value: Boolean) = userDataRepository.setDeleteZipFile(value)
     fun setEnableNavigationAnimation(value: Boolean) = userDataRepository.setEnableNavigationAnimation(value)
 }

@@ -40,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
@@ -57,8 +58,11 @@ fun ModulesScreen(
     navController: NavController,
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
+    val suState by viewModel.suState.collectAsStateWithLifecycle()
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
+
     val isScrollingUp = listState.isScrollingUp()
     val showFab by remember(isScrollingUp) {
         derivedStateOf {
@@ -118,7 +122,9 @@ fun ModulesScreen(
 
             ModulesList(
                 list = viewModel.localValue,
-                state = listState
+                state = listState,
+                suState = suState,
+                getModuleState = { viewModel.rememberModuleState(it) }
             )
 
             PullRefreshIndicator(

@@ -36,14 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.ui.component.Checkbox
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.utils.expansion.shareText
 import com.sanmer.mrepo.utils.expansion.toDateTime
-import com.sanmer.mrepo.viewmodel.RepositoriesViewModel
 
 private enum class Menu(
     @StringRes val label: Int,
@@ -74,7 +72,9 @@ private val options = listOf(
 @Composable
 fun RepositoryItem(
     repo: Repo,
-    viewModel: RepositoriesViewModel = hiltViewModel()
+    deleteRepo: (Repo) -> Unit,
+    updateRepo: (Repo) -> Unit,
+    getRepoUpdate: (Repo, (Throwable) -> Unit) -> Unit
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -82,11 +82,9 @@ fun RepositoryItem(
     var delete by remember { mutableStateOf(false) }
     if (delete) {
         DeleteDialog(
+            repo = repo,
             onClose = { delete = false },
-            onConfirm = {
-                viewModel.delete(repo)
-            },
-            repo = repo
+            onConfirm = { deleteRepo(repo) }
         )
     }
 
@@ -104,7 +102,7 @@ fun RepositoryItem(
     }
 
     val onUpdate: () -> Unit = {
-        viewModel.getUpdate(repo) {
+        getRepoUpdate(repo) {
             failure = true
             message = it.message
         }
@@ -119,9 +117,7 @@ fun RepositoryItem(
         surface = {
             RepoItem(
                 repo = repo,
-                onChange = {
-                    viewModel.update(repo.copy(enable = it))
-                },
+                onChange = { updateRepo(repo.copy(enable = it)) },
                 onLongClick = { expanded = true },
                 onIconClick = { expanded = true }
             )

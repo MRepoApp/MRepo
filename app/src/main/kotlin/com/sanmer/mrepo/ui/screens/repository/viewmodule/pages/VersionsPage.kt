@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.ui.screens.repository.viewmodule.pages
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -38,7 +39,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,8 +50,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.app.event.isLoading
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.database.entity.Repo
@@ -63,16 +63,18 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.rememberStringDataRequest
 import com.sanmer.mrepo.utils.expansion.toDate
-import com.sanmer.mrepo.viewmodel.ModuleViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun VersionsPage(
+    versions: List<VersionItem>,
+    state: State,
     isRoot: Boolean,
-    viewModel: ModuleViewModel = hiltViewModel()
+    getRepoByUrl: @Composable (String) -> Repo?,
+    downloader: (Context, VersionItem, Boolean) -> Unit
 ) = Box {
     AnimatedVisibility(
-        visible = viewModel.state.isLoading,
+        visible = state.isLoading,
         enter = fadeIn(),
         exit = fadeOut()
     ) {
@@ -80,18 +82,20 @@ fun VersionsPage(
     }
 
     AnimatedVisibility(
-        visible = viewModel.state.isSucceeded,
+        visible = state.isSucceeded,
         enter = fadeIn(),
         exit = fadeOut()
     ) {
         VersionList(
-            versions = viewModel.versions,
-            isRoot = isRoot
+            versions = versions,
+            isRoot = isRoot,
+            getRepoByUrl = getRepoByUrl,
+            downloader = downloader
         )
     }
 
     AnimatedVisibility(
-        visible = viewModel.state.isFailed,
+        visible = state.isFailed,
         enter = fadeIn(),
         exit = fadeOut()
     ) {
@@ -105,7 +109,9 @@ fun VersionsPage(
 @Composable
 private fun VersionList(
     versions: List<VersionItem>,
-    isRoot: Boolean
+    isRoot: Boolean,
+    getRepoByUrl: @Composable (String) -> Repo?,
+    downloader: (Context, VersionItem, Boolean) -> Unit
 ) = LazyColumn(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -115,7 +121,9 @@ private fun VersionList(
     ) {
         VersionItem(
             item = it,
-            isRoot = isRoot
+            isRoot = isRoot,
+            getRepoByUrl = getRepoByUrl,
+            downloader = downloader
         )
 
         Divider(thickness = 0.9.dp)
@@ -126,27 +134,27 @@ private fun VersionList(
 private fun VersionItem(
     item: VersionItem,
     isRoot: Boolean,
-    viewModel: ModuleViewModel = hiltViewModel()
+    getRepoByUrl: @Composable (String) -> Repo?,
+    downloader: (Context, VersionItem, Boolean) -> Unit
 ) {
     val hasChangelog = item.changelog.isNotBlank()
-    var repo: Repo? by remember { mutableStateOf(null) }
-    LaunchedEffect(item) {
-        repo = viewModel.getRepoByUrl(item.repoUrl)
-    }
+    val repo = getRepoByUrl(item.repoUrl)
 
     var show by remember { mutableStateOf(false) }
     if (show && !hasChangelog) {
         VersionItemDialog(
             item = item,
             isRoot = isRoot,
-            onClose = { show = false }
+            onClose = { show = false },
+            downloader = downloader
         )
     }
     if (show && hasChangelog) {
         VersionItemBottomSheet(
             item = item,
             isRoot = isRoot,
-            onClose = { show = false }
+            onClose = { show = false },
+            downloader = downloader
         )
     }
 
@@ -187,7 +195,7 @@ private fun VersionItem(
 private fun VersionItemDialog(
     item: VersionItem,
     isRoot: Boolean,
-    viewModel: ModuleViewModel = hiltViewModel(),
+    downloader: (Context, VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
 ) = AlertDialog(
     onDismissRequest = onClose
@@ -229,10 +237,7 @@ private fun VersionItemDialog(
 
                 TextButton(
                     onClick = {
-                        viewModel.downloader(
-                            context = context,
-                            item = item
-                        )
+                        downloader(context, item, false)
                         onClose()
                     }
                 ) {
@@ -243,11 +248,7 @@ private fun VersionItemDialog(
 
                 TextButton(
                     onClick = {
-                        viewModel.downloader(
-                            context = context,
-                            item = item,
-                            install = true
-                        )
+                        downloader(context, item, true)
                         onClose()
                     },
                     enabled = isRoot
@@ -264,7 +265,7 @@ private fun VersionItemBottomSheet(
     item: VersionItem,
     isRoot: Boolean,
     state: SheetState = rememberModalBottomSheetState(),
-    viewModel: ModuleViewModel = hiltViewModel(),
+    downloader: (Context, VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
@@ -284,11 +285,7 @@ private fun VersionItemBottomSheet(
     ) {
         OutlinedButton(
             onClick = {
-                viewModel.downloader(
-                    context = context,
-                    item = item,
-                    install = true
-                )
+                downloader(context, item, true)
                 scope.launch {
                     onClose()
                     state.hide()
@@ -308,10 +305,7 @@ private fun VersionItemBottomSheet(
 
         OutlinedButton(
             onClick = {
-                viewModel.downloader(
-                    context = context,
-                    item = item
-                )
+                downloader(context, item, false)
                 scope.launch {
                     onClose()
                     state.hide()

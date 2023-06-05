@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.module.OnlineModule
@@ -44,7 +43,8 @@ import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 fun ModulesList(
     list: List<OnlineModule>,
     state: LazyListState,
-    navController: NavController
+    navController: NavController,
+    getModuleState: @Composable (OnlineModule) -> RepositoryViewModel.ModuleState
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -57,9 +57,11 @@ fun ModulesList(
             items = list,
             key = { it.id }
         ) { module ->
-            ModuleItem(module) {
-                navController.navigatePopUpTo(createViewRoute(module))
-            }
+            ModuleItem(
+                module = module,
+                onClick = { navController.navigatePopUpTo(createViewRoute(module)) },
+                getModuleState = getModuleState
+            )
         }
     }
 
@@ -77,14 +79,14 @@ fun ModulesList(
 @Composable
 private fun ModuleItem(
     module: OnlineModule,
-    viewModel: RepositoryViewModel = hiltViewModel(),
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    getModuleState: @Composable (OnlineModule) -> RepositoryViewModel.ModuleState
 ) = Surface(
     modifier = Modifier.fillMaxWidth(),
     onClick = onClick,
     shape = RoundedCornerShape(10.dp)
 ) {
-    val uiState = viewModel.rememberOnlineModuleState(module)
+    val moduleState = getModuleState(module)
 
     Row(
         modifier = Modifier.padding(all = 10.dp),
@@ -119,17 +121,17 @@ private fun ModuleItem(
                 color = MaterialTheme.colorScheme.outline
             )
 
-            if (uiState.hasLabel) {
+            if (moduleState.hasLabel) {
                 Row(
                     modifier = Modifier.padding(top = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    if (uiState.hasLicense) {
+                    if (moduleState.hasLicense) {
                         LabelItem(text = module.license)
                     }
 
-                    if (uiState.installed) {
+                    if (moduleState.installed) {
                         LabelItem(text = stringResource(id = R.string.module_label_installed))
                     }
                 }

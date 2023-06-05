@@ -19,15 +19,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
@@ -41,7 +39,9 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 @Composable
 fun ModulesList(
     list: List<LocalModule>,
-    state: LazyListState
+    state: LazyListState,
+    suState: Event,
+    getModuleState: @Composable (LocalModule) -> ModulesViewModel.ModuleState
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -54,8 +54,12 @@ fun ModulesList(
         items(
             items = list,
             key = { it.id }
-        ) { module ->
-            ModuleItem(module)
+        ) {
+            ModuleItem(
+                module = it,
+                suState = suState,
+                getModuleState = getModuleState
+            )
         }
     }
 
@@ -73,22 +77,22 @@ fun ModulesList(
 @Composable
 private fun ModuleItem(
     module: LocalModule,
-    viewModel: ModulesViewModel = hiltViewModel()
+    suState: Event,
+    getModuleState: @Composable (LocalModule) -> ModulesViewModel.ModuleState
 ) {
-    val uiState = viewModel.rememberLocalModuleState(module)
-    val suState by viewModel.suState.collectAsStateWithLifecycle()
+    val moduleState = getModuleState(module)
 
     ModuleCard(
         name = module.name,
         version = module.versionDisplay,
         author = module.author,
         description = module.description,
-        alpha = uiState.alpha,
-        decoration = uiState.decoration,
+        alpha = moduleState.alpha,
+        decoration = moduleState.decoration,
         switch = {
             Switch(
                 checked = module.state == State.ENABLE,
-                onCheckedChange = uiState.toggle,
+                onCheckedChange = moduleState.toggle,
                 enabled = suState.isSucceeded
             )
         },
@@ -100,15 +104,15 @@ private fun ModuleItem(
             State.ZYGISK_DISABLE -> stateIndicator(R.drawable.danger_outline)
             else -> null
         },
-        leadingButton = if (uiState.manager != null) {
-            manager(uiState.manager)
+        leadingButton = if (moduleState.manager != null) {
+            manager(moduleState.manager)
         } else {
             null
         },
         trailingButton = {
             RemoveOrRestore(
                 module = module,
-                onClick = uiState.change,
+                onClick = moduleState.change,
                 enabled = suState.isSucceeded
             )
         }

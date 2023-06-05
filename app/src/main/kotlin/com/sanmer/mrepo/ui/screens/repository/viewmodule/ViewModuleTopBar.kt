@@ -37,7 +37,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.module.OnlineModule
@@ -47,24 +46,23 @@ import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.utils.LicenseContent
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.navigateBack
-import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
 fun ViewModuleTopBar(
+    online: OnlineModule,
     scrollBehavior: TopAppBarScrollBehavior,
-    navController: NavController,
-    viewModel: ModuleViewModel = hiltViewModel()
+    navController: NavController
 ) = CollapsedTopAppBar(
     title = {
         Text(
-            text = viewModel.online.name,
+            text = online.name,
             style = MaterialTheme.typography.titleLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
     },
     content = topBarContent(
-        module = viewModel.online
+        module = online
     ),
     navigationIcon = {
         IconButton(

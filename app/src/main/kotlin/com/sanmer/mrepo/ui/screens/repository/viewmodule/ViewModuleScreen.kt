@@ -29,7 +29,10 @@ fun ViewModuleScreen(
     navController: NavController,
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
+    val suState by viewModel.suState.collectAsStateWithLifecycle()
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
+    val localModuleInfo = viewModel.rememberLocalModuleInfo(suState = suState)
+
     val scrollBehavior = CollapsedTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { pages.size }
 
@@ -39,6 +42,7 @@ fun ViewModuleScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             ViewModuleTopBar(
+                online = viewModel.online,
                 scrollBehavior = scrollBehavior,
                 navController = navController
             )
@@ -53,10 +57,21 @@ fun ViewModuleScreen(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
-            ) {
-                when (it) {
-                    0 -> OverviewPage()
-                    1 -> VersionsPage(isRoot = userData.isRoot)
+            ) { pageIndex ->
+                when (pageIndex) {
+                    0 -> OverviewPage(
+                        online = viewModel.online,
+                        local = viewModel.local,
+                        installed = viewModel.installed,
+                        localModuleInfo = localModuleInfo
+                    )
+                    1 -> VersionsPage(
+                        versions = viewModel.versions,
+                        state = viewModel.state,
+                        isRoot = userData.isRoot,
+                        getRepoByUrl = { viewModel.getRepoByUrl(it) },
+                        downloader = viewModel::downloader
+                    )
                     2 -> AboutPage()
                 }
             }

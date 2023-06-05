@@ -20,14 +20,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.DarkMode
-import com.sanmer.mrepo.datastore.UserData
-import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.utils.expandedShape
 
 @Composable
 fun AppThemeItem(
-    userData: UserData,
+    themeColor: Int,
+    darkMode: DarkMode,
+    isDarkMode: Boolean,
     onThemeColorChange: (Int) -> Unit,
     onDarkModeChange: (DarkMode) -> Unit
 ) {
@@ -45,9 +45,9 @@ fun AppThemeItem(
         BottomSheet(
             state = bottomSheetState,
             onClose = { openBottomSheet = false },
-            themeColor = userData.themeColor,
-            darkMode = userData.darkMode,
-            isDarkMode = userData.isDarkMode(),
+            themeColor = themeColor,
+            darkMode = darkMode,
+            isDarkMode = isDarkMode,
             onThemeColorChange =onThemeColorChange,
             onDarkModeChange = onDarkModeChange
         )

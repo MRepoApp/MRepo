@@ -61,25 +61,25 @@ class RepositoryViewModel @Inject constructor(
     }
 
     @Stable
-    data class OnlineModuleState(
+    data class ModuleState(
         val installed: Boolean,
         val hasLicense: Boolean
     ) {
         val hasLabel get() = installed or hasLicense
     }
 
-    private fun createOnlineModuleState(module: OnlineModule): OnlineModuleState {
+    private fun createModuleState(module: OnlineModule): ModuleState {
         val installed = localRepository.local.any { it.id == module.id }
-        return OnlineModuleState(
+        return ModuleState(
             installed = installed,
             hasLicense = module.license.isNotBlank()
         )
     }
 
     @Composable
-    fun rememberOnlineModuleState(module: OnlineModule): OnlineModuleState {
+    fun rememberModuleState(module: OnlineModule): ModuleState {
         return remember(key1 = module, key2 = isRefreshing) {
-            createOnlineModuleState(module)
+            createModuleState(module)
         }
     }
 }

@@ -77,8 +77,8 @@ import com.sanmer.mrepo.viewmodel.RepositoriesViewModel
 
 @Composable
 fun RepositoriesScreen(
-    viewModel: RepositoriesViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    viewModel: RepositoriesViewModel = hiltViewModel()
 ) {
     val list by viewModel.list.collectAsStateWithLifecycle()
 
@@ -144,7 +144,10 @@ fun RepositoriesScreen(
 
             RepoList(
                 list = list,
-                state = listSate
+                state = listSate,
+                deleteRepo = viewModel::delete,
+                updateRepo = viewModel::update,
+                getRepoUpdate = viewModel::getUpdate
             )
 
             AnimatedVisibility(
@@ -164,7 +167,10 @@ fun RepositoriesScreen(
 @Composable
 private fun RepoList(
     list: List<Repo>,
-    state: LazyListState
+    state: LazyListState,
+    deleteRepo: (Repo) -> Unit,
+    updateRepo: (Repo) -> Unit,
+    getRepoUpdate: (Repo, (Throwable) -> Unit) -> Unit
 ) = LazyColumn(
     state = state,
     modifier = Modifier.fillMaxSize()
@@ -177,7 +183,12 @@ private fun RepoList(
         items = list,
         key = { it.url }
     ) { repo ->
-        RepositoryItem(repo = repo)
+        RepositoryItem(
+            repo = repo,
+            deleteRepo = deleteRepo,
+            updateRepo = updateRepo,
+            getRepoUpdate = getRepoUpdate,
+        )
     }
 }
 

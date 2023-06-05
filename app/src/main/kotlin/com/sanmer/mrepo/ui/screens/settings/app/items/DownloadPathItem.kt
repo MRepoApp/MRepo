@@ -28,30 +28,28 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.absoluteFile
-import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.utils.expansion.toFile
 import java.io.File
 
 @Composable
 fun DownloadPathItem(
-    userData: UserData,
-    onChange: (String) -> Unit
+    downloadPath: File,
+    onChange: (File) -> Unit
 ) {
-    val path = userData.downloadPath
     var edit by remember { mutableStateOf(false) }
     if (edit) {
         EditDialog(
-            path = path,
+            path = downloadPath,
             onClose = { edit = false },
-            onConfirm = { if (it != path) onChange(it.absolutePath) }
+            onConfirm = { if (it != downloadPath) onChange(it) }
         )
     }
 
     SettingNormalItem(
         iconRes = R.drawable.cube_scan_outline,
         text = stringResource(id = R.string.settings_download_path),
-        subText = path.absolutePath,
+        subText = downloadPath.absolutePath,
         onClick = { edit = true }
     )
 }

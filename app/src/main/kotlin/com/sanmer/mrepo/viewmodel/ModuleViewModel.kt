@@ -1,8 +1,13 @@
 package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,6 +15,7 @@ import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.State
+import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.json.VersionItem
 import com.sanmer.mrepo.model.json.versionDisplay
@@ -24,7 +30,9 @@ import com.sanmer.mrepo.utils.expansion.toDateTime
 import com.sanmer.mrepo.utils.expansion.totalSize
 import com.sanmer.mrepo.utils.expansion.update
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.log10
@@ -47,7 +55,6 @@ class ModuleViewModel @Inject constructor(
     var local by mutableStateOf(LocalModule())
         private set
     val installed get() = local.id != "unknown"
-    val modulePath get() = "${Const.MODULE_PATH}/${moduleId}"
 
     val userData get() = userDataRepository.userData
     val suState get() = suRepository.state
@@ -69,8 +76,6 @@ class ModuleViewModel @Inject constructor(
             Timber.e(it, "getModule")
         }
     }
-
-    suspend fun getRepoByUrl(url: String) = localRepository.getRepoByUrl(url)
 
     // TODO: TODO: Waiting for version 2.0 of util
     val state = State(initial = Event.LOADING)
@@ -131,33 +136,78 @@ class ModuleViewModel @Inject constructor(
         )
     }
 
-    fun getLastModified(): String? = try {
-        val moduleProp = suRepository.fs
-            .getFile("$modulePath/module.prop")
+    @Composable
+    fun getRepoByUrl(url: String): Repo? {
+        val repo: MutableState<Repo?> = remember { mutableStateOf(null) }
 
-        if (moduleProp.exists()) {
-            moduleProp.lastModified().toDateTime()
-        } else {
-            null
+        LaunchedEffect(url) {
+            repo.value = localRepository.getRepoByUrl(url)
         }
 
-    } catch (e: Exception) {
-        Timber.e(e, "getLastModified")
-        null
+        return repo.value
     }
 
-    fun getDirSize(): String? = try {
-        val modulePath = suRepository.fs.getFile(modulePath)
+    @Stable
+    data class LocalModuleInfo(
+        val modulePath: String,
+        val lastModified: String?,
+        val dirSize: String?
+    )
 
-        if (modulePath.exists()) {
-            modulePath.totalSize.formatFileSize()
-        } else {
+    private suspend fun createLocalModuleInfo(
+        module: LocalModule
+    ) = withContext(Dispatchers.Default) {
+        val modulePath = "${Const.MODULE_PATH}/${module.id}"
+
+        val lastModified: String? = try {
+            val moduleProp = suRepository.fs
+                .getFile("$modulePath/module.prop")
+
+            if (moduleProp.exists()) {
+                moduleProp.lastModified().toDateTime()
+            } else {
+                null
+            }
+
+        } catch (e: Exception) {
+            Timber.e(e, "getLastModified")
             null
         }
 
-    } catch (e: Exception) {
-        Timber.e(e, "getDirSize")
-        null
+
+        val dirSize: String? = try {
+            val path = suRepository.fs.getFile(modulePath)
+
+            if (path.exists()) {
+                path.totalSize.formatFileSize()
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "getDirSize")
+            null
+        }
+
+        return@withContext LocalModuleInfo(
+            modulePath = modulePath,
+            lastModified = lastModified,
+            dirSize = dirSize
+        )
+    }
+
+    @Composable
+    fun rememberLocalModuleInfo(
+        suState: Event
+    ): LocalModuleInfo? {
+        val info: MutableState<LocalModuleInfo?> = remember {
+            mutableStateOf(null)
+        }
+
+        LaunchedEffect(key1 = suState, key2 = local) {
+            info.value = createLocalModuleInfo(local)
+        }
+
+        return info.value
     }
 
     private fun Long.formatFileSize() = if (this < 0){

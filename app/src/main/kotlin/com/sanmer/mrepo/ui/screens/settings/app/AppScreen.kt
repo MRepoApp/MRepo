@@ -20,6 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.SettingSwitchItem
 import com.sanmer.mrepo.ui.screens.settings.app.items.AppThemeItem
@@ -34,6 +35,7 @@ fun AppScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     BackHandler { navController.navigateBack() }
@@ -55,20 +57,16 @@ fun AppScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             AppThemeItem(
-                userData = userData,
-                onThemeColorChange = {
-                    viewModel.setThemeColor(it)
-                },
-                onDarkModeChange = {
-                    viewModel.setDarkTheme(it)
-                }
+                themeColor = userData.themeColor,
+                darkMode = userData.darkMode,
+                isDarkMode = userData.isDarkMode(),
+                onThemeColorChange = viewModel::setThemeColor,
+                onDarkModeChange = viewModel::setDarkTheme
             )
 
             DownloadPathItem(
-                userData = userData,
-                onChange = {
-                    viewModel.setDownloadPath(it)
-                }
+                downloadPath = userData.downloadPath,
+                onChange = viewModel::setDownloadPath
             )
 
             SettingSwitchItem(
@@ -76,9 +74,7 @@ fun AppScreen(
                 text = stringResource(id = R.string.settings_delete_zip),
                 subText = stringResource(id = R.string.settings_delete_zip_desc),
                 checked = userData.deleteZipFile,
-                onChange = {
-                    viewModel.setDeleteZipFile(it)
-                }
+                onChange = viewModel::setDeleteZipFile
             )
 
             SettingSwitchItem(
@@ -86,9 +82,7 @@ fun AppScreen(
                 text = stringResource(id = R.string.settings_navigation_animation),
                 subText = stringResource(id = R.string.settings_navigation_animation_desc),
                 checked = userData.enableNavigationAnimation,
-                onChange = {
-                    viewModel.setEnableNavigationAnimation(it)
-                }
+                onChange = viewModel::setEnableNavigationAnimation
             )
         }
     }
