@@ -17,7 +17,12 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
     val userData get() = userDataRepository.userData
     val suState get() = suRepository.state
-    val apiVersion get() = suRepository.version
+
+    val apiVersion get() = try {
+        suRepository.version
+    } catch (e: Exception) {
+        "unknown"
+    }
 
     init {
         Timber.d("SettingsViewModel init")
