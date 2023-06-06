@@ -32,7 +32,7 @@ jobs:
 
     - name: Download JBR 17
       run: |
-        download_url="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-17.0.7-linux-x64-b966.2.tar.gz"
+        download_url="https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-17.0.7-linux-x64-b979.4.tar.gz"
         wget -O $RUNNER_TEMP/jbr.tar.gz $download_url
         
     - name: Set up JBR 17
