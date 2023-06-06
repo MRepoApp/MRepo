@@ -38,13 +38,11 @@ fun DownloadPathItem(
     onChange: (File) -> Unit
 ) {
     var edit by remember { mutableStateOf(false) }
-    if (edit) {
-        EditDialog(
-            path = downloadPath,
-            onClose = { edit = false },
-            onConfirm = { if (it != downloadPath) onChange(it) }
-        )
-    }
+    if (edit) EditDialog(
+        path = downloadPath,
+        onClose = { edit = false },
+        onConfirm = { if (it != downloadPath) onChange(it) }
+    )
 
     SettingNormalItem(
         iconRes = R.drawable.cube_scan_outline,

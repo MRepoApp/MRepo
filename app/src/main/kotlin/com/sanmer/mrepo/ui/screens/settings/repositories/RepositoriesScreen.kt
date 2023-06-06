@@ -101,17 +101,16 @@ fun RepositoriesScreen(
     }
 
     var add by remember { mutableStateOf(false) }
-    if (add) {
-        AddDialog(
-            onClose = { add = false }
-        ) {
+    if (add) AddDialog(
+        onClose = { add = false },
+        onAdd = {
             viewModel.insert(it) { repo, e ->
                 value = repo
                 failure = true
                 message = e.message
             }
         }
-    }
+    )
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

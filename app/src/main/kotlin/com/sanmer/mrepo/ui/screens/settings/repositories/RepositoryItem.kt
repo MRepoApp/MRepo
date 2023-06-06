@@ -80,26 +80,22 @@ fun RepositoryItem(
     var expanded by remember { mutableStateOf(false) }
 
     var delete by remember { mutableStateOf(false) }
-    if (delete) {
-        DeleteDialog(
-            repo = repo,
-            onClose = { delete = false },
-            onConfirm = { deleteRepo(repo) }
-        )
-    }
+    if (delete) DeleteDialog(
+        repo = repo,
+        onClose = { delete = false },
+        onConfirm = { deleteRepo(repo) }
+    )
 
     var failure by remember { mutableStateOf(false) }
     var message: String? by remember { mutableStateOf(null) }
-    if (failure) {
-        FailureDialog(
-            repo = repo,
-            message = message,
-            onClose = {
-                failure = false
-                message = null
-            }
-        )
-    }
+    if (failure) FailureDialog(
+        repo = repo,
+        message = message,
+        onClose = {
+            failure = false
+            message = null
+        }
+    )
 
     val onUpdate: () -> Unit = {
         getRepoUpdate(repo) {
