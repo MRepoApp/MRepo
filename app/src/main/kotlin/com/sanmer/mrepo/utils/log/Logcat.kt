@@ -23,6 +23,12 @@ object Logcat {
 
     private val logFile by lazy { context.logDir.resolve(fileName) }
 
+    init {
+        context.logDir.apply {
+            if (!exists()) mkdirs()
+        }
+    }
+
     fun getCurrent(): List<String> = try {
         val command = arrayOf(
             "logcat",
