@@ -13,12 +13,10 @@ import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
-import com.sanmer.mrepo.utils.expansion.logDir
-import com.sanmer.mrepo.utils.expansion.now
+import com.sanmer.mrepo.utils.expansion.createLog
 import com.sanmer.mrepo.utils.expansion.shareFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -85,9 +83,7 @@ class InstallViewModel @Inject constructor(
 
     fun sendLogFile(context: Context) {
         val text = console.joinToString(separator = "\n")
-        val date = LocalDateTime.now()
-        val logFile = context.logDir
-            .resolve("module_${date}.log")
+        val logFile = context.createLog("module")
             .apply {
                 writeText(text)
             }

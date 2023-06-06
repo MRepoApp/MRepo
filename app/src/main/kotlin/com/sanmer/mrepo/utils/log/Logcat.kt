@@ -2,32 +2,16 @@ package com.sanmer.mrepo.utils.log
 
 import android.content.Context
 import com.sanmer.mrepo.App
-import com.sanmer.mrepo.utils.expansion.logDir
-import com.sanmer.mrepo.utils.expansion.now
+import com.sanmer.mrepo.utils.expansion.getLogPath
 import com.sanmer.mrepo.utils.expansion.shareFile
 import com.sanmer.mrepo.utils.log.LogText.Companion.toLogPriority
-import kotlinx.datetime.LocalDateTime
 
 object Logcat {
+    const val FILE_NAME = "mrepo"
+
     private val context by lazy { App.context }
     private val uid by lazy { context.applicationInfo.uid }
-    private val date by lazy { LocalDateTime.now() }
-
-    private val fileName by lazy {
-        context.logDir.listFiles()
-            .orEmpty()
-            .find {
-                it.isFile && it.name.startsWith("app")
-            }?.name ?: "app_${date}.log"
-    }
-
-    private val logFile by lazy { context.logDir.resolve(fileName) }
-
-    init {
-        context.logDir.apply {
-            if (!exists()) mkdirs()
-        }
-    }
+    private val logFile by lazy { context.getLogPath(FILE_NAME) }
 
     fun getCurrent(): List<String> = try {
         val command = arrayOf(
