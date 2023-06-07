@@ -74,4 +74,25 @@
     <string name="unknown_error">Erro desconhecido</string>
     <string name="install_activity_label">Instalador de Módulos</string>
     <string name="settings_root_access">Acesso Enraizado: %1$s</string>
+    <string name="view_module_page_about">Sobre</string>
+    <string name="view_module_dir_size">Tamanho do Diretório</string>
+    <string name="settings_app_desc">Configurações do aplicativo MRepo</string>
+    <string name="page_repository">Repositório</string>
+    <string name="module_label_installed">Instalado</string>
+    <string name="view_module_page_overview">Visão geral</string>
+    <string name="settings_delete_zip">Excluir arquivo Zip</string>
+    <string name="settings_delete_zip_desc">Exclui o arquivo zip após a instalação ser bem-sucedida, Observe que este é o melhor esforço e não funcionará se o aplicativo não tiver permissão para excluir</string>
+    <string name="settings_navigation_animation">Animação de Navegação</string>
+    <string name="settings_navigation_animation_desc">Suporte de animação de navegação fornecido por Accompanist (experimental), observe que isso tem problemas de estabilidade, habilite-o com cuidado</string>
+    <string name="view_module_description">Descrição</string>
+    <string name="view_module_local">Local</string>
+    <string name="view_module_version">Versão</string>
+    <string name="view_module_last_modified">Última Modificação</string>
+    <string name="view_module_module_directory">Diretório dos Módulos</string>
+    <string name="view_module_version_dialog_desc">Você deseja instalar ou baixar esta versão desse módulo\?</string>
+    <string name="settings_about">Sobre</string>
+    <string name="repo_notification_title">Revisão do conteúdo dos Módulos</string>
+    <string name="about_app_version">Versão %1$s (%2$s)</string>
+    <string name="about_desc1">Disponibiliza repositórios de módulos e gerencia módulos do Magisk e KernelSU.</string>
+    <string name="about_desc2">Feito com ❤️ por %1$s</string>
 </resources>
