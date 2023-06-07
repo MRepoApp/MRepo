@@ -6,7 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -14,8 +15,8 @@ import com.sanmer.mrepo.ui.component.ScrollbarState
 
 @Composable
 fun LazyListState.isScrollingUp(): Boolean {
-    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
-    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
+    var previousIndex by remember(this) { mutableIntStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) { mutableIntStateOf(firstVisibleItemScrollOffset) }
     return remember(this) {
         derivedStateOf {
             if (previousIndex != firstVisibleItemIndex) {
@@ -70,7 +71,7 @@ private inline fun rememberFastScroller(
     itemsAvailable: Int,
     crossinline scroll: suspend (index: Int) -> Unit,
 ): (Float) -> Unit {
-    var percentage by remember { mutableStateOf(Float.NaN) }
+    var percentage by remember { mutableFloatStateOf(Float.NaN) }
     val itemCount by rememberUpdatedState(itemsAvailable)
 
     LaunchedEffect(percentage) {
