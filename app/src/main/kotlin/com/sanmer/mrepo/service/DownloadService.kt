@@ -4,9 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import android.os.Process
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.app.ServiceCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
@@ -22,7 +29,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.isActive
@@ -44,7 +50,7 @@ class DownloadService : LifecycleService() {
             .setOngoing(true)
             .setGroup(GROUP_KEY)
 
-        progress.sample(500)
+        progressFlow.sample(500)
             .flowOn(Dispatchers.IO)
             .onEach { (value, task) ->
                 lastTime = System.currentTimeMillis()
@@ -54,7 +60,7 @@ class DownloadService : LifecycleService() {
                     return@onEach
                 }
 
-                NotificationUtils.notify(task!!.id,
+                NotificationUtils.notify(task.id,
                     notification.setContentTitle(task.name)
                         .setProgress(100, p, false)
                         .build()
@@ -229,35 +235,52 @@ class DownloadService : LifecycleService() {
             override fun hashCode(): Int {
                 return url.hashCode()
             }
+
+            companion object {
+                fun empty() = Task(
+                    name = "",
+                    path = "",
+                    url = "",
+                    install = false
+                )
+            }
         }
 
-        private val progress = MutableStateFlow<Pair<Float, Task?>>(0f to null)
+        private val progressFlow = MutableStateFlow(0f to Task.empty())
         private fun updateProgress(progress: Float, item: Task) {
-            this.progress.value = progress to item
+            progressFlow.value = progress to item
         }
-        fun getProgress(get: (Task) -> Boolean) =
-            progress.map { (value, task) ->
-                if (task != null && get(task)) {
-                    value
-                } else {
-                    0f
+
+        @Composable
+        fun rememberProgress(filter: (Task) -> Boolean): Float {
+            var value by remember { mutableFloatStateOf(0f) }
+            val progress by progressFlow.collectAsStateWithLifecycle()
+
+            LaunchedEffect(progress) {
+                if (filter(progress.second)) {
+                    value = progress.first.let {
+                        return@let if (it == 1f) {
+                            0f
+                        } else {
+                            it
+                        }
+                    }
                 }
             }
+
+            return value
+        }
 
         fun start(
             context: Context,
             name: String, path: String,
             url: String, install: Boolean
         ) {
-            val task = Task(
-                name = name,
-                path = path,
-                url = url,
-                install = install
-            )
+            val task = Task(name = name, path = path, url = url, install = install)
             val intent = Intent(context, DownloadService::class.java).apply {
                 putExtra(DOWNLOAD_TASK, task)
             }
+
             context.startService(intent)
         }
 

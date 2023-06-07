@@ -70,6 +70,7 @@ fun ViewModuleScreen(
                         state = viewModel.state,
                         isRoot = userData.isRoot,
                         getRepoByUrl = { viewModel.getRepoByUrl(it) },
+                        getProgress = { viewModel.rememberProgress(it) },
                         downloader = viewModel::downloader
                     )
                     2 -> AboutPage()

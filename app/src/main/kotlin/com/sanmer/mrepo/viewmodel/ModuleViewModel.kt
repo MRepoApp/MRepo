@@ -137,6 +137,10 @@ class ModuleViewModel @Inject constructor(
     }
 
     @Composable
+    fun rememberProgress(item: VersionItem) =
+        DownloadService.rememberProgress { it.url == item.zipUrl }
+
+    @Composable
     fun getRepoByUrl(url: String): Repo? {
         val repo: MutableState<Repo?> = remember { mutableStateOf(null) }
 
