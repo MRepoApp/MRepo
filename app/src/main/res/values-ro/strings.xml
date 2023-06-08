@@ -37,7 +37,7 @@
     <string name="install_flashing">Instalare</string>
     <string name="install_done">Finalizat</string>
     <string name="install_failure">Eșuat</string>
-    <string name="install_reboot">Repornire</string>
+    <string name="install_reboot">Repornește</string>
     <string name="license_title">Vezi licența</string>
     <string name="license_osi_approved">Aprobat OSI</string>
     <string name="license_fsf_libre">FSF Gratuit</string>
@@ -92,4 +92,7 @@
     <string name="about_app_version">Versiunea %1$s (%2$s)</string>
     <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
     <string name="about_desc2">Făcut cu ❤️ de %1$s</string>
+    <string name="view_module_dir_size">Dimensiunea dosarului</string>
+    <string name="settings_navigation_animation">Animație de navigare</string>
+    <string name="settings_navigation_animation_desc">Suport pentru animația de navigare oferit de Accompanist (experimental), reține că acesta are probleme de stabilitate, activează cu precauție</string>
 </resources>
