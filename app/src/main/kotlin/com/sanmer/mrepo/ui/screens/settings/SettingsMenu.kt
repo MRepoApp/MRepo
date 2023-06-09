@@ -1,7 +1,6 @@
 package com.sanmer.mrepo.ui.screens.settings
 
 import android.content.Context
-import android.os.Build
 import android.os.PowerManager
 import androidx.annotation.StringRes
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.utils.SvcPower
 
@@ -70,9 +70,7 @@ fun SettingsMenu(
     shape = RoundedCornerShape(15.dp)
 ) {
     val powerManager = LocalContext.current.getSystemService(Context.POWER_SERVICE) as PowerManager?
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-        && powerManager?.isRebootingUserspaceSupported == true
-    ) {
+    if (OsUtils.atLeastR && powerManager?.isRebootingUserspaceSupported == true) {
         options.add(1, Menu.Userspace)
     }
 

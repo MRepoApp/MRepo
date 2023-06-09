@@ -1,12 +1,14 @@
 package com.sanmer.mrepo.ui.theme
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.ui.theme.color.BlueDarkColorScheme
 import com.sanmer.mrepo.ui.theme.color.BlueLightColorScheme
 import com.sanmer.mrepo.ui.theme.color.CyanDarkColorScheme
@@ -23,7 +25,7 @@ sealed class Colors(
     val lightColorScheme: ColorScheme,
     val darkColorScheme: ColorScheme
 ) {
-    @SuppressLint("NewApi")
+    @RequiresApi(Build.VERSION_CODES.S)
     class Dynamic(context: Context) : Colors(
         id = -1,
         lightColorScheme = dynamicLightColorScheme(context),
@@ -76,7 +78,7 @@ sealed class Colors(
         fun getColor(id: Int): Colors {
             val context = LocalContext.current
 
-            return if (id == Dynamic.id) {
+            return if (OsUtils.atLeastS && id == Dynamic.id) {
                 Dynamic(context)
             } else {
                 mColors[id]

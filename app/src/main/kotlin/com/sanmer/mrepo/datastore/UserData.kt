@@ -3,6 +3,7 @@ package com.sanmer.mrepo.datastore
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.ui.theme.Colors
 import com.sanmer.mrepo.utils.expansion.toFile
 import java.io.File
@@ -22,7 +23,7 @@ data class UserData(
         fun default() = UserData(
             workingMode = WorkingMode.FIRST_SETUP,
             darkMode = DarkMode.FOLLOW_SYSTEM,
-            themeColor = if (Const.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
+            themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
             downloadPath = Const.DIR_PUBLIC_DOWNLOADS.resolve("MRepo"),
             deleteZipFile = true,
             enableNavigationAnimation = false

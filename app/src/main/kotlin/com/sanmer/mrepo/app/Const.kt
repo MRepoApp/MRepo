@@ -1,15 +1,11 @@
 package com.sanmer.mrepo.app
 
-import android.os.Build
 import android.os.Environment
 import java.io.File
 
 object Const {
     // MODULES
     const val MODULE_PATH = "/data/adb/modules"
-
-    // DEVICE
-    val atLeastS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
     // DIR
     val DIR_PUBLIC_DOWNLOADS: File = Environment

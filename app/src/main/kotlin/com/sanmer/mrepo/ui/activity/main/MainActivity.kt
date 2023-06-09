@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.activity.main
 
-import android.os.Build
 import android.os.Bundle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.NotificationUtils
+import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.activity.base.BaseActivity
 import com.sanmer.mrepo.ui.screens.settings.workingmode.WorkingModeItem
@@ -55,7 +55,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setSetup() = setActivityContent {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (OsUtils.atLeastT) {
             NotificationUtils.PermissionState()
         }
 
@@ -93,7 +93,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setMain() = setActivityContent {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (OsUtils.atLeastT) {
             NotificationUtils.PermissionState()
         }
 
