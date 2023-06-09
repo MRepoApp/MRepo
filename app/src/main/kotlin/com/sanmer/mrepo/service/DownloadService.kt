@@ -16,7 +16,6 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.newOutputStream
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
@@ -44,7 +43,7 @@ class DownloadService : LifecycleService() {
 
     init {
         val notification = NotificationUtils
-            .buildNotification(context, Const.CHANNEL_ID_DOWNLOAD)
+            .buildNotification(context, NotificationUtils.CHANNEL_ID_DOWNLOAD)
             .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
             .setProgress(0, 0 , false)
             .setOngoing(true)
@@ -189,7 +188,7 @@ class DownloadService : LifecycleService() {
 
     private fun setForeground() {
         startForeground(Process.myPid(),
-            NotificationUtils.buildNotification(this, Const.CHANNEL_ID_DOWNLOAD)
+            NotificationUtils.buildNotification(this, NotificationUtils.CHANNEL_ID_DOWNLOAD)
                 .setSilent(true)
                 .setContentIntent(NotificationUtils.getActivity(MainActivity::class))
                 .setGroup(GROUP_KEY)
@@ -204,7 +203,7 @@ class DownloadService : LifecycleService() {
         message: String,
         silent: Boolean = false
     ) = NotificationUtils.notify(this, id) {
-        setChannelId(Const.CHANNEL_ID_DOWNLOAD)
+        setChannelId(NotificationUtils.CHANNEL_ID_DOWNLOAD)
         setContentTitle(name)
         setContentText(message)
         setSilent(silent)

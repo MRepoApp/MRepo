@@ -20,16 +20,17 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.sanmer.mrepo.App
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Const
 import kotlin.reflect.KClass
 
 object NotificationUtils {
+    const val CHANNEL_ID_DOWNLOAD = "download_service"
+
     val context by lazy { App.context }
     private val notificationManager by lazy { NotificationManagerCompat.from(context) }
 
     init {
         val channels = listOf(
-            NotificationChannel(Const.CHANNEL_ID_DOWNLOAD,
+            NotificationChannel(CHANNEL_ID_DOWNLOAD,
                 context.getString(R.string.notification_name_download),
                 NotificationManager.IMPORTANCE_HIGH
             )

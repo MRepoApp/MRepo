@@ -13,16 +13,12 @@ object Const {
             Environment.DIRECTORY_DOWNLOADS
         )
 
-    // NOTIFICATION
-    const val CHANNEL_ID_DOWNLOAD = "download_service"
-
     // URL
     const val TRANSLATE_URL = "https://weblate.sanmer.dev/engage/mrepo"
     const val GITHUB_URL = "https://github.com/ya0211/MRepo"
     const val TELEGRAM_URL = "https://t.me/mrepo_news"
     const val MY_REPO_URL = "https://ya0211.github.io/magisk-modules-repo/"
     const val SPDX_URL = "https://spdx.org/licenses/%s.json"
-    const val UPDATE_URL = "https://ya0211.github.io/mrepo-files/%s.json"
 
     // CONTEXT
     const val KSU_CONTEXT = "u:r:su:s0"
