@@ -11,7 +11,7 @@ data class OnlineModule(
     val versionCode: Int = -1,
     val author: String = id,
     val description: String = id,
-    val license: String = id,
+    val license: String = "",
     val states: States = States(),
     @Json(ignore = true) val repoUrls: MutableList<String> = mutableListOf()
 ) {
