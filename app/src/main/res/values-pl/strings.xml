@@ -25,7 +25,7 @@
     <string name="license_title">Zobacz licencję</string>
     <string name="license_osi_approved">Zatwierdzone przez OSI</string>
     <string name="license_fsf_libre">FSF Libre</string>
-    <string name="page_repository">Repozytoria</string>
+    <string name="page_repository">Repozytorium</string>
     <string name="page_modules">Moduły</string>
     <string name="page_settings">Ustawienia</string>
     <string name="module_label_installed">Zainstalowane</string>
