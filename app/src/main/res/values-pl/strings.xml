@@ -11,7 +11,7 @@
     <string name="settings_menu_reboot_recovery">Restartuj do Recovery</string>
     <string name="settings_delete_zip">Usuwaj plik zip</string>
     <string name="settings_delete_zip_desc">Kasuje plik zip po pomyślnej instalacji, jeżeli jest to możliwe</string>
-    <string name="app_theme_palette">Akcenty motywu</string>
+    <string name="app_theme_palette">Paleta barw</string>
     <string name="setup_root_title">Root</string>
     <string name="setup_non_root_title">Bez roota</string>
     <string name="setup_non_root_desc1">Nie wymaga dostępu do roota</string>
@@ -61,7 +61,7 @@
     <string name="settings_menu_reboot_download">Restartuj do trybu Download</string>
     <string name="settings_menu_reboot_edl">Restartuj do trybu EDL</string>
     <string name="settings_app_theme">Motyw aplikacji</string>
-    <string name="settings_app_theme_desc">Zmień akcenty motywu i kolor tła</string>
+    <string name="settings_app_theme_desc">Zmień paletę barw i kolor tła motywu</string>
     <string name="settings_download_path">Ścieżka pobierania</string>
     <string name="settings_navigation_animation">Animacje nawigacji</string>
     <string name="settings_navigation_animation_desc">Obsługa animacji nawigacji zapewniana przez Accompanist (eksperymentalnie). Pamiętaj, że funkcja ta ma problemy ze stabilnością</string>
@@ -80,7 +80,7 @@
     <string name="repo_add_dialog_add">Dodaj</string>
     <string name="repo_update_dialog_failure">Aktualizacja nie powiodła się: %1$s</string>
     <string name="repo_notification_title">Przegląd zawartości modułów</string>
-    <string name="repo_notification_desc">Odpowiedzialny jest za to właściciel repozytorium. W sprawach związanych z repozytorium prosimy o kontakt z jego administratorem.</string>
+    <string name="repo_notification_desc">Odpowiada za to właściciel repozytorium. W razie problemów z repozytorium, skontaktuj się z jego właścicielem.</string>
     <string name="about_app_version">Wersja %1$s (%2$s)</string>
     <string name="about_desc1">Zarządza repozytoriami, modułami Magisk i KernelSU.</string>
     <string name="about_desc2">Stworzone z ❤️ przez %1$s</string>
