@@ -1,12 +1,10 @@
 package com.sanmer.mrepo.database.entity
 
-import androidx.compose.runtime.Stable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Stable
 @Entity(tableName = "repo")
 data class Repo(
     @PrimaryKey val url: String,

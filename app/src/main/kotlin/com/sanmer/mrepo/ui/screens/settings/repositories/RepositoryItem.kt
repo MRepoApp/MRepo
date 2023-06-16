@@ -78,7 +78,6 @@ fun RepositoryItem(
     getRepoUpdate: (Repo, (Throwable) -> Unit) -> Unit
 ) {
     val context = LocalContext.current
-    var isEnable by remember { mutableStateOf(repo.enable) }
 
     var delete by remember { mutableStateOf(false) }
     if (delete) DeleteDialog(
@@ -115,11 +114,7 @@ fun RepositoryItem(
         surface = {
             RepoItem(
                 repo = repo,
-                isEnable = isEnable,
-                onChange = {
-                    isEnable = it
-                    updateRepo(repo.copy(enable = it))
-                },
+                onChange = { updateRepo(repo.copy(enable = it)) },
                 onLongClick = { expanded = true },
                 onIconClick = { expanded = true }
             )
@@ -140,7 +135,6 @@ fun RepositoryItem(
 @Composable
 private fun RepoItem(
     repo: Repo,
-    isEnable: Boolean,
     onChange: (Boolean) -> Unit,
     onLongClick: () -> Unit,
     onIconClick: () -> Unit
@@ -148,7 +142,7 @@ private fun RepoItem(
     modifier = Modifier
         .clip(RoundedCornerShape(10.dp))
         .combinedClickable(
-            onClick = { onChange(!isEnable) },
+            onClick = { onChange(!repo.enable) },
             onLongClick = onLongClick,
             role = Role.Checkbox,
             enabled = repo.isCompatible()
@@ -158,7 +152,7 @@ private fun RepoItem(
     verticalAlignment = Alignment.CenterVertically
 ) {
     Checkbox(
-        checked = isEnable,
+        checked = repo.enable,
         onCheckedChange = null
     )
 
