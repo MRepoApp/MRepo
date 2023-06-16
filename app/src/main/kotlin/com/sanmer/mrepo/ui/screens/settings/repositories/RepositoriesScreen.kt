@@ -41,7 +41,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -233,7 +232,7 @@ private fun AddDialog(
     onClose: () -> Unit,
     onAdd: (String) -> Unit
 ) {
-    var url by rememberSaveable { mutableStateOf("") }
+    var url by remember { mutableStateOf("") }
 
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -250,20 +249,18 @@ private fun AddDialog(
         title = { Text(text = stringResource(id = R.string.repo_add_dialog_title)) },
         text = {
             OutlinedTextField(
-                modifier = Modifier
-                    .focusRequester(focusRequester),
+                modifier = Modifier.focusRequester(focusRequester),
                 textStyle = MaterialTheme.typography.bodyLarge,
                 value = url,
                 onValueChange = { url = it },
                 placeholder = { Text(text = "https://your-repo.com/") },
-                singleLine = false,
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions {
                     defaultKeyboardAction(ImeAction.Done)
-                    focusManager.clearFocus()
                 },
                 shape = RoundedCornerShape(15.dp)
             )

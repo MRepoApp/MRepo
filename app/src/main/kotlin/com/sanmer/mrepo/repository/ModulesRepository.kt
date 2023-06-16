@@ -2,6 +2,7 @@ package com.sanmer.mrepo.repository
 
 import com.sanmer.mrepo.api.online.ModulesRepoApi
 import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.database.entity.RepoMetadata
 import com.sanmer.mrepo.database.entity.toEntity
 import com.sanmer.mrepo.di.ApplicationScope
 import com.sanmer.mrepo.utils.expansion.runRequest
@@ -47,16 +48,27 @@ class ModulesRepository @Inject constructor(
                 runRequest {
                     val api = ModulesRepoApi.build(repo.url)
                     return@runRequest api.getModules().execute()
-                }.onSuccess { data ->
-                    localRepository.updateRepo(
-                        repo.copy(
-                            name = data.name,
-                            size = data.modules.size,
-                            timestamp = data.timestamp
-                        )
+                }.onSuccess { modulesJson ->
+                    val new = repo.copy(
+                        name = modulesJson.name,
+                        size = modulesJson.modules.size,
+                        timestamp = modulesJson.timestamp,
+                        version = modulesJson.metadata.version,
+                        versionCode = modulesJson.metadata.versionCode
                     )
 
-                    val list = data.modules.map { it.toEntity(repo.url) }
+                    if (!new.isCompatible()) {
+                        Timber.w("getRepoAll: incompatible repository(${repo.url}), " +
+                                "required version >= ${RepoMetadata.current.versionCode}")
+
+                        localRepository.updateRepo(new.copy(enable = false))
+                        return@onSuccess
+                    } else {
+                        localRepository.updateRepo(new)
+                    }
+
+                    val list = modulesJson.modules.map { it.toEntity(repo.url) }
+                    localRepository.deleteOnlineByUrl(repo.url)
                     localRepository.insertOnline(list)
                 }.onFailure {
                     Timber.e(it, "getRepoAll: ${repo.url}")
@@ -70,12 +82,20 @@ class ModulesRepository @Inject constructor(
                 val api = ModulesRepoApi.build(repo.url)
                 api.getModules().execute()
             }
-        ) {
-            repo.copy(
-                name = it.name,
-                size = it.modules.size,
-                timestamp = it.timestamp
+        ) { modulesJson ->
+            val new = repo.copy(
+                name = modulesJson.name,
+                size = modulesJson.modules.size,
+                timestamp = modulesJson.timestamp,
+                version = modulesJson.metadata.version,
+                versionCode = modulesJson.metadata.versionCode
             )
+
+            return@runRequest if (new.isCompatible()) {
+                new
+            } else {
+                new.copy(enable = false)
+            }
         }
     }
 

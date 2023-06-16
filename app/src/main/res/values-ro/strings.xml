@@ -57,7 +57,7 @@
     <string name="settings_repo_desc">Gestionează depozitele de module Magisk</string>
     <string name="app_theme_dark_theme">Tema întunecată</string>
     <string name="app_theme_dark_theme_dark">Întunecată</string>
-    <string name="repo_metadata">%1$d module</string>
+    <string name="repo_modules">%1$d module</string>
     <string name="repo_options_delete">Șterge</string>
     <string name="repo_delete_dialog_desc1">Sigur ștergi %1$s\?</string>
     <string name="repo_delete_dialog_desc2">Sfat: Toate modulele instalate vor rămâne pe dispozitivul tău.</string>

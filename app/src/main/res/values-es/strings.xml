@@ -56,7 +56,7 @@
     <string name="app_theme_dark_theme_auto">Automático</string>
     <string name="app_theme_dark_theme_light">Claro</string>
     <string name="app_theme_dark_theme_dark">Oscuro</string>
-    <string name="repo_metadata">%1$d módulos</string>
+    <string name="repo_modules">%1$d módulos</string>
     <string name="repo_last_update">Última actualización: %1$s</string>
     <string name="repo_options_update">Actualización</string>
     <string name="repo_options_share">Compartir</string>

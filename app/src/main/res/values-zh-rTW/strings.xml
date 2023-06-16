@@ -100,7 +100,7 @@
     <string name="app_theme_dark_theme_light">淺色</string>
     <string name="app_theme_dark_theme_dark">深色</string>
     <!-- Repo -->
-    <string name="repo_metadata">%1$d 個模組</string>
+    <string name="repo_modules">%1$d 個模組</string>
     <string name="repo_last_update">上次更新：%1$s</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_share">分享</string>

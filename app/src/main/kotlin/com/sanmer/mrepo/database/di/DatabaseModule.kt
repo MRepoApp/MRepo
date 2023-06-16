@@ -46,7 +46,10 @@ object DatabaseModule {
 
         return Room.databaseBuilder(context,
             RepoDatabase::class.java, "repo")
-            .addMigrations(RepoDatabase.MIGRATION_1_2)
+            .addMigrations(
+                RepoDatabase.MIGRATION_1_2,
+                RepoDatabase.MIGRATION_2_3
+            )
             .build()
     }
 

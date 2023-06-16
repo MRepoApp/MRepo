@@ -91,7 +91,7 @@ class LocalRepository @Inject constructor(
     }
 
     fun getOnlineAllAsFlow() = repoDao.getRepoWithModuleAsFlow().map { list ->
-        list.filter { it.repo.enable }
+        list.filter { it.repo.enable && it.repo.isCompatible() }
             .map { it.modules }
             .merge()
             .toModuleList()

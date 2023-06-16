@@ -52,7 +52,7 @@
     <string name="app_theme_dark_theme_auto">Automático</string>
     <string name="app_theme_dark_theme_light">Claro</string>
     <string name="app_theme_dark_theme_dark">Escuro</string>
-    <string name="repo_metadata">Módulos de %1$d</string>
+    <string name="repo_modules">Módulos de %1$d</string>
     <string name="repo_last_update">Última atualização: %1$s</string>
     <string name="repo_options_update">Atualizar</string>
     <string name="repo_options_share">Compartilhar</string>

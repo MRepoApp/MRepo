@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.database.entity.RepoMetadata
 import com.sanmer.mrepo.ui.component.Checkbox
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.utils.expansion.shareText
@@ -77,7 +78,7 @@ fun RepositoryItem(
     getRepoUpdate: (Repo, (Throwable) -> Unit) -> Unit
 ) {
     val context = LocalContext.current
-    var expanded by remember { mutableStateOf(false) }
+    var isEnable by remember { mutableStateOf(repo.enable) }
 
     var delete by remember { mutableStateOf(false) }
     if (delete) DeleteDialog(
@@ -104,6 +105,7 @@ fun RepositoryItem(
         }
     }
 
+    var expanded by remember { mutableStateOf(false) }
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = { expanded = false },
@@ -113,7 +115,11 @@ fun RepositoryItem(
         surface = {
             RepoItem(
                 repo = repo,
-                onChange = { updateRepo(repo.copy(enable = it)) },
+                isEnable = isEnable,
+                onChange = {
+                    isEnable = it
+                    updateRepo(repo.copy(enable = it))
+                },
                 onLongClick = { expanded = true },
                 onIconClick = { expanded = true }
             )
@@ -134,6 +140,7 @@ fun RepositoryItem(
 @Composable
 private fun RepoItem(
     repo: Repo,
+    isEnable: Boolean,
     onChange: (Boolean) -> Unit,
     onLongClick: () -> Unit,
     onIconClick: () -> Unit
@@ -141,16 +148,17 @@ private fun RepoItem(
     modifier = Modifier
         .clip(RoundedCornerShape(10.dp))
         .combinedClickable(
-            onClick = { onChange(!repo.enable) },
+            onClick = { onChange(!isEnable) },
             onLongClick = onLongClick,
-            role = Role.Checkbox
+            role = Role.Checkbox,
+            enabled = repo.isCompatible()
         )
         .padding(all = 16.dp)
         .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
 ) {
     Checkbox(
-        checked = repo.enable,
+        checked = isEnable,
         onCheckedChange = null
     )
 
@@ -164,16 +172,41 @@ private fun RepoItem(
             text = repo.name,
             style = MaterialTheme.typography.titleSmall
         )
-        Text(
-            text = stringResource(id = R.string.repo_metadata, repo.size),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.outline
-        )
-        Text(
-            text = stringResource(id = R.string.repo_last_update, repo.timestamp.toDateTime()),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.outline
-        )
+
+        if (repo.isCompatible()) {
+            Text(
+                text = stringResource(id = R.string.repo_modules,
+                    repo.metadata.size),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+            Text(
+                text = stringResource(id = R.string.repo_util_version,
+                    repo.metadata.version, repo.metadata.versionCode),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.outline
+            )
+            Text(
+                text = stringResource(id = R.string.repo_last_update,
+                    repo.metadata.timestamp.toDateTime()),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.outline
+            )
+        } else {
+            Text(
+                text = stringResource(id = R.string.repo_util_version,
+                    repo.metadata.version, repo.metadata.versionCode),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.outline
+            )
+
+            Text(
+                text = stringResource(id = R.string.repo_incompatible_desc,
+                    RepoMetadata.current.versionCode),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
     }
 
     IconButton(
