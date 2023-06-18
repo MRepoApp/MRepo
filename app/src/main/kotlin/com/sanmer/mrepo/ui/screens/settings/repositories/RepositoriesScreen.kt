@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,20 +36,16 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -69,6 +64,7 @@ import com.sanmer.mrepo.ui.animate.slideOutBottomToTop
 import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.PageIndicator
+import com.sanmer.mrepo.ui.component.TextFieldDialog
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
@@ -234,68 +230,51 @@ private fun AddDialog(
 ) {
     var url by remember { mutableStateOf("") }
 
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(focusRequester) {
-        focusRequester.requestFocus()
-        keyboardController?.show()
+    val onDone: () -> Unit = {
+        if (!url.endsWith("/")) {
+            url += "/"
+        }
+        onAdd(url)
+        onClose()
     }
 
-    AlertDialog(
+    TextFieldDialog(
         shape = RoundedCornerShape(20.dp),
         onDismissRequest = onClose,
         title = { Text(text = stringResource(id = R.string.repo_add_dialog_title)) },
-        text = {
-            OutlinedTextField(
-                modifier = Modifier.focusRequester(focusRequester),
-                textStyle = MaterialTheme.typography.bodyLarge,
-                value = url,
-                onValueChange = { url = it },
-                placeholder = { Text(text = "https://your-repo.com/") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions {
-                    defaultKeyboardAction(ImeAction.Done)
-                },
-                shape = RoundedCornerShape(15.dp)
-            )
-        },
         confirmButton = {
             TextButton(
-                onClick = {
-                    if (url.isBlank()) return@TextButton
-                    if (!url.endsWith("/")) url += "/"
-
-                    onAdd(url)
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
-                    onClose()
-                }
+                onClick = onDone,
+                enabled = url.isNotBlank()
             ) {
-                Text(
-                    text = stringResource(id = R.string.repo_add_dialog_add)
-                )
+                Text(text = stringResource(id = R.string.repo_add_dialog_add))
             }
         },
         dismissButton = {
             TextButton(
-                onClick = {
-                    onClose()
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
-                }
+                onClick = onClose
             ) {
-                Text(
-                    text = stringResource(id = R.string.dialog_cancel)
-                )
+                Text(text = stringResource(id = R.string.dialog_cancel))
             }
         }
-    )
+    ) { focusRequester ->
+        OutlinedTextField(
+            modifier = Modifier.focusRequester(focusRequester),
+            textStyle = MaterialTheme.typography.bodyLarge,
+            value = url,
+            onValueChange = { url = it },
+            placeholder = { Text(text = "https://your-repo.com/") },
+            singleLine = false,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions {
+                if (url.isNotBlank()) onDone()
+            },
+            shape = RoundedCornerShape(15.dp)
+        )
+    }
 }
 
 @Composable

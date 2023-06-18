@@ -5,10 +5,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -19,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -29,6 +27,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.absoluteFile
 import com.sanmer.mrepo.ui.component.SettingNormalItem
+import com.sanmer.mrepo.ui.component.TextFieldDialog
 import com.sanmer.mrepo.utils.expansion.toFile
 import java.io.File
 
@@ -94,34 +93,10 @@ private fun EditDialog(
         }
     }
 
-    AlertDialog(
+    TextFieldDialog(
         shape = RoundedCornerShape(20.dp),
         onDismissRequest = onClose,
         title = { Text(text = stringResource(id = R.string.settings_download_path)) },
-        text = {
-            OutlinedTextField(
-                modifier = Modifier.wrapContentHeight(),
-                textStyle = MaterialTheme.typography.bodyLarge,
-                value = name,
-                onValueChange = {
-                    newPath = "$parent/${it.trim()}".toFile()
-                    name = it
-                },
-                shape = RoundedCornerShape(15.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                label = { Text(text = "$parent/") },
-                singleLine = true,
-                readOnly = hasDocumentTree,
-                interactionSource = if (hasDocumentTree) {
-                    interactionSource
-                } else {
-                    remember { MutableInteractionSource() }
-                }
-            )
-        },
         confirmButton = {
             TextButton(
                 onClick = {
@@ -138,6 +113,33 @@ private fun EditDialog(
             ) {
                 Text(text = stringResource(id = R.string.dialog_cancel))
             }
-        }
-    )
+        },
+        launchKeyboard = false
+    ) {
+        OutlinedTextField(
+            textStyle = MaterialTheme.typography.bodyLarge,
+            value = name,
+            onValueChange = {
+                newPath = "$parent/${it.trim()}".toFile()
+                name = it
+            },
+            shape = RoundedCornerShape(15.dp),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions {
+                onConfirm(newPath)
+                onClose()
+            },
+            label = { Text(text = "$parent/") },
+            singleLine = true,
+            readOnly = hasDocumentTree,
+            interactionSource = if (hasDocumentTree) {
+                interactionSource
+            } else {
+                remember { MutableInteractionSource() }
+            }
+        )
+    }
 }
