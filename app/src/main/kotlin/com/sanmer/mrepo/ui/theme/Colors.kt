@@ -27,7 +27,7 @@ sealed class Colors(
 ) {
     @RequiresApi(Build.VERSION_CODES.S)
     class Dynamic(context: Context) : Colors(
-        id = -1,
+        id = id,
         lightColorScheme = dynamicLightColorScheme(context),
         darkColorScheme = dynamicDarkColorScheme(context)
     ) {
@@ -62,12 +62,12 @@ sealed class Colors(
     )
 
     companion object {
-        private val mColors = listOf(
+        private val mColors get() = listOf(
             Sakura,
             DeepPurple,
             Blue,
             Cyan,
-            Orange,
+            Orange
         )
 
         fun getColorIds(): List<Int> {
