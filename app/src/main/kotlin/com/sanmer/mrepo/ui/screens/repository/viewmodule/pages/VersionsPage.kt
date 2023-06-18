@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.ui.screens.repository.viewmodule.pages
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -11,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -25,7 +27,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ButtonDefaults
@@ -38,7 +39,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -154,26 +154,16 @@ private fun VersionItem(
     getRepoByUrl: @Composable (String) -> Repo?,
     downloader: (Context, VersionItem, Boolean) -> Unit
 ) {
-    val hasChangelog = item.changelog.isNotBlank()
     val repo = getRepoByUrl(item.repoUrl)
 
     var show by remember { mutableStateOf(false) }
-    if (show && !hasChangelog) {
-        VersionItemDialog(
-            item = item,
-            isRoot = isRoot,
-            onClose = { show = false },
-            downloader = downloader
-        )
-    }
-    if (show && hasChangelog) {
-        VersionItemBottomSheet(
-            item = item,
-            isRoot = isRoot,
-            onClose = { show = false },
-            downloader = downloader
-        )
-    }
+    if (show) VersionItemBottomSheet(
+        item = item,
+        isRoot = isRoot,
+        hasChangelog = item.changelog.isNotBlank(),
+        onClose = { show = false },
+        downloader = downloader
+    )
 
     Row(
         modifier = Modifier
@@ -209,78 +199,10 @@ private fun VersionItem(
 }
 
 @Composable
-private fun VersionItemDialog(
-    item: VersionItem,
-    isRoot: Boolean,
-    downloader: (Context, VersionItem, Boolean) -> Unit,
-    onClose: () -> Unit
-) = AlertDialog(
-    onDismissRequest = onClose
-) {
-    val context = LocalContext.current
-
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = AlertDialogDefaults.containerColor,
-        tonalElevation = AlertDialogDefaults.TonalElevation
-    ) {
-        Column(
-            modifier = Modifier.padding(all = 24.dp)
-        ) {
-            Text(
-                modifier = Modifier.padding(bottom = 16.dp),
-                text = item.versionDisplay,
-                color = AlertDialogDefaults.titleContentColor,
-                style = MaterialTheme.typography.headlineSmall
-            )
-
-            Text(
-                modifier = Modifier.padding(bottom = 24.dp),
-                text = stringResource(id = R.string.view_module_version_dialog_desc),
-                color = AlertDialogDefaults.textContentColor,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TextButton(
-                    onClick = onClose
-                ) {
-                    Text(text = stringResource(id = R.string.dialog_cancel))
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                TextButton(
-                    onClick = {
-                        downloader(context, item, false)
-                        onClose()
-                    }
-                ) {
-                    Text(text = stringResource(id = R.string.module_download))
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                TextButton(
-                    onClick = {
-                        downloader(context, item, true)
-                        onClose()
-                    },
-                    enabled = isRoot
-                ) {
-                    Text(text = stringResource(id = R.string.module_install))
-                }
-            }
-        }
-    }
-}
-
-@Composable
 private fun VersionItemBottomSheet(
     item: VersionItem,
     isRoot: Boolean,
+    hasChangelog: Boolean = true,
     state: SheetState = rememberModalBottomSheetState(),
     downloader: (Context, VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
@@ -288,60 +210,91 @@ private fun VersionItemBottomSheet(
     onDismissRequest = onClose,
     sheetState = state,
     shape = BottomSheetDefaults.expandedShape(15.dp),
-    windowInsets = WindowInsets.navigationBars
+    windowInsets = WindowInsets.navigationBars,
+    dragHandle = {
+        if (hasChangelog) {
+            BottomSheetDefaults.DragHandle()
+        } else {
+            Text(
+                modifier = Modifier.padding(all = 18.dp),
+                text = stringResource(id = R.string.view_module_version_dialog_desc),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+) {
+    if (hasChangelog) {
+        ButtonRow(
+            item = item,
+            isRoot = isRoot,
+            state = state,
+            downloader = downloader,
+            onClose = onClose
+        )
+        ChangelogItem(url = item.changelog)
+    } else {
+        ButtonColumn(
+            item = item,
+            isRoot = isRoot,
+            state = state,
+            downloader = downloader,
+            onClose = onClose
+        )
+    }
+}
+
+@Composable
+private fun ColumnScope.ButtonRow(
+    item: VersionItem,
+    isRoot: Boolean,
+    state: SheetState,
+    downloader: (Context, VersionItem, Boolean) -> Unit,
+    onClose: () -> Unit
+) = Row(
+    modifier = Modifier
+        .padding(horizontal = 18.dp)
+        .padding(bottom = 18.dp)
+        .align(Alignment.CenterHorizontally),
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(10.dp)
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    Row(
-        modifier = Modifier
-            .padding(bottom = 18.dp, start = 18.dp, end = 18.dp)
-            .align(Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        OutlinedButton(
-            onClick = {
-                downloader(context, item, true)
-                scope.launch {
-                    onClose()
-                    state.hide()
-                }
-            },
-            enabled = isRoot
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.import_outline),
-                contentDescription = null
-            )
-
-            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-
-            Text(text = stringResource(id = R.string.module_install))
-        }
-
-        OutlinedButton(
-            onClick = {
-                downloader(context, item, false)
-                scope.launch {
-                    onClose()
-                    state.hide()
-                }
+    OutlinedButton(
+        onClick = {
+            downloader(context, item, true)
+            scope.launch {
+                onClose()
+                state.hide()
             }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.link_outline),
-                contentDescription = null
-            )
-
-            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-
-            Text(text = stringResource(id = R.string.module_download))
-        }
+        },
+        enabled = isRoot
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.import_outline),
+            contentDescription = null
+        )
+        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+        Text(text = stringResource(id = R.string.module_install))
     }
 
-    ChangelogItem(url = item.changelog)
-
+    OutlinedButton(
+        onClick = {
+            downloader(context, item, false)
+            scope.launch {
+                onClose()
+                state.hide()
+            }
+        }
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.link_outline),
+            contentDescription = null
+        )
+        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+        Text(text = stringResource(id = R.string.module_download))
+    }
 }
 
 @Composable
@@ -349,10 +302,7 @@ private fun ChangelogItem(
     url: String
 ) {
     var changelog by remember { mutableStateOf("") }
-
-    val event = rememberStringDataRequest(url) {
-        changelog = it
-    }
+    val event = rememberStringDataRequest(url) { changelog = it }
 
     Box(
         modifier = Modifier
@@ -377,8 +327,81 @@ private fun ChangelogItem(
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
-                    .padding(bottom = 18.dp, start = 18.dp, end = 18.dp)
+                    .padding(horizontal = 18.dp)
+                    .padding(bottom = 18.dp)
             )
         }
+    }
+}
+
+@Composable
+private fun ColumnScope.ButtonColumn(
+    item: VersionItem,
+    isRoot: Boolean,
+    state: SheetState,
+    downloader: (Context, VersionItem, Boolean) -> Unit,
+    onClose: () -> Unit
+) = Column(
+    modifier = Modifier
+        .padding(bottom = 18.dp)
+        .align(Alignment.CenterHorizontally),
+    verticalArrangement = Arrangement.spacedBy(2.dp),
+    horizontalAlignment = Alignment.CenterHorizontally
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    ButtonItem(
+        onClick = {
+            downloader(context, item, true)
+            scope.launch {
+                onClose()
+                state.hide()
+            }
+        },
+        enabled = isRoot,
+        icon = R.drawable.import_outline,
+        text = stringResource(id = R.string.module_install)
+    )
+
+    ButtonItem(
+        onClick = {
+            downloader(context, item, false)
+            scope.launch {
+                onClose()
+                state.hide()
+            }
+        },
+        icon = R.drawable.link_outline,
+        text = stringResource(id = R.string.module_download)
+    )
+}
+
+@Composable
+private fun ButtonItem(
+    onClick: () -> Unit,
+    enabled: Boolean = true,
+    @DrawableRes icon: Int,
+    text: String
+) = Surface(
+    onClick = onClick,
+    enabled = enabled,
+    shape = RoundedCornerShape(10.dp),
+    modifier = Modifier.fillMaxWidth()
+) {
+    Row(
+        modifier = Modifier.padding(vertical = 16.dp, horizontal = 18.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = null
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
