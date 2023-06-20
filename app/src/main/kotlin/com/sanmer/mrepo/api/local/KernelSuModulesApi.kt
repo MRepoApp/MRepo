@@ -13,9 +13,8 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 
-class KernelSuModulesApi(private val context: Context) : ModulesLocalApi {
-
-    override var version = "kernelsu"
+class KernelSuModulesApi(private val context: Context) {
+    private var version = "kernelsu"
     private val ksud = "/data/adb/ksud"
 
     fun build(listener: ApiInitializerListener): ModulesLocalApi {
@@ -33,7 +32,20 @@ class KernelSuModulesApi(private val context: Context) : ModulesLocalApi {
             }
         }
 
-        return this
+        return object : ModulesLocalApi {
+            val api = this@KernelSuModulesApi
+            override val version: String get() = api.version
+            override suspend fun getModules() = api.getModules()
+            override fun enable(module: LocalModule) = api.enable(module)
+            override fun disable(module: LocalModule) = api.disable(module)
+            override fun remove(module: LocalModule) = api.remove(module)
+            override fun install(
+                console: (String) -> Unit,
+                onSuccess: (LocalModule) -> Unit,
+                onFailure: () -> Unit,
+                zipFile: File
+            ) = api.install(console, onSuccess, onFailure, zipFile)
+        }
     }
 
     private fun getModule(obj: JSONObject) = LocalModule(
@@ -60,7 +72,7 @@ class KernelSuModulesApi(private val context: Context) : ModulesLocalApi {
         }
     }
 
-    override suspend fun getModules() = runCatching {
+    private suspend fun getModules() = runCatching {
         Timber.i("getLocal: $version")
 
         val out = Shell.cmd("$ksud module list").exec().out
@@ -79,7 +91,7 @@ class KernelSuModulesApi(private val context: Context) : ModulesLocalApi {
         return@runCatching modules
     }
 
-    override fun enable(module: LocalModule) {
+    private fun enable(module: LocalModule) {
         Shell.cmd("$ksud module enable ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.ENABLE
@@ -89,7 +101,7 @@ class KernelSuModulesApi(private val context: Context) : ModulesLocalApi {
         }
     }
 
-    override fun disable(module: LocalModule) {
+    private fun disable(module: LocalModule) {
         Shell.cmd("$ksud module disable ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.DISABLE
@@ -99,7 +111,7 @@ class KernelSuModulesApi(private val context: Context) : ModulesLocalApi {
         }
     }
 
-    override fun remove(module: LocalModule) {
+    private fun remove(module: LocalModule) {
         Shell.cmd("$ksud module uninstall ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.REMOVE
@@ -109,7 +121,7 @@ class KernelSuModulesApi(private val context: Context) : ModulesLocalApi {
         }
     }
 
-    override fun install(
+    private fun install(
         console: (String) -> Unit,
         onSuccess: (LocalModule) -> Unit,
         onFailure: () -> Unit,

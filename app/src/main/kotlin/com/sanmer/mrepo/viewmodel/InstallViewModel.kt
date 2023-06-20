@@ -26,7 +26,6 @@ class InstallViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
-
     val console = mutableStateListOf<String>()
 
     val state = object : State(initial = Event.LOADING) {

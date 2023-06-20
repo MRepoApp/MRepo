@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.model.json
 
+import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.RepoMetadata
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.squareup.moshi.JsonClass
@@ -24,3 +25,11 @@ data class ModulesJsonMetadata(
         )
     }
 }
+
+fun Repo.copy(modulesJson: ModulesJson) = copy(
+    name = modulesJson.name,
+    size = modulesJson.modules.size,
+    timestamp = modulesJson.timestamp,
+    version = modulesJson.metadata.version,
+    versionCode = modulesJson.metadata.versionCode
+)

@@ -16,9 +16,8 @@ import java.io.File
 class MagiskModulesApi(
     private val context: Context,
     private val fs: FileSystemManager
-) : ModulesLocalApi {
-
-    override var version = "magisk"
+) {
+    private var version = "magisk"
     private var isZygiskEnabled = false
 
     fun build(listener: ApiInitializerListener): ModulesLocalApi {
@@ -37,7 +36,20 @@ class MagiskModulesApi(
             }
         }
 
-        return this
+        return object : ModulesLocalApi {
+            val api = this@MagiskModulesApi
+            override val version: String get() = api.version
+            override suspend fun getModules() = api.getModules()
+            override fun enable(module: LocalModule) = api.enable(module)
+            override fun disable(module: LocalModule) = api.disable(module)
+            override fun remove(module: LocalModule) = api.remove(module)
+            override fun install(
+                console: (String) -> Unit,
+                onSuccess: (LocalModule) -> Unit,
+                onFailure: () -> Unit,
+                zipFile: File
+            ) = api.install(console, onSuccess, onFailure, zipFile)
+        }
     }
 
     private fun isZygisk(): Boolean {
@@ -88,7 +100,7 @@ class MagiskModulesApi(
         }
     }
 
-    override suspend fun getModules() = runCatching {
+    private suspend fun getModules() = runCatching {
         Timber.i("getLocal: ${Const.MODULE_PATH}")
 
         val modules = mutableListOf<LocalModule>()
@@ -108,7 +120,7 @@ class MagiskModulesApi(
 
     private val LocalModule.path get() = "${Const.MODULE_PATH}/${id}"
 
-    override fun enable(module: LocalModule) {
+    private fun enable(module: LocalModule) {
         when (module.state) {
             State.REMOVE -> {
                 fs.getFile(module.path, "remove").delete()
@@ -121,12 +133,12 @@ class MagiskModulesApi(
         module.state = State.ENABLE
     }
 
-    override fun disable(module: LocalModule) {
+    private fun disable(module: LocalModule) {
         fs.getFile(module.path, "disable").createNewFile()
         module.state = State.DISABLE
     }
 
-    override fun remove(module: LocalModule) {
+    private fun remove(module: LocalModule) {
         when (module.state) {
             State.ENABLE -> {
                 fs.getFile(module.path, "remove").createNewFile()
@@ -140,7 +152,7 @@ class MagiskModulesApi(
         module.state = State.REMOVE
     }
 
-    override fun install(
+    private fun install(
         console: (String) -> Unit,
         onSuccess: (LocalModule) -> Unit,
         onFailure: () -> Unit,

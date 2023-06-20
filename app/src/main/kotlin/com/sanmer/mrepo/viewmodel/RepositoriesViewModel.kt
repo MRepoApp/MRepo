@@ -24,7 +24,6 @@ class RepositoriesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
-
     val list = localRepository.getRepoAllAsFlow()
         .map { list ->
             list.sortedBy { it.name }

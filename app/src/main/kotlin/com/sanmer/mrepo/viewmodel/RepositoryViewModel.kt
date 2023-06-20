@@ -22,7 +22,6 @@ class RepositoryViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
-
     val onlineValue get() = (if (isSearch) _online else online)
         .sortedBy { it.name }
 

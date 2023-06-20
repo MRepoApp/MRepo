@@ -87,13 +87,11 @@ fun RepositoriesScreen(
     var message: String? by remember { mutableStateOf(null) }
 
     var failure by remember { mutableStateOf(false) }
-    if (failure) {
-        FailureDialog(
-            repo = value,
-            message = message,
-            onClose = { failure = false }
-        )
-    }
+    if (failure) FailureDialog(
+        repo = value,
+        message = message,
+        onClose = { failure = false }
+    )
 
     var add by remember { mutableStateOf(false) }
     if (add) AddDialog(

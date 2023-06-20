@@ -55,7 +55,7 @@ class LocalRepository @Inject constructor(
             }.launchIn(applicationScope)
     }
 
-    fun getLocalAllAsFlow() = moduleDao.getLocalAllAsFlow().map { list ->
+    private fun getLocalAllAsFlow() = moduleDao.getLocalAllAsFlow().map { list ->
         list.map { it.toModule() }
     }
 
@@ -64,8 +64,11 @@ class LocalRepository @Inject constructor(
     }
 
     suspend fun insertLocal(list: List<LocalModule>) = withContext(Dispatchers.IO) {
-        moduleDao.deleteLocalAll()
         moduleDao.insertLocal(list.map { it.toEntity() })
+    }
+
+    suspend fun deleteLocalAll() = withContext(Dispatchers.IO) {
+        moduleDao.deleteLocalAll()
     }
 
     fun getRepoAllAsFlow() = repoDao.getRepoAllAsFlow()
@@ -90,7 +93,7 @@ class LocalRepository @Inject constructor(
         repoDao.deleteRepo(value)
     }
 
-    fun getOnlineAllAsFlow() = repoDao.getRepoWithModuleAsFlow().map { list ->
+    private fun getOnlineAllAsFlow() = repoDao.getRepoWithModuleAsFlow().map { list ->
         list.filter { it.repo.enable && it.repo.isCompatible() }
             .map { it.modules }
             .merge()

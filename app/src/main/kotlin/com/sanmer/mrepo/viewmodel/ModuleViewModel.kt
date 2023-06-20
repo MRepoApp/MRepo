@@ -46,7 +46,6 @@ class ModuleViewModel @Inject constructor(
     private val suRepository: SuRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
     private val moduleId: String = checkNotNull(savedStateHandle["moduleId"])
     var online by mutableStateOf(OnlineModule())
         private set

@@ -2,9 +2,9 @@ package com.sanmer.mrepo.repository
 
 import com.sanmer.mrepo.api.online.ModulesRepoApi
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.database.entity.RepoMetadata
 import com.sanmer.mrepo.database.entity.toEntity
 import com.sanmer.mrepo.di.ApplicationScope
+import com.sanmer.mrepo.model.json.copy
 import com.sanmer.mrepo.utils.expansion.runRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +35,7 @@ class ModulesRepository @Inject constructor(
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
         suRepository.getModules()
             .onSuccess {
+                localRepository.deleteLocalAll()
                 localRepository.insertLocal(it)
             }.onFailure {
                 Timber.e(it, "getLocalAll")
@@ -49,18 +50,8 @@ class ModulesRepository @Inject constructor(
                     val api = ModulesRepoApi.build(repo.url)
                     return@runRequest api.getModules().execute()
                 }.onSuccess { modulesJson ->
-                    val new = repo.copy(
-                        name = modulesJson.name,
-                        size = modulesJson.modules.size,
-                        timestamp = modulesJson.timestamp,
-                        version = modulesJson.metadata.version,
-                        versionCode = modulesJson.metadata.versionCode
-                    )
-
+                    val new = repo.copy(modulesJson)
                     if (!new.isCompatible()) {
-                        Timber.w("getRepoAll: incompatible repository(${repo.url}), " +
-                                "required version >= ${RepoMetadata.current.versionCode}")
-
                         localRepository.updateRepo(new.copy(enable = false))
                         return@onSuccess
                     } else {
@@ -82,20 +73,9 @@ class ModulesRepository @Inject constructor(
                 val api = ModulesRepoApi.build(repo.url)
                 api.getModules().execute()
             }
-        ) { modulesJson ->
-            val new = repo.copy(
-                name = modulesJson.name,
-                size = modulesJson.modules.size,
-                timestamp = modulesJson.timestamp,
-                version = modulesJson.metadata.version,
-                versionCode = modulesJson.metadata.versionCode
-            )
-
-            return@runRequest if (new.isCompatible()) {
-                new
-            } else {
-                new.copy(enable = false)
-            }
+        ) {
+            val new = repo.copy(it)
+            if (new.isCompatible()) new else new.copy(enable = false)
         }
     }
 
