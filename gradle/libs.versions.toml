@@ -13,7 +13,7 @@ androidxCore = "1.10.1"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
 androidxLifecycle = "2.6.1"
-androidxNavigation = "2.6.0"
+androidxNavigation = "2.7.0-beta01"
 androidxRoom = "2.5.2"
 androidxWork = "2.8.1"
 hilt = "2.46"
@@ -30,7 +30,6 @@ squareMoshi = "1.14.0"
 
 [libraries]
 accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanist" }
-accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }

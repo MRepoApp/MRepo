@@ -115,7 +115,6 @@ protobuf {
 
 dependencies {
     implementation(libs.accompanist.drawablepainter)
-    implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
