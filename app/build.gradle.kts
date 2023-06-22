@@ -1,8 +1,5 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
-import org.w3c.dom.Element
-import org.w3c.dom.Node
 import java.time.Instant
-import javax.xml.parsers.DocumentBuilderFactory
 
 plugins {
     id("mrepo.android.application")
@@ -26,8 +23,17 @@ android {
         versionName = "${baseVersionName}${verNameSuffix}.${commitId}"
         versionCode = commitCount
 
-        resourceConfigurations += getLocales(file("src/main/res/xml/locales_config.xml"))
-        multiDexEnabled = true
+        resourceConfigurations += arrayOf(
+            "en",
+            "zh-rCN",
+            "zh-rTW",
+            "fr",
+            "ro",
+            "es",
+            "ar",
+            "ja",
+            "pl"
+        )
     }
 
     val releaseSigning = if (project.hasReleaseKeyStore) {
@@ -58,6 +64,7 @@ android {
         }
 
         all {
+            multiDexEnabled = true
             signingConfig = releaseSigning
             buildConfigField("Boolean", "IS_DEV_VERSION", isDevVersion.toString())
             buildConfigField("String", "BUILD_TIME", "\"${Instant.now()}\"")
@@ -69,19 +76,15 @@ android {
         buildConfig = true
     }
 
-    packaging {
-        resources {
-            excludes += setOf(
-                "META-INF/**",
-                "okhttp3/**",
-                "kotlin/**",
-                "org/**",
-                "**.properties",
-                "**.bin",
-                "**/*.proto"
-            )
-        }
-    }
+    packaging.resources.excludes += setOf(
+        "META-INF/**",
+        "okhttp3/**",
+        "kotlin/**",
+        "org/**",
+        "**.properties",
+        "**.bin",
+        "**/*.proto"
+    )
 
     applicationVariants.configureEach {
         outputs.configureEach {
@@ -141,30 +144,4 @@ dependencies {
 
     implementation(libs.markwon.core)
     implementation(libs.timber)
-}
-
-fun getLocales(file: File): Array<String> {
-    val builderFactory = DocumentBuilderFactory.newInstance()
-    val docBuilder = builderFactory.newDocumentBuilder()
-    val xmlDocument = docBuilder.parse(file)
-
-    val localesNode = xmlDocument.getElementsByTagName("locale")
-
-    val locales = mutableListOf<String>()
-    for (i in 0 until localesNode.length) {
-        val localeNode = localesNode.item(i)
-        if (localeNode.nodeType == Node.ELEMENT_NODE) {
-            val localeElement = localeNode as Element
-            val value = localeElement.getAttribute("android:name")
-            val name = when  {
-                "-" in value && value.substring(3).all(Char::isUpperCase) ->
-                    value.substring(0, 2) + "-r" + value.substring(3)
-                else -> value
-            }
-
-            locales.add(name)
-        }
-    }
-
-    return locales.toTypedArray()
 }
