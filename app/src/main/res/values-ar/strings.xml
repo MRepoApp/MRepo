@@ -85,8 +85,6 @@
     <string name="view_module_last_modified">اخر تعديل</string>
     <string name="view_module_dir_size">حجم المسار</string>
     <string name="about_desc1">إدارة الوحدات وتوفير مستودعات الوحدات النمطية لـ Magisk و KernelSU.</string>
-    <string name="settings_navigation_animation">تأثير حركة التنقل</string>
-    <string name="settings_navigation_animation_desc">دعم الرسوم المتحركة للتنقل المقدم من Accompanist (تجريبي) ، لاحظ أن هذا به مشكلات استقرار ، يرجى تمكينه بحذر</string>
     <string name="settings_delete_zip_desc">احذف الملف المضغوط بعد نجاح التثبيت ، لاحظ أن هذا هو أفضل جهد ولن يتم إذا لم يكن لدى التطبيق إذن بالحذف</string>
     <string name="settings_delete_zip">حذف الملف المضغوط</string>
     <string name="page_repository">المستودع</string>

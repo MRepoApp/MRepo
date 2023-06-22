@@ -21,5 +21,4 @@ message UserPreferences {
   int32 themeColor = 3;
   string downloadPath = 4;
   bool deleteZipFile = 5;
-  bool enableNavigationAnimation = 6; // TODO: Waiting for https://github.com/google/accompanist/issues/1487 to be fixed
 }

@@ -92,8 +92,6 @@
     <!-- App Theme -->
     <string name="settings_delete_zip">刪除壓縮包</string>
     <string name="settings_delete_zip_desc">安裝成功後刪除壓縮包，請注意此功能是「盡量」刪除，如果應用程式沒有權限將無法執行。</string>
-    <string name="settings_navigation_animation">視窗動畫</string>
-    <string name="settings_navigation_animation_desc">由 Accompanist 提供的視窗動畫支援 (實驗性)，請注意這存在穩定性問題，謹慎開啟。</string>
     <string name="app_theme_palette">主題調色盤</string>
     <string name="app_theme_dark_theme">深色主題</string>
     <string name="app_theme_dark_theme_auto">自動</string>

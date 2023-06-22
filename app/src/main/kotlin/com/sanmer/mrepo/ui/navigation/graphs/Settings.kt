@@ -1,11 +1,11 @@
-package com.sanmer.mrepo.ui.navigation.animated
+package com.sanmer.mrepo.ui.navigation.graphs
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.navigation
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.sanmer.mrepo.ui.animate.slideInLeftToRight
 import com.sanmer.mrepo.ui.animate.slideInRightToLeft
 import com.sanmer.mrepo.ui.animate.slideOutLeftToRight

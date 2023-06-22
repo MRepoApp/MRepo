@@ -33,7 +33,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.module.OnlineModule
 import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.component.Logo
-import com.sanmer.mrepo.ui.navigation.animated.createViewRoute
+import com.sanmer.mrepo.ui.navigation.graphs.createViewRoute
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 import com.sanmer.mrepo.ui.utils.rememberFastScroller
 import com.sanmer.mrepo.ui.utils.scrollbarState

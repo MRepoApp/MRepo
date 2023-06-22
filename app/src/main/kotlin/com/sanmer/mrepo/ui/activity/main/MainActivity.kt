@@ -97,10 +97,6 @@ class MainActivity : BaseActivity() {
             NotificationUtils.PermissionState()
         }
 
-        if (it.enableNavigationAnimation) {
-            AnimatedMainScreen(it)
-        } else {
-            NormalMainScreen(it)
-        }
+        MainScreen(it)
     }
 }

@@ -76,14 +76,6 @@ fun AppScreen(
                 checked = userData.deleteZipFile,
                 onChange = viewModel::setDeleteZipFile
             )
-
-            SettingSwitchItem(
-                iconRes = R.drawable.convertshape_outline,
-                text = stringResource(id = R.string.settings_navigation_animation),
-                subText = stringResource(id = R.string.settings_navigation_animation_desc),
-                checked = userData.enableNavigationAnimation,
-                onChange = viewModel::setEnableNavigationAnimation
-            )
         }
     }
 }

@@ -82,8 +82,6 @@
     <string name="view_module_page_overview">Visão geral</string>
     <string name="settings_delete_zip">Excluir arquivo Zip</string>
     <string name="settings_delete_zip_desc">Exclui o arquivo zip após a instalação ser bem-sucedida, Observe que este é o melhor esforço e não funcionará se o aplicativo não tiver permissão para excluir</string>
-    <string name="settings_navigation_animation">Animação de Navegação</string>
-    <string name="settings_navigation_animation_desc">Suporte de animação de navegação fornecido por Accompanist (experimental), observe que isso tem problemas de estabilidade, habilite-o com cuidado</string>
     <string name="view_module_description">Descrição</string>
     <string name="view_module_local">Local</string>
     <string name="view_module_version">Versão</string>

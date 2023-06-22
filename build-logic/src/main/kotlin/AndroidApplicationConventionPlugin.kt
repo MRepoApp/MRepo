@@ -17,12 +17,12 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
-                compileSdk = 33
+                compileSdk = 34
                 buildToolsVersion = "33.0.2"
 
                 defaultConfig {
                     minSdk = 26
-                    targetSdk = 33
+                    targetSdk = compileSdk
                 }
 
                 compileOptions {

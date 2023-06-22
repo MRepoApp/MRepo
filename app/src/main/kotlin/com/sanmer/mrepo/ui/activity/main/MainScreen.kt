@@ -19,52 +19,15 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.navigation.MainScreen
+import com.sanmer.mrepo.ui.navigation.graphs.modulesScreen
+import com.sanmer.mrepo.ui.navigation.graphs.repositoryScreen
+import com.sanmer.mrepo.ui.navigation.graphs.settingsScreen
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
-import com.sanmer.mrepo.ui.navigation.animated.modulesScreen as animatedModulesScreen
-import com.sanmer.mrepo.ui.navigation.animated.repositoryScreen as animatedRepositoryScreen
-import com.sanmer.mrepo.ui.navigation.animated.settingsScreen as animatedSettingsScreen
-import com.sanmer.mrepo.ui.navigation.normal.modulesScreen as normalModulesScreen
-import com.sanmer.mrepo.ui.navigation.normal.repositoryScreen as normalRepositoryScreen
-import com.sanmer.mrepo.ui.navigation.normal.settingsScreen as normalSettingsScreen
 
 @Composable
-fun AnimatedMainScreen(
-    userData: UserData
-) {
-    val navController = rememberAnimatedNavController()
-
-    Scaffold(
-        bottomBar = {
-            BottomNav(
-                navController = navController,
-                isRoot = userData.isRoot
-            )
-        }
-    ) {
-        AnimatedNavHost(
-            modifier = Modifier.padding(bottom = it.calculateBottomPadding()),
-            navController = navController,
-            startDestination = MainScreen.Repository.route
-        ) {
-            animatedRepositoryScreen(
-                navController = navController
-            )
-            animatedModulesScreen(
-                navController = navController
-            )
-            animatedSettingsScreen(
-                navController = navController
-            )
-        }
-    }
-}
-
-@Composable
-fun NormalMainScreen(
+fun MainScreen(
     userData: UserData
 ) {
     val navController = rememberNavController()
@@ -82,13 +45,13 @@ fun NormalMainScreen(
             navController = navController,
             startDestination = MainScreen.Repository.route
         ) {
-            normalRepositoryScreen(
+            repositoryScreen(
                 navController = navController
             )
-            normalModulesScreen(
+            modulesScreen(
                 navController = navController
             )
-            normalSettingsScreen(
+            settingsScreen(
                 navController = navController
             )
         }

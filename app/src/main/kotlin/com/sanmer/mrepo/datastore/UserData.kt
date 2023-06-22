@@ -16,8 +16,7 @@ data class UserData(
     val darkMode: DarkMode,
     val themeColor: Int,
     val downloadPath: File,
-    val deleteZipFile: Boolean,
-    val enableNavigationAnimation: Boolean
+    val deleteZipFile: Boolean
 ) {
     companion object {
         fun default() = UserData(
@@ -25,8 +24,7 @@ data class UserData(
             darkMode = DarkMode.FOLLOW_SYSTEM,
             themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
             downloadPath = Const.DIR_PUBLIC_DOWNLOADS.resolve("MRepo"),
-            deleteZipFile = true,
-            enableNavigationAnimation = false
+            deleteZipFile = true
         )
     }
 }
@@ -44,7 +42,6 @@ fun UserData.toPreferences(): UserPreferences = UserPreferences.newBuilder()
     .setThemeColor(themeColor)
     .setDownloadPath(downloadPath.absolutePath)
     .setDeleteZipFile(deleteZipFile)
-    .setEnableNavigationAnimation(enableNavigationAnimation)
     .build()
 
 fun UserPreferences.toUserData() = UserData(
@@ -52,6 +49,5 @@ fun UserPreferences.toUserData() = UserData(
     darkMode = darkMode,
     themeColor = themeColor,
     downloadPath = downloadPath.toFile(),
-    deleteZipFile = deleteZipFile,
-    enableNavigationAnimation = enableNavigationAnimation
+    deleteZipFile = deleteZipFile
 )
