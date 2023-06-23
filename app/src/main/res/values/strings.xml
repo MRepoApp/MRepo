@@ -80,7 +80,7 @@
     <string name="settings_app_theme_desc">Change night mode and theme platte</string>
     <string name="settings_download_path">Download Path</string>
     <string name="settings_delete_zip">Delete Zip File</string>
-    <string name="settings_delete_zip_desc">Delete zip after the installation is successful, note that this is a best effort and will not work if app does not have permission to delete</string>
+    <string name="settings_delete_zip_desc">Delete zip of module after the installation is successful, this will be executed by Superuser</string>
     <!-- App Theme -->
     <string name="app_theme_palette">Theme Palette</string>
     <string name="app_theme_dark_theme">Dark Theme</string>

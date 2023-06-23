@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.State
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.absolutePath
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.copyTo
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.displayName
 import com.sanmer.mrepo.model.module.LocalModule
@@ -36,6 +37,7 @@ class InstallViewModel @Inject constructor(
     }
 
     val suState get() = suRepository.state
+    private val userData get() = userDataRepository.value
 
     init {
         Timber.d("InstallViewModel init")
@@ -65,7 +67,9 @@ class InstallViewModel @Inject constructor(
             onSuccess = {
                 onSucceeded(it)
                 file.delete()
-                if (userDataRepository.value.deleteZipFile) path.safeDelete(context)
+                if (userData.deleteZipFile) {
+                    path.delete()
+                }
             },
             onFailure = {
                 state.setFailed()
@@ -74,10 +78,12 @@ class InstallViewModel @Inject constructor(
         )
     }
 
-    private fun Uri.safeDelete(context: Context) = try {
-        context.contentResolver.delete(this, null, null)
-    } catch (e: Exception) {
-        Timber.e(e)
+    private fun Uri.delete() = runCatching {
+        absolutePath?.let {
+            suRepository.fs.getFile(it).delete()
+        }
+    }.onFailure {
+        Timber.e(it)
     }
 
     fun sendLogFile(context: Context) {

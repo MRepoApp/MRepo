@@ -74,7 +74,8 @@ fun AppScreen(
                 text = stringResource(id = R.string.settings_delete_zip),
                 subText = stringResource(id = R.string.settings_delete_zip_desc),
                 checked = userData.deleteZipFile,
-                onChange = viewModel::setDeleteZipFile
+                onChange = viewModel::setDeleteZipFile,
+                enabled = userData.isRoot
             )
         }
     }

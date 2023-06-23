@@ -60,9 +60,17 @@ object MediaStoreUtils {
     fun File.newOutputStream(): OutputStream? = cr.openOutputStream(toUri())
 
     val Uri.absolutePath: String? get() = run {
-        val df = DocumentFile.fromTreeUri(context, this) ?: return null
+        if (scheme == "file") {
+            return toFile().absolutePath
+        }
 
-        val path = cr.openFileDescriptor(df.uri, "r")?.use {
+        val uri = try {
+            DocumentFile.fromTreeUri(context, this)?.uri ?: return null
+        } catch (e: Exception) {
+            this
+        }
+
+        val path = cr.openFileDescriptor(uri, "r")?.use {
             Os.readlink("/proc/self/fd/${it.fd}")
         }?: return null
 
