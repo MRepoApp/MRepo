@@ -14,15 +14,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlin.math.abs
 import kotlin.math.min
 
-/**
- * Calculates the [ScrollbarState] for lazy layouts.
- * @param itemsAvailable the total amount of items available to scroll in the layout.
- * @param visibleItems a list of items currently visible in the layout.
- * @param firstVisibleItemIndex a function for interpolating the first visible index in the lazy layout
- * as scrolling progresses for smooth and linear scrollbar thumb progression.
- * [itemsAvailable].
- * @param reverseLayout if the items in the backing lazy layout are laid out in reverse order.
- * */
 @Composable
 internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrollbarState(
     itemsAvailable: Int,
@@ -63,10 +54,8 @@ internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrol
             )
             ScrollbarState(
                 thumbSizePercent = thumbSizePercent,
-                thumbDisplacementPercent = when {
-                    reverseLayout() -> 1f - thumbTravelPercent
-                    else -> thumbTravelPercent
-                },
+                thumbDisplacementPercent = thumbTravelPercent,
+                reverseLayout = reverseLayout()
             )
         }
             .filterNotNull()
@@ -76,17 +65,6 @@ internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.scrol
     return state
 }
 
-/**
- * Linearly interpolates the index for the first item in [visibleItems] for smooth scrollbar
- * progression.
- * @param visibleItems a list of items currently visible in the layout.
- * @param itemSize a lookup function for the size of an item in the layout.
- * @param offset a lookup function for the offset of an item relative to the start of the view port.
- * @param nextItemOnMainAxis a lookup function for the next item on the main axis in the direction
- * of the scroll.
- * @param itemIndex a lookup function for index of an item in the layout relative to
- * the total amount of items available.
- * */
 internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.interpolateFirstItemIndex(
     visibleItems: List<LazyStateItem>,
     crossinline itemSize: LazyState.(LazyStateItem) -> Int,
@@ -111,13 +89,6 @@ internal inline fun <LazyState : ScrollableState, LazyStateItem> LazyState.inter
     return firstItemIndex + ((nextItemIndex - firstItemIndex) * offsetPercentage)
 }
 
-/**
- * Returns the percentage of an item that is currently visible in the view port.
- * @param itemSize the size of the item
- * @param itemStartOffset the start offset of the item relative to the view port start
- * @param viewportStartOffset the start offset of the view port
- * @param viewportEndOffset the end offset of the view port
- */
 internal fun itemVisibilityPercentage(
     itemSize: Int,
     itemStartOffset: Int,
