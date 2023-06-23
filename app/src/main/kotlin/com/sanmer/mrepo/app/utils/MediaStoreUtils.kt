@@ -1,11 +1,16 @@
 package com.sanmer.mrepo.app.utils
 
+import android.Manifest
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.system.Os
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.sanmer.mrepo.App
 import com.sanmer.mrepo.utils.expansion.toFile
 import java.io.File
@@ -15,6 +20,17 @@ import java.io.OutputStream
 object MediaStoreUtils {
     private val context by lazy { App.context }
     private val cr by lazy { context.contentResolver }
+
+    @Composable
+    fun PermissionState() {
+        val permissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        SideEffect {
+            if (!permissionState.status.isGranted) {
+                permissionState.launchPermissionRequest()
+            }
+        }
+    }
 
     val Uri.displayName: String get() {
         if (scheme == "file") {
