@@ -93,4 +93,6 @@
     <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
     <string name="about_desc2">Făcut cu ❤️ de %1$s</string>
     <string name="view_module_dir_size">Dimensiunea dosarului</string>
+    <string name="repo_incompatible_desc">Incompatibil, versiune necesară &gt;= %1$d</string>
+    <string name="repo_util_version">Versiune utilă: %1$s (%2$d)</string>
 </resources>
