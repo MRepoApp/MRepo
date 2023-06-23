@@ -121,7 +121,8 @@ fun LogScreen() {
                 .fillMaxSize()
         ) {
             LazyColumn(
-                state = state
+                state = state,
+                reverseLayout = true
             ) {
                 items(console) { value ->
                     Column(
