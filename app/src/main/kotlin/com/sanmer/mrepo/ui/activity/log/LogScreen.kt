@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -153,7 +155,7 @@ private fun LogTopBar(
     onPriority: (String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) = NavigateUpTopBar(
-    title = R.string.settings_log_viewer,
+    title = stringResource(id = R.string.settings_log_viewer),
     actions = {
         val context = LocalContext.current
         IconButton(
@@ -182,7 +184,10 @@ private fun LogTopBar(
             )
         }
     },
-    scrollBehavior = scrollBehavior
+    scrollBehavior = scrollBehavior,
+    colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
+    )
 )
 
 @Composable

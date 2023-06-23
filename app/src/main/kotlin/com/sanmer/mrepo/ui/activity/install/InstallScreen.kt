@@ -148,12 +148,12 @@ private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     viewModel: InstallViewModel = hiltViewModel()
 ) = NavigateUpTopBar(
-    title = R.string.install_title,
-    subtitle = when (viewModel.state.event) {
+    title = stringResource(id = R.string.install_title),
+    subtitle = stringResource(id = when (viewModel.state.event) {
         Event.LOADING -> R.string.install_flashing
         Event.FAILED -> R.string.install_failure
         else -> R.string.install_done
-    },
+    }),
     scrollBehavior = scrollBehavior,
     enable = viewModel.state.isFinished,
     actions = {

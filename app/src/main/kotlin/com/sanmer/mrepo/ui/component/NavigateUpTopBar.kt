@@ -2,21 +2,22 @@ package com.sanmer.mrepo.ui.component
 
 import android.content.Context
 import androidx.activity.ComponentActivity
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
@@ -24,33 +25,63 @@ import com.sanmer.mrepo.ui.utils.navigateBack
 
 @Composable
 fun NavigateUpTopBar(
-    @StringRes title: Int,
-    @StringRes subtitle: Int? = null,
+    title: String,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    subtitle: String? = null,
+    enable: Boolean = true,
     actions: @Composable RowScope.() -> Unit = {},
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-    context: Context = LocalContext.current,
-    navController: NavController? = null,
-    enable: Boolean = true
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    scrollBehavior: TopAppBarScrollBehavior? = null
 ) = NavigateUpTopBar(
-    title = stringResource(id = title),
-    subtitle = if (subtitle != null) stringResource(id = subtitle) else null,
+    modifier = modifier,
+    title = title,
+    subtitle = subtitle,
+    onBack = { navController.navigateBack() },
     actions = actions,
+    windowInsets = windowInsets,
+    colors = colors,
     scrollBehavior = scrollBehavior,
-    context = context,
-    navController = navController,
     enable = enable
 )
 
 @Composable
 fun NavigateUpTopBar(
     title: String,
-    subtitle: String? = null,
-    actions: @Composable RowScope.() -> Unit = {},
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+    modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    navController: NavController? = null,
-    enable: Boolean = true
+    subtitle: String? = null,
+    enable: Boolean = true,
+    actions: @Composable RowScope.() -> Unit = {},
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    scrollBehavior: TopAppBarScrollBehavior? = null
 ) = NavigateUpTopBar(
+    modifier = modifier,
+    title = title,
+    subtitle = subtitle,
+    onBack = { (context as ComponentActivity).finish() },
+    actions = actions,
+    windowInsets = windowInsets,
+    colors = colors,
+    scrollBehavior = scrollBehavior,
+    enable = enable
+)
+
+@Composable
+fun NavigateUpTopBar(
+    title: String,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier,
+    subtitle: String? = null,
+    enable: Boolean = true,
+    actions: @Composable RowScope.() -> Unit = {},
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    scrollBehavior: TopAppBarScrollBehavior? = null
+) = NavigateUpTopBar(
+    modifier = modifier,
     title = {
         Column(
             horizontalAlignment = Alignment.Start
@@ -72,35 +103,30 @@ fun NavigateUpTopBar(
             }
         }
     },
+    onBack = onBack,
     actions = actions,
+    windowInsets = windowInsets,
+    colors = colors,
     scrollBehavior = scrollBehavior,
-    context = context,
-    navController = navController,
     enable = enable
 )
 
 @Composable
 fun NavigateUpTopBar(
     title: @Composable () -> Unit,
-    actions: @Composable RowScope.() -> Unit = {},
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-    context: Context = LocalContext.current,
-    navController: NavController? = null,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier,
     enable: Boolean = true,
+    actions: @Composable RowScope.() -> Unit = {},
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    scrollBehavior: TopAppBarScrollBehavior? = null
 ) = TopAppBar(
     title = title,
+    modifier = modifier,
     navigationIcon = {
         IconButton(
-            onClick = {
-                if (!enable) return@IconButton
-
-                if (navController != null) {
-                    navController.navigateBack()
-                } else {
-                    val that = context as ComponentActivity
-                    that.finish()
-                }
-            }
+            onClick = { if (enable) onBack() }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.arrow_left_outline),
@@ -109,5 +135,7 @@ fun NavigateUpTopBar(
         }
     },
     actions = actions,
+    windowInsets = windowInsets,
+    colors = colors,
     scrollBehavior = scrollBehavior
 )

@@ -170,7 +170,7 @@ private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
 ) = NavigateUpTopBar(
-    title = R.string.settings_about,
+    title = stringResource(id = R.string.settings_about),
     scrollBehavior = scrollBehavior,
     navController = navController
 )
