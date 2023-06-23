@@ -39,7 +39,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -62,17 +65,17 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 @Composable
-fun CollapsedTopAppBar(
+fun CollapsingTopAppBar(
     title: @Composable () -> Unit,
     content: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
-    windowInsets: WindowInsets = CollapsedTopAppBarDefaults.windowInsets,
-    colors: CollapsedTopAppBarColors = CollapsedTopAppBarDefaults.topAppBarColors(),
+    windowInsets: WindowInsets = CollapsingTopAppBarDefaults.windowInsets,
+    colors: CollapsingTopAppBarColors = CollapsingTopAppBarDefaults.topAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
-    TwoRowsTopAppBar(
+    CollapsingTopAppBarLayout(
         title = {
             Column(
                 modifier = Modifier.padding(end = TopAppBarTitleInset),
@@ -81,54 +84,44 @@ fun CollapsedTopAppBar(
         },
         titleTextStyle = MaterialTheme.typography.titleLarge,
         smallTitleTextStyle = MaterialTheme.typography.titleLarge,
-        titleBottomPadding = 0.dp,
         smallTitle = title,
         modifier = modifier,
         navigationIcon = navigationIcon,
         actions = actions,
         colors = colors,
         windowInsets = windowInsets,
-        maxHeight = 185.0.dp,
         pinnedHeight =  64.0.dp,
         scrollBehavior = scrollBehavior
     )
 }
 
 @Composable
-private fun TwoRowsTopAppBar(
+private fun CollapsingTopAppBarLayout(
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit,
     titleTextStyle: TextStyle,
-    titleBottomPadding: Dp,
     smallTitle: @Composable () -> Unit,
     smallTitleTextStyle: TextStyle,
     navigationIcon: @Composable () -> Unit,
     actions: @Composable RowScope.() -> Unit,
     windowInsets: WindowInsets,
-    colors: CollapsedTopAppBarColors,
-    maxHeight: Dp,
+    colors: CollapsingTopAppBarColors,
     pinnedHeight: Dp,
     scrollBehavior: TopAppBarScrollBehavior?
 ) {
-    if (maxHeight <= pinnedHeight) {
-        throw IllegalArgumentException(
-            "A TwoRowsTopAppBar max height should be greater than its pinned height"
-        )
+    val pinnedHeightPx = with(LocalDensity.current) {
+        pinnedHeight.toPx()
     }
-    val pinnedHeightPx: Float
-    val maxHeightPx: Float
-    val titleBottomPaddingPx: Int
-    LocalDensity.current.run {
-        pinnedHeightPx = pinnedHeight.toPx()
-        maxHeightPx = maxHeight.toPx()
-        titleBottomPaddingPx = titleBottomPadding.roundToPx()
-    }
+
+    // Sets the app bar's height offset to collapse the entire bar's height when content is
+    // scrolled.
+    var heightOffsetLimit by remember { mutableFloatStateOf(-pinnedHeightPx) }
 
     // Sets the app bar's height offset limit to hide just the bottom title area and keep top title
     // visible when collapsed.
     SideEffect {
-        if (scrollBehavior?.state?.heightOffsetLimit != pinnedHeightPx - maxHeightPx) {
-            scrollBehavior?.state?.heightOffsetLimit = pinnedHeightPx - maxHeightPx
+        if (scrollBehavior?.state?.heightOffsetLimit != heightOffsetLimit) {
+            scrollBehavior?.state?.heightOffsetLimit = heightOffsetLimit
         }
     }
 
@@ -175,7 +168,10 @@ private fun TwoRowsTopAppBar(
         Modifier
     }
 
-    Surface(modifier = modifier.then(appBarDragModifier), color = appBarContainerColor) {
+    Surface(
+        modifier = modifier.then(appBarDragModifier),
+        color = appBarContainerColor
+    ) {
         Column {
             TopAppBarLayout(
                 modifier = Modifier
@@ -198,33 +194,56 @@ private fun TwoRowsTopAppBar(
                 navigationIcon = navigationIcon,
                 actions = actionsRow,
             )
-            TopAppBarLayout(
+
+            Layout(
+                content = {
+                    Box(
+                        Modifier
+                            .layoutId("title")
+                            .then(if (hideBottomRowSemantics) {
+                                Modifier.clearAndSetSemantics { }
+                            } else {
+                                Modifier
+                            })
+                            .graphicsLayer(alpha = bottomTitleAlpha)
+                    ) {
+                        ProvideTextStyle(value = titleTextStyle) {
+                            CompositionLocalProvider(
+                                LocalContentColor provides colors.titleContentColor,
+                                content = title
+                            )
+                        }
+                    }
+                },
                 modifier = Modifier
                     // only apply the horizontal sides of the window insets padding, since the top
                     // padding will always be applied by the layout above
                     .windowInsetsPadding(windowInsets.only(WindowInsetsSides.Horizontal))
-                    .clipToBounds(),
-                heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.state?.heightOffset
-                    ?: 0f),
-                navigationIconContentColor =
-                colors.navigationIconContentColor,
-                titleContentColor = colors.titleContentColor,
-                actionIconContentColor =
-                colors.actionIconContentColor,
-                title = title,
-                titleTextStyle = titleTextStyle,
-                titleAlpha = bottomTitleAlpha,
-                titleVerticalArrangement = Arrangement.Bottom,
-                titleHorizontalArrangement = Arrangement.Start,
-                titleBottomPadding = titleBottomPaddingPx,
-                hideTitleSemantics = hideBottomRowSemantics,
-                navigationIcon = {},
-                actions = {}
-            )
+                    .clipToBounds()
+            ) { measurables, constraints ->
+                val titlePlaceable =
+                    measurables.first { it.layoutId == "title" }
+                        .measure(constraints.copy(minWidth = 0))
+                        .apply {
+                            heightOffsetLimit = - (pinnedHeightPx + height)
+                        }
+
+                val heightOffset = scrollBehavior?.state?.heightOffset ?: 0f
+                val layoutHeight = (titlePlaceable.height + heightOffset)
+                    .roundToInt()
+
+                layout(constraints.maxWidth, layoutHeight) {
+                    titlePlaceable.placeRelative(
+                        x = 0,
+                        y = layoutHeight - titlePlaceable.height
+                    )
+                }
+            }
         }
     }
 }
 
+@Suppress("SameParameterValue")
 @Composable
 private fun TopAppBarLayout(
     modifier: Modifier,
@@ -243,7 +262,7 @@ private fun TopAppBarLayout(
     actions: @Composable () -> Unit,
 ) {
     Layout(
-        {
+        content = {
             Box(
                 Modifier
                     .layoutId("navigationIcon")
@@ -414,7 +433,7 @@ private val TopAppBarHorizontalPadding = 4.dp
 private val TopAppBarTitleInset = 16.dp - TopAppBarHorizontalPadding
 
 @Stable
-class CollapsedTopAppBarColors internal constructor(
+class CollapsingTopAppBarColors internal constructor(
     private val containerColor: Color,
     private val scrolledContainerColor: Color,
     internal val navigationIconContentColor: Color,
@@ -430,9 +449,10 @@ class CollapsedTopAppBarColors internal constructor(
         )
     }
 
+    @Suppress("RedundantIf")
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other == null || other !is CollapsedTopAppBarColors) return false
+        if (other == null || other !is CollapsingTopAppBarColors) return false
 
         if (containerColor != other.containerColor) return false
         if (scrolledContainerColor != other.scrolledContainerColor) return false
@@ -454,7 +474,7 @@ class CollapsedTopAppBarColors internal constructor(
     }
 }
 
-object CollapsedTopAppBarDefaults {
+object CollapsingTopAppBarDefaults {
     @Composable
     fun topAppBarColors(
         containerColor: Color = MaterialTheme.colorScheme.surface,
@@ -465,7 +485,7 @@ object CollapsedTopAppBarDefaults {
         navigationIconContentColor: Color = MaterialTheme.colorScheme.onSurface,
         titleContentColor: Color = MaterialTheme.colorScheme.onSurface,
         actionIconContentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    ) = CollapsedTopAppBarColors(
+    ) = CollapsingTopAppBarColors(
             containerColor,
             scrolledContainerColor,
             navigationIconContentColor,

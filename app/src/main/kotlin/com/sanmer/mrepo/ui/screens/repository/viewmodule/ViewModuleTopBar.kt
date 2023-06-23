@@ -2,7 +2,6 @@ package com.sanmer.mrepo.ui.screens.repository.viewmodule
 
 import android.widget.Toast
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
@@ -40,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.module.OnlineModule
-import com.sanmer.mrepo.ui.component.CollapsedTopAppBar
-import com.sanmer.mrepo.ui.component.CollapsedTopAppBarDefaults
+import com.sanmer.mrepo.ui.component.CollapsingTopAppBar
+import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.utils.LicenseContent
 import com.sanmer.mrepo.ui.utils.expandedShape
@@ -52,7 +50,7 @@ fun ViewModuleTopBar(
     online: OnlineModule,
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
-) = CollapsedTopAppBar(
+) = CollapsingTopAppBar(
     title = {
         Text(
             text = online.name,
@@ -75,7 +73,7 @@ fun ViewModuleTopBar(
         }
     },
     scrollBehavior = scrollBehavior,
-    colors = CollapsedTopAppBarDefaults.topAppBarColors(
+    colors = CollapsingTopAppBarDefaults.topAppBarColors(
         scrolledContainerColor = MaterialTheme.colorScheme.surface
     )
 )
@@ -87,6 +85,7 @@ private fun topBarContent(
     val hasLicense = module.license.isNotBlank()
 
     Row(
+        modifier = Modifier.padding(horizontal = 16.dp),
         verticalAlignment = Alignment.Top
     ) {
         Logo(
@@ -99,19 +98,21 @@ private fun topBarContent(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(start = 15.dp)
+                .padding(start = 16.dp)
         ) {
             Text(
                 text = module.name,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.horizontalScroll(rememberScrollState())
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = module.author,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.horizontalScroll(rememberScrollState())
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = if (hasLicense) {
@@ -126,7 +127,9 @@ private fun topBarContent(
     }
 
     Row(
-        modifier = Modifier.padding(top = 10.dp),
+        modifier = Modifier
+            .padding(top = 10.dp)
+            .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {

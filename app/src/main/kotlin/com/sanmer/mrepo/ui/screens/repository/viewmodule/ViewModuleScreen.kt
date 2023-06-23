@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.datastore.UserData
-import com.sanmer.mrepo.ui.component.CollapsedTopAppBarDefaults
+import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.OverviewPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.VersionsPage
@@ -33,7 +33,7 @@ fun ViewModuleScreen(
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val localModuleInfo = viewModel.rememberLocalModuleInfo(suState = suState)
 
-    val scrollBehavior = CollapsedTopAppBarDefaults.scrollBehavior()
+    val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { pages.size }
 
     BackHandler { navController.navigateBack() }

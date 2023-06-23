@@ -114,6 +114,8 @@ private fun ModuleItem(
             Text(
                 text = module.author,
                 style = MaterialTheme.typography.bodyMedium.copy(),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = module.versionDisplay,
