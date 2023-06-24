@@ -7,7 +7,7 @@
     <string name="setup_non_root_desc1">لا يتطلب خصائص الروت</string>
     <string name="setup_non_root_desc2">متاح : تحميل الملف</string>
     <string name="install_title">تنصيب</string>
-    <string name="install_flashing">تثبيت</string>
+    <string name="install_flashing">تفليش</string>
     <string name="install_done">إنتهى.</string>
     <string name="install_failure">فشل</string>
     <string name="install_reboot">إعادة تشغيل</string>
@@ -39,7 +39,7 @@
     <string name="modules_empty">لم يتم العثور على وحدات</string>
     <string name="repository_empty">المستودعات فارغة</string>
     <string name="search_placeholder">بحث…</string>
-    <string name="view_module_page_versions">الإصدار</string>
+    <string name="view_module_page_versions">الإصدارات</string>
     <string name="view_module_provided">مقدم بواسطة%1$s</string>
     <string name="settings_app_theme">سمة التطبيق</string>
     <string name="settings_log_viewer">عارض السجل</string>
@@ -85,7 +85,7 @@
     <string name="view_module_last_modified">اخر تعديل</string>
     <string name="view_module_dir_size">حجم المسار</string>
     <string name="about_desc1">إدارة الوحدات وتوفير مستودعات الوحدات النمطية لـ Magisk و KernelSU.</string>
-    <string name="settings_delete_zip_desc">احذف الملف المضغوط بعد نجاح التثبيت ، لاحظ أن هذا هو أفضل جهد ولن يتم إذا لم يكن لدى التطبيق إذن بالحذف</string>
+    <string name="settings_delete_zip_desc">احذف الملف المضغوط للوحدة بعد تثبيته بنجاح ، لاحظ أن هذا هو أفضل جهد ولن يعمل إذا لم يكن لدى التطبيق إذن بحذف هذا سيتم تنفيذه بواسطة صلاحية الروت</string>
     <string name="settings_delete_zip">حذف الملف المضغوط</string>
     <string name="page_repository">المستودع</string>
     <string name="view_module_version_dialog_desc">هل تريد تثبيت او تنزيل هذا الإصدار من الوحدة؟</string>
@@ -93,4 +93,6 @@
     <string name="settings_about">حول</string>
     <string name="repo_notification_title">عرض محتويات الوحدات</string>
     <string name="about_app_version">الإصدار %1$s (%2$s)</string>
+    <string name="repo_util_version">إصدار Util:%1$s (%2$d)</string>
+    <string name="repo_incompatible_desc">الإصدار المطلوب غير متوافق&gt; =‌%1$d</string>
 </resources>
