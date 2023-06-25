@@ -19,7 +19,7 @@ body:
       label: Bug description / Bug 描述
       description: Please describe the bug / 请描述 bug 详情
       placeholder: |
-        e.g. Crashed when generating snapshot.
+        e.g. Crashed when installing module.
     validations:
       required: true
   - type: textarea
@@ -28,7 +28,7 @@ body:
       label: Expected behavior / 预期行为
       description: What did you expect to happen? / 你预期会发生什么？
       placeholder: |
-        e.g. A New snapshot!
+        e.g. Install a module.
     validations:
       required: true
   - type: textarea
