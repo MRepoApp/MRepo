@@ -77,4 +77,21 @@
     <string name="license_osi_approved">Одобренно OSI</string>
     <string name="settings_non_root_desc">Функциональность ограничена</string>
     <string name="settings_menu_reboot_download">Перезагрузка в режим загрузки</string>
+    <string name="repo_incompatible_desc">Несовместимо, требуемая версия &gt;= %1$d</string>
+    <string name="repo_options_update">Обновить</string>
+    <string name="repo_options_share">Поделиться</string>
+    <string name="repo_options_delete">Удалить</string>
+    <string name="repo_delete_dialog_desc1">Вы уверены что хотите удалить %1$s\?</string>
+    <string name="repo_delete_dialog_desc2">Заметка: Все установленные модули останутся на вашем устройстве.</string>
+    <string name="repo_add_dialog_title">Добавить репозиторий</string>
+    <string name="repo_add_dialog_add">Добавить</string>
+    <string name="repo_update_dialog_failure">Неудачное обновление: %1$s</string>
+    <string name="repo_notification_title">Обзор содержимого модулей</string>
+    <string name="repo_notification_desc">Ответственность за это несет владелец репозитория. По любым вопросам, связанным с этим хранилищем, пожалуйста, обращайтесь к его владельцу.</string>
+    <string name="about_app_version">Версия %1$s (%2$s)</string>
+    <string name="about_desc1">Предоставление репозиториев модулей и управление модулями для Magisk и KernelSU.</string>
+    <string name="about_desc2">Сделано с ❤️ %1$s</string>
+    <string name="dialog_attention">Внимание</string>
+    <string name="dialog_cancel">Отменить</string>
+    <string name="search_placeholder">Поиск…</string>
 </resources>
