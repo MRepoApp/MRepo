@@ -249,11 +249,10 @@ private fun Scrollbar(
     val targetThumbDisplacementPx = when {
         interactionThumbTravelPercent.isNaN() -> {
             val trackSize = track.size + originalThumbSizePx.plus(
-                    if (originalThumbSizePx > thumbSizePx) {
-                        thumbSizePx
-                    } else {
-                        - thumbSizePx
-                    }
+                when {
+                    originalThumbSizePx > thumbSizePx -> thumbSizePx
+                    else -> - thumbSizePx
+                }
             )
 
             trackSize * thumbTravelPercent

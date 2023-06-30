@@ -47,7 +47,7 @@ fun LazyListState.scrollbarState(
             itemIndex = itemIndex,
         )
     },
-    itemPercentVisible = itemPercentVisible@{ itemInfo ->
+    itemPercentVisible = { itemInfo ->
         itemVisibilityPercentage(
             itemSize = itemInfo.size,
             itemStartOffset = itemInfo.offset,

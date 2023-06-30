@@ -157,7 +157,7 @@ private fun LabelItem(
             .copy(fontSize = 8.sp),
         color = MaterialTheme.colorScheme.onPrimary,
         modifier = Modifier
-            .padding(horizontal = 3.dp, vertical = 1.dp)
+            .padding(horizontal = 3.dp)
             .align(Alignment.Center)
     )
 }
