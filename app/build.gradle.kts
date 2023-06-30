@@ -25,14 +25,17 @@ android {
 
         resourceConfigurations += arrayOf(
             "en",
-            "zh-rCN",
-            "zh-rTW",
-            "fr",
-            "ro",
-            "es",
             "ar",
+            "es",
+            "fr",
             "ja",
-            "pl"
+            "pl",
+            "pt",
+            "ro",
+            "ru",
+            "tr",
+            "zh-rCN",
+            "zh-rTW"
         )
     }
 
