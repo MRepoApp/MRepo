@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.31.4-beta"
 androidGradlePlugin = "8.0.2"
-androidxActivity = "1.7.2"
+androidxActivity = "1.8.0-alpha06"
 androidxAppCompat = "1.6.1"
 androidxCompose = "1.6.0-alpha01"
 androidxComposeCompiler = "1.4.7"
@@ -13,7 +13,7 @@ androidxCore = "1.10.1"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
 androidxLifecycle = "2.6.1"
-androidxNavigation = "2.7.0-beta01"
+androidxNavigation = "2.7.0-beta02"
 androidxRoom = "2.5.2"
 androidxWork = "2.8.1"
 hilt = "2.46"
@@ -31,7 +31,6 @@ squareMoshi = "1.14.0"
 [libraries]
 accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanist" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
-accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" , version.ref = "androidxComposeMaterial" }
