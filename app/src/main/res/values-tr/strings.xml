@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="setup_root_title">Kök</string>
+    <string name="setup_root_title">Root</string>
     <string name="setup_mode">Çalışma Modu</string>
     <string name="setup_root_desc2">Kullanılabilir: bütün özellikler</string>
     <string name="setup_non_root_title">Rootsuz</string>
@@ -31,20 +31,20 @@
     <string name="view_module_dir_size">Klasör Boyutu</string>
     <string name="view_module_provided">%1$s tarafından sağlanmıştır</string>
     <string name="view_module_version_dialog_desc">Modülün bu sürümünü yüklemek veya indirmek istiyor musunuz\?</string>
-    <string name="modules_empty">Modüller bulunamadı</string>
+    <string name="modules_empty">Modül bulunamadı</string>
     <string name="module_version_author">%2$s tarafından %1$s</string>
     <string name="module_remove">Kaldır</string>
     <string name="module_restore">Geri yükle</string>
     <string name="module_install">Yükle</string>
     <string name="module_download">İndir</string>
-    <string name="settings_log_viewer">Log Görüntüleyici</string>
+    <string name="settings_log_viewer">Log Görüntüleme</string>
     <string name="settings_repo">Repolar</string>
     <string name="settings_repo_desc">Magisk modül repolarını yönetin</string>
     <string name="settings_app">Uygulama</string>
     <string name="settings_about">Hakkında</string>
     <string name="settings_root_access">Root erişimi: %1$s</string>
     <string name="settings_root_provider">Sağlayıcı: %1$s</string>
-    <string name="settings_root_granted">Verilmiş</string>
+    <string name="settings_root_granted">Sağlanmış</string>
     <string name="settings_root_none">Yok</string>
     <string name="settings_non_root_desc">İşlevsellik sınırlı</string>
     <string name="settings_menu_reboot">Yeniden başlat</string>
@@ -72,7 +72,7 @@
     <string name="repo_add_dialog_add">Ekle</string>
     <string name="repo_update_dialog_failure">Güncelleme başarısız: %1$s</string>
     <string name="repo_notification_title">Modüllerin İçerik İncelemesi</string>
-    <string name="repo_notification_desc">Repo sahibinin sorumluluğundadır. Bu repoyla ilgili herhangi bir sorun için lütfen sahibiyle iletişime geçin.</string>
+    <string name="repo_notification_desc">Bu repo sahibinin sorumluluğundadır. Bu repoyla ilgili herhangi bir sorun için lütfen sahibiyle iletişime geçin.</string>
     <string name="about_app_version">Sürüm %1$s (%2$s)</string>
     <string name="about_desc1">Magisk ve KernelSU için modül repoları sağlayın ve modülleri yönetin.</string>
     <string name="about_desc2">%1$s tarafından ❤️ ile yapılmıştır</string>
@@ -90,7 +90,7 @@
     <string name="settings_delete_zip_desc">Yükleme başarıyla tamamlandıktan sonra modülün zip dosyasını sil, bu Superuser ile gerçekleştirilir</string>
     <string name="setup_root_desc1">Magisk veya KernelSU\'dan Root erişimi gerektir</string>
     <string name="settings_log_viewer_desc">Uygulama çalışma zamanı günlüklerini görüntüleyin</string>
-    <string name="settings_app_desc">MRepo uygulamasının kendi ayarları</string>
+    <string name="settings_app_desc">MRepo uygulamasının ayarları</string>
     <string name="settings_root_not_available">Mevcut değil</string>
     <string name="settings_menu_reboot_userspace">Arayüzü yeniden başlat</string>
     <string name="settings_menu_reboot_bootloader">Bootloader modunda başlat</string>
