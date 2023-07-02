@@ -44,7 +44,7 @@
     <string name="settings_about">Hakkında</string>
     <string name="settings_root_access">Root erişimi: %1$s</string>
     <string name="settings_root_provider">Sağlayıcı: %1$s</string>
-    <string name="settings_root_granted">Sağlanmış</string>
+    <string name="settings_root_granted">Mevcut</string>
     <string name="settings_root_none">Yok</string>
     <string name="settings_non_root_desc">İşlevsellik sınırlı</string>
     <string name="settings_menu_reboot">Yeniden başlat</string>
@@ -60,9 +60,9 @@
     <string name="settings_delete_zip">Zip Dosyasını Sil</string>
     <string name="app_theme_dark_theme_light">Aydınlık</string>
     <string name="app_theme_dark_theme_dark">Karanlık</string>
-    <string name="repo_modules">%1$d modüller</string>
+    <string name="repo_modules">%1$d modül</string>
     <string name="repo_last_update">Son güncelleme: %1$s</string>
-    <string name="repo_util_version">Özellik sürümü: %1$s (%2$d)</string>
+    <string name="repo_util_version">Sürüm: %1$s (%2$d)</string>
     <string name="repo_options_update">Güncelle</string>
     <string name="repo_options_share">Paylaş</string>
     <string name="repo_options_delete">Sil</string>
@@ -72,7 +72,7 @@
     <string name="repo_add_dialog_add">Ekle</string>
     <string name="repo_update_dialog_failure">Güncelleme başarısız: %1$s</string>
     <string name="repo_notification_title">Modüllerin İçerik İncelemesi</string>
-    <string name="repo_notification_desc">Bu repo sahibinin sorumluluğundadır. Bu repoyla ilgili herhangi bir sorun için lütfen sahibiyle iletişime geçin.</string>
+    <string name="repo_notification_desc">Bu, repo sahibinin sorumluluğundadır. Bir repoyla ilgili herhangi bir sorun için lütfen sahibiyle iletişime geçin.</string>
     <string name="about_app_version">Sürüm %1$s (%2$s)</string>
     <string name="about_desc1">Magisk ve KernelSU için modül repoları sağlayın ve modülleri yönetin.</string>
     <string name="about_desc2">%1$s tarafından ❤️ ile yapılmıştır</string>
