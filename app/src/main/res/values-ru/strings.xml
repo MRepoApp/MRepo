@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings_app_theme_desc">Смена ночного режима и цветовой схемы</string>
-    <string name="settings_delete_zip_desc">Удалить zip фаил модуля после успешной установки, это будет выполнено суперпользователем</string>
+    <string name="settings_delete_zip_desc">Удаление zip файла модуля после успешной установки. Будет выполнено суперпользователем</string>
     <string name="setup_mode">Режим работы</string>
     <string name="setup_root_title">Рут</string>
     <string name="setup_root_desc1">Запрос рут-доступа от Magisk или KernelSU</string>
@@ -37,21 +37,21 @@
     <string name="settings_log_viewer_desc">Просмотр логов приложения</string>
     <string name="settings_repo">Репозитории</string>
     <string name="settings_app">Приложение</string>
-    <string name="settings_app_desc">Настройки самого приложения MRepo</string>
+    <string name="settings_app_desc">Настройки приложения MRepo</string>
     <string name="settings_about">О приложении</string>
     <string name="settings_root_access">Рут доступ: %1$s</string>
-    <string name="settings_root_provider">Провайдер: %1$s</string>
-    <string name="settings_root_granted">Выданно</string>
+    <string name="settings_root_provider">Предоставлено %1$s</string>
+    <string name="settings_root_granted">предоставлен</string>
     <string name="settings_root_not_available">Недоступно</string>
     <string name="settings_root_none">Нету</string>
     <string name="settings_menu_reboot">Перезагрузка</string>
-    <string name="settings_menu_reboot_userspace">Софт перезагрузка</string>
+    <string name="settings_menu_reboot_userspace">Перезагрузка оболочки</string>
     <string name="settings_menu_reboot_recovery">Перезагрузка в рекавери</string>
     <string name="settings_menu_reboot_bootloader">Перезагрузка в бутлоадер</string>
     <string name="settings_menu_reboot_edl">Перезагрузка в EDL</string>
     <string name="settings_app_theme">Тема приложения</string>
     <string name="settings_download_path">Путь для загрузки</string>
-    <string name="settings_delete_zip">Удалить Zip фаил</string>
+    <string name="settings_delete_zip">Удалить zip файл</string>
     <string name="app_theme_palette">Цветовая схема</string>
     <string name="app_theme_dark_theme">Темная тема</string>
     <string name="app_theme_dark_theme_auto">Авто</string>
@@ -63,9 +63,9 @@
     <string name="message_download_failed">Загрузка не удалась: %1$s</string>
     <string name="message_download_success">Успешно загружено</string>
     <string name="message_loading">Загрузка…</string>
-    <string name="notification_name_download">Сервис загрузки</string>
+    <string name="notification_name_download">Служба загрузки</string>
     <string name="shortcut_log_label">Логи</string>
-    <string name="search_empty">Пустой список</string>
+    <string name="search_empty">Список пустой</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="setup_non_root_desc2">Доступно: загрузка модулей</string>
     <string name="page_settings">Настройки</string>
@@ -74,7 +74,7 @@
     <string name="view_module_provided">Предоставлено %1$s</string>
     <string name="view_module_version_dialog_desc">Вы хотите установить или загрузить эту версию модуля\?</string>
     <string name="settings_repo_desc">Управление репозиториями модулей Magisk</string>
-    <string name="license_osi_approved">Одобренно OSI</string>
+    <string name="license_osi_approved">Одобрено OSI</string>
     <string name="settings_non_root_desc">Функциональность ограничена</string>
     <string name="settings_menu_reboot_download">Перезагрузка в режим загрузки</string>
     <string name="repo_incompatible_desc">Несовместимо, требуемая версия &gt;= %1$d</string>
@@ -82,16 +82,17 @@
     <string name="repo_options_share">Поделиться</string>
     <string name="repo_options_delete">Удалить</string>
     <string name="repo_delete_dialog_desc1">Вы уверены что хотите удалить %1$s\?</string>
-    <string name="repo_delete_dialog_desc2">Заметка: Все установленные модули останутся на вашем устройстве.</string>
+    <string name="repo_delete_dialog_desc2">Заметка: все установленные модули останутся на вашем устройстве.</string>
     <string name="repo_add_dialog_title">Добавить репозиторий</string>
     <string name="repo_add_dialog_add">Добавить</string>
     <string name="repo_update_dialog_failure">Неудачное обновление: %1$s</string>
-    <string name="repo_notification_title">Обзор содержимого модулей</string>
-    <string name="repo_notification_desc">Ответственность за это несет владелец репозитория. По любым вопросам, связанным с этим хранилищем, пожалуйста, обращайтесь к его владельцу.</string>
+    <string name="repo_notification_title">Обзор содержания модулей</string>
+    <string name="repo_notification_desc">Ответственность за это лежит на владельце репозитория. По любым вопросам, связанным с этим репозиторием, пожалуйста, обращайтесь к его владельцу.</string>
     <string name="about_app_version">Версия %1$s (%2$s)</string>
     <string name="about_desc1">Предоставление репозиториев модулей и управление модулями для Magisk и KernelSU.</string>
     <string name="about_desc2">Сделано с ❤️ %1$s</string>
     <string name="dialog_attention">Внимание</string>
     <string name="dialog_cancel">Отменить</string>
     <string name="search_placeholder">Поиск…</string>
+    <string name="repo_util_version">Используемая версия: %1$s (%2$d)</string>
 </resources>
