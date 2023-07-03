@@ -93,10 +93,22 @@ private fun ModuleItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Logo(
-            iconRes = R.drawable.box_outline,
+            iconRes = if (moduleState.updatable) {
+                R.drawable.import_outline
+            } else {
+                R.drawable.box_outline
+            },
             modifier = Modifier.size(40.dp),
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            contentColor = if (moduleState.updatable) {
+                MaterialTheme.colorScheme.onPrimary
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
+            containerColor = if (moduleState.updatable) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant
+            },
         )
 
         Column(
