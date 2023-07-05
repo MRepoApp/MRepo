@@ -10,7 +10,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -32,6 +31,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.SettingNormalItem
+import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.navigation.graphs.SettingsScreen
 import com.sanmer.mrepo.ui.navigation.navigateToRepository
 import com.sanmer.mrepo.ui.screens.settings.items.NonRootItem
@@ -135,7 +135,7 @@ private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior
 ) = TopAppBar(
     title = {
-        Text(text = stringResource(id = R.string.page_settings))
+        TopAppBarTitle(text = stringResource(id = R.string.page_settings))
     },
     actions = {
         var expanded by remember { mutableStateOf(false) }

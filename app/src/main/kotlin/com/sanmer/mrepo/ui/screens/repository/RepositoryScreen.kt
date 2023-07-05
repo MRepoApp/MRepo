@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -32,6 +31,7 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
+import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.utils.expansion.navigateToLauncher
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
@@ -128,7 +128,7 @@ private fun NormalTopBar(
     viewModel: RepositoryViewModel = hiltViewModel()
 ) = TopAppBar(
     title = {
-        Text(text = stringResource(id = R.string.page_repository))
+        TopAppBarTitle(text = stringResource(id = R.string.page_repository))
     },
     actions = {
         IconButton(

@@ -48,6 +48,7 @@ import com.sanmer.mrepo.ui.animate.slideInBottomToTop
 import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
+import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.navigation.navigateToRepository
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.none
@@ -162,7 +163,7 @@ private fun NormalTopBar(
     viewModel: ModulesViewModel = hiltViewModel()
 ) = TopAppBar(
     title = {
-        Text(text = stringResource(id = R.string.page_modules))
+        TopAppBarTitle(text = stringResource(id = R.string.page_modules))
     },
     actions = {
         IconButton(
