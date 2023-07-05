@@ -36,10 +36,10 @@ import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.ui.component.HtmlText
+import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.ui.utils.rememberDrawablePainter
 import com.sanmer.mrepo.utils.expansion.openUrl
 
 @Composable
@@ -69,10 +69,11 @@ fun AboutScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            Image(
-                painter = rememberDrawablePainter(id = R.mipmap.ic_launcher),
-                contentDescription = null,
-                modifier = Modifier.size(65.dp)
+            Logo(
+                iconRes = R.drawable.ic_logo,
+                modifier = Modifier.size(65.dp),
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primary
             )
 
             Spacer(modifier = Modifier.height(20.dp))
