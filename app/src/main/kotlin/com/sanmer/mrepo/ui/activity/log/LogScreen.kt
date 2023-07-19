@@ -26,7 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.surfaceColorAtElevation
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -93,6 +94,7 @@ object LogColors {
 
 @Composable
 fun LogScreen() {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val state = rememberLazyListState()
     var priority by remember { mutableStateOf("DEBUG") }
 
@@ -100,15 +102,17 @@ fun LogScreen() {
         derivedStateOf {
             LogcatService.console.filter {
                 it.priority >= priorities.indexOf(priority) + 2
-            }.asReversed()
+            }
         }
     }
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            LogTopBar(
+            TopBar(
                 priority = priority,
-                onPriority = { priority = it }
+                onPriority = { priority = it },
+                scrollBehavior = scrollBehavior
             )
         }
     ) { innerPadding ->
@@ -118,8 +122,7 @@ fun LogScreen() {
                 .fillMaxSize()
         ) {
             LazyColumn(
-                state = state,
-                reverseLayout = true
+                state = state
             ) {
                 items(console) { value ->
                     Column(
@@ -145,9 +148,10 @@ fun LogScreen() {
 }
 
 @Composable
-private fun LogTopBar(
+private fun TopBar(
     priority: String,
     onPriority: (String) -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
     title = stringResource(id = R.string.settings_log_viewer),
     actions = {
@@ -178,9 +182,7 @@ private fun LogTopBar(
             )
         }
     },
-    colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
-    )
+    scrollBehavior = scrollBehavior
 )
 
 @Composable
