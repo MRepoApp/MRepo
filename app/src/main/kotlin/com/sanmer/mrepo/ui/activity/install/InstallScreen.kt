@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,13 +27,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,13 +56,7 @@ fun InstallScreen(
     val isScrollingUp = listState.isScrollingUp()
     val showFab by remember(isScrollingUp) {
         derivedStateOf {
-            isScrollingUp && viewModel.state.isSucceeded
-        }
-    }
-
-    LaunchedEffect(viewModel.console.size) {
-        listState.apply {
-            animateScrollToItem(layoutInfo.totalItemsCount)
+            isScrollingUp && viewModel.state.isFinished
         }
     }
 
@@ -107,7 +98,7 @@ fun InstallScreen(
         }
     ) {
         Console(
-            list = viewModel.console,
+            list = viewModel.console.asReversed(),
             state = listState,
             modifier = Modifier
                 .padding(it)
@@ -119,27 +110,21 @@ fun InstallScreen(
 
 @Composable
 private fun Console(
-    list: SnapshotStateList<String>,
+    list: List<String>,
     state: LazyListState,
     modifier: Modifier = Modifier,
+) = LazyColumn(
+    state = state,
+    modifier = modifier,
+    reverseLayout = true
 ) {
-    val configuration = LocalConfiguration.current
-    val minWidth = remember(configuration) { configuration.screenWidthDp.dp }
-
-    LazyColumn(
-        state = state,
-        modifier = modifier
-    ) {
-        items(list) {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .defaultMinSize(minWidth = minWidth)
-                    .padding(horizontal = 5.dp)
-            )
-        }
+    items(list) {
+        Text(
+            text = it,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 5.dp)
+        )
     }
 }
 
@@ -173,12 +158,8 @@ private fun TopBar(
 
 @Composable
 private fun FloatingButton() = ExtendedFloatingActionButton(
-    onClick = {
-        SvcPower.reboot()
-    },
-    text = {
-        Text(text = stringResource(id = R.string.install_reboot))
-    },
+    onClick = { SvcPower.reboot() },
+    text = { Text(text = stringResource(id = R.string.install_reboot)) },
     icon = {
         Icon(
             painter = painterResource(id = R.drawable.refresh_outline),
