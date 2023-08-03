@@ -1,19 +1,9 @@
-<p>
-    <i>MRepo</i> (kurz für <i>My Repository</i> oder <i>Modules(Magisk) Repository</i>) ist eine Android-App, mit der Sie Ihr eigenes Modul-Repository verwalten können.
-    <i>MRepo</i> soll Module mit Magisk installieren – und lässt Sie Ihr eigenes zu verwendendes Modul-Repository definieren.
-</p>
+MRepo ist eine Android-App, mit der Sie Ihr eigenes Modul-Repository verwalten können.
 
-<p>
-    <b>Features:</b>
-</p>
+Features:
+- Jetpack Compose &amp; Material Design 3
+- Module herunterladen und aktualisieren
+- Ihr eigenes Modul-Repository
+- Mehrere Repositories unterstützen
 
-<ul>
-    <li>Jetpack Compose &amp; Material Design 3</li>
-    <li>Module herunterladen und aktualisieren</li>
-    <li>Ihr eigenes Modul-Repository</li>
-    <li>Mehrere Repositories unterstützen</li>
-</ul>
-
-<p>
-    <b>Repo:</b> Das wird empfohlen Wenn Sie ein eigenes Modul-Repository verwenden, können Sie auf <a href='https://github.com/ya0211/magisk-modules-repo-util' target='_blank' rel='nofollow noopener'>ya0211/magisk-modules-repo-util</a>.
-</p>
+https://github.com/ya0211/MRepo
