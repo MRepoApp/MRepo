@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,14 +52,14 @@ fun OverviewPage(
     }
 
     if (installed && localModuleInfo != null) {
-        Divider(thickness = 0.9.dp)
+        HorizontalDivider(thickness = 0.9.dp)
         LocalItem(
             local = local,
             moduleInfo = localModuleInfo
         )
     }
 
-    Divider(thickness = 0.9.dp)
+    HorizontalDivider(thickness = 0.9.dp)
 }
 
 @Composable

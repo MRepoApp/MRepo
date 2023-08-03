@@ -31,7 +31,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -143,7 +143,7 @@ private fun VersionList(
                     .fillMaxWidth()
             )
         } else {
-            Divider(thickness = 0.9.dp)
+            HorizontalDivider(thickness = 0.9.dp)
         }
     }
 }

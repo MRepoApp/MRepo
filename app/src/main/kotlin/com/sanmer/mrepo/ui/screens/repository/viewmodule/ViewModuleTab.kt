@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
@@ -55,7 +55,7 @@ fun ViewModuleTab(
             )
         },
         divider = {
-            Divider(
+            HorizontalDivider(
                 thickness = 0.3.dp,
                 modifier = Modifier.shadow(6.dp)
             )
