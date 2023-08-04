@@ -26,7 +26,7 @@ libsu = "5.2.0"
 protobuf = "3.23.4"
 protobufPlugin = "0.9.4"
 squareRetrofit = "2.9.0"
-squareMoshi = "1.14.0"
+squareMoshi = "1.15.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
