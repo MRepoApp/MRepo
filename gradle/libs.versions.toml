@@ -1,5 +1,5 @@
 [versions]
-accompanist = "0.31.5-beta"
+accompanist = "0.31.6-rc"
 androidGradlePlugin = "8.1.0"
 androidxActivity = "1.8.0-alpha06"
 androidxAppCompat = "1.6.1"
