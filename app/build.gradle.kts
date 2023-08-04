@@ -92,7 +92,7 @@ android {
     applicationVariants.configureEach {
         outputs.configureEach {
             this as ApkVariantOutputImpl
-            outputFileName = "mrepo-${versionName}-${versionCode}-${name}.apk"
+            outputFileName = "MRepo-${versionName}-${versionCode}-${name}.apk"
         }
     }
 }
