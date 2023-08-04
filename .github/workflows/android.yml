@@ -50,17 +50,23 @@ jobs:
     
     - name: Build with Gradle
       run: ./gradlew assembleRelease
+
+    - name: Get release name
+      if: success() && github.ref == 'refs/heads/main'
+      id: release-name
+      run: |
+        name=`ls app/build/outputs/apk/release/*.apk | awk -F '(/|.apk)' '{print $6}'` && echo "name=$name" >> $GITHUB_OUTPUT
     
     - name: Upload built apk
       if: success() && github.ref == 'refs/heads/main'
       uses: actions/upload-artifact@v3
       with:
-        name: apk
-        path: ${{ github.workspace }}/app/build/outputs/apk/release/*.apk
+        name: ${{ steps.release-name.outputs.name }}
+        path: app/build/outputs/apk/release/*.apk
     
     - name: Upload mappings
       if: success() && github.ref == 'refs/heads/main'
       uses: actions/upload-artifact@v3
       with:
         name: mappings
-        path: ${{ github.workspace }}/app/build/outputs/mapping/release
+        path: app/build/outputs/mapping/release
