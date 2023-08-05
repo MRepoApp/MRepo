@@ -21,7 +21,7 @@ data class OnlineModule(
         ""
     }
 
-    val versionDisplay get() = if ("(${versionCode})" in version) {
+    val versionDisplay get() = if ("$versionCode" in version) {
         version
     } else {
         "$version (${versionCode})"

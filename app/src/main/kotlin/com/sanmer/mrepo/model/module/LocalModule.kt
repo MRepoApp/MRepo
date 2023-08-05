@@ -14,7 +14,7 @@ data class LocalModule(
 ) {
     var state by mutableStateOf(State.DISABLE)
 
-    val versionDisplay get() = if ("(${versionCode})" in version) {
+    val versionDisplay get() = if ("$versionCode" in version) {
         version
     } else {
         "$version (${versionCode})"
