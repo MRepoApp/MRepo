@@ -4,46 +4,23 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
-@Entity(tableName = "repo")
+@Entity(tableName = "repos")
 data class Repo(
     @PrimaryKey val url: String,
     val name: String = url,
     val enable: Boolean = true,
     @Embedded val metadata: RepoMetadata = RepoMetadata.default
 ) {
-    constructor(
-        url: String,
-        name: String,
-        enable: Boolean,
-        size: Int,
-        timestamp: Float,
-        version: String,
-        versionCode: Int
-    ) : this(
-        url = url,
-        name = name,
-        enable = enable,
-        metadata = RepoMetadata(
-            size = size,
-            timestamp = timestamp,
-            version = version,
-            versionCode = versionCode
-        )
-    )
-
     fun isCompatible() = metadata.versionCode >= RepoMetadata.current.versionCode
 
-    override fun equals(other: Any?): Boolean {
-        return when (other) {
-            is Repo -> url == other.url
-            else -> false
-        }
+    override fun equals(other: Any?) = when (other) {
+        is Repo -> url == other.url
+        else -> false
     }
 
-    override fun hashCode(): Int {
-        return url.hashCode()
-    }
+    override fun hashCode() = url.hashCode()
 
     fun copy(
         url: String = this.url,
@@ -66,8 +43,6 @@ data class Repo(
     )
 }
 
-fun String.toRepo() = Repo(url = this)
-
 @Entity(tableName = "metadata")
 data class RepoMetadata(
     val size: Int,
@@ -86,3 +61,17 @@ data class RepoMetadata(
         val current = default
     }
 }
+
+data class RepoWithModule(
+    @Embedded val repo: Repo,
+    @Relation(
+        parentColumn = "url",
+        entityColumn = "repoUrl",
+        entity = OnlineModuleEntity::class
+    )
+    val modules: List<OnlineModuleEntity> = listOf()
+)
+
+fun String.toRepo() = Repo(url = this)
+
+

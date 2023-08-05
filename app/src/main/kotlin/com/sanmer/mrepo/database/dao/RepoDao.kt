@@ -1,7 +1,12 @@
 package com.sanmer.mrepo.database.dao
 
-import androidx.room.*
-import com.sanmer.mrepo.database.entity.OnlineModuleEntity
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.RepoWithModule
 import kotlinx.coroutines.flow.Flow
@@ -9,52 +14,28 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RepoDao {
     @Transaction
-    @Query("SELECT * FROM repo")
-    fun getRepoWithModule(): List<RepoWithModule>
+    @Query("SELECT * FROM repos")
+    fun getWithModule(): List<RepoWithModule>
 
     @Transaction
-    @Query("SELECT * FROM repo")
-    fun getRepoWithModuleAsFlow(): Flow<List<RepoWithModule>>
+    @Query("SELECT * FROM repos")
+    fun getWithModuleAsFlow(): Flow<List<RepoWithModule>>
 
-    @Query("SELECT * FROM repo")
-    fun getRepoAll(): List<Repo>
+    @Query("SELECT * FROM repos")
+    fun getAll(): List<Repo>
 
-    @Query("SELECT * FROM repo")
-    fun getRepoAllAsFlow(): Flow<List<Repo>>
+    @Query("SELECT * FROM repos")
+    fun getAllAsFlow(): Flow<List<Repo>>
 
-    @Query("SELECT COUNT(url) FROM repo")
-    fun getRepoCount(): Flow<Int>
-
-    @Query("SELECT COUNT(*) FROM repo WHERE enable LIKE 1")
-    fun getEnableCount(): Flow<Int>
-
-    @Query("SELECT SUM(size) FROM repo WHERE enable LIKE 1")
-    fun getModuleCount(): Flow<Int>
-
-    @Query("SELECT * FROM repo WHERE url LIKE :url LIMIT 1")
-    fun getRepoByUrl(url: String): Repo
+    @Query("SELECT * FROM repos WHERE url LIKE :url LIMIT 1")
+    fun getByUrl(url: String): Repo
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRepo(value: Repo)
+    suspend fun insert(value: Repo)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateRepo(value: Repo)
+    suspend fun update(value: Repo)
 
     @Delete
-    suspend fun deleteRepo(value: Repo)
-
-    @Query("SELECT * FROM online_module")
-    fun getModuleAll(): List<OnlineModuleEntity>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertModule(value: OnlineModuleEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertModule(list: List<OnlineModuleEntity>)
-
-    @Query("DELETE from online_module where repo_url = :repoUrl")
-    suspend fun deleteModuleByUrl(repoUrl: String)
-
-    @Query("DELETE FROM online_module")
-    suspend fun deleteModuleAll()
+    suspend fun delete(value: Repo)
 }

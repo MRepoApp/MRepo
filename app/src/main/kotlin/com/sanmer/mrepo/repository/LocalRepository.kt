@@ -1,7 +1,8 @@
 package com.sanmer.mrepo.repository
 
 import androidx.compose.runtime.toMutableStateList
-import com.sanmer.mrepo.database.dao.ModuleDao
+import com.sanmer.mrepo.database.dao.LocalDao
+import com.sanmer.mrepo.database.dao.OnlineDao
 import com.sanmer.mrepo.database.dao.RepoDao
 import com.sanmer.mrepo.database.entity.OnlineModuleEntity
 import com.sanmer.mrepo.database.entity.Repo
@@ -25,8 +26,9 @@ import javax.inject.Singleton
 
 @Singleton
 class LocalRepository @Inject constructor(
-    private val moduleDao: ModuleDao,
     private val repoDao: RepoDao,
+    private val onlineDao: OnlineDao,
+    private val localDao: LocalDao,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) {
     private var _online = listOf<OnlineModule>()
@@ -55,45 +57,45 @@ class LocalRepository @Inject constructor(
             }.launchIn(applicationScope)
     }
 
-    private fun getLocalAllAsFlow() = moduleDao.getLocalAllAsFlow().map { list ->
+    private fun getLocalAllAsFlow() = localDao.getAllAsFlow().map { list ->
         list.map { it.toModule() }
     }
 
     suspend fun insertLocal(value: LocalModule) = withContext(Dispatchers.IO) {
-        moduleDao.insertLocal(value.toEntity())
+        localDao.insert(value.toEntity())
     }
 
     suspend fun insertLocal(list: List<LocalModule>) = withContext(Dispatchers.IO) {
-        moduleDao.insertLocal(list.map { it.toEntity() })
+        localDao.insert(list.map { it.toEntity() })
     }
 
     suspend fun deleteLocalAll() = withContext(Dispatchers.IO) {
-        moduleDao.deleteLocalAll()
+        localDao.deleteAll()
     }
 
-    fun getRepoAllAsFlow() = repoDao.getRepoAllAsFlow()
+    fun getRepoAllAsFlow() = repoDao.getAllAsFlow()
 
     suspend fun getRepoAll() = withContext(Dispatchers.IO) {
-        repoDao.getRepoAll()
+        repoDao.getAll()
     }
 
     suspend fun getRepoByUrl(url: String) = withContext(Dispatchers.IO) {
-        repoDao.getRepoByUrl(url)
+        repoDao.getByUrl(url)
     }
 
     suspend fun insertRepo(value: Repo) = withContext(Dispatchers.IO) {
-        repoDao.insertRepo(value)
+        repoDao.insert(value)
     }
 
     suspend fun updateRepo(value: Repo) = withContext(Dispatchers.IO) {
-        repoDao.updateRepo(value)
+        repoDao.update(value)
     }
 
     suspend fun deleteRepo(value: Repo) = withContext(Dispatchers.IO) {
-        repoDao.deleteRepo(value)
+        repoDao.delete(value)
     }
 
-    private fun getOnlineAllAsFlow() = repoDao.getRepoWithModuleAsFlow().map { list ->
+    private fun getOnlineAllAsFlow() = repoDao.getWithModuleAsFlow().map { list ->
         list.filter { it.repo.enable && it.repo.isCompatible() }
             .map { it.modules }
             .merge()
@@ -101,11 +103,11 @@ class LocalRepository @Inject constructor(
     }
 
     suspend fun insertOnline(list: List<OnlineModuleEntity>) = withContext(Dispatchers.IO) {
-        repoDao.insertModule(list)
+        onlineDao.insert(list)
     }
 
     suspend fun deleteOnlineByUrl(repoUrl: String) = withContext(Dispatchers.IO) {
-        repoDao.deleteModuleByUrl(repoUrl)
+        onlineDao.deleteByUrl(repoUrl)
     }
 
     private suspend fun List<OnlineModuleEntity>.toModuleList() = withContext(Dispatchers.Default) {

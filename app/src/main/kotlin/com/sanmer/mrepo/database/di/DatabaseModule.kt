@@ -1,12 +1,10 @@
 package com.sanmer.mrepo.database.di
 
 import android.content.Context
-import androidx.room.Room
-import com.sanmer.mrepo.database.ModuleDatabase
-import com.sanmer.mrepo.database.RepoDatabase
-import com.sanmer.mrepo.database.dao.ModuleDao
+import com.sanmer.mrepo.database.AppDatabase
+import com.sanmer.mrepo.database.dao.LocalDao
+import com.sanmer.mrepo.database.dao.OnlineDao
 import com.sanmer.mrepo.database.dao.RepoDao
-import com.sanmer.mrepo.utils.expansion.renameDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,42 +16,21 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
-
     @Provides
     @Singleton
-    fun providesModuleDatabase(
+    fun providesAppDatabase(
         @ApplicationContext context: Context
-    ): ModuleDatabase {
-        // MIGRATION
-        context.renameDatabase("mrepo", "module")
-
-        return Room.databaseBuilder(context,
-            ModuleDatabase::class.java, "module")
-            .build()
-    }
+    )  = AppDatabase.build(context)
 
     @Provides
     @Singleton
-    fun providesModuleDao(db: ModuleDatabase): ModuleDao = db.moduleDao()
+    fun providesRepoDao(db: AppDatabase): RepoDao = db.repoDao()
 
     @Provides
     @Singleton
-    fun providesRepoDatabase(
-        @ApplicationContext context: Context
-    ): RepoDatabase {
-        // MIGRATION
-        context.filesDir.resolve("repositories").deleteRecursively()
-
-        return Room.databaseBuilder(context,
-            RepoDatabase::class.java, "repo")
-            .addMigrations(
-                RepoDatabase.MIGRATION_1_2,
-                RepoDatabase.MIGRATION_2_3
-            )
-            .build()
-    }
+    fun providesOnlineDao(db: AppDatabase): OnlineDao = db.onlineDao()
 
     @Provides
     @Singleton
-    fun providesRepoDao(db: RepoDatabase): RepoDao = db.repoDao()
+    fun providesLocalDao(db: AppDatabase): LocalDao = db.localDao()
 }
