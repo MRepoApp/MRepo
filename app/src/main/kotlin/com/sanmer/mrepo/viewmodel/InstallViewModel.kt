@@ -14,8 +14,8 @@ import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
-import com.sanmer.mrepo.utils.expansion.createLog
-import com.sanmer.mrepo.utils.expansion.shareFile
+import com.sanmer.mrepo.utils.extensions.createLog
+import com.sanmer.mrepo.utils.extensions.shareFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber

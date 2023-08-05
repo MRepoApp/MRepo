@@ -11,7 +11,7 @@ import com.sanmer.mrepo.database.dao.RepoDao
 import com.sanmer.mrepo.database.entity.LocalModuleEntity
 import com.sanmer.mrepo.database.entity.OnlineModuleEntity
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.utils.expansion.renameDatabase
+import com.sanmer.mrepo.utils.extensions.renameDatabase
 
 @Database(
     entities = [

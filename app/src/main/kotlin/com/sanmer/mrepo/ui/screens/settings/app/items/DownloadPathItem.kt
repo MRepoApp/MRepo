@@ -28,7 +28,7 @@ import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.absoluteFile
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TextFieldDialog
-import com.sanmer.mrepo.utils.expansion.toFile
+import com.sanmer.mrepo.utils.extensions.toFile
 import java.io.File
 
 @Composable

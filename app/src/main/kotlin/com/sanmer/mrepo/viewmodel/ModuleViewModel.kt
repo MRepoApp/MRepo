@@ -26,9 +26,9 @@ import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.service.DownloadService
-import com.sanmer.mrepo.utils.expansion.toDateTime
-import com.sanmer.mrepo.utils.expansion.totalSize
-import com.sanmer.mrepo.utils.expansion.update
+import com.sanmer.mrepo.utils.extensions.toDateTime
+import com.sanmer.mrepo.utils.extensions.totalSize
+import com.sanmer.mrepo.utils.extensions.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

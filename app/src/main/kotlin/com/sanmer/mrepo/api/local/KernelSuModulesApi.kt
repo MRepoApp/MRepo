@@ -5,7 +5,7 @@ import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
 import com.sanmer.mrepo.utils.ModuleUtils
-import com.sanmer.mrepo.utils.expansion.output
+import com.sanmer.mrepo.utils.extensions.output
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import org.json.JSONArray

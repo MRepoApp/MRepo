@@ -33,7 +33,7 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.utils.expansion.navigateToLauncher
+import com.sanmer.mrepo.utils.extensions.navigateToLauncher
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable

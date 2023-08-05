@@ -21,9 +21,9 @@ import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
-import com.sanmer.mrepo.utils.expansion.getUriForFile
-import com.sanmer.mrepo.utils.expansion.parcelable
-import com.sanmer.mrepo.utils.expansion.toFile
+import com.sanmer.mrepo.utils.extensions.getUriForFile
+import com.sanmer.mrepo.utils.extensions.parcelable
+import com.sanmer.mrepo.utils.extensions.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn

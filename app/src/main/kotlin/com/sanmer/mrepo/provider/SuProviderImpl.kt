@@ -13,7 +13,7 @@ import com.sanmer.mrepo.api.local.MagiskModulesApi
 import com.sanmer.mrepo.api.local.ModulesLocalApi
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.utils.expansion.toFile
+import com.sanmer.mrepo.utils.extensions.toFile
 import com.topjohnwu.superuser.NoShellException
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService

@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.ui.activity.base.BaseActivity
-import com.sanmer.mrepo.utils.expansion.deleteLog
+import com.sanmer.mrepo.utils.extensions.deleteLog
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

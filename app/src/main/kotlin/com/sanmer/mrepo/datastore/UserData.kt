@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.ui.theme.Colors
-import com.sanmer.mrepo.utils.expansion.toFile
+import com.sanmer.mrepo.utils.extensions.toFile
 import java.io.File
 
 data class UserData(

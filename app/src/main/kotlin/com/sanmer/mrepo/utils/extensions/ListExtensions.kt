@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.utils.expansion
+package com.sanmer.mrepo.utils.extensions
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 

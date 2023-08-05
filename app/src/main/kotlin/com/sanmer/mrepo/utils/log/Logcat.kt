@@ -2,8 +2,8 @@ package com.sanmer.mrepo.utils.log
 
 import android.content.Context
 import com.sanmer.mrepo.App
-import com.sanmer.mrepo.utils.expansion.getLogPath
-import com.sanmer.mrepo.utils.expansion.shareFile
+import com.sanmer.mrepo.utils.extensions.getLogPath
+import com.sanmer.mrepo.utils.extensions.shareFile
 import com.sanmer.mrepo.utils.log.LogText.Companion.toLogPriority
 
 object Logcat {

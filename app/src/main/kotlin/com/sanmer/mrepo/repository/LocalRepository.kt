@@ -11,8 +11,8 @@ import com.sanmer.mrepo.database.entity.toModule
 import com.sanmer.mrepo.di.ApplicationScope
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.OnlineModule
-import com.sanmer.mrepo.utils.expansion.merge
-import com.sanmer.mrepo.utils.expansion.update
+import com.sanmer.mrepo.utils.extensions.merge
+import com.sanmer.mrepo.utils.extensions.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged

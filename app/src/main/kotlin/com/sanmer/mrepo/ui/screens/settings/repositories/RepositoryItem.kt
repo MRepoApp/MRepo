@@ -41,8 +41,8 @@ import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.RepoMetadata
 import com.sanmer.mrepo.ui.component.Checkbox
 import com.sanmer.mrepo.ui.component.DropdownMenu
-import com.sanmer.mrepo.utils.expansion.shareText
-import com.sanmer.mrepo.utils.expansion.toDateTime
+import com.sanmer.mrepo.utils.extensions.shareText
+import com.sanmer.mrepo.utils.extensions.toDateTime
 
 private enum class Menu(
     @StringRes val label: Int,

@@ -3,7 +3,7 @@ package com.sanmer.mrepo.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.sanmer.mrepo.utils.expansion.deleteLog
+import com.sanmer.mrepo.utils.extensions.deleteLog
 import com.sanmer.mrepo.utils.log.Logcat
 import timber.log.Timber
 

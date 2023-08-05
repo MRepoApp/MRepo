@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.utils.expansion
+package com.sanmer.mrepo.utils.extensions
 
 import android.content.Intent
 import android.os.Bundle

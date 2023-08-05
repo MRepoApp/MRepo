@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.utils
 
-import com.sanmer.mrepo.utils.expansion.runRequest
+import com.sanmer.mrepo.utils.extensions.runRequest
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import kotlinx.coroutines.Dispatchers

@@ -66,7 +66,7 @@ import com.sanmer.mrepo.ui.component.MarkdownText
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.rememberStringDataRequest
-import com.sanmer.mrepo.utils.expansion.toDate
+import com.sanmer.mrepo.utils.extensions.toDate
 import kotlinx.coroutines.launch
 
 @Composable

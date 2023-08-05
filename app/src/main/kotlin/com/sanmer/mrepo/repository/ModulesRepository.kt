@@ -5,7 +5,7 @@ import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toEntity
 import com.sanmer.mrepo.di.ApplicationScope
 import com.sanmer.mrepo.model.json.copy
-import com.sanmer.mrepo.utils.expansion.runRequest
+import com.sanmer.mrepo.utils.extensions.runRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged

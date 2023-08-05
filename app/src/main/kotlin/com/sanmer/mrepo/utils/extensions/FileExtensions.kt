@@ -1,10 +1,27 @@
-package com.sanmer.mrepo.utils.expansion
+package com.sanmer.mrepo.utils.extensions
 
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+
+fun String.toFile() = File(this)
+
+val File.isSymbolicLink get() = exists() && absolutePath != canonicalPath
+
+val File.totalSize: Long get() {
+    var size: Long = 0
+    listFiles()?.forEach {
+        if (!it.isDirectory && !it.isSymbolicLink) {
+            size += it.length()
+        } else if (it.isDirectory) {
+            size += it.totalSize
+        }
+    }
+
+    return size
+}
 
 @Throws(IOException::class)
 fun File.unzip(folder: File, path: String = "", junkPath: Boolean = false) {

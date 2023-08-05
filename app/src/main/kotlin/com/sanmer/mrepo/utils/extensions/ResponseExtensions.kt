@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.utils.expansion
+package com.sanmer.mrepo.utils.extensions
 
 inline fun <reified T> runRequest(
     run: () -> retrofit2.Response<T>

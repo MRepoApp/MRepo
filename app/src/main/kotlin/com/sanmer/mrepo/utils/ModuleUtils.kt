@@ -3,8 +3,8 @@ package com.sanmer.mrepo.utils
 import android.content.Context
 import com.sanmer.mrepo.model.module.LocalModule
 import com.sanmer.mrepo.model.module.State
-import com.sanmer.mrepo.utils.expansion.output
-import com.sanmer.mrepo.utils.expansion.unzip
+import com.sanmer.mrepo.utils.extensions.output
+import com.sanmer.mrepo.utils.extensions.unzip
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import timber.log.Timber

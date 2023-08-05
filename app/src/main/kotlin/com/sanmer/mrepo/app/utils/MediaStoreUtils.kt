@@ -12,7 +12,7 @@ import androidx.documentfile.provider.DocumentFile
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.sanmer.mrepo.App
-import com.sanmer.mrepo.utils.expansion.toFile
+import com.sanmer.mrepo.utils.extensions.toFile
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
