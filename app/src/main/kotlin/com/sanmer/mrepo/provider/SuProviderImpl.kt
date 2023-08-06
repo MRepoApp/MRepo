@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.os.Process
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.api.local.KernelSuModulesApi
@@ -109,12 +108,11 @@ class SuProviderImpl @Inject constructor(
 
     private class SuService : RootService() {
         override fun onBind(intent: Intent): IBinder = object : ISuProvider.Stub() {
-            override fun getPid(): Int = Process.myPid()
             override fun getContext(): String = getContextImpl()
-            override fun getEnforce(): Int = getEnforceImpl()
             override fun getFileSystemService(): IBinder = FileSystemManager.getService()
         }
 
+        @Suppress("SameParameterValue")
         private inline fun <T> safe(default: T, block: () -> T): T {
             return try {
                 block()
@@ -129,19 +127,9 @@ class SuProviderImpl @Inject constructor(
                 .readText()
                 .replace("[^a-z0-9:_,]".toRegex(), "")
         }
-
-        private fun getEnforceImpl() = safe(1) {
-            "/sys/fs/selinux/enforce".toFile()
-                .readText()
-                .replace("[^0-9]".toRegex(), "")
-                .toInt()
-        }
-
     }
 
-    override val pid: Int get() = mProvider.pid
     override val context: String get() = mProvider.context
-    override val enforce: Int get() = mProvider.enforce
 
     override fun getFileSystemManager(): FileSystemManager =
         FileSystemManager.getRemote(mProvider.fileSystemService)

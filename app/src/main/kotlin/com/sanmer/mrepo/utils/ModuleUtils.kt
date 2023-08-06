@@ -110,4 +110,12 @@ object ModuleUtils {
                 }
             }
     }
+
+    fun reboot(reason: String = "") {
+        if (reason == "recovery") {
+            // KEYCODE_POWER = 26, hide incorrect "Factory data reset" message
+            Shell.cmd("/system/bin/input keyevent 26").submit()
+        }
+        Shell.cmd("/system/bin/svc power reboot $reason || /system/bin/reboot $reason").submit()
+    }
 }

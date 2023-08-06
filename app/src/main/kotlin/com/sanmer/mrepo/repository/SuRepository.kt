@@ -17,9 +17,6 @@ class SuRepository @Inject constructor(
     private val api: ModulesLocalApi get() = suProvider.getModulesApi()
 
     val state: StateFlow<Event> get() = suProvider.state
-    val pid get() = suProvider.pid
-    val context get() = suProvider.context
-    val enforce get() = suProvider.enforce
     val fs: FileSystemManager get() = suProvider.getFileSystemManager()
 
     val version get() = api.version

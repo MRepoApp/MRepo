@@ -43,7 +43,7 @@ import com.sanmer.mrepo.ui.animate.slideInBottomToTop
 import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
-import com.sanmer.mrepo.utils.SvcPower
+import com.sanmer.mrepo.utils.ModuleUtils
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 
 @Composable
@@ -158,7 +158,7 @@ private fun TopBar(
 
 @Composable
 private fun FloatingButton() = ExtendedFloatingActionButton(
-    onClick = { SvcPower.reboot() },
+    onClick = { ModuleUtils.reboot() },
     text = { Text(text = stringResource(id = R.string.install_reboot)) },
     icon = {
         Icon(

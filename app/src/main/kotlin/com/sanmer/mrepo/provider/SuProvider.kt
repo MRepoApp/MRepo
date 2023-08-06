@@ -8,11 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface SuProvider {
     val state: StateFlow<Event>
 
-    val pid: Int
-
     val context: String
-
-    val enforce: Int
 
     fun getFileSystemManager(): FileSystemManager
 
