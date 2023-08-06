@@ -12,8 +12,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.model.module.LocalModule
-import com.sanmer.mrepo.model.module.State
+import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository

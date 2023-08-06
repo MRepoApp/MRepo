@@ -2,8 +2,8 @@ package com.sanmer.mrepo.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.sanmer.mrepo.model.module.LocalModule
-import com.sanmer.mrepo.model.module.State
+import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.local.State
 
 @Entity(tableName = "localModules")
 data class LocalModuleEntity(

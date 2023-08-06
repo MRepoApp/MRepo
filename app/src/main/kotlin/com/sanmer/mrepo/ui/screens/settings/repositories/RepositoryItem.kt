@@ -2,7 +2,6 @@ package com.sanmer.mrepo.ui.screens.settings.repositories
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -23,22 +23,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.database.entity.RepoMetadata
+import com.sanmer.mrepo.model.online.ModulesJson
 import com.sanmer.mrepo.ui.component.Checkbox
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.utils.extensions.shareText
@@ -115,7 +116,6 @@ fun RepositoryItem(
             RepoItem(
                 repo = repo,
                 onChange = { updateRepo(repo.copy(enable = it)) },
-                onLongClick = { expanded = true },
                 onIconClick = { expanded = true }
             )
         }
@@ -136,80 +136,85 @@ fun RepositoryItem(
 private fun RepoItem(
     repo: Repo,
     onChange: (Boolean) -> Unit,
-    onLongClick: () -> Unit,
     onIconClick: () -> Unit
-) = Row(
-    modifier = Modifier
-        .clip(RoundedCornerShape(10.dp))
-        .combinedClickable(
-            onClick = { onChange(!repo.enable) },
-            onLongClick = onLongClick,
-            role = Role.Checkbox,
-            enabled = repo.isCompatible()
-        )
-        .padding(all = 16.dp)
-        .fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically
 ) {
-    Checkbox(
-        checked = repo.enable,
-        onCheckedChange = null
-    )
+    val alpha by remember {
+        derivedStateOf { if (repo.isCompatible) 1f else 0.6f }
+    }
 
-    Spacer(modifier = Modifier.width(16.dp))
-    Column(
-        modifier = Modifier.weight(1f),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(2.dp)
+    val (checkedState, onStateChange) = remember {
+        mutableStateOf(repo.enable && repo.isCompatible)
+    }
+
+    Row(
+        modifier = Modifier
+            .alpha(alpha)
+            .clip(RoundedCornerShape(10.dp))
+            .toggleable(
+                enabled = repo.isCompatible,
+                value = checkedState,
+                onValueChange = {
+                    onStateChange(it)
+                    onChange(it)
+                }
+            )
+            .padding(all = 16.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = repo.name,
-            style = MaterialTheme.typography.titleSmall
+        Checkbox(
+            checked = checkedState,
+            onCheckedChange = null
         )
 
-        if (repo.isCompatible()) {
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
             Text(
-                text = stringResource(id = R.string.repo_modules,
-                    repo.metadata.size),
+                text = repo.name,
+                style = MaterialTheme.typography.titleSmall
+            )
+
+            Text(
+                text = stringResource(
+                    id = R.string.repo_modules,
+                    repo.metadata.size
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.outline
             )
             Text(
-                text = stringResource(id = R.string.repo_util_version,
-                    repo.metadata.version, repo.metadata.versionCode),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.outline
-            )
-            Text(
-                text = stringResource(id = R.string.repo_last_update,
-                    repo.metadata.timestamp.toDateTime()),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.outline
-            )
-        } else {
-            Text(
-                text = stringResource(id = R.string.repo_util_version,
-                    repo.metadata.version, repo.metadata.versionCode),
+                text = stringResource(
+                    id = R.string.repo_last_update,
+                    repo.metadata.timestamp.toDateTime()
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.outline
             )
 
-            Text(
-                text = stringResource(id = R.string.repo_incompatible_desc,
-                    RepoMetadata.current.versionCode),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.error
+            if (!repo.isCompatible) {
+                Text(
+                    text = stringResource(
+                        id = R.string.repo_incompatible_desc,
+                        repo.metadata.version, ModulesJson.CURRENT_VERSION
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+
+        IconButton(
+            onClick = onIconClick
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = null
             )
         }
-    }
-
-    IconButton(
-        onClick = onIconClick
-    ) {
-        Icon(
-            imageVector = Icons.Default.MoreVert,
-            contentDescription = null
-        )
     }
 }
 

@@ -62,7 +62,6 @@
     <string name="app_theme_dark_theme_dark">Karanlık</string>
     <string name="repo_modules">%1$d modül</string>
     <string name="repo_last_update">Son güncelleme: %1$s</string>
-    <string name="repo_util_version">Sürüm: %1$s (%2$d)</string>
     <string name="repo_options_update">Güncelle</string>
     <string name="repo_options_share">Paylaş</string>
     <string name="repo_options_delete">Sil</string>
@@ -94,5 +93,4 @@
     <string name="settings_root_not_available">Mevcut değil</string>
     <string name="settings_menu_reboot_userspace">Arayüzü yeniden başlat</string>
     <string name="settings_menu_reboot_bootloader">Bootloader modunda başlat</string>
-    <string name="repo_incompatible_desc">Uyumlu değil, gerekli sürüm &gt;= %1$d</string>
 </resources>

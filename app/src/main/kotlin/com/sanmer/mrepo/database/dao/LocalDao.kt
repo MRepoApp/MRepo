@@ -10,9 +10,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LocalDao {
     @Query("SELECT * FROM localModules")
-    fun getAll(): List<LocalModuleEntity>
-
-    @Query("SELECT * FROM localModules")
     fun getAllAsFlow(): Flow<List<LocalModuleEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

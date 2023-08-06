@@ -1,8 +1,9 @@
-package com.sanmer.mrepo.model.module
+package com.sanmer.mrepo.model.local
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.sanmer.mrepo.model.online.OnlineModule
 
 data class LocalModule(
     var id: String = "unknown",
@@ -31,14 +32,4 @@ data class LocalModule(
     override fun hashCode(): Int {
         return id.hashCode()
     }
-}
-
-enum class State {
-    ENABLE,
-    REMOVE,
-    DISABLE,
-    UPDATE,
-    RIRU_DISABLE,
-    ZYGISK_DISABLE,
-    ZYGISK_UNLOADED
 }

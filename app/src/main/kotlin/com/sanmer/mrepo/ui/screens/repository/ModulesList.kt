@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.model.module.OnlineModule
+import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.navigation.graphs.createViewRoute
@@ -142,7 +142,7 @@ private fun ModuleItem(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     if (moduleState.hasLicense) {
-                        LabelItem(text = module.license)
+                        LabelItem(text = module.track.license)
                     }
 
                     if (moduleState.installed) {

@@ -8,7 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.sanmer.mrepo.model.module.LocalModule
+import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.ui.animate.slideInLeftToRight
 import com.sanmer.mrepo.ui.animate.slideInRightToLeft
 import com.sanmer.mrepo.ui.animate.slideOutLeftToRight

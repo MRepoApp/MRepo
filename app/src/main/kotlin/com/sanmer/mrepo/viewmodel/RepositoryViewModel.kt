@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.model.module.OnlineModule
+import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -81,7 +81,7 @@ class RepositoryViewModel @Inject constructor(
         return ModuleState(
             installed = installed,
             updatable = updatable,
-            hasLicense = onlineModule.license.isNotBlank()
+            hasLicense = onlineModule.track.license.isNotBlank()
         )
     }
 

@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.isSucceeded
-import com.sanmer.mrepo.model.module.LocalModule
-import com.sanmer.mrepo.model.module.State
+import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.component.ModuleCard
 import com.sanmer.mrepo.ui.component.stateIndicator

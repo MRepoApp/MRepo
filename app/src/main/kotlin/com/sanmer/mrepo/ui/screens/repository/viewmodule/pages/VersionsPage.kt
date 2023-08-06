@@ -55,15 +55,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.app.event.isLoading
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.model.json.VersionItem
-import com.sanmer.mrepo.model.json.versionDisplay
+import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
-import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.rememberStringDataRequest
 import com.sanmer.mrepo.utils.extensions.toDate
@@ -71,49 +68,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun VersionsPage(
-    versions: List<VersionItem>,
-    state: State,
-    isRoot: Boolean,
-    getRepoByUrl: @Composable (String) -> Repo?,
-    getProgress: @Composable (VersionItem) -> Float,
-    downloader: (Context, VersionItem, Boolean) -> Unit
-) = Box {
-    AnimatedVisibility(
-        visible = state.isLoading,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        Loading()
-    }
-
-    AnimatedVisibility(
-        visible = state.isSucceeded,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        VersionList(
-            versions = versions,
-            isRoot = isRoot,
-            getRepoByUrl = getRepoByUrl,
-            getProgress = getProgress,
-            downloader = downloader
-        )
-    }
-
-    AnimatedVisibility(
-        visible = state.isFailed,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        PageIndicator(
-            icon = R.drawable.box_outline,
-            text = stringResource(id = R.string.search_empty)
-        )
-    }
-}
-
-@Composable
-private fun VersionList(
     versions: List<VersionItem>,
     isRoot: Boolean,
     getRepoByUrl: @Composable (String) -> Repo?,
@@ -124,7 +78,7 @@ private fun VersionList(
 ) {
     items(
         items = versions,
-        key = { it.versionCode }
+        key = { "${it.repoUrl}, ${it.versionCode}" }
     ) {
         VersionItem(
             item = it,

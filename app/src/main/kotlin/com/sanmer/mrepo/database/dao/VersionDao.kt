@@ -4,13 +4,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sanmer.mrepo.database.entity.OnlineModuleEntity
+import com.sanmer.mrepo.database.entity.VersionItemEntity
 
 @Dao
-interface OnlineDao {
+interface VersionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(list: List<OnlineModuleEntity>)
+    suspend fun insert(list: List<VersionItemEntity>)
 
-    @Query("DELETE from onlineModules WHERE repoUrl = :repoUrl")
+    @Query("DELETE from versions WHERE repoUrl = :repoUrl")
     suspend fun deleteByUrl(repoUrl: String)
 }

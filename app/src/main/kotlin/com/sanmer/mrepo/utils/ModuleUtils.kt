@@ -1,8 +1,8 @@
 package com.sanmer.mrepo.utils
 
 import android.content.Context
-import com.sanmer.mrepo.model.module.LocalModule
-import com.sanmer.mrepo.model.module.State
+import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.utils.extensions.output
 import com.sanmer.mrepo.utils.extensions.unzip
 import com.topjohnwu.superuser.CallbackList
@@ -86,7 +86,7 @@ object ModuleUtils {
         null
     }
 
-    private val  LocalModule.isLsposed get() =
+    private val LocalModule.isLsposed get() =
         id == "zygisk_lsposed" || id == "riru_lsposed"
 
     private fun launchLSPManger(

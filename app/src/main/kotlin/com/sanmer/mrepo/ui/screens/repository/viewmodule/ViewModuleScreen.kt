@@ -67,7 +67,6 @@ fun ViewModuleScreen(
                     )
                     1 -> VersionsPage(
                         versions = viewModel.versions,
-                        state = viewModel.state,
                         isRoot = userData.isRoot,
                         getRepoByUrl = { viewModel.getRepoByUrl(it) },
                         getProgress = { viewModel.rememberProgress(it) },

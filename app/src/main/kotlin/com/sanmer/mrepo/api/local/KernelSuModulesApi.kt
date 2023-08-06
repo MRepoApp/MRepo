@@ -2,8 +2,8 @@ package com.sanmer.mrepo.api.local
 
 import android.content.Context
 import com.sanmer.mrepo.api.ApiInitializerListener
-import com.sanmer.mrepo.model.module.LocalModule
-import com.sanmer.mrepo.model.module.State
+import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.utils.ModuleUtils
 import com.sanmer.mrepo.utils.extensions.output
 import com.topjohnwu.superuser.Shell

@@ -2,9 +2,11 @@ package com.sanmer.mrepo.database.di
 
 import android.content.Context
 import com.sanmer.mrepo.database.AppDatabase
+import com.sanmer.mrepo.database.dao.JoinDao
 import com.sanmer.mrepo.database.dao.LocalDao
 import com.sanmer.mrepo.database.dao.OnlineDao
 import com.sanmer.mrepo.database.dao.RepoDao
+import com.sanmer.mrepo.database.dao.VersionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +34,13 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun providesVersionDao(db: AppDatabase): VersionDao = db.versionDao()
+
+    @Provides
+    @Singleton
     fun providesLocalDao(db: AppDatabase): LocalDao = db.localDao()
+
+    @Provides
+    @Singleton
+    fun providesJoinDao(db: AppDatabase): JoinDao = db.joinDao()
 }

@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.api.local
 
-import com.sanmer.mrepo.model.module.LocalModule
+import com.sanmer.mrepo.model.local.LocalModule
 import java.io.File
 
 interface ModulesLocalApi {

@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.model.module.OnlineModule
+import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBar
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.component.Logo
@@ -82,7 +82,7 @@ fun ViewModuleTopBar(
 private fun topBarContent(
     module: OnlineModule
 ) : @Composable ColumnScope.() -> Unit = {
-    val hasLicense = module.license.isNotBlank()
+    val hasLicense = module.track.license.isNotBlank()
 
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -116,7 +116,7 @@ private fun topBarContent(
             )
             Text(
                 text = if (hasLicense) {
-                    "ID = ${module.id}, License = ${module.license}"
+                    "ID = ${module.id}, License = ${module.track.license}"
                 } else {
                     "ID = ${module.id}"
                 },
@@ -134,7 +134,7 @@ private fun topBarContent(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (hasLicense) {
-            LicenseItem(module.license)
+            LicenseItem(module.track.license)
         }
 
         val context = LocalContext.current

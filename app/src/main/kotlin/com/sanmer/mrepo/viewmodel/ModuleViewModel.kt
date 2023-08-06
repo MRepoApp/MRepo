@@ -14,21 +14,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.model.json.UpdateJson
-import com.sanmer.mrepo.model.json.VersionItem
-import com.sanmer.mrepo.model.json.versionDisplay
-import com.sanmer.mrepo.model.module.LocalModule
-import com.sanmer.mrepo.model.module.OnlineModule
+import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.online.OnlineModule
+import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.repository.LocalRepository
-import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserDataRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.extensions.toDateTime
 import com.sanmer.mrepo.utils.extensions.totalSize
-import com.sanmer.mrepo.utils.extensions.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,15 +36,14 @@ import kotlin.math.pow
 @HiltViewModel
 class ModuleViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val modulesRepository: ModulesRepository,
     private val userDataRepository: UserDataRepository,
     private val suRepository: SuRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val moduleId: String = checkNotNull(savedStateHandle["moduleId"])
-    var online by mutableStateOf(OnlineModule())
-        private set
-    val versions = mutableListOf<VersionItem>()
+    private var _online: OnlineModule? by mutableStateOf(null)
+    val online get() = checkNotNull(_online)
+    val versions get() = online.versions.sortedBy { it.versionCode }
 
     var local by mutableStateOf(LocalModule())
         private set
@@ -66,53 +60,19 @@ class ModuleViewModel @Inject constructor(
     private fun getModule(moduleId: String) = viewModelScope.launch {
         Timber.d("getModule: $moduleId")
 
-        runCatching {
-            localRepository.local.find { it.id == moduleId }?.let { local = it }
-            localRepository.online.first { it.id == moduleId }.apply { online = this }
-        }.onSuccess {
-            getUpdates(it)
-        }.onFailure {
-            Timber.e(it, "getModule")
-        }
-    }
-
-    // TODO: TODO: Waiting for version 2.0 of util
-    val state = State(initial = Event.LOADING)
-    private suspend fun getUpdates(module: OnlineModule) {
-        val update: (UpdateJson) -> Unit = { update ->
-            update.versions.forEach { item ->
-                val versionCodes = versions.map { it.versionCode }
-                if (item.versionCode !in versionCodes) {
-                    val new = item.copy(repoUrl = update.repoUrl)
-                    versions.update(new)
-                }
+        localRepository.online
+            .first {
+                it.id == moduleId
+            }.apply {
+                _online = this
             }
-        }
 
-        val result = module.repoUrls.map { url ->
-            modulesRepository.getUpdate(url, module.id)
-                .onSuccess {
-                    return@map Result.success(it.copy(repoUrl = url))
-                }.onFailure {
-                    Timber.e(it, "getUpdates")
-                }
-        }
-
-        if (result.all { it.isFailure }) {
-            state.setFailed()
-            return
-        }
-
-        result.mapNotNull { it.getOrNull() }.let { list ->
-            list.sortedByDescending { it.timestamp }
-                .forEach(update)
-
-            if (versions.isNotEmpty()) {
-                versions.sortedByDescending { it.versionCode }
+        localRepository.local
+            .find {
+                it.id == moduleId
+            }?.let {
+                local = it
             }
-        }
-
-        state.setSucceeded()
     }
 
     fun downloader(
