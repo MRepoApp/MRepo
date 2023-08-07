@@ -93,4 +93,5 @@
     <string name="settings_root_not_available">Mevcut değil</string>
     <string name="settings_menu_reboot_userspace">Arayüzü yeniden başlat</string>
     <string name="settings_menu_reboot_bootloader">Bootloader modunda başlat</string>
+    <string name="repo_incompatible_desc">Şimdiki sürüm %1$d, lütfen %2$d sürümüne güncelleyin</string>
 </resources>
