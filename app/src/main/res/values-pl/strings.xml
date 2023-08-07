@@ -93,4 +93,5 @@
     <string name="search_empty">Nic nie znaleziono</string>
     <string name="search_placeholder">Wyszukaj…</string>
     <string name="unknown_error">Nieznany błąd</string>
+    <string name="repo_incompatible_desc">Aktualna wersja to %1$d, zaktualizuj do wersji %2$d</string>
 </resources>
