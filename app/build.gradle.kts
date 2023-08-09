@@ -28,6 +28,7 @@ android {
             "ar",
             "es",
             "fr",
+            "in",
             "ja",
             "pl",
             "pt",
