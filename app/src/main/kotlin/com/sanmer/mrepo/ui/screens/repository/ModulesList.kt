@@ -93,7 +93,7 @@ private fun ModuleItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Logo(
-            iconRes = if (moduleState.updatable) {
+            icon = if (moduleState.updatable) {
                 R.drawable.import_outline
             } else {
                 R.drawable.box_outline

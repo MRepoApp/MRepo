@@ -70,7 +70,7 @@ fun AppScreen(
             )
 
             SettingSwitchItem(
-                iconRes = R.drawable.box_remove_outline,
+                icon = R.drawable.box_remove_outline,
                 text = stringResource(id = R.string.settings_delete_zip),
                 subText = stringResource(id = R.string.settings_delete_zip_desc),
                 checked = userData.deleteZipFile,

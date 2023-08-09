@@ -78,7 +78,7 @@ fun SettingsScreen(
             }
 
             SettingNormalItem(
-                iconRes = R.drawable.health_outline,
+                icon = R.drawable.health_outline,
                 text = stringResource(id = R.string.settings_log_viewer),
                 subText = stringResource(id = R.string.settings_log_viewer_desc),
                 onClick = {
@@ -87,7 +87,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                iconRes = R.drawable.hierarchy_outline,
+                icon = R.drawable.hierarchy_outline,
                 text = stringResource(id = R.string.settings_repo),
                 subText = stringResource(id = R.string.settings_repo_desc),
                 onClick = {
@@ -96,7 +96,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                iconRes = R.drawable.layer_outline,
+                icon = R.drawable.layer_outline,
                 text = stringResource(id = R.string.settings_app),
                 subText = stringResource(id = R.string.settings_app_desc),
                 onClick = {
@@ -105,7 +105,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                iconRes = R.drawable.main_component_outline,
+                icon = R.drawable.main_component_outline,
                 text = stringResource(id = R.string.settings_mode),
                 subText = if (userData.isRoot) {
                     stringResource(id = R.string.settings_mode_root)
@@ -118,7 +118,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                iconRes = R.drawable.ic_logo,
+                icon = R.drawable.ic_logo,
                 text = stringResource(id = R.string.settings_about),
                 subText = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                 onClick = {

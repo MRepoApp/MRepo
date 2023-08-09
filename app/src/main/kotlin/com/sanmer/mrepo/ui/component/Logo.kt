@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Logo(
-    @DrawableRes iconRes: Int,
+    @DrawableRes icon: Int,
     modifier: Modifier = Modifier,
     contentColor: Color = MaterialTheme.colorScheme.onPrimary,
     containerColor: Color = MaterialTheme.colorScheme.primary
@@ -32,7 +32,7 @@ fun Logo(
     Icon(
         modifier = Modifier
             .fillMaxSize(0.6f),
-        painter = painterResource(id = iconRes),
+        painter = painterResource(id = icon),
         contentDescription = null,
         tint = contentColor
     )

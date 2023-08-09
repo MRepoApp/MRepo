@@ -83,7 +83,7 @@ private fun topBarContent(
         verticalAlignment = Alignment.Top
     ) {
         Logo(
-            iconRes = R.drawable.box_outline,
+            icon = R.drawable.box_outline,
             modifier = Modifier.size(55.dp),
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             containerColor = MaterialTheme.colorScheme.surfaceVariant

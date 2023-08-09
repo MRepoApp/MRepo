@@ -69,7 +69,7 @@ fun AboutScreen(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
             Logo(
-                iconRes = R.drawable.ic_logo,
+                icon = R.drawable.ic_logo,
                 modifier = Modifier.size(65.dp),
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 containerColor = MaterialTheme.colorScheme.primary

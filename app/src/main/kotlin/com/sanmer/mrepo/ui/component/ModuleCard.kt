@@ -121,12 +121,12 @@ fun ModuleCard(
 
 @Composable
 fun stateIndicator(
-    @DrawableRes id: Int,
+    @DrawableRes icon: Int,
     color: Color = MaterialTheme.colorScheme.onSurfaceVariant
 ): @Composable BoxScope.() -> Unit = {
     Image(
         modifier = Modifier.fillMaxSize(),
-        painter = painterResource(id = id),
+        painter = painterResource(id = icon),
         contentDescription = null,
         alpha = 0.05f,
         colorFilter = ColorFilter.tint(color)

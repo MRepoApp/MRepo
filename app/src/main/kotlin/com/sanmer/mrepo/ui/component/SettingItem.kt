@@ -40,7 +40,7 @@ fun SettingNormalItem(
     text: String,
     subText: String,
     modifier: Modifier = Modifier,
-    @DrawableRes iconRes: Int? = null,
+    @DrawableRes icon: Int? = null,
     enabled: Boolean = true,
     onClick: () -> Unit,
 ) = Row(
@@ -54,10 +54,10 @@ fun SettingNormalItem(
         .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
 ) {
-    iconRes?.let {
+    icon?.let {
         Icon(
             modifier = Modifier.size(24.dp),
-            painter = painterResource(id = iconRes),
+            painter = painterResource(id = icon),
             contentDescription = null,
             tint = LocalContentColor.current
         )
@@ -88,7 +88,7 @@ fun SettingSwitchItem(
     checked: Boolean,
     modifier: Modifier = Modifier,
     subText: String? = null,
-    @DrawableRes iconRes: Int? = null,
+    @DrawableRes icon: Int? = null,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onChange: (Boolean) -> Unit,
@@ -107,10 +107,10 @@ fun SettingSwitchItem(
         .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
 ) {
-    iconRes?.let {
+    icon?.let {
         Icon(
             modifier = Modifier.size(24.dp),
-            painter = painterResource(id = iconRes),
+            painter = painterResource(id = icon),
             contentDescription = null
         )
 
@@ -145,14 +145,14 @@ fun SettingSwitchItem(
 
 @Composable
 fun <T> SettingMenuItem(
-    @DrawableRes iconRes: Int? = null,
+    @DrawableRes icon: Int? = null,
     items: Map<T, String>,
     title: String,
     selected: T,
     enabled: Boolean = true,
     onChange: (T, String) -> Unit
 ) = SettingMenuItem(
-    iconRes = iconRes,
+    icon = icon,
     items = items,
     title = title,
     selected = items[selected] ?: items.values.first(),
@@ -162,7 +162,7 @@ fun <T> SettingMenuItem(
 
 @Composable
 fun <T> SettingMenuItem(
-    @DrawableRes iconRes: Int? = null,
+    @DrawableRes icon: Int? = null,
     items: Map<T, String>,
     title: String,
     selected: String,
@@ -180,7 +180,7 @@ fun <T> SettingMenuItem(
         surface = {
             SettingNormalItem(
                 enabled = enabled,
-                iconRes = iconRes,
+                icon = icon,
                 text = title,
                 subText = selected,
             ) {
