@@ -32,6 +32,7 @@ fun ViewModuleScreen(
     val suState by viewModel.suState.collectAsStateWithLifecycle()
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val localModuleInfo = viewModel.rememberLocalModuleInfo(suState = suState)
+    val (versions, tracks) = viewModel.getVersionsAndTracks()
 
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { pages.size }
@@ -43,6 +44,7 @@ fun ViewModuleScreen(
         topBar = {
             ViewModuleTopBar(
                 online = viewModel.online,
+                tracks = tracks,
                 scrollBehavior = scrollBehavior,
                 navController = navController
             )
@@ -61,18 +63,22 @@ fun ViewModuleScreen(
                 when (pageIndex) {
                     0 -> OverviewPage(
                         online = viewModel.online,
+                        item = versions.firstOrNull()?.second,
                         local = viewModel.local,
                         installed = viewModel.installed,
-                        localModuleInfo = localModuleInfo
+                        localModuleInfo = localModuleInfo,
+                        downloader = viewModel::downloader
                     )
                     1 -> VersionsPage(
-                        versions = viewModel.versions,
+                        versions = versions,
                         isRoot = userData.isRoot,
-                        getRepoByUrl = { viewModel.getRepoByUrl(it) },
                         getProgress = { viewModel.rememberProgress(it) },
                         downloader = viewModel::downloader
                     )
-                    2 -> AboutPage()
+                    2 -> AboutPage(
+                        online = viewModel.online,
+                        isEmpty = viewModel.isEmptyAbout
+                    )
                 }
             }
         }

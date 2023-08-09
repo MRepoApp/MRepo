@@ -1,53 +1,43 @@
 package com.sanmer.mrepo.ui.screens.repository.viewmodule
 
-import android.widget.Toast
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.online.OnlineModule
+import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBar
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.component.Logo
-import com.sanmer.mrepo.ui.utils.LicenseContent
-import com.sanmer.mrepo.ui.utils.expandedShape
+import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LabelItem
+import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LicenseItem
+import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.TrackItem
 import com.sanmer.mrepo.ui.utils.navigateBack
+import com.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
 fun ViewModuleTopBar(
     online: OnlineModule,
+    tracks: List<Pair<Repo, TrackJson>>,
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
 ) = CollapsingTopAppBar(
@@ -60,7 +50,8 @@ fun ViewModuleTopBar(
         )
     },
     content = topBarContent(
-        module = online
+        module = online,
+        tracks = tracks
     ),
     navigationIcon = {
         IconButton(
@@ -80,9 +71,12 @@ fun ViewModuleTopBar(
 
 @Composable
 private fun topBarContent(
-    module: OnlineModule
+    module: OnlineModule,
+    tracks: List<Pair<Repo, TrackJson>>
 ) : @Composable ColumnScope.() -> Unit = {
+    val context = LocalContext.current
     val hasLicense = module.track.license.isNotBlank()
+    val hasDonate = module.track.donate.isNotBlank()
 
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -133,64 +127,21 @@ private fun topBarContent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        TrackItem(
+            tracks = tracks
+        )
+
         if (hasLicense) {
-            LicenseItem(module.track.license)
+            LicenseItem(
+                licenseId = module.track.license
+            )
         }
 
-        val context = LocalContext.current
-        TagItem(
-            iconRes = R.drawable.tag_outline,
-            onClick = {
-                // TODO: Waiting for version 2.0 of util
-                Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
-            }
-        )
-    }
-}
-
-@Composable
-private fun TagItem(
-    @DrawableRes iconRes: Int,
-    onClick: () -> Unit
-) = FilledTonalIconButton(
-    onClick = onClick,
-    colors = IconButtonDefaults.filledTonalIconButtonColors(
-        containerColor = MaterialTheme.colorScheme.onSurface.copy(0.1f)
-    ),
-    modifier = Modifier.size(35.dp),
-) {
-    Icon(
-        painter = painterResource(id = iconRes),
-        contentDescription = null
-    )
-}
-
-@Composable
-private fun LicenseItem(
-    licenseId: String
-) = Box {
-    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-
-    TagItem(
-        iconRes = R.drawable.receipt_search_outline,
-        onClick = { openBottomSheet = true }
-    )
-
-    if (openBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { openBottomSheet = false },
-            sheetState = bottomSheetState,
-            shape = BottomSheetDefaults.expandedShape(15.dp),
-            windowInsets = WindowInsets.navigationBars
-        ) {
-            Text(
-                text = stringResource(id = R.string.license_title),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+        if (hasDonate) {
+            LabelItem(
+                icon = R.drawable.coin_outline,
+                onClick = { context.openUrl(module.track.donate) }
             )
-
-            LicenseContent(licenseId = licenseId)
         }
     }
 }

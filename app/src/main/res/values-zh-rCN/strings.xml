@@ -35,13 +35,21 @@
     <string name="view_module_page_versions">版本</string>
     <string name="view_module_page_about">关于</string>
     <string name="view_module_description">描述</string>
-    <string name="view_module_local">本地</string>
+    <string name="view_module_cloud">云端</string>
     <string name="view_module_version">版本</string>
+    <string name="view_module_last_updated">上次更新</string>
+    <string name="view_module_local">本地</string>
     <string name="view_module_module_directory">模块目录</string>
     <string name="view_module_last_modified">最后修改</string>
     <string name="view_module_dir_size">目录大小</string>
     <string name="view_module_provided">由 %1$s 提供</string>
     <string name="view_module_version_dialog_desc">是否安装或下载该版本的模块？</string>
+    <string name="view_module_homepage">主页</string>
+    <string name="view_module_source">源码</string>
+    <string name="view_module_support">支持</string>
+    <string name="view_module_view_track">追踪信息</string>
+    <string name="view_module_type">类型：%1$s</string>
+    <string name="view_module_added">添加于：%1$s</string>
 
     <!-- Modules -->
     <string name="modules_empty">没找到任何模块</string>

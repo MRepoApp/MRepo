@@ -68,9 +68,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun VersionsPage(
-    versions: List<VersionItem>,
+    versions: List<Pair<Repo, VersionItem>>,
     isRoot: Boolean,
-    getRepoByUrl: @Composable (String) -> Repo?,
     getProgress: @Composable (VersionItem) -> Float,
     downloader: (Context, VersionItem, Boolean) -> Unit
 ) = LazyColumn(
@@ -78,16 +77,16 @@ fun VersionsPage(
 ) {
     items(
         items = versions,
-        key = { "${it.repoUrl}, ${it.versionCode}" }
-    ) {
+        key = { "${it.first.url}, ${it.second.versionCode}" }
+    ) { (repo, item) ->
         VersionItem(
-            item = it,
+            item = item,
+            repo = repo,
             isRoot = isRoot,
-            getRepoByUrl = getRepoByUrl,
             downloader = downloader
         )
 
-        val progress = getProgress(it)
+        val progress = getProgress(item)
         if (progress != 0f) {
             LinearProgressIndicator(
                 progress = progress,
@@ -105,12 +104,10 @@ fun VersionsPage(
 @Composable
 private fun VersionItem(
     item: VersionItem,
+    repo: Repo,
     isRoot: Boolean,
-    getRepoByUrl: @Composable (String) -> Repo?,
     downloader: (Context, VersionItem, Boolean) -> Unit
 ) {
-    val repo = getRepoByUrl(item.repoUrl)
-
     var show by remember { mutableStateOf(false) }
     if (show) VersionItemBottomSheet(
         item = item,
@@ -123,7 +120,7 @@ private fun VersionItem(
     Row(
         modifier = Modifier
             .clickable(onClick = { show = true })
-            .padding(all = 15.dp)
+            .padding(all = 16.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -133,16 +130,14 @@ private fun VersionItem(
         ) {
             Text(
                 text = item.versionDisplay,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium
             )
 
-            repo?.let {
-                Text(
-                    text = stringResource(id = R.string.view_module_provided, it.name),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.view_module_provided, repo.name),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
 
         Text(
@@ -171,9 +166,11 @@ private fun VersionItemBottomSheet(
             BottomSheetDefaults.DragHandle()
         } else {
             Text(
-                modifier = Modifier.padding(all = 18.dp),
+                modifier = Modifier
+                    .padding(all = 18.dp)
+                    .fillMaxWidth(),
                 text = stringResource(id = R.string.view_module_version_dialog_desc),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }

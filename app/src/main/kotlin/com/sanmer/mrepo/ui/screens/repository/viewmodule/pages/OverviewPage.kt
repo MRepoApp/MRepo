@@ -1,32 +1,44 @@
 package com.sanmer.mrepo.ui.screens.repository.viewmodule.pages
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
+import com.sanmer.mrepo.model.online.VersionItem
+import com.sanmer.mrepo.utils.extensions.toDateTime
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
 fun OverviewPage(
     online: OnlineModule,
+    item: VersionItem?,
     local: LocalModule,
     installed: Boolean,
-    localModuleInfo: ModuleViewModel.LocalModuleInfo?
+    localModuleInfo: ModuleViewModel.LocalModuleInfo?,
+    downloader: (Context, VersionItem, Boolean) -> Unit
 ) = Column(
     modifier = Modifier
         .fillMaxSize()
@@ -50,16 +62,71 @@ fun OverviewPage(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+    HorizontalDivider(thickness = 0.9.dp)
+
+    if (item != null) {
+        CloudItem(
+            item = item,
+            downloader = downloader
+        )
+        HorizontalDivider(thickness = 0.9.dp)
+    }
 
     if (installed && localModuleInfo != null) {
-        HorizontalDivider(thickness = 0.9.dp)
         LocalItem(
             local = local,
             moduleInfo = localModuleInfo
         )
+        HorizontalDivider(thickness = 0.9.dp)
+    }
+}
+
+@Composable
+private fun CloudItem(
+    item: VersionItem,
+    downloader: (Context, VersionItem, Boolean) -> Unit
+) = Column(
+    modifier = Modifier
+        .padding(all = 16.dp)
+        .fillMaxWidth(),
+    verticalArrangement = Arrangement.spacedBy(16.dp)
+) {
+    val context = LocalContext.current
+
+    Text(
+        text = stringResource(id = R.string.view_module_cloud),
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.primary
+    )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        ValueItem(
+            key = stringResource(id = R.string.view_module_version),
+            value = item.versionDisplay,
+            modifier = Modifier.weight(1f)
+        )
+
+        ElevatedAssistChip(
+            onClick = { downloader(context, item, true) },
+            label = { Text(text = stringResource(id = R.string.module_install)) },
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.import_outline),
+                    contentDescription = null,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+        )
     }
 
-    HorizontalDivider(thickness = 0.9.dp)
+    ValueItem(
+        key = stringResource(id = R.string.view_module_last_updated),
+        value = item.timestamp.toDateTime()
+    )
 }
 
 @Composable
@@ -88,38 +155,39 @@ private fun LocalItem(
         value = moduleInfo.modulePath
     )
 
-    if (moduleInfo.lastModified != null) {
-        ValueItem(
-            key = stringResource(id = R.string.view_module_last_modified),
-            value = moduleInfo.lastModified
-        )
-    }
+    ValueItem(
+        key = stringResource(id = R.string.view_module_last_modified),
+        value = moduleInfo.lastModified
+    )
 
-    if (moduleInfo.dirSize != null) {
-        ValueItem(
-            key = stringResource(id = R.string.view_module_dir_size),
-            value = moduleInfo.dirSize
-        )
-    }
+    ValueItem(
+        key = stringResource(id = R.string.view_module_dir_size),
+        value = moduleInfo.dirSize
+    )
 }
 
 @Composable
 private fun ValueItem(
     key: String,
-    value: String,
-)  = Column(
-    modifier = Modifier.fillMaxWidth(),
-    verticalArrangement = Arrangement.spacedBy(4.dp)
+    value: String?,
+    modifier: Modifier = Modifier
 ) {
-    Text(
-        text = key,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
-    )
+    if (value.isNullOrBlank()) return
 
-    Text(
-        text = value,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.outline
-    )
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = key,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.outline
+        )
+    }
 }

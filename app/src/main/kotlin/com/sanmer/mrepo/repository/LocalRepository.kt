@@ -118,6 +118,10 @@ class LocalRepository @Inject constructor(
         return@map values
     }
 
+    suspend fun getOnlineByIdAndUrl(id: String, repoUrl: String) = withContext(Dispatchers.IO) {
+        joinDao.getOnlineByIdAndUrl(id, repoUrl).toModule()
+    }
+
     private suspend fun getVersionById(id: String) = withContext(Dispatchers.IO) {
         joinDao.getVersionById(id).map { it.toItem() }
     }
