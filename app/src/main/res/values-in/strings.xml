@@ -94,4 +94,12 @@
     <string name="search_empty">Daftar kosong</string>
     <string name="search_placeholder">Cari…</string>
     <string name="unknown_error">Kesalahan tidak diketahui</string>
+    <string name="view_module_cloud">Cloud</string>
+    <string name="view_module_last_updated">Terakhir diperbarui</string>
+    <string name="view_module_homepage">Beranda</string>
+    <string name="view_module_source">Source Code</string>
+    <string name="view_module_support">Dukungan</string>
+    <string name="view_module_view_track">Lihat Track</string>
+    <string name="view_module_type">Jenis: %1$s</string>
+    <string name="view_module_added">Ditambahkan pada: %1$s</string>
 </resources>
