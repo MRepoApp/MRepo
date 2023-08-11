@@ -94,4 +94,12 @@
     <string name="settings_menu_reboot_userspace">Arayüzü yeniden başlat</string>
     <string name="settings_menu_reboot_bootloader">Bootloader modunda başlat</string>
     <string name="repo_incompatible_desc">Şimdiki sürüm %1$d, lütfen %2$d sürümüne güncelleyin</string>
+    <string name="view_module_last_updated">Son güncelleme</string>
+    <string name="view_module_cloud">Bulut</string>
+    <string name="view_module_homepage">Anaysayfa</string>
+    <string name="view_module_source">Kaynak kodu</string>
+    <string name="view_module_support">Destek</string>
+    <string name="view_module_view_track">İzi görüntüle</string>
+    <string name="view_module_type">Tip: %1$s</string>
+    <string name="view_module_added">%1$s tarihinde eklendi</string>
 </resources>
