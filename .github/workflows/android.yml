@@ -26,8 +26,8 @@ jobs:
             echo keyStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> signing.properties
             echo keyAlias='${{ secrets.KEY_ALIAS }}' >> signing.properties
             echo keyPassword='${{ secrets.KEY_PASSWORD }}' >> signing.properties
-            echo keyStore='key.jks' >> signing.properties
-            echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
+            echo keyStore='${{ github.workspace }}/key.jks' >> signing.properties
+            echo ${{ secrets.KEY_STORE }} | base64 --decode > ${{ github.workspace }}/key.jks
           fi
 
       - name: Download JBR 17
