@@ -80,7 +80,7 @@ private fun EditDialog(
         val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         context.contentResolver.takePersistableUriPermission(uri, flags)
 
-        newPath = uri.absoluteFile ?: path
+        newPath = uri.absoluteFile
         parent = newPath.parent
         name = newPath.name
     }

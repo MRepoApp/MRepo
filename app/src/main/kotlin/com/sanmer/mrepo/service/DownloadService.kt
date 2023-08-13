@@ -16,7 +16,6 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.utils.MediaStoreUtils.newOutputStream
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
@@ -86,7 +85,7 @@ class DownloadService : LifecycleService() {
                 downloader(it)
                 tasks.add(it)
             } else {
-                Timber.d("download: ${it.name} is already in list")
+                Timber.d("${it.name} is already in list")
             }
         }
 
@@ -102,7 +101,7 @@ class DownloadService : LifecycleService() {
         val notificationId = task.id
         val notificationIdFinish = notificationId + 1
 
-        Timber.d("download: ${task.url} to ${task.path}")
+        Timber.d("${task.url} -> ${task.path}")
         val path = task.path.toFile().apply {
             parentFile!!.let {
                 if (!it.exists()) it.mkdirs()
@@ -120,11 +119,11 @@ class DownloadService : LifecycleService() {
                 silent = true
             )
 
-            if (task.install && path.name.endsWith("zip")) {
+            if (task.install && path.name.endsWith(".zip")) {
                 InstallActivity.start(context = context, path = path)
             }
 
-            if (task.install && path.name.endsWith("apk")) {
+            if (task.install && path.name.endsWith(".apk")) {
                 runCatching {
                     apkInstall(path)
                 }.onFailure {
@@ -150,7 +149,7 @@ class DownloadService : LifecycleService() {
         }
 
         val output = try {
-            path.newOutputStream()!!
+            contentResolver.openOutputStream(path.toUri())!!
         } catch (e: Exception) {
             failed(e.message)
             return@launch

@@ -14,8 +14,6 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.sanmer.mrepo.App
 import com.sanmer.mrepo.utils.extensions.toFile
 import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
 
 object MediaStoreUtils {
     private val context by lazy { App.context }
@@ -36,7 +34,9 @@ object MediaStoreUtils {
         if (scheme == "file") {
             return toFile().name
         }
+
         require(scheme == "content") { "Uri lacks 'content' scheme: $this" }
+
         val projection = arrayOf(OpenableColumns.DISPLAY_NAME)
         cr.query(this, projection, null, null, null)?.use { cursor ->
             val displayNameColumn = cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
@@ -44,6 +44,7 @@ object MediaStoreUtils {
                 return cursor.getString(displayNameColumn)
             }
         }
+
         return this.toString()
     }
 
@@ -55,27 +56,23 @@ object MediaStoreUtils {
         }
     }
 
-    fun File.newInputStream(): InputStream? = cr.openInputStream(toUri())
-
-    fun File.newOutputStream(): OutputStream? = cr.openOutputStream(toUri())
-
-    val Uri.absolutePath: String? get() = run {
+    val Uri.absolutePath: String get() {
         if (scheme == "file") {
             return toFile().absolutePath
         }
 
+        require(scheme == "content") { "Uri lacks 'content' scheme: $this" }
+
         val uri = try {
-            DocumentFile.fromTreeUri(context, this)?.uri ?: return null
+            DocumentFile.fromTreeUri(context, this)?.uri ?: return this.toString()
         } catch (e: Exception) {
             this
         }
 
-        val path = cr.openFileDescriptor(uri, "r")?.use {
+        return cr.openFileDescriptor(uri, "r")?.use {
             Os.readlink("/proc/self/fd/${it.fd}")
-        }?: return null
-
-        return path
+        } ?: this.toString()
     }
 
-    val Uri.absoluteFile get() = absolutePath?.toFile()
+    val Uri.absoluteFile get() = absolutePath.toFile()
 }
