@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.repository.viewmodule
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,6 @@ import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.OverviewPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.VersionsPage
-import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
@@ -36,8 +34,6 @@ fun ViewModuleScreen(
 
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { pages.size }
-
-    BackHandler { navController.navigateBack() }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

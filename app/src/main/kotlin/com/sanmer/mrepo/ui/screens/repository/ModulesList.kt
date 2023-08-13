@@ -34,7 +34,7 @@ import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.navigation.graphs.createViewRoute
-import com.sanmer.mrepo.ui.utils.navigatePopUpTo
+import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.rememberFastScroller
 import com.sanmer.mrepo.ui.utils.scrollbarState
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
@@ -59,7 +59,7 @@ fun ModulesList(
         ) { module ->
             ModuleItem(
                 module = module,
-                onClick = { navController.navigatePopUpTo(createViewRoute(module)) },
+                onClick = { navController.navigateSingleTopTo(createViewRoute(module)) },
                 getModuleState = getModuleState
             )
         }

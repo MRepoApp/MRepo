@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.settings.workingmode
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -23,7 +22,6 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
-import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.SettingsViewModel
 
@@ -34,8 +32,6 @@ fun WorkingModeScreen(
 ) {
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-    BackHandler { navController.navigateBack() }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

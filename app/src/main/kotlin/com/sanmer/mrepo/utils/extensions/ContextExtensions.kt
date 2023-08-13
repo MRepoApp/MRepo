@@ -68,11 +68,3 @@ fun Context.shareFile(file: File, mimeType: String) {
         .addStream(getUriForFile(file))
         .startChooser()
 }
-
-fun Context.navigateToLauncher() {
-    val home = Intent(Intent.ACTION_MAIN).apply {
-        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        addCategory(Intent.CATEGORY_HOME)
-    }
-    startActivity(home)
-}

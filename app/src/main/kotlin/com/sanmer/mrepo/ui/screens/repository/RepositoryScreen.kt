@@ -33,7 +33,6 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.utils.extensions.navigateToLauncher
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
@@ -41,8 +40,6 @@ fun RepositoryScreen(
     navController: NavController,
     viewModel: RepositoryViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
 
@@ -51,13 +48,10 @@ fun RepositoryScreen(
         onRefresh = { viewModel.getOnlineAll() }
     )
 
-    BackHandler {
-        if (viewModel.isSearch) {
-            viewModel.closeSearch()
-        } else {
-            context.navigateToLauncher()
-        }
-    }
+    BackHandler(
+        enabled = viewModel.isSearch,
+        onBack = viewModel::closeSearch
+    )
 
     DisposableEffect(viewModel) {
         onDispose { viewModel.closeSearch() }

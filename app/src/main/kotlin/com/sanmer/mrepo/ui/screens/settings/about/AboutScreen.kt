@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.settings.about
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,7 +36,6 @@ import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.ui.component.HtmlText
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
-import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.utils.extensions.openUrl
 
@@ -47,8 +45,6 @@ fun AboutScreen(
 ) {
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-    BackHandler { navController.navigateBack() }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

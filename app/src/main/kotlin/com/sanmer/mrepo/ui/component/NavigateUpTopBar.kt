@@ -21,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.ui.utils.navigateBack
 
 @Composable
 fun NavigateUpTopBar(
@@ -38,7 +37,7 @@ fun NavigateUpTopBar(
     modifier = modifier,
     title = title,
     subtitle = subtitle,
-    onBack = { navController.navigateBack() },
+    onBack = { navController.popBackStack() },
     actions = actions,
     windowInsets = windowInsets,
     colors = colors,

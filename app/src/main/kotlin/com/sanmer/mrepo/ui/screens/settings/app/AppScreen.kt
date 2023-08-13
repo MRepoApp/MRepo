@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.settings.app
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +24,6 @@ import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.SettingSwitchItem
 import com.sanmer.mrepo.ui.screens.settings.app.items.AppThemeItem
 import com.sanmer.mrepo.ui.screens.settings.app.items.DownloadPathItem
-import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.SettingsViewModel
 
@@ -37,8 +35,6 @@ fun AppScreen(
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-    BackHandler { navController.navigateBack() }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

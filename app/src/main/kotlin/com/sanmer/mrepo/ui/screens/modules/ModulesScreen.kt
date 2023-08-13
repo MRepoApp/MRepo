@@ -49,7 +49,6 @@ import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
-import com.sanmer.mrepo.ui.navigation.navigateToRepository
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
@@ -76,13 +75,10 @@ fun ModulesScreen(
         onRefresh = { viewModel.getLocalAll() }
     )
 
-    BackHandler {
-        if (viewModel.isSearch) {
-            viewModel.closeSearch()
-        } else {
-            navController.navigateToRepository()
-        }
-    }
+    BackHandler(
+        enabled = viewModel.isSearch,
+        onBack = viewModel::closeSearch
+    )
 
     DisposableEffect(viewModel) {
         onDispose { viewModel.closeSearch() }

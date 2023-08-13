@@ -2,9 +2,7 @@ package com.sanmer.mrepo.ui.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 
 enum class MainScreen(
     val route: String,
@@ -33,7 +31,3 @@ enum class MainScreen(
         iconSelected = R.drawable.setting_bold
     )
 }
-
-fun NavController.navigateToRepository() = navigatePopUpTo(MainScreen.Repository.route)
-fun NavController.navigateToModules() = navigatePopUpTo(MainScreen.Modules.route)
-fun NavController.navigateToSettings() = navigatePopUpTo(MainScreen.Settings.route)

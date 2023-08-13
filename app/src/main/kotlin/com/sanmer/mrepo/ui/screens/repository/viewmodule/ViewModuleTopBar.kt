@@ -31,7 +31,6 @@ import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LabelItem
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LicenseItem
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.TrackItem
-import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
@@ -55,7 +54,7 @@ fun ViewModuleTopBar(
     ),
     navigationIcon = {
         IconButton(
-            onClick = { navController.navigateBack() }
+            onClick = { navController.popBackStack() }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.arrow_left_outline),

@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.settings
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,10 +32,9 @@ import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.navigation.graphs.SettingsScreen
-import com.sanmer.mrepo.ui.navigation.navigateToRepository
 import com.sanmer.mrepo.ui.screens.settings.items.NonRootItem
 import com.sanmer.mrepo.ui.screens.settings.items.RootItem
-import com.sanmer.mrepo.ui.utils.navigatePopUpTo
+import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.SettingsViewModel
 
@@ -50,8 +48,6 @@ fun SettingsScreen(
     val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-    BackHandler { navController.navigateToRepository() }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -91,7 +87,7 @@ fun SettingsScreen(
                 text = stringResource(id = R.string.settings_repo),
                 subText = stringResource(id = R.string.settings_repo_desc),
                 onClick = {
-                    navController.navigatePopUpTo(SettingsScreen.Repositories.route)
+                    navController.navigateSingleTopTo(SettingsScreen.Repositories.route)
                 }
             )
 
@@ -100,7 +96,7 @@ fun SettingsScreen(
                 text = stringResource(id = R.string.settings_app),
                 subText = stringResource(id = R.string.settings_app_desc),
                 onClick = {
-                    navController.navigatePopUpTo(SettingsScreen.App.route)
+                    navController.navigateSingleTopTo(SettingsScreen.App.route)
                 }
             )
 
@@ -113,7 +109,7 @@ fun SettingsScreen(
                     stringResource(id = R.string.settings_mode_non_root)
                 },
                 onClick = {
-                    navController.navigatePopUpTo(SettingsScreen.WorkingMode.route)
+                    navController.navigateSingleTopTo(SettingsScreen.WorkingMode.route)
                 }
             )
 
@@ -122,7 +118,7 @@ fun SettingsScreen(
                 text = stringResource(id = R.string.settings_about),
                 subText = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                 onClick = {
-                    navController.navigatePopUpTo(SettingsScreen.About.route)
+                    navController.navigateSingleTopTo(SettingsScreen.About.route)
                 }
             )
         }

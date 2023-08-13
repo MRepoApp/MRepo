@@ -1,7 +1,6 @@
 package com.sanmer.mrepo.ui.screens.settings.repositories
 
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -66,7 +65,6 @@ import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.TextFieldDialog
 import com.sanmer.mrepo.ui.utils.isScrollingUp
-import com.sanmer.mrepo.ui.utils.navigateBack
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.RepositoriesViewModel
 
@@ -80,8 +78,6 @@ fun RepositoriesScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listSate = rememberLazyListState()
     val showFab = listSate.isScrollingUp()
-
-    BackHandler { navController.navigateBack() }
 
     var value by remember { mutableStateOf(Const.MY_REPO_URL.toRepo()) }
     var message: String? by remember { mutableStateOf(null) }

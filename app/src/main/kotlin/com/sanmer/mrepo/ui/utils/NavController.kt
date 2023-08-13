@@ -16,21 +16,14 @@ fun NavController.navigateSingleTopTo(
 }
 
 fun NavController.navigatePopUpTo(
-    route: String,
-    saveState: Boolean = true
+    route: String
 ) = navigateSingleTopTo(
     route = route
 ) {
-    popUpTo(graph.findStartDestination().id) {
-        this.saveState = saveState
-    }
-}
-
-fun NavController.navigateBack() {
-    val route = currentBackStackEntry?.destination?.parent?.route
-    if (route == null) {
-        navigateUp()
-    } else {
-        navigatePopUpTo(route, false)
+    popUpTo(
+        id = currentDestination?.parent?.id ?: graph.findStartDestination().id
+    ) {
+        saveState = true
+        inclusive = true
     }
 }
