@@ -94,4 +94,12 @@
     <string name="search_placeholder">Wyszukaj…</string>
     <string name="unknown_error">Nieznany błąd</string>
     <string name="repo_incompatible_desc">Aktualna wersja to %1$d, zaktualizuj do wersji %2$d</string>
+    <string name="view_module_cloud">Chmura</string>
+    <string name="view_module_source">Kod źródłowy</string>
+    <string name="view_module_last_updated">Zaktualizowano</string>
+    <string name="view_module_homepage">Strona domowa</string>
+    <string name="view_module_support">Wsparcie</string>
+    <string name="view_module_view_track">Zobacz ścieżkę</string>
+    <string name="view_module_type">Typ: %1$s</string>
+    <string name="view_module_added">Dodano w: %1$s</string>
 </resources>
