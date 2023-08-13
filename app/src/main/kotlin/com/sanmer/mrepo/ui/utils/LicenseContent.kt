@@ -94,7 +94,8 @@ private fun ViewLicense(
     license: License
 ) = Column(
     modifier = Modifier
-        .padding(top = 18.dp, start = 18.dp, end = 18.dp)
+        .padding(horizontal = 18.dp)
+        .padding(top = 18.dp)
         .fillMaxSize(),
     verticalArrangement = Arrangement.spacedBy(18.dp),
     horizontalAlignment = Alignment.CenterHorizontally

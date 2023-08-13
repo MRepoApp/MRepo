@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BottomSheetDefaults
@@ -170,7 +169,8 @@ private fun VersionItemBottomSheet(
                     .padding(all = 18.dp)
                     .fillMaxWidth(),
                 text = stringResource(id = R.string.view_module_version_dialog_desc),
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -299,7 +299,6 @@ private fun ColumnScope.ButtonColumn(
     modifier = Modifier
         .padding(bottom = 18.dp)
         .align(Alignment.CenterHorizontally),
-    verticalArrangement = Arrangement.spacedBy(2.dp),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
     val context = LocalContext.current
@@ -340,7 +339,6 @@ private fun ButtonItem(
 ) = Surface(
     onClick = onClick,
     enabled = enabled,
-    shape = RoundedCornerShape(10.dp),
     modifier = Modifier.fillMaxWidth()
 ) {
     Row(
