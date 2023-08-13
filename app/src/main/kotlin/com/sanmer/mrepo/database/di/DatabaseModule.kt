@@ -22,7 +22,7 @@ object DatabaseModule {
     @Singleton
     fun providesAppDatabase(
         @ApplicationContext context: Context
-    )  = AppDatabase.build(context)
+    ): AppDatabase = AppDatabase.build(context)
 
     @Provides
     @Singleton
