@@ -61,6 +61,11 @@ fun RepositoryScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
+                isSearch = viewModel.isSearch,
+                query = viewModel.key,
+                onQueryChange = { viewModel.key = it },
+                onOpenSearch = { viewModel.isSearch = true },
+                onCloseSearch = viewModel::closeSearch,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -101,32 +106,37 @@ fun RepositoryScreen(
 
 @Composable
 private fun TopBar(
+    isSearch: Boolean,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onOpenSearch: () -> Unit,
+    onCloseSearch: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
-    viewModel: RepositoryViewModel = hiltViewModel()
-) = if (viewModel.isSearch) {
+) = if (isSearch) {
     SearchTopBar(
-        query = viewModel.key,
-        onQueryChange = { viewModel.key = it },
-        onClose = { viewModel.closeSearch() },
+        query = query,
+        onQueryChange = onQueryChange,
+        onClose = onCloseSearch,
         scrollBehavior = scrollBehavior
     )
 } else {
     NormalTopBar(
+        onOpenSearch = onOpenSearch,
         scrollBehavior = scrollBehavior
     )
 }
 
 @Composable
 private fun NormalTopBar(
-    scrollBehavior: TopAppBarScrollBehavior,
-    viewModel: RepositoryViewModel = hiltViewModel()
+    onOpenSearch: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior
 ) = TopAppBar(
     title = {
         TopAppBarTitle(text = stringResource(id = R.string.page_repository))
     },
     actions = {
         IconButton(
-            onClick = { viewModel.isSearch = true }
+            onClick = onOpenSearch
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.search_normal_outline),

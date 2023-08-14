@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.ui.activity.install
 
+import android.content.Context
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.utils.ModuleUtils
@@ -84,6 +86,8 @@ fun InstallScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
+                state = viewModel.state,
+                sendLogFile = viewModel::sendLogFile,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -130,22 +134,23 @@ private fun Console(
 
 @Composable
 private fun TopBar(
-    scrollBehavior: TopAppBarScrollBehavior,
-    viewModel: InstallViewModel = hiltViewModel()
+    state: State,
+    sendLogFile: (Context) -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
     title = stringResource(id = R.string.install_title),
-    subtitle = stringResource(id = when (viewModel.state.event) {
+    subtitle = stringResource(id = when (state.event) {
         Event.LOADING -> R.string.install_flashing
         Event.FAILED -> R.string.install_failure
         else -> R.string.install_done
     }),
     scrollBehavior = scrollBehavior,
-    enable = viewModel.state.isFinished,
+    enable = state.isFinished,
     actions = {
         val context = LocalContext.current
-        if (viewModel.state.isFinished) {
+        if (state.isFinished) {
             IconButton(
-                onClick = { viewModel.sendLogFile(context) }
+                onClick = { sendLogFile(context) }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.send_outline),
