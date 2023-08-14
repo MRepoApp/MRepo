@@ -4,6 +4,8 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,10 +59,8 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toRepo
-import com.sanmer.mrepo.ui.animate.slideInBottomToTop
 import com.sanmer.mrepo.ui.animate.slideInTopToBottom
 import com.sanmer.mrepo.ui.animate.slideOutBottomToTop
-import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.TextFieldDialog
@@ -112,8 +112,8 @@ fun RepositoriesScreen(
         floatingActionButton = {
             AnimatedVisibility(
                 visible = showFab,
-                enter = fadeIn() + slideInBottomToTop(),
-                exit = fadeOut() + slideOutTopToBottom()
+                enter = fadeIn() + scaleIn(),
+                exit = fadeOut() + scaleOut()
             ) {
                 FloatingButton { add = true }
             }

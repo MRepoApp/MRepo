@@ -2,14 +2,11 @@ package com.sanmer.mrepo.ui.navigation.graphs
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.sanmer.mrepo.ui.animate.slideInLeftToRight
-import com.sanmer.mrepo.ui.animate.slideInRightToLeft
-import com.sanmer.mrepo.ui.animate.slideOutLeftToRight
-import com.sanmer.mrepo.ui.animate.slideOutRightToLeft
 import com.sanmer.mrepo.ui.navigation.MainScreen
 import com.sanmer.mrepo.ui.screens.settings.SettingsScreen
 import com.sanmer.mrepo.ui.screens.settings.about.AboutScreen
@@ -25,13 +22,6 @@ enum class SettingsScreen(val route: String) {
     About("About")
 }
 
-private val subScreens = listOf(
-    SettingsScreen.Repositories.route,
-    SettingsScreen.App.route,
-    SettingsScreen.WorkingMode.route,
-    SettingsScreen.About.route
-)
-
 fun NavGraphBuilder.settingsScreen(
     navController: NavController
 ) = navigation(
@@ -40,20 +30,8 @@ fun NavGraphBuilder.settingsScreen(
 ) {
     composable(
         route = SettingsScreen.Home.route,
-        enterTransition = {
-            if (initialState.destination.route in subScreens) {
-                slideInLeftToRight() + fadeIn()
-            } else {
-                fadeIn()
-            }
-        },
-        exitTransition = {
-            if (targetState.destination.route in subScreens) {
-                slideOutRightToLeft() + fadeOut()
-            } else {
-                fadeOut()
-            }
-        }
+        enterTransition = { fadeIn() },
+        exitTransition = { fadeOut() }
     ) {
         SettingsScreen(
             navController = navController
@@ -62,8 +40,8 @@ fun NavGraphBuilder.settingsScreen(
 
     composable(
         route = SettingsScreen.Repositories.route,
-        enterTransition = { slideInRightToLeft() + fadeIn() },
-        exitTransition = { slideOutLeftToRight() + fadeOut() }
+        enterTransition = { scaleIn() + fadeIn() },
+        exitTransition = { fadeOut() }
     ) {
         RepositoriesScreen(
             navController = navController
@@ -72,8 +50,8 @@ fun NavGraphBuilder.settingsScreen(
 
     composable(
         route = SettingsScreen.App.route,
-        enterTransition = { slideInRightToLeft() + fadeIn() },
-        exitTransition = { slideOutLeftToRight() + fadeOut() }
+        enterTransition = { scaleIn() + fadeIn() },
+        exitTransition = { fadeOut() }
     ) {
         AppScreen(
             navController = navController
@@ -82,8 +60,8 @@ fun NavGraphBuilder.settingsScreen(
 
     composable(
         route = SettingsScreen.WorkingMode.route,
-        enterTransition = { slideInRightToLeft() + fadeIn() },
-        exitTransition = { slideOutLeftToRight() + fadeOut() }
+        enterTransition = { scaleIn() + fadeIn() },
+        exitTransition = { fadeOut() }
     ) {
         WorkingModeScreen(
             navController = navController
@@ -92,8 +70,8 @@ fun NavGraphBuilder.settingsScreen(
 
     composable(
         route = SettingsScreen.About.route,
-        enterTransition = { slideInRightToLeft() + fadeIn() },
-        exitTransition = { slideOutLeftToRight() + fadeOut() }
+        enterTransition = { scaleIn() + fadeIn() },
+        exitTransition = { fadeOut() }
     ) {
         AboutScreen(
             navController = navController

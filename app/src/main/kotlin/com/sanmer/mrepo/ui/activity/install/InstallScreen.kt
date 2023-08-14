@@ -5,6 +5,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,8 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.ui.animate.slideInBottomToTop
-import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.utils.ModuleUtils
@@ -90,8 +90,8 @@ fun InstallScreen(
         floatingActionButton = {
             AnimatedVisibility(
                 visible = showFab,
-                enter = fadeIn() + slideInBottomToTop(),
-                exit = fadeOut() + slideOutTopToBottom()
+                enter = fadeIn() + scaleIn(),
+                exit = fadeOut() + scaleOut()
             ) {
                 FloatingButton()
             }
