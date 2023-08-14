@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.repository
 
-import com.sanmer.mrepo.api.online.ModulesRepoApi
+import com.sanmer.mrepo.api.online.RepoApi
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.copy
 import com.sanmer.mrepo.utils.extensions.runRequest
@@ -28,7 +28,7 @@ class ModulesRepository @Inject constructor(
     suspend fun getRepoAll() = withContext(Dispatchers.IO) {
         localRepository.getEnableAll().map { repo ->
             runRequest {
-                val api = ModulesRepoApi.build(repo.url)
+                val api = RepoApi.build(repo.url)
                 return@runRequest api.getModules().execute()
             }.onSuccess { modulesJson ->
                 val new = repo.copy(modulesJson)
@@ -53,7 +53,7 @@ class ModulesRepository @Inject constructor(
     suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
         runRequest(
             run = {
-                val api = ModulesRepoApi.build(repo.url)
+                val api = RepoApi.build(repo.url)
                 api.getModules().execute()
             }
         ) {
