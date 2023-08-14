@@ -13,14 +13,14 @@ import com.topjohnwu.superuser.nio.FileSystemManager
 import timber.log.Timber
 import java.io.File
 
-class MagiskModulesApi(
+class MagiskApi(
     private val context: Context,
     private val fs: FileSystemManager
 ) {
     private var version = "magisk"
     private var isZygiskEnabled = false
 
-    fun build(listener: ApiInitializerListener): ModulesLocalApi {
+    fun build(listener: ApiInitializerListener): LocalApi {
         Timber.d("initMagisk")
 
         Shell.cmd("su -v").submit {
@@ -36,8 +36,8 @@ class MagiskModulesApi(
             }
         }
 
-        return object : ModulesLocalApi {
-            val api = this@MagiskModulesApi
+        return object : LocalApi {
+            val api = this@MagiskApi
             override val version: String get() = api.version
             override suspend fun getModules() = api.getModules()
             override fun enable(module: LocalModule) = api.enable(module)
@@ -100,7 +100,7 @@ class MagiskModulesApi(
         }
     }
 
-    private suspend fun getModules() = runCatching {
+    private fun getModules() = runCatching {
         Timber.i("getLocal: ${Const.MODULE_PATH}")
 
         val modules = mutableListOf<LocalModule>()

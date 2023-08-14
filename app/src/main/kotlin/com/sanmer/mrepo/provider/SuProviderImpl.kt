@@ -7,10 +7,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.api.ApiInitializerListener
-import com.sanmer.mrepo.api.local.KernelSuModulesApi
-import com.sanmer.mrepo.api.local.MagiskModulesApi
-import com.sanmer.mrepo.api.local.ModulesLocalApi
-import com.sanmer.mrepo.app.Const
+import com.sanmer.mrepo.api.local.LocalApi
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.utils.extensions.toFile
 import com.topjohnwu.superuser.NoShellException
@@ -25,7 +22,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SuProviderImpl @Inject constructor(
-    @ApplicationContext private val app: Context
+    @ApplicationContext private val context: Context
 ) : SuProvider {
     override val state = MutableStateFlow(Event.NON)
     private val listener = object : ApiInitializerListener {
@@ -42,7 +39,7 @@ class SuProviderImpl @Inject constructor(
     }
 
     private lateinit var mProvider: ISuProvider
-    private lateinit var mApi: ModulesLocalApi
+    private lateinit var mApi: LocalApi
 
     init {
         Shell.enableVerboseLogging = BuildConfig.DEBUG
@@ -64,11 +61,11 @@ class SuProviderImpl @Inject constructor(
         runCatching {
             Shell.getShell().apply {
                 if (!isRoot) throw NoShellException(
-                    "su request rejected (${app.applicationInfo.uid})"
+                    "su request rejected (${context.applicationInfo.uid})"
                 )
             }
 
-            Intent(app, SuService::class.java).apply {
+            Intent(context, SuService::class.java).apply {
                 RootService.bind(this, connection)
             }
         }.onFailure {
@@ -81,23 +78,16 @@ class SuProviderImpl @Inject constructor(
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             mProvider = ISuProvider.Stub.asInterface(binder)
 
-            when (context) {
-                Const.KSU_CONTEXT -> {
-                    mApi = KernelSuModulesApi(
-                        context = app
-                    ).build(listener)
-                }
-
-                Const.MAGISK_CONTEXT -> {
-                    mApi = MagiskModulesApi(
-                        context = app,
-                        fs = getFileSystemManager()
-                    ).build(listener)
-                }
-
-                else -> {
-                    Timber.e("unknown root provider: $context")
-                }
+            runCatching {
+                mApi = LocalApi.build(
+                    context = context,
+                    attr = mProvider.context,
+                    listener = listener,
+                    fs = getFileSystemManager()
+                )
+            }.onFailure {
+                Timber.e(it)
+                listener.onFailure()
             }
         }
 
@@ -129,11 +119,9 @@ class SuProviderImpl @Inject constructor(
         }
     }
 
-    override val context: String get() = mProvider.context
-
     override fun getFileSystemManager(): FileSystemManager =
         FileSystemManager.getRemote(mProvider.fileSystemService)
 
-    override fun getModulesApi(): ModulesLocalApi = mApi
+    override fun getModulesApi(): LocalApi = mApi
 
 }

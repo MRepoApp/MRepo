@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.repository
 
-import com.sanmer.mrepo.api.local.ModulesLocalApi
+import com.sanmer.mrepo.api.local.LocalApi
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.provider.SuProvider
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class SuRepository @Inject constructor(
     private val suProvider: SuProvider
 ) {
-    private val api: ModulesLocalApi get() = suProvider.getModulesApi()
+    private val api: LocalApi get() = suProvider.getModulesApi()
 
     val state: StateFlow<Event> get() = suProvider.state
     val fs: FileSystemManager get() = suProvider.getFileSystemManager()

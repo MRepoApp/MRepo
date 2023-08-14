@@ -15,5 +15,4 @@ abstract class ProviderModule {
     @Binds
     @Singleton
     abstract fun bindsSuProvider(suProviderImpl: SuProviderImpl): SuProvider
-
 }

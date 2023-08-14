@@ -20,10 +20,6 @@ object Const {
     const val MY_REPO_URL = "https://ya0211.github.io/magisk-modules-repo/"
     const val SPDX_URL = "https://spdx.org/licenses/%s.json"
 
-    // CONTEXT
-    const val KSU_CONTEXT = "u:r:su:s0"
-    const val MAGISK_CONTEXT = "u:r:magisk:s0"
-
     // EMOTICON
     const val EMOTICON_SHRUG = "¯\u2060\\\u2060_\u2060(\u2060ツ\u2060)\u2060_\u2060/\u2060¯"
 }

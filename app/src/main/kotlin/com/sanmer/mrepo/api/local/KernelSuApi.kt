@@ -13,11 +13,11 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 
-class KernelSuModulesApi(private val context: Context) {
+class KernelSuApi(private val context: Context) {
     private var version = "kernelsu"
     private val ksud = "/data/adb/ksud"
 
-    fun build(listener: ApiInitializerListener): ModulesLocalApi {
+    fun build(listener: ApiInitializerListener): LocalApi {
         Timber.i("initKernelSu")
 
         Shell.cmd("su -v").submit {
@@ -32,8 +32,8 @@ class KernelSuModulesApi(private val context: Context) {
             }
         }
 
-        return object : ModulesLocalApi {
-            val api = this@KernelSuModulesApi
+        return object : LocalApi {
+            val api = this@KernelSuApi
             override val version: String get() = api.version
             override suspend fun getModules() = api.getModules()
             override fun enable(module: LocalModule) = api.enable(module)
@@ -72,7 +72,7 @@ class KernelSuModulesApi(private val context: Context) {
         }
     }
 
-    private suspend fun getModules() = runCatching {
+    private fun getModules() = runCatching {
         Timber.i("getLocal: $version")
 
         val out = Shell.cmd("$ksud module list").exec().out
@@ -95,8 +95,6 @@ class KernelSuModulesApi(private val context: Context) {
         Shell.cmd("$ksud module enable ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.ENABLE
-            } else {
-                Timber.e("enable failed: ${it.output}")
             }
         }
     }
@@ -105,8 +103,6 @@ class KernelSuModulesApi(private val context: Context) {
         Shell.cmd("$ksud module disable ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.DISABLE
-            } else {
-                Timber.e("disable failed: ${it.output}")
             }
         }
     }
@@ -115,8 +111,6 @@ class KernelSuModulesApi(private val context: Context) {
         Shell.cmd("$ksud module uninstall ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.REMOVE
-            } else {
-                Timber.e("uninstall failed: ${it.output}")
             }
         }
     }
