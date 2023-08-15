@@ -44,9 +44,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     languageSettings {
                         optIn("androidx.compose.material.ExperimentalMaterialApi")
                         optIn("androidx.compose.material3.ExperimentalMaterial3Api")
-                        optIn("androidx.compose.ui.ExperimentalComposeUiApi")
-                        optIn("androidx.compose.animation.ExperimentalAnimationApi")
                         optIn("androidx.compose.foundation.ExperimentalFoundationApi")
+                        optIn("androidx.compose.foundation.layout.ExperimentalLayoutApi")
                         optIn("com.google.accompanist.permissions.ExperimentalPermissionsApi")
                         optIn("kotlin.ExperimentalStdlibApi")
                         optIn("kotlinx.coroutines.FlowPreview")
