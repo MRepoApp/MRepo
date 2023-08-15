@@ -96,6 +96,5 @@ private fun TitleItem(
 ) = Text(
     text = text,
     style = MaterialTheme.typography.titleSmall,
-    color = MaterialTheme.colorScheme.primary,
     modifier = Modifier.padding(start = 18.dp, top = 18.dp)
 )
