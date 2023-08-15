@@ -54,7 +54,7 @@ fun SegmentedButtons(
     containerColor: Color = Color.Transparent,
     contentColor: Color = LocalContentColor.current,
     shape: Shape = SegmentedButtonsDefaults.Shape,
-    border: BorderStroke = SegmentedButtonsDefaults.Border,
+    border: BorderStroke = SegmentedButtonsDefaults.border(),
     segments: @Composable () -> Unit
 ) {
     Surface(
@@ -109,7 +109,7 @@ fun Segment(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    colors: SegmentedButtonColors = SegmentedButtonsDefaults.buttonColor(),
+    colors: SegmentColors = SegmentedButtonsDefaults.buttonColor(),
     contentPadding: PaddingValues = SegmentedButtonsDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     icon: (@Composable () -> Unit)? = { SegmentedButtonsDefaults.SegmentIcon(selected) },
@@ -127,7 +127,7 @@ fun Segment(
                 interactionSource = interactionSource,
                 indication = rememberRipple(
                     bounded = true,
-                    color = MaterialTheme.colorScheme.primary
+                    color = colors.containerColor(selected).value
                 )
             ),
         color = containerColor,
@@ -162,15 +162,26 @@ object SegmentedButtonsDefaults {
     val Shape: Shape = CircleShape
     val ContentPadding = PaddingValues(vertical = 8.dp, horizontal = 24.dp)
 
-    private val borderColor @Composable get() = MaterialTheme.colorScheme.outline
-    val Border @Composable get() = BorderStroke(1.dp, borderColor)
+    @Composable
+    fun border(
+        width: Dp = 1.dp,
+        color: Color =  MaterialTheme.colorScheme.outline
+    ) = BorderStroke(
+        width = width,
+        color = color
+    )
 
     @Composable
-    fun buttonColor() = SegmentedButtonColors(
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        disabledContainerColor = Color.Transparent,
-        disabledContentColor = MaterialTheme.colorScheme.onSurface
+    fun buttonColor(
+        containerColor: Color = Color.Transparent,
+        contentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+        selectedContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+        selectedContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer
+    ) = SegmentColors(
+        containerColor = containerColor,
+        contentColor = contentColor,
+        selectedContainerColor = selectedContainerColor,
+        selectedContentColor = selectedContentColor
     )
 
     fun divider(
@@ -230,31 +241,31 @@ object SegmentedButtonsDefaults {
 }
 
 @Immutable
-class SegmentedButtonColors internal constructor(
+class SegmentColors internal constructor(
     private val containerColor: Color,
     private val contentColor: Color,
-    private val disabledContainerColor: Color,
-    private val disabledContentColor: Color,
+    private val selectedContainerColor: Color,
+    private val selectedContentColor: Color,
 ) {
     @Composable
     internal fun containerColor(selected: Boolean): State<Color> {
-        return rememberUpdatedState(if (selected) containerColor else disabledContainerColor)
+        return rememberUpdatedState(if (selected) selectedContainerColor else containerColor)
     }
 
     @Composable
     internal fun contentColor(selected: Boolean): State<Color> {
-        return rememberUpdatedState(if (selected) contentColor else disabledContentColor)
+        return rememberUpdatedState(if (selected) selectedContentColor else contentColor)
     }
 
     @Suppress("RedundantIf")
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other == null || other !is SegmentedButtonColors) return false
+        if (other == null || other !is SegmentColors) return false
 
         if (containerColor != other.containerColor) return false
         if (contentColor != other.contentColor) return false
-        if (disabledContainerColor != other.disabledContainerColor) return false
-        if (disabledContentColor != other.disabledContentColor) return false
+        if (selectedContainerColor != other.selectedContainerColor) return false
+        if (selectedContentColor != other.selectedContentColor) return false
 
         return true
     }
@@ -262,8 +273,8 @@ class SegmentedButtonColors internal constructor(
     override fun hashCode(): Int {
         var result = containerColor.hashCode()
         result = 31 * result + contentColor.hashCode()
-        result = 31 * result + disabledContainerColor.hashCode()
-        result = 31 * result + disabledContentColor.hashCode()
+        result = 31 * result + selectedContainerColor.hashCode()
+        result = 31 * result + selectedContentColor.hashCode()
         return result
     }
 }
