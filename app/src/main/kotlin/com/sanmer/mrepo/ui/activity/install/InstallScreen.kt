@@ -4,8 +4,7 @@ import android.content.Context
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.focusable
@@ -94,8 +93,14 @@ fun InstallScreen(
         floatingActionButton = {
             AnimatedVisibility(
                 visible = showFab,
-                enter = fadeIn() + scaleIn(),
-                exit = fadeOut() + scaleOut()
+                enter = scaleIn(
+                    animationSpec = tween(100),
+                    initialScale = 0.8f
+                ),
+                exit = scaleOut(
+                    animationSpec = tween(100),
+                    targetScale = 0.8f
+                )
             ) {
                 FloatingButton()
             }
