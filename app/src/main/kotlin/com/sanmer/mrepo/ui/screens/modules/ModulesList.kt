@@ -29,6 +29,7 @@ import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
+import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.utils.rememberFastScroller
 import com.sanmer.mrepo.ui.utils.scrollbarState
@@ -36,10 +37,10 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun ModulesList(
-    list: List<LocalModule>,
+    list: List<Pair<LocalState, LocalModule>>,
     state: LazyListState,
     suState: Event,
-    getModuleState: @Composable (LocalModule) -> ModulesViewModel.ModuleState
+    getUiState: @Composable (LocalModule) -> ModulesViewModel.UiState
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -51,12 +52,13 @@ fun ModulesList(
     ) {
         items(
             items = list,
-            key = { it.id }
-        ) {
+            key = { it.second.id }
+        ) { (state, module) ->
             ModuleItem(
-                module = it,
+                module = module,
+                state = state,
                 suState = suState,
-                getModuleState = getModuleState
+                getUiState = getUiState
             )
         }
     }
@@ -75,19 +77,21 @@ fun ModulesList(
 @Composable
 private fun ModuleItem(
     module: LocalModule,
+    state: LocalState,
     suState: Event,
-    getModuleState: @Composable (LocalModule) -> ModulesViewModel.ModuleState
+    getUiState: @Composable (LocalModule) -> ModulesViewModel.UiState
 ) {
-    val moduleState = getModuleState(module)
+    val uiState = getUiState(module)
 
     ModuleItem(
         module = module,
-        alpha = moduleState.alpha,
-        decoration = moduleState.decoration,
+        state = state,
+        alpha = uiState.alpha,
+        decoration = uiState.decoration,
         switch = {
             Switch(
                 checked = module.state == State.ENABLE,
-                onCheckedChange = moduleState.toggle,
+                onCheckedChange = uiState.toggle,
                 enabled = suState.isSucceeded
             )
         },
@@ -99,15 +103,15 @@ private fun ModuleItem(
             State.ZYGISK_DISABLE -> stateIndicator(R.drawable.danger_outline)
             else -> null
         },
-        leadingButton = if (moduleState.manager != null) {
-            manager(moduleState.manager)
+        leadingButton = if (uiState.manager != null) {
+            manager(uiState.manager)
         } else {
             null
         },
         trailingButton = {
             RemoveOrRestore(
                 module = module,
-                onClick = moduleState.change,
+                onClick = uiState.change,
                 enabled = suState.isSucceeded
             )
         }

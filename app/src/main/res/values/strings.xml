@@ -53,7 +53,7 @@
 
     <!-- Modules -->
     <string name="modules_empty">No modules found</string>
-    <!-- Module Card -->
+    <!-- Module Item -->
     <string name="module_version_author">%1$s by %2$s</string>
     <string name="module_remove">Remove</string>
     <string name="module_restore">Restore</string>
@@ -68,13 +68,13 @@
     <string name="settings_app">App</string>
     <string name="settings_app_desc">Settings about MRepo app itself</string>
     <string name="settings_about">About</string>
-    <!-- Root Card -->
+    <!-- Root Item -->
     <string name="settings_root_access">Root Access: %1$s</string>
     <string name="settings_root_provider">Provider: %1$s</string>
     <string name="settings_root_granted">Granted</string>
     <string name="settings_root_not_available">Not available</string>
     <string name="settings_root_none">None</string>
-    <!-- Non Root Card -->
+    <!-- Non Root Item -->
     <string name="settings_non_root_desc">Functionality is limited</string>
     <!-- Menu -->
     <string name="settings_menu_reboot">Reboot</string>
@@ -97,7 +97,7 @@
     <string name="app_theme_dark_theme_dark">Dark</string>
     <!-- Repo -->
     <string name="repo_modules">%1$d modules</string>
-    <string name="repo_last_update">Last update: %1$s</string>
+    <string name="repo_last_update">Updated at: %1$s</string>
     <string name="repo_incompatible_desc">The current version is %1$d, please upgrade version to %2$d</string>
     <string name="repo_options_update">Update</string>
     <string name="repo_options_share">Share</string>

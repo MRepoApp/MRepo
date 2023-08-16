@@ -2,6 +2,7 @@ package com.sanmer.mrepo.ui.screens.modules
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -32,10 +33,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.state.LocalState
 
 @Composable
 fun ModuleItem(
     module: LocalModule,
+    state: LocalState,
     modifier: Modifier = Modifier,
     alpha: Float = 1f,
     decoration: TextDecoration = TextDecoration.None,
@@ -64,7 +67,8 @@ fun ModuleItem(
                 Column(
                     modifier = Modifier
                         .alpha(alpha = alpha)
-                        .weight(1f)
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = module.name,
@@ -74,12 +78,13 @@ fun ModuleItem(
                         textDecoration = decoration,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
+
                     Text(
                         text = stringResource(id = R.string.module_version_author,
                             module.versionDisplay, module.author),
                         style = MaterialTheme.typography.bodySmall,
-                        textDecoration = decoration
+                        textDecoration = decoration,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -92,8 +97,22 @@ fun ModuleItem(
                     .padding(horizontal = 16.dp),
                 text = module.description,
                 style = MaterialTheme.typography.bodySmall,
-                textDecoration = decoration
+                textDecoration = decoration,
+                color = MaterialTheme.colorScheme.outline
             )
+
+            if (state.lastModified != null) {
+                Text(
+                    modifier = Modifier
+                        .alpha(alpha = alpha)
+                        .padding(top = 8.dp, start = 16.dp),
+                    text = stringResource(id = R.string.module_update_at,
+                        state.lastModified),
+                    style = MaterialTheme.typography.bodySmall,
+                    textDecoration = decoration,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
 
             HorizontalDivider(
                 thickness = 1.5.dp,

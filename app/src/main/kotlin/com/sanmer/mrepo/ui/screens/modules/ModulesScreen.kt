@@ -130,7 +130,7 @@ fun ModulesScreen(
                 list = viewModel.localValue,
                 state = listState,
                 suState = suState,
-                getModuleState = { viewModel.rememberModuleState(it) }
+                getUiState = { viewModel.rememberUiState(it) }
             )
 
             PullRefreshIndicator(

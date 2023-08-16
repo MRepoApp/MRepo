@@ -53,7 +53,7 @@
 
     <!-- Modules -->
     <string name="modules_empty">没找到任何模块</string>
-    <!-- Module Card -->
+    <!-- Module Item -->
     <string name="module_version_author">%1$s，作者 %2$s</string>
     <string name="module_remove">移除</string>
     <string name="module_restore">还原</string>
@@ -68,13 +68,13 @@
     <string name="settings_app">应用</string>
     <string name="settings_app_desc">关于 MRepo 应用本身的设置</string>
     <string name="settings_about">关于</string>
-    <!-- Root Card -->
+    <!-- Root Item -->
     <string name="settings_root_access">Root 权限：%1$s</string>
     <string name="settings_root_provider">授权应用：%1$s</string>
     <string name="settings_root_granted">已授权</string>
     <string name="settings_root_not_available">不可用</string>
     <string name="settings_root_none">无</string>
-    <!-- Non Root Card -->
+    <!-- Non Root Item -->
     <string name="settings_non_root_desc">功能受到限制</string>
     <!-- Menu -->
     <string name="settings_menu_reboot">重启</string>
@@ -97,7 +97,7 @@
     <string name="app_theme_dark_theme_dark">深色</string>
     <!-- Repo -->
     <string name="repo_modules">%1$d 个模块</string>
-    <string name="repo_last_update">上次更新：%1$s</string>
+    <string name="repo_last_update">更新于：%1$s</string>
     <string name="repo_incompatible_desc">当前版本为 %1$d，请升级至 %2$d</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_share">分享</string>

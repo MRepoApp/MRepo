@@ -14,10 +14,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
+import com.sanmer.mrepo.model.state.LocalState.Companion.createState
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.utils.ModuleUtils
+import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -29,21 +31,34 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
-    val localValue get() = (if (isSearch) _local else local)
-        .sortedBy { it.name }
-
-    private val local get() = localRepository.local
+    val suState get() = suRepository.state
+    private val fs get() = try {
+        suRepository.fs
+    } catch (e: Exception) {
+        FileSystemManager.getLocal()
+    }
 
     var isSearch by mutableStateOf(false)
     var key by mutableStateOf("")
-    private val _local by derivedStateOf {
-        local.filter {
+
+    private val local get() = localRepository.local
+        .map { local ->
+            local.createState(
+                fs = fs,
+                skipSize = true
+            ) to local
+        }.sortedBy { (_, module) ->
+            module.name
+        }
+
+    private val localSearch by derivedStateOf {
+        local.filter { (_, module) ->
             if (key.isBlank()) return@filter true
-            key.uppercase() in "${it.name}${it.author}".uppercase()
+            key.uppercase() in "${module.name}${module.author}".uppercase()
         }
     }
 
-    val suState get() = suRepository.state
+    val localValue get() = (if (isSearch) localSearch else local)
 
     var isRefreshing by mutableStateOf(false)
         private set
@@ -69,7 +84,7 @@ class ModulesViewModel @Inject constructor(
     }
 
     @Stable
-    data class ModuleState(
+    data class UiState(
         val alpha: Float = 1f,
         val decoration: TextDecoration = TextDecoration.None,
         val toggle: (Boolean) -> Unit = {},
@@ -77,11 +92,11 @@ class ModulesViewModel @Inject constructor(
         val manager: (() -> Unit)? = null
     )
 
-    private fun createModuleState(
+    private fun createUiState(
         context: Context,
         module: LocalModule
-    ): ModuleState = when (module.state) {
-        State.ENABLE -> ModuleState(
+    ): UiState = when (module.state) {
+        State.ENABLE -> UiState(
             alpha = 1f,
             decoration = TextDecoration.None,
             toggle = { suRepository.disable(module) },
@@ -89,32 +104,32 @@ class ModulesViewModel @Inject constructor(
             manager = ModuleUtils.launchManger(context, module)
         )
 
-        State.DISABLE -> ModuleState(
+        State.DISABLE -> UiState(
             alpha = 0.5f,
             toggle = { suRepository.enable(module) },
             change = { suRepository.remove(module) },
             manager = ModuleUtils.launchManger(context, module)
         )
 
-        State.REMOVE -> ModuleState(
+        State.REMOVE -> UiState(
             alpha = 0.5f,
             decoration = TextDecoration.LineThrough,
             change = { suRepository.enable(module) }
         )
         State.ZYGISK_UNLOADED,
         State.RIRU_DISABLE,
-        State.ZYGISK_DISABLE -> ModuleState(
+        State.ZYGISK_DISABLE -> UiState(
             alpha = 0.5f
         )
-        State.UPDATE -> ModuleState()
+        State.UPDATE -> UiState()
     }
 
     @Composable
-    fun rememberModuleState(module: LocalModule): ModuleState {
+    fun rememberUiState(module: LocalModule): UiState {
         val context = LocalContext.current
 
         return remember(key1 = module.state, key2 = isRefreshing) {
-            createModuleState(context, module)
+            createUiState(context, module)
         }
     }
 }
