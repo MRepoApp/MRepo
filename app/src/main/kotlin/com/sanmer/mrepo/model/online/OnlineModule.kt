@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.model.online
 
-import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.utils.ModuleUtils.getVersionDisplay
 import com.squareup.moshi.JsonClass
 
@@ -19,7 +18,6 @@ data class OnlineModule(
 
     override fun equals(other: Any?): Boolean {
         return when (other) {
-            is LocalModule -> id == other.id
             is OnlineModule -> id == other.id
             else -> false
         }
@@ -27,5 +25,22 @@ data class OnlineModule(
 
     override fun hashCode(): Int {
         return id.hashCode()
+    }
+
+    companion object {
+        fun example() = OnlineModule(
+            id = "example",
+            name = "Example",
+            version = "2022.08.16",
+            versionCode = 1703,
+            author = "Sanmer",
+            description = "This is an example!",
+            track = TrackJson(
+                typeName = "ONLINE_JSON",
+                added = 0f,
+                license = "GPL-3.0"
+            ),
+            versions = emptyList()
+        )
     }
 }
