@@ -23,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
@@ -153,36 +152,23 @@ private fun TopBar(
     onOpenSearch: () -> Unit,
     onCloseSearch: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
-) = if (isSearch) {
-    SearchTopBar(
-        query = query,
-        onQueryChange = onQueryChange,
-        onClose = onCloseSearch,
-        scrollBehavior = scrollBehavior
-    )
-} else {
-    NormalTopBar(
-        onOpenSearch = onOpenSearch,
-        scrollBehavior = scrollBehavior
-    )
-}
-
-@Composable
-private fun NormalTopBar(
-    onOpenSearch: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior
-) = TopAppBar(
-    title = {
-        TopAppBarTitle(text = stringResource(id = R.string.page_modules))
-    },
+) = SearchTopBar(
+    isSearch = isSearch,
+    query = query,
+    onQueryChange = onQueryChange,
+    onClose = onCloseSearch,
+    title = { TopAppBarTitle(text = stringResource(id = R.string.page_modules)) },
+    scrollBehavior = scrollBehavior,
     actions = {
-        IconButton(
-            onClick = onOpenSearch
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.search_normal_outline),
-                contentDescription = null
-            )
+        if (!isSearch) {
+            IconButton(
+                onClick = onOpenSearch
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.search_normal_outline),
+                    contentDescription = null
+                )
+            }
         }
 
         val context = LocalContext.current
@@ -197,8 +183,7 @@ private fun NormalTopBar(
                 contentDescription = null
             )
         }
-    },
-    scrollBehavior = scrollBehavior
+    }
 )
 
 @Composable
