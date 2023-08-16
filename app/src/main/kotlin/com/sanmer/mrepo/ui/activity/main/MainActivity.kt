@@ -26,7 +26,7 @@ class MainActivity : BaseActivity() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userDataRepository.userData
+                userPreferencesRepository.flow
                     .distinctUntilChanged()
                     .collect {
                         if (it.isSetup) {
@@ -42,7 +42,7 @@ class MainActivity : BaseActivity() {
 
     private fun setSetup() = setActivityContent {
         PermissionsState()
-        SetupScreen(setMode = userDataRepository::setWorkingMode)
+        SetupScreen(setMode = userPreferencesRepository::setWorkingMode)
     }
 
     private fun setMain() = setActivityContent {

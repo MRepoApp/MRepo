@@ -8,7 +8,7 @@ import com.sanmer.mrepo.ui.theme.Colors
 import com.sanmer.mrepo.utils.extensions.toFile
 import java.io.File
 
-data class UserData(
+data class UserPreferencesExt(
     val workingMode: WorkingMode,
     val isRoot: Boolean = workingMode == WorkingMode.MODE_ROOT,
     val isNonRoot: Boolean = workingMode == WorkingMode.MODE_NON_ROOT,
@@ -19,7 +19,7 @@ data class UserData(
     val deleteZipFile: Boolean
 ) {
     companion object {
-        fun default() = UserData(
+        fun default() = UserPreferencesExt(
             workingMode = WorkingMode.FIRST_SETUP,
             darkMode = DarkMode.FOLLOW_SYSTEM,
             themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
@@ -30,13 +30,13 @@ data class UserData(
 }
 
 @Composable
-fun UserData.isDarkMode() = when (darkMode) {
+fun UserPreferencesExt.isDarkMode() = when (darkMode) {
     DarkMode.ALWAYS_OFF -> false
     DarkMode.ALWAYS_ON -> true
     else -> isSystemInDarkTheme()
 }
 
-fun UserData.toPreferences(): UserPreferences = UserPreferences.newBuilder()
+fun UserPreferencesExt.toPreferences(): UserPreferences = UserPreferences.newBuilder()
     .setWorkingMode(workingMode)
     .setDarkMode(darkMode)
     .setThemeColor(themeColor)
@@ -44,7 +44,7 @@ fun UserData.toPreferences(): UserPreferences = UserPreferences.newBuilder()
     .setDeleteZipFile(deleteZipFile)
     .build()
 
-fun UserPreferences.toUserData() = UserData(
+fun UserPreferences.toExt() = UserPreferencesExt(
     workingMode = workingMode,
     darkMode = darkMode,
     themeColor = themeColor,

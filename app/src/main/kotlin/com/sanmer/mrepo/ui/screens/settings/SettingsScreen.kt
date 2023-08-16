@@ -27,7 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
@@ -43,17 +43,18 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
+    val userPreferences by viewModel.userPreferences
+        .collectAsStateWithLifecycle(UserPreferencesExt.default())
+
     val context = LocalContext.current
     val suState by viewModel.suState.collectAsStateWithLifecycle()
-    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
-                isRoot = userData.isRoot,
+                isRoot = userPreferences.isRoot,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -66,11 +67,11 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             when {
-                userData.isRoot -> RootItem(
+                userPreferences.isRoot -> RootItem(
                     suState = suState,
                     apiVersion = viewModel.apiVersion
                 )
-                userData.isNonRoot -> NonRootItem()
+                userPreferences.isNonRoot -> NonRootItem()
             }
 
             SettingNormalItem(
@@ -103,7 +104,7 @@ fun SettingsScreen(
             SettingNormalItem(
                 icon = R.drawable.main_component_outline,
                 text = stringResource(id = R.string.settings_mode),
-                subText = if (userData.isRoot) {
+                subText = if (userPreferences.isRoot) {
                     stringResource(id = R.string.settings_mode_root)
                 } else {
                     stringResource(id = R.string.settings_mode_non_root)

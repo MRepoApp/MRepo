@@ -19,7 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.none
@@ -30,7 +30,9 @@ fun WorkingModeScreen(
     navController: NavController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
+    val userPreferences by viewModel.userPreferences
+        .collectAsStateWithLifecycle(UserPreferencesExt.default())
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
@@ -55,7 +57,7 @@ fun WorkingModeScreen(
                 title = stringResource(id = R.string.setup_root_title),
                 desc1 = stringResource(id = R.string.setup_root_desc1),
                 desc2 = stringResource(id = R.string.setup_root_desc2),
-                selected = userData.isRoot,
+                selected = userPreferences.isRoot,
                 onClick = {
                     viewModel.setWorkingMode(WorkingMode.MODE_ROOT)
                 }
@@ -65,7 +67,7 @@ fun WorkingModeScreen(
                 title = stringResource(id = R.string.setup_non_root_title),
                 desc1 = stringResource(id = R.string.setup_non_root_desc1),
                 desc2 = stringResource(id = R.string.setup_non_root_desc2),
-                selected = userData.isNonRoot,
+                selected = userPreferences.isNonRoot,
                 onClick = {
                     viewModel.setWorkingMode(WorkingMode.MODE_NON_ROOT)
                 }

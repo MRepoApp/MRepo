@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 
 class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferences> {
-    override val defaultValue: UserPreferences = UserData.default().toPreferences()
+    override val defaultValue: UserPreferences = UserPreferencesExt.default().toPreferences()
 
     override suspend fun readFrom(input: InputStream): UserPreferences =
         try {

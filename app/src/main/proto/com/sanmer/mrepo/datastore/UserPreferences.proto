@@ -1,19 +1,10 @@
 syntax = "proto3";
 
+import "com/sanmer/mrepo/datastore/WorkingMode.proto";
+import "com/sanmer/mrepo/datastore/DarkMode.proto";
+
 option java_package = "com.sanmer.mrepo.datastore";
 option java_multiple_files = true;
-
-enum WorkingMode {
-    FIRST_SETUP = 0;
-    MODE_ROOT = 1;
-    MODE_NON_ROOT = 2;
-}
-
-enum DarkMode {
-    FOLLOW_SYSTEM = 0;
-    ALWAYS_OFF = 1;
-    ALWAYS_ON = 2;
-}
 
 message UserPreferences {
   WorkingMode workingMode = 1;

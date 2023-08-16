@@ -14,7 +14,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.OverviewPage
@@ -28,7 +27,6 @@ fun ViewModuleScreen(
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
     val suState by viewModel.suState.collectAsStateWithLifecycle()
-    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
     val localModuleInfo = viewModel.rememberLocalModuleInfo(suState = suState)
     val (versions, tracks) = viewModel.getVersionsAndTracks()
 
@@ -67,7 +65,7 @@ fun ViewModuleScreen(
                     )
                     1 -> VersionsPage(
                         versions = versions,
-                        isRoot = userData.isRoot,
+                        isRoot = viewModel.isRoot,
                         getProgress = { viewModel.rememberProgress(it) },
                         downloader = viewModel::downloader
                     )

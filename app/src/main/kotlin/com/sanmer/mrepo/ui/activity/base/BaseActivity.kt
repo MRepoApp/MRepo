@@ -7,9 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.datastore.isDarkMode
-import com.sanmer.mrepo.repository.UserDataRepository
+import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 abstract class BaseActivity : ComponentActivity() {
     @Inject
-    lateinit var userDataRepository: UserDataRepository
+    lateinit var userPreferencesRepository: UserPreferencesRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,15 +25,16 @@ abstract class BaseActivity : ComponentActivity() {
     }
 
     fun setActivityContent(
-        content: @Composable (UserData) -> Unit
+        content: @Composable (UserPreferencesExt) -> Unit
     ) = setContent {
-        val userData by userDataRepository.userData.collectAsStateWithLifecycle(UserData.default())
+        val userPreferences by userPreferencesRepository.flow
+            .collectAsStateWithLifecycle(UserPreferencesExt.default())
 
         AppTheme(
-            darkMode = userData.isDarkMode(),
-            themeColor = userData.themeColor
+            darkMode = userPreferences.isDarkMode(),
+            themeColor = userPreferences.themeColor
         ) {
-            content(userData)
+            content(userPreferences)
         }
     }
 }

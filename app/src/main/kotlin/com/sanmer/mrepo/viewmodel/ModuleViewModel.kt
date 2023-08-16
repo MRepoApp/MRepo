@@ -21,7 +21,7 @@ import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.repository.UserDataRepository
+import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.extensions.toDateTime
 import com.sanmer.mrepo.utils.extensions.totalSize
@@ -36,7 +36,7 @@ import kotlin.math.pow
 @HiltViewModel
 class ModuleViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val userDataRepository: UserDataRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -51,7 +51,8 @@ class ModuleViewModel @Inject constructor(
         private set
     val installed get() = local.id != "unknown"
 
-    val userData get() = userDataRepository.userData
+    private val userPreferencesValue get() = userPreferencesRepository.value
+    val isRoot get() = userPreferencesValue.isRoot
     val suState get() = suRepository.state
 
     init {
@@ -94,7 +95,7 @@ class ModuleViewModel @Inject constructor(
         item: VersionItem,
         install: Boolean
     ) {
-        val path = userDataRepository.value.downloadPath.resolve(
+        val path = userPreferencesValue.downloadPath.resolve(
             "${online.name}_${item.versionDisplay}.zip"
                 .replace("[\\s+|/]".toRegex(), "_")
                 .replace("[^a-zA-Z0-9\\-._]".toRegex(), "")

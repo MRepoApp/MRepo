@@ -3,8 +3,8 @@ package com.sanmer.mrepo.repository
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.datastore.DarkMode
-import com.sanmer.mrepo.datastore.UserData
 import com.sanmer.mrepo.datastore.UserPreferencesDataSource
+import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
@@ -18,18 +18,18 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserDataRepository @Inject constructor(
+class UserPreferencesRepository @Inject constructor(
     private val userPreferencesDataSource: UserPreferencesDataSource,
     private val localRepository: LocalRepository,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) {
-    val userData get() = userPreferencesDataSource.userData
+    val flow get() = userPreferencesDataSource.dataFlow
 
-    private var _value = UserData.default()
+    private var _value = UserPreferencesExt.default()
     val value get() = _value
 
     init {
-        userPreferencesDataSource.userData
+        userPreferencesDataSource.dataFlow
             .distinctUntilChanged()
             .onEach {
                 if (it.isSetup) {

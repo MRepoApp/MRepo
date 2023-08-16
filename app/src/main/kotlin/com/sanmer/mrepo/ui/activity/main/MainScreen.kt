@@ -20,7 +20,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.ui.navigation.MainScreen
 import com.sanmer.mrepo.ui.navigation.graphs.modulesScreen
 import com.sanmer.mrepo.ui.navigation.graphs.repositoryScreen
@@ -29,7 +29,7 @@ import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 
 @Composable
 fun MainScreen(
-    userData: UserData
+    userPreferences: UserPreferencesExt
 ) {
     val navController = rememberNavController()
 
@@ -37,7 +37,7 @@ fun MainScreen(
         bottomBar = {
             BottomNav(
                 navController = navController,
-                isRoot = userData.isRoot
+                isRoot = userPreferences.isRoot
             )
         }
     ) {

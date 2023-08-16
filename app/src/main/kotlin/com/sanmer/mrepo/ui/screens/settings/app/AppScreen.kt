@@ -18,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.datastore.UserData
+import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.SettingSwitchItem
@@ -32,7 +32,8 @@ fun AppScreen(
     navController: NavController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val userData by viewModel.userData.collectAsStateWithLifecycle(UserData.default())
+    val userPreferences by viewModel.userPreferences
+        .collectAsStateWithLifecycle(UserPreferencesExt.default())
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -53,15 +54,15 @@ fun AppScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             AppThemeItem(
-                themeColor = userData.themeColor,
-                darkMode = userData.darkMode,
-                isDarkMode = userData.isDarkMode(),
+                themeColor = userPreferences.themeColor,
+                darkMode = userPreferences.darkMode,
+                isDarkMode = userPreferences.isDarkMode(),
                 onThemeColorChange = viewModel::setThemeColor,
                 onDarkModeChange = viewModel::setDarkTheme
             )
 
             DownloadPathItem(
-                downloadPath = userData.downloadPath,
+                downloadPath = userPreferences.downloadPath,
                 onChange = viewModel::setDownloadPath
             )
 
@@ -69,9 +70,9 @@ fun AppScreen(
                 icon = R.drawable.box_remove_outline,
                 text = stringResource(id = R.string.settings_delete_zip),
                 subText = stringResource(id = R.string.settings_delete_zip_desc),
-                checked = userData.deleteZipFile,
+                checked = userPreferences.deleteZipFile,
                 onChange = viewModel::setDeleteZipFile,
-                enabled = userData.isRoot
+                enabled = userPreferences.isRoot
             )
         }
     }

@@ -11,7 +11,7 @@ import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.app.utils.ShortcutUtils
 import com.sanmer.mrepo.di.MainScope
 import com.sanmer.mrepo.provider.SuProviderImpl
-import com.sanmer.mrepo.repository.UserDataRepository
+import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.timber.DebugTree
 import com.sanmer.mrepo.utils.timber.ReleaseTree
 import com.sanmer.mrepo.works.LocalWork
@@ -32,7 +32,7 @@ class App : Application(), Configuration.Provider {
     lateinit var workerFactory: HiltWorkerFactory
 
     @Inject
-    lateinit var userDataRepository: UserDataRepository
+    lateinit var userPreferences: UserPreferencesRepository
 
     @Inject
     lateinit var suProviderImpl: SuProviderImpl
@@ -66,7 +66,7 @@ class App : Application(), Configuration.Provider {
             .build()
 
     private fun initSuProviderImpl() {
-        userDataRepository.userData
+        userPreferences.flow
             .map { it.isRoot }
             .distinctUntilChanged()
             .combine(suProviderImpl.state) { isRoot, state ->

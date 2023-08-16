@@ -13,7 +13,7 @@ import com.sanmer.mrepo.app.utils.MediaStoreUtils.displayName
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.repository.UserDataRepository
+import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.extensions.createLog
 import com.sanmer.mrepo.utils.extensions.shareFile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val userDataRepository: UserDataRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
     val console = mutableStateListOf<String>()
@@ -37,7 +37,7 @@ class InstallViewModel @Inject constructor(
     }
 
     val suState get() = suRepository.state
-    private val userData get() = userDataRepository.value
+    private val userPreferences get() = userPreferencesRepository.value
 
     init {
         Timber.d("InstallViewModel init")
@@ -67,7 +67,7 @@ class InstallViewModel @Inject constructor(
             onSuccess = {
                 onSucceeded(it)
                 file.delete()
-                if (userData.deleteZipFile) {
+                if (userPreferences.deleteZipFile) {
                     path.delete()
                 }
             },
@@ -79,7 +79,7 @@ class InstallViewModel @Inject constructor(
     }
 
     private fun Uri.delete() = runCatching {
-        absolutePath?.let {
+        absolutePath.let {
             suRepository.fs.getFile(it).delete()
         }
     }.onFailure {
