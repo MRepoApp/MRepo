@@ -53,7 +53,6 @@
     <string name="app_theme_dark_theme_auto">تلقائي</string>
     <string name="app_theme_dark_theme_light">مضيء</string>
     <string name="app_theme_dark_theme_dark">داكن</string>
-    <string name="repo_last_update">اخر تحديث:%1$s</string>
     <string name="repo_options_update">تحديث</string>
     <string name="repo_options_share">مشاركة</string>
     <string name="repo_options_delete">حذف</string>
@@ -64,7 +63,6 @@
     <string name="dialog_attention">ملاحظة</string>
     <string name="dialog_cancel">إلغاء</string>
     <string name="dialog_ok">حسناً</string>
-    <string name="message_download_failed">فشل تنزيل: %1$s</string>
     <string name="message_download_success">تم التنزيل بنجاح</string>
     <string name="message_loading">انتظار…</string>
     <string name="notification_name_download">خدمة التنزيل</string>
@@ -73,7 +71,6 @@
     <string name="settings_app_theme_desc">تغيير الوضع الليلي ولوحة الألوان</string>
     <string name="settings_repo_desc">إدارة مستودعات و وحدات Magisk</string>
     <string name="repo_delete_dialog_desc1">هل انت متأكد من حذف %1$s؟</string>
-    <string name="repo_update_dialog_failure">فشل تحديث: %1$s</string>
     <string name="module_label_installed">مثبته</string>
     <string name="about_desc2">صنع ❤️ بواسطة %1$s</string>
     <string name="view_module_page_overview">وصف مختصر</string>

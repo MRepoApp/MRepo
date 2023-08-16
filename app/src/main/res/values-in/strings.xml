@@ -68,7 +68,6 @@
     <string name="app_theme_dark_theme_light">Terang</string>
     <string name="app_theme_dark_theme_dark">Gelap</string>
     <string name="repo_modules">%1$d modul</string>
-    <string name="repo_last_update">Pembaruan terakhir: %1$s</string>
     <string name="repo_options_update">Perbarui</string>
     <string name="repo_options_share">Bagikan</string>
     <string name="repo_options_delete">Hapus</string>
@@ -78,7 +77,6 @@
     <string name="repo_delete_dialog_desc2">Tip: Semua modul yang terpasang akan tetap ada di perangkat Anda.</string>
     <string name="repo_add_dialog_title">Tambah repositori</string>
     <string name="repo_add_dialog_add">Tambah</string>
-    <string name="repo_update_dialog_failure">Pembaruan gagal: %1$s</string>
     <string name="repo_notification_title">Tinjauan Isi Modul</string>
     <string name="about_app_version">Versi %1$s (%2$s)</string>
     <string name="about_desc1">Menyediakan repositori modul dan Mengelola modul untuk Magisk dan KernelSU.</string>
@@ -86,7 +84,6 @@
     <string name="dialog_attention">Perhatian</string>
     <string name="dialog_cancel">Batal</string>
     <string name="dialog_ok">Oke</string>
-    <string name="message_download_failed">Download gagal: %1$s</string>
     <string name="message_download_success">Download berhasil</string>
     <string name="message_loading">Memuat…</string>
     <string name="notification_name_download">Layanan Download</string>

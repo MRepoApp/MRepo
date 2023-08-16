@@ -42,7 +42,6 @@
     <string name="license_osi_approved">Aprobat OSI</string>
     <string name="license_fsf_libre">FSF Gratuit</string>
     <string name="page_modules">Module</string>
-    <string name="repo_last_update">Ultima actualizare: %1$s</string>
     <string name="repo_options_update">Actualizare</string>
     <string name="setup_mode">Mod de funcționare</string>
     <string name="setup_non_root_desc2">Disponibil: descărcare modul</string>
@@ -63,12 +62,10 @@
     <string name="repo_delete_dialog_desc2">Sfat: Toate modulele instalate vor rămâne pe dispozitivul tău.</string>
     <string name="repo_add_dialog_title">Adaugă un depozit</string>
     <string name="repo_add_dialog_add">Adaugă</string>
-    <string name="repo_update_dialog_failure">Actualizare eșuată: %1$s</string>
     <string name="repo_notification_desc">Este responsabilitatea proprietarului depozitului. Pentru orice probleme legate de acest depozit, contactează proprietarul acestuia.</string>
     <string name="dialog_attention">Atenție</string>
     <string name="dialog_cancel">Anulează</string>
     <string name="dialog_ok">OK</string>
-    <string name="message_download_failed">Descărcarea eșuată: %1$s</string>
     <string name="message_download_success">Descărcare reușită</string>
     <string name="message_loading">Se încarcă…</string>
     <string name="notification_name_download">Serviciu de descărcare</string>

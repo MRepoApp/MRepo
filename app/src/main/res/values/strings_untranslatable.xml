@@ -4,7 +4,7 @@
 
     <!-- Modules -->
     <!-- Module Item -->
-    <string name="module_update_at" translatable="false">@string/repo_last_update</string>
+    <string name="module_update_at" translatable="false">@string/repo_update_at</string>
 
     <!-- Settings -->
     <string name="settings_mode" translatable="false">@string/setup_mode</string>

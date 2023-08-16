@@ -58,9 +58,7 @@
     <string name="app_theme_dark_theme_light">Светлая</string>
     <string name="app_theme_dark_theme_dark">Темная</string>
     <string name="repo_modules">%1$d модулей</string>
-    <string name="repo_last_update">Последние обновление: %1$s</string>
     <string name="dialog_ok">ОК</string>
-    <string name="message_download_failed">Загрузка не удалась: %1$s</string>
     <string name="message_download_success">Успешно загружено</string>
     <string name="message_loading">Загрузка…</string>
     <string name="notification_name_download">Служба загрузки</string>
@@ -84,7 +82,6 @@
     <string name="repo_delete_dialog_desc2">Заметка: все установленные модули останутся на вашем устройстве.</string>
     <string name="repo_add_dialog_title">Добавить репозиторий</string>
     <string name="repo_add_dialog_add">Добавить</string>
-    <string name="repo_update_dialog_failure">Неудачное обновление: %1$s</string>
     <string name="repo_notification_title">Обзор содержания модулей</string>
     <string name="repo_notification_desc">Ответственность за это лежит на владельце репозитория. По любым вопросам, связанным с этим репозиторием, пожалуйста, обращайтесь к его владельцу.</string>
     <string name="about_app_version">Версия %1$s (%2$s)</string>

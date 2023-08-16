@@ -188,7 +188,7 @@ private fun RepoItem(
             )
             Text(
                 text = stringResource(
-                    id = R.string.repo_last_update,
+                    id = R.string.repo_update_at,
                     repo.metadata.timestamp.toDateTime()
                 ),
                 style = MaterialTheme.typography.bodySmall,
@@ -296,7 +296,7 @@ fun FailureDialog(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = stringResource(id = R.string.repo_update_dialog_failure, message.toString()),
+                text = message.toString(),
                 maxLines = 5,
             )
         }

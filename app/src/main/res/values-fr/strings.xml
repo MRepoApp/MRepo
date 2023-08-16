@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Setup -->
     <string name="setup_mode">Traitement en cours</string>
     <string name="setup_root_title">Raçine</string>
     <string name="setup_root_desc1">Accès à la racine requis via Magisk ou KernelSU</string>
@@ -8,76 +7,54 @@
     <string name="setup_non_root_title">Sans racine</string>
     <string name="setup_non_root_desc1">Accès à la racine non requis</string>
     <string name="setup_non_root_desc2">Disponible : téléchargement de modules</string>
-    <!-- Install -->
     <string name="install_activity_label">Installateur de Module</string>
     <string name="install_title">Installer</string>
     <string name="install_flashing">Flashage</string>
     <string name="install_done">Terminé</string>
     <string name="install_failure">Échec</string>
     <string name="install_reboot">Redémarrage</string>
-    <!-- License -->
     <string name="license_title">Afficher Licence</string>
     <string name="license_osi_approved">OSI Approuvé</string>
     <string name="license_fsf_libre">FSF Libre</string>
-    <!-- Page -->
     <string name="page_modules">Modules</string>
     <string name="page_settings">Réglages</string>
-    <!-- Overview -->
-    <!-- Root Card -->
     <string name="settings_root_access">Accès Administrateur : %1$s</string>
     <string name="settings_root_provider">Fournisseur : %1$s</string>
     <string name="settings_root_granted">Permis</string>
     <string name="settings_root_not_available">Non disponible</string>
     <string name="settings_root_none">Aucun</string>
-    <!-- Non Root Card -->
     <string name="settings_non_root_desc">Le fonctionnement est limité</string>
-    <!-- Info Card -->
-    <!-- About -->
-    <!-- Menu -->
     <string name="settings_menu_reboot">Redémarrer</string>
     <string name="settings_menu_reboot_userspace">Rédémarrer en espace utilisateur</string>
     <string name="settings_menu_reboot_recovery">Redémarrer en mode de récupération</string>
     <string name="settings_menu_reboot_bootloader">Redémarrer en mode amorçage</string>
     <string name="settings_menu_reboot_download">Redémarrer en mode téléchargement</string>
     <string name="settings_menu_reboot_edl">Redémarrer en mode EDL</string>
-    <!-- Modules -->
-    <!-- Modules Title -->
-    <!-- Modules Menu -->
-    <!-- Module Card -->
     <string name="module_version_author">%1$s par %2$s</string>
     <string name="module_remove">Supprimer</string>
     <string name="module_restore">Restaurer</string>
     <string name="module_install">Installer</string>
     <string name="module_download">Télécharger</string>
-    <!-- Modules Page -->
     <string name="repository_empty">Dépôt vide</string>
     <string name="modules_empty">Aucun module trouvé</string>
     <string name="search_empty">Liste vide</string>
     <string name="search_placeholder">Recherche…</string>
-    <!-- View Module -->
     <string name="view_module_page_versions">Versions</string>
     <string name="view_module_provided">Fournis par %1$s</string>
-    <!-- Settings -->
-    <!-- Normal -->
     <string name="settings_app_theme">Thème de l\’application</string>
     <string name="settings_app_theme_desc">Changer le mode nuit et le thème platte</string>
     <string name="settings_log_viewer">Journal</string>
     <string name="settings_log_viewer_desc">Afficher les journaux du fonctionnement de l\’application</string>
-    <!-- App -->
     <string name="settings_app">Application</string>
     <string name="settings_download_path">Emplacement des téléchargements</string>
     <string name="settings_repo">Dépôt</string>
     <string name="settings_repo_desc">Gérrer le dépôt des modules Magisk</string>
-    <!-- Others -->
-    <!-- App Theme -->
     <string name="app_theme_palette">Palette du thème</string>
     <string name="app_theme_dark_theme">Thème sombre</string>
     <string name="app_theme_dark_theme_auto">Automatique</string>
     <string name="app_theme_dark_theme_light">Clair</string>
     <string name="app_theme_dark_theme_dark">Noir</string>
-    <!-- Repo -->
     <string name="repo_modules">%1$d modules</string>
-    <string name="repo_last_update">Dernière mise à jour : %1$s</string>
     <string name="repo_options_update">Mise à jour</string>
     <string name="repo_options_share">Partager</string>
     <string name="repo_options_delete">Supprimer</string>
@@ -85,21 +62,14 @@
     <string name="repo_delete_dialog_desc2">Astuce : Tous les modules installés resteront sur votre périphérique.</string>
     <string name="repo_add_dialog_title">ajouter dépôt</string>
     <string name="repo_add_dialog_add">Ajouter</string>
-    <string name="repo_update_dialog_failure">Échec de la mise à jour : %1$s</string>
     <string name="repo_notification_desc">L\’examen de contenu des modules est de la responsabilité des propriétaires du dépôt. Pour tout problème à propos de ce dépôt, merci de contacter son propriétaire.</string>
-    <!-- Dialog -->
     <string name="dialog_attention">Attention</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="dialog_ok">OK</string>
-    <!-- Text Field Dialog -->
-    <!-- Message -->
-    <string name="message_download_failed">Échec du téléchargement : %1$s</string>
     <string name="message_download_success">téléchargement réussi</string>
     <string name="message_loading">Chargement…</string>
-    <!-- Shortcut -->
     <string name="notification_name_download">Service de téléchargement</string>
     <string name="shortcut_log_label">Journaux</string>
-    <!-- Other -->
     <string name="unknown_error">Erreur inconnue</string>
     <string name="settings_delete_zip">Supprimer le fichier zip</string>
     <string name="settings_delete_zip_desc">Supprimer le fichier zip une fois l\'installation réussie, notez que cela peut ne pas fonctionner si l\'application n\'a pas l\'autorisation de supprimer</string>

@@ -68,7 +68,6 @@
     <string name="app_theme_dark_theme_light">Jasne</string>
     <string name="app_theme_dark_theme_dark">Ciemne</string>
     <string name="repo_modules">Ilość modułów: %1$d</string>
-    <string name="repo_last_update">Aktualizacja: %1$s</string>
     <string name="repo_options_update">Zaktualizuj</string>
     <string name="repo_options_share">Udostępnij</string>
     <string name="repo_options_delete">Usuń</string>
@@ -76,7 +75,6 @@
     <string name="repo_delete_dialog_desc2">Wszystkie zainstalowane moduły pozostaną na urządzeniu.</string>
     <string name="repo_add_dialog_title">Dodaj repozytorium</string>
     <string name="repo_add_dialog_add">Dodaj</string>
-    <string name="repo_update_dialog_failure">Aktualizacja nie powiodła się: %1$s</string>
     <string name="repo_notification_title">Przegląd zawartości modułów</string>
     <string name="repo_notification_desc">Odpowiada za to właściciel repozytorium. W razie problemów z repozytorium, skontaktuj się z jego właścicielem.</string>
     <string name="about_app_version">Wersja %1$s (%2$s)</string>
@@ -85,7 +83,6 @@
     <string name="dialog_attention">Uwaga</string>
     <string name="dialog_cancel">Anuluj</string>
     <string name="dialog_ok">OK</string>
-    <string name="message_download_failed">Pobieranie nie powiodło się: %1$s</string>
     <string name="message_download_success">Pobieranie zakończone sukcesem</string>
     <string name="message_loading">Wczytywanie…</string>
     <string name="notification_name_download">Usługa pobierania</string>

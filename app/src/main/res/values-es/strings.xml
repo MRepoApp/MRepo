@@ -50,14 +50,12 @@
     <string name="setup_non_root_desc1">No requiere acceso Root</string>
     <string name="settings_non_root_desc">La funcionalidad es limitada</string>
     <string name="app_theme_palette">Colores del fondo</string>
-    <string name="repo_update_dialog_failure">Error de actualización: %1$s</string>
     <string name="repo_notification_desc">La revisión del contenido de los módulos es responsabilidad del propietario del repositorio. Para cualquier cuestión sobre este repositorio, póngase en contacto con su propietario.</string>
     <string name="app_theme_dark_theme">Tema oscuro</string>
     <string name="app_theme_dark_theme_auto">Automático</string>
     <string name="app_theme_dark_theme_light">Claro</string>
     <string name="app_theme_dark_theme_dark">Oscuro</string>
     <string name="repo_modules">%1$d módulos</string>
-    <string name="repo_last_update">Última actualización: %1$s</string>
     <string name="repo_options_update">Actualización</string>
     <string name="repo_options_share">Compartir</string>
     <string name="repo_options_delete">Eliminar</string>
@@ -68,7 +66,6 @@
     <string name="dialog_attention">Atención</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_ok">OK</string>
-    <string name="message_download_failed">Error de descarga: %1$s</string>
     <string name="message_download_success">Descarga con éxito</string>
     <string name="message_loading">Cargando…</string>
     <string name="notification_name_download">Servicio de descarga</string>

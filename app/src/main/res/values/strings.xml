@@ -97,7 +97,7 @@
     <string name="app_theme_dark_theme_dark">Dark</string>
     <!-- Repo -->
     <string name="repo_modules">%1$d modules</string>
-    <string name="repo_last_update">Updated at: %1$s</string>
+    <string name="repo_update_at">Updated at: %1$s</string>
     <string name="repo_incompatible_desc">The current version is %1$d, please upgrade version to %2$d</string>
     <string name="repo_options_update">Update</string>
     <string name="repo_options_share">Share</string>
@@ -106,7 +106,6 @@
     <string name="repo_delete_dialog_desc2">Tip: All installed modules will remain on your device.</string>
     <string name="repo_add_dialog_title">Add repository</string>
     <string name="repo_add_dialog_add">Add</string>
-    <string name="repo_update_dialog_failure">Update failed: %1$s</string>
     <string name="repo_notification_title">Content Review of Modules</string>
     <string name="repo_notification_desc">It is the responsibility of the repository owner. For any issues about this repository, please contact its owner.</string>
     <!-- About -->
@@ -120,7 +119,6 @@
     <string name="dialog_ok">OK</string>
 
     <!-- Message -->
-    <string name="message_download_failed">Download failed: %1$s</string>
     <string name="message_download_success">Download successful</string>
     <string name="message_loading">Loading…</string>
 

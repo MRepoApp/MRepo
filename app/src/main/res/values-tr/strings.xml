@@ -61,7 +61,6 @@
     <string name="app_theme_dark_theme_light">Aydınlık</string>
     <string name="app_theme_dark_theme_dark">Karanlık</string>
     <string name="repo_modules">%1$d modül</string>
-    <string name="repo_last_update">Son güncelleme: %1$s</string>
     <string name="repo_options_update">Güncelle</string>
     <string name="repo_options_share">Paylaş</string>
     <string name="repo_options_delete">Sil</string>
@@ -69,7 +68,6 @@
     <string name="repo_add_dialog_title">Repo ekle</string>
     <string name="repo_delete_dialog_desc1">%1$s silmek istediğinizden emin misiniz\?</string>
     <string name="repo_add_dialog_add">Ekle</string>
-    <string name="repo_update_dialog_failure">Güncelleme başarısız: %1$s</string>
     <string name="repo_notification_title">Modüllerin İçerik İncelemesi</string>
     <string name="repo_notification_desc">Bu, repo sahibinin sorumluluğundadır. Bir repoyla ilgili herhangi bir sorun için lütfen sahibiyle iletişime geçin.</string>
     <string name="about_app_version">Sürüm %1$s (%2$s)</string>
@@ -78,7 +76,6 @@
     <string name="dialog_attention">Dikkat</string>
     <string name="dialog_cancel">İptal</string>
     <string name="dialog_ok">Tamam</string>
-    <string name="message_download_failed">İndirme başarısız: %1$s</string>
     <string name="message_download_success">İndirme başarılı</string>
     <string name="message_loading">Yükleniyor…</string>
     <string name="notification_name_download">İndirme Hizmeti</string>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Setup -->
     <string name="setup_mode">工作模式</string>
     <string name="setup_root_title">Root</string>
     <string name="setup_root_desc1">需要由 Magisk 或 KernelSU 提供 Root 授權</string>
@@ -8,27 +7,18 @@
     <string name="setup_non_root_title">無 Root</string>
     <string name="setup_non_root_desc1">不需要 Root 授權</string>
     <string name="setup_non_root_desc2">工作狀態：僅下載</string>
-
-    <!-- Install -->
     <string name="install_activity_label">模組安裝器</string>
     <string name="install_title">安裝</string>
     <string name="install_flashing">正在刷入</string>
     <string name="install_done">完成</string>
     <string name="install_failure">失敗</string>
     <string name="install_reboot">重啟</string>
-
-    <!-- License -->
     <string name="license_title">閱讀授權條款</string>
     <string name="license_osi_approved">開源授權</string>
     <string name="license_fsf_libre">自由軟體</string>
-
-    <!-- Page -->
     <string name="page_repository">儲存庫</string>
     <string name="page_modules">模組</string>
     <string name="page_settings">設定</string>
-
-    <!-- Overview -->
-    <!-- Root Card -->
     <string name="settings_app_desc">有關 MRepo 的設定</string>
     <string name="settings_about">關於</string>
     <string name="settings_root_access">Root 狀態：%1$s</string>
@@ -36,35 +26,23 @@
     <string name="settings_root_granted">已授權</string>
     <string name="settings_root_not_available">不可用</string>
     <string name="settings_root_none">無</string>
-    <!-- Non Root Card -->
     <string name="settings_non_root_desc">功能受到限制</string>
-    <!-- App Update Card -->
-    <!-- Info Card -->
-    <!-- About -->
-    <!-- Menu -->
     <string name="settings_menu_reboot">重新啟動</string>
     <string name="settings_menu_reboot_userspace">軟重啟</string>
     <string name="settings_menu_reboot_recovery">重啟到 Recovery</string>
     <string name="settings_menu_reboot_bootloader">重啟到 BootLoader</string>
     <string name="settings_menu_reboot_download">重啟到 Download</string>
     <string name="settings_menu_reboot_edl">重啟到 EDL</string>
-
-    <!-- Modules -->
-    <!-- Modules Title -->
-    <!-- Modules Menu -->
-    <!-- Module Card -->
     <string name="module_version_author">%1$s，作者 %2$s</string>
     <string name="module_remove">移除</string>
     <string name="module_restore">還原</string>
     <string name="module_install">安裝</string>
     <string name="module_download">下載</string>
-    <!-- Modules Page -->
     <string name="repository_empty">儲存庫為空</string>
     <string name="view_module_version_dialog_desc">是否安裝或下載該模組的版本？</string>
     <string name="modules_empty">沒找到任何模組</string>
     <string name="search_empty">空列表</string>
     <string name="search_placeholder">搜尋…</string>
-    <!-- View Module -->
     <string name="module_label_installed">已安裝</string>
     <string name="view_module_page_overview">概覽</string>
     <string name="view_module_page_versions">版本</string>
@@ -76,20 +54,14 @@
     <string name="view_module_last_modified">最後修改</string>
     <string name="view_module_dir_size">目錄大小</string>
     <string name="view_module_provided">由 %1$s 提供</string>
-
-    <!-- Settings-->
-    <!-- Normal -->
     <string name="settings_app_theme">主題</string>
     <string name="settings_app_theme_desc">更改深色模式和主題調色盤</string>
     <string name="settings_log_viewer">日誌檢視器</string>
     <string name="settings_log_viewer_desc">檢視應用程式執行日誌</string>
-    <!-- App -->
     <string name="settings_app">應用程式</string>
     <string name="settings_download_path">下載路徑</string>
     <string name="settings_repo">儲存庫</string>
     <string name="settings_repo_desc">管理 Magisk 模組儲存庫</string>
-    <!-- Others -->
-    <!-- App Theme -->
     <string name="settings_delete_zip">刪除壓縮包</string>
     <string name="settings_delete_zip_desc">安裝成功後刪除壓縮包，請注意此功能是「盡量」刪除，如果應用程式沒有權限將無法執行。</string>
     <string name="app_theme_palette">主題調色盤</string>
@@ -97,9 +69,7 @@
     <string name="app_theme_dark_theme_auto">自動</string>
     <string name="app_theme_dark_theme_light">淺色</string>
     <string name="app_theme_dark_theme_dark">深色</string>
-    <!-- Repo -->
     <string name="repo_modules">%1$d 個模組</string>
-    <string name="repo_last_update">上次更新：%1$s</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_share">分享</string>
     <string name="repo_options_delete">刪除</string>
@@ -107,31 +77,18 @@
     <string name="repo_delete_dialog_desc2">提示：已安裝的所有模組會保留在你的裝置上。</string>
     <string name="repo_add_dialog_title">新增儲存庫</string>
     <string name="repo_add_dialog_add">新增</string>
-    <string name="repo_update_dialog_failure">更新失敗：%1$s</string>
     <string name="repo_notification_title">模組的內容審查</string>
     <string name="repo_notification_desc">模組的內容審查由儲存庫所有者負責。關於該儲存庫的任何問題，請聯絡其所有者。</string>
-
-    <!-- Dialog-->
     <string name="about_app_version">版本 %1$s (%2$s)</string>
     <string name="about_desc1">為 Magisk 和 KernelSU 提供模組儲存庫以及模組管理。</string>
     <string name="about_desc2">由 %1$s 用 ❤️ 製作</string>
     <string name="dialog_attention">注意</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">確定</string>
-    <!-- Text Field Dialog -->
-
-    <!-- Message -->
-    <string name="message_download_failed">下載失敗：%1$s</string>
     <string name="message_download_success">下載成功</string>
     <string name="message_loading">載入中…</string>
-
-    <!-- Notification -->
     <string name="notification_name_download">下載服務</string>
-
-    <!-- Shortcut -->
     <string name="shortcut_log_label">日誌</string>
-
-    <!-- Other -->
     <string name="unknown_error">未知錯誤</string>
 
 </resources>

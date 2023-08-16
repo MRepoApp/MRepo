@@ -138,11 +138,10 @@ class DownloadService : LifecycleService() {
             updateProgress(0f, task)
             NotificationUtils.cancel(notificationId)
 
-            val message = getString(R.string.message_download_failed, it)
             notifyFinish(
                 id = notificationIdFinish,
                 name = task.name,
-                message = message
+                message = it.toString()
             )
 
             tasks.remove(task)
