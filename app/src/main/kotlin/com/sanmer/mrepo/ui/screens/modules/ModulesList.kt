@@ -30,8 +30,6 @@ import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.ui.component.FastScrollbar
-import com.sanmer.mrepo.ui.component.ModuleCard
-import com.sanmer.mrepo.ui.component.stateIndicator
 import com.sanmer.mrepo.ui.utils.rememberFastScroller
 import com.sanmer.mrepo.ui.utils.scrollbarState
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
@@ -82,11 +80,8 @@ private fun ModuleItem(
 ) {
     val moduleState = getModuleState(module)
 
-    ModuleCard(
-        name = module.name,
-        version = module.versionDisplay,
-        author = module.author,
-        description = module.description,
+    ModuleItem(
+        module = module,
         alpha = moduleState.alpha,
         decoration = moduleState.decoration,
         switch = {

@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.component
+package com.sanmer.mrepo.ui.screens.modules
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -31,13 +31,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.model.local.LocalModule
 
 @Composable
-fun ModuleCard(
-    name: String,
-    version: String,
-    author: String,
-    description: String,
+fun ModuleItem(
+    module: LocalModule,
     modifier: Modifier = Modifier,
     alpha: Float = 1f,
     decoration: TextDecoration = TextDecoration.None,
@@ -69,7 +67,7 @@ fun ModuleCard(
                         .weight(1f)
                 ) {
                     Text(
-                        text = name,
+                        text = module.name,
                         style = MaterialTheme.typography.titleSmall
                             .copy(fontWeight = FontWeight.Bold),
                         maxLines = 2,
@@ -79,7 +77,7 @@ fun ModuleCard(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = stringResource(id = R.string.module_version_author,
-                            version, author),
+                            module.versionDisplay, module.author),
                         style = MaterialTheme.typography.bodySmall,
                         textDecoration = decoration
                     )
@@ -92,7 +90,7 @@ fun ModuleCard(
                 modifier = Modifier
                     .alpha(alpha = alpha)
                     .padding(horizontal = 16.dp),
-                text = description,
+                text = module.description,
                 style = MaterialTheme.typography.bodySmall,
                 textDecoration = decoration
             )
