@@ -27,7 +27,7 @@ fun ViewModuleScreen(
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
     val suState by viewModel.suState.collectAsStateWithLifecycle()
-    val localModuleInfo = viewModel.rememberLocalModuleInfo(suState = suState)
+    val localState = viewModel.rememberLocalState(suState = suState)
     val (versions, tracks) = viewModel.getVersionsAndTracks()
 
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
@@ -59,8 +59,7 @@ fun ViewModuleScreen(
                         online = viewModel.online,
                         item = versions.firstOrNull()?.second,
                         local = viewModel.local,
-                        installed = viewModel.installed,
-                        localModuleInfo = localModuleInfo,
+                        localState = localState,
                         downloader = viewModel::downloader
                     )
                     1 -> VersionsPage(

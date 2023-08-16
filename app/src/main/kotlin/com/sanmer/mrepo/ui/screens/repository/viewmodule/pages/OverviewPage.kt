@@ -28,16 +28,15 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
+import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.utils.extensions.toDateTime
-import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
 fun OverviewPage(
     online: OnlineModule,
     item: VersionItem?,
     local: LocalModule,
-    installed: Boolean,
-    localModuleInfo: ModuleViewModel.LocalModuleInfo?,
+    localState: LocalState?,
     downloader: (Context, VersionItem, Boolean) -> Unit
 ) = Column(
     modifier = Modifier
@@ -72,10 +71,10 @@ fun OverviewPage(
         HorizontalDivider(thickness = 0.9.dp)
     }
 
-    if (installed && localModuleInfo != null) {
+    if (localState != null) {
         LocalItem(
             local = local,
-            moduleInfo = localModuleInfo
+            state = localState
         )
         HorizontalDivider(thickness = 0.9.dp)
     }
@@ -132,7 +131,7 @@ private fun CloudItem(
 @Composable
 private fun LocalItem(
     local: LocalModule,
-    moduleInfo: ModuleViewModel.LocalModuleInfo
+    state: LocalState
 ) = Column(
     modifier = Modifier
         .padding(all = 16.dp)
@@ -152,17 +151,17 @@ private fun LocalItem(
 
     ValueItem(
         key = stringResource(id = R.string.view_module_module_directory),
-        value = moduleInfo.modulePath
+        value = state.path
     )
 
     ValueItem(
         key = stringResource(id = R.string.view_module_last_modified),
-        value = moduleInfo.lastModified
+        value = state.lastModified
     )
 
     ValueItem(
         key = stringResource(id = R.string.view_module_dir_size),
-        value = moduleInfo.dirSize
+        value = state.size
     )
 }
 
