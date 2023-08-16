@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.model.online
 
 import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.utils.ModuleUtils.getVersionDisplay
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -14,11 +15,7 @@ data class OnlineModule(
     val track: TrackJson,
     val versions: List<VersionItem>,
 ) {
-    val versionDisplay get() = if ("$versionCode" in version) {
-        version
-    } else {
-        "$version (${versionCode})"
-    }
+    val versionDisplay get() = getVersionDisplay(version, versionCode)
 
     override fun equals(other: Any?): Boolean {
         return when (other) {

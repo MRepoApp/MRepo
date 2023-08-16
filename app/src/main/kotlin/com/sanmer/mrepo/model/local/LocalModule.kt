@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.model.online.OnlineModule
+import com.sanmer.mrepo.utils.ModuleUtils.getVersionDisplay
 
 data class LocalModule(
     var id: String = "unknown",
@@ -15,11 +16,7 @@ data class LocalModule(
 ) {
     var state by mutableStateOf(State.DISABLE)
 
-    val versionDisplay get() = if ("$versionCode" in version) {
-        version
-    } else {
-        "$version (${versionCode})"
-    }
+    val versionDisplay get() = getVersionDisplay(version, versionCode)
 
     override fun equals(other: Any?): Boolean {
         return when (other) {

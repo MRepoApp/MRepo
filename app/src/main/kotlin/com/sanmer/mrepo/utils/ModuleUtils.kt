@@ -118,4 +118,18 @@ object ModuleUtils {
         }
         Shell.cmd("/system/bin/svc power reboot $reason || /system/bin/reboot $reason").submit()
     }
+
+    fun getVersionDisplay(
+        version: String,
+        versionCode: Int
+    ): String {
+        val included = "\\(.*?${versionCode}.*?\\)".toRegex()
+            .containsMatchIn(version)
+
+        return if (included) {
+            version
+        } else {
+            "$version (${versionCode})"
+        }
+    }
 }
