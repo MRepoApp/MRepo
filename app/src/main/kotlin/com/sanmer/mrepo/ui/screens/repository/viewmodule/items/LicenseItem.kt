@@ -25,18 +25,17 @@ import com.sanmer.mrepo.ui.utils.expandedShape
 fun LicenseItem(
     licenseId: String
 ) = Box {
-    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    var open by rememberSaveable { mutableStateOf(false) }
 
     LabelItem(
         icon = R.drawable.receipt_search_outline,
-        onClick = { openBottomSheet = true }
+        onClick = { open = true }
     )
 
-    if (openBottomSheet) {
+    if (open) {
         ModalBottomSheet(
-            onDismissRequest = { openBottomSheet = false },
-            sheetState = bottomSheetState,
+            onDismissRequest = { open = false },
+            sheetState = rememberModalBottomSheetState(),
             shape = BottomSheetDefaults.expandedShape(15.dp),
             windowInsets = WindowInsets.navigationBars
         ) {

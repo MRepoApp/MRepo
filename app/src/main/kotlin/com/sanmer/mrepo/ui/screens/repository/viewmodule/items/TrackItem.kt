@@ -41,20 +41,17 @@ import com.sanmer.mrepo.utils.extensions.toDateTime
 fun TrackItem(
     tracks: List<Pair<Repo, TrackJson>>
 ) = Box {
-    if (tracks.isEmpty()) return@Box
-
-    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    var open by rememberSaveable { mutableStateOf(false) }
 
     LabelItem(
         icon = R.drawable.tag_outline,
-        onClick = { openBottomSheet = true }
+        onClick = { open = true }
     )
 
-    if (openBottomSheet) {
+    if (open) {
         ModalBottomSheet(
-            onDismissRequest = { openBottomSheet = false },
-            sheetState = bottomSheetState,
+            onDismissRequest = { open = false },
+            sheetState = rememberModalBottomSheetState(),
             shape = BottomSheetDefaults.expandedShape(15.dp),
             windowInsets = WindowInsets.navigationBars
         ) {

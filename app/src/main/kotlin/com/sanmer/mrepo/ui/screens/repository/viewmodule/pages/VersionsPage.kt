@@ -107,18 +107,18 @@ private fun VersionItem(
     isRoot: Boolean,
     downloader: (Context, VersionItem, Boolean) -> Unit
 ) {
-    var show by remember { mutableStateOf(false) }
-    if (show) VersionItemBottomSheet(
+    var open by remember { mutableStateOf(false) }
+    if (open) VersionItemBottomSheet(
         item = item,
         isRoot = isRoot,
         hasChangelog = item.changelog.isNotBlank(),
-        onClose = { show = false },
+        onClose = { open = false },
         downloader = downloader
     )
 
     Row(
         modifier = Modifier
-            .clickable(onClick = { show = true })
+            .clickable(onClick = { open = true })
             .padding(all = 16.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically

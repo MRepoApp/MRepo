@@ -31,20 +31,18 @@ fun AppThemeItem(
     onThemeColorChange: (Int) -> Unit,
     onDarkModeChange: (DarkMode) -> Unit
 ) {
-    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState()
+    var open by rememberSaveable { mutableStateOf(false) }
 
     SettingNormalItem(
         icon = R.drawable.color_swatch_outline,
         text = stringResource(id = R.string.settings_app_theme),
         subText = stringResource(id = R.string.settings_app_theme_desc),
-        onClick = { openBottomSheet = true }
+        onClick = { open = true }
     )
 
-    if (openBottomSheet) {
+    if (open) {
         BottomSheet(
-            state = bottomSheetState,
-            onClose = { openBottomSheet = false },
+            onClose = { open = false },
             themeColor = themeColor,
             darkMode = darkMode,
             isDarkMode = isDarkMode,
@@ -57,7 +55,7 @@ fun AppThemeItem(
 
 @Composable
 private fun BottomSheet(
-    state: SheetState,
+    state: SheetState = rememberModalBottomSheetState(),
     onClose: () -> Unit,
     themeColor: Int,
     darkMode: DarkMode,
