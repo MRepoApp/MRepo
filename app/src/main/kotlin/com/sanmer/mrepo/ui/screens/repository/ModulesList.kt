@@ -14,19 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sanmer.mrepo.model.online.OnlineModule
+import com.sanmer.mrepo.model.state.OnlineState
 import com.sanmer.mrepo.ui.component.FastScrollbar
 import com.sanmer.mrepo.ui.navigation.graphs.createViewRoute
 import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.rememberFastScroller
 import com.sanmer.mrepo.ui.utils.scrollbarState
-import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
 fun ModulesList(
-    list: List<OnlineModule>,
+    list: List<Pair<OnlineState, OnlineModule>>,
     state: LazyListState,
-    navController: NavController,
-    getModuleState: @Composable (OnlineModule) -> RepositoryViewModel.ModuleState
+    navController: NavController
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -37,14 +36,11 @@ fun ModulesList(
     ) {
         items(
             items = list,
-            key = { it.id }
-        ) { module ->
-            val moduleState = getModuleState(module)
-
+            key = { it.second.id }
+        ) { (state, module) ->
             ModuleItem(
                 module = module,
-                updatable = moduleState.updatable,
-                installed = moduleState.installed,
+                state = state,
                 onClick = { navController.navigateSingleTopTo(createViewRoute(module)) }
             )
         }

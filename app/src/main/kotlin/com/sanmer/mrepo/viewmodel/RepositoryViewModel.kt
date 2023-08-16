@@ -1,15 +1,12 @@
 package com.sanmer.mrepo.viewmodel
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.model.online.OnlineModule
+import com.sanmer.mrepo.model.state.OnlineState.Companion.createState
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,19 +19,27 @@ class RepositoryViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
-    val onlineValue get() = (if (isSearch) _online else online)
-        .sortedBy { it.name }
-
-    private val online get() = localRepository.online
 
     var isSearch by mutableStateOf(false)
     var key by mutableStateOf("")
-    private val _online by derivedStateOf {
-        online.filter {
+
+    private val online get() = localRepository.online
+        .map { online ->
+            online.createState(
+                local = localRepository.local.find { it.id == online.id }
+            ) to online
+        }.sortedBy { (_, module) ->
+            module.name
+        }
+
+    private val onlineSearch by derivedStateOf {
+        online.filter { (_, module) ->
             if (key.isBlank()) return@filter true
-            key.uppercase() in "${it.name}${it.author}".uppercase()
+            key.uppercase() in "${module.name}${module.author}".uppercase()
         }
     }
+
+    val onlineValue get() = (if (isSearch) onlineSearch else online)
 
     var isRefreshing by mutableStateOf(false)
         private set
@@ -56,39 +61,6 @@ class RepositoryViewModel @Inject constructor(
     fun getOnlineAll() = viewModelScope.launch {
         refreshing {
             modulesRepository.getRepoAll()
-        }
-    }
-
-    @Stable
-    data class ModuleState(
-        val installed: Boolean,
-        val updatable: Boolean,
-        val hasLicense: Boolean
-    ) {
-        val hasLabel get() = installed or hasLicense
-    }
-
-    private fun createModuleState(onlineModule: OnlineModule): ModuleState {
-        val localModule = localRepository.local.find { it.id == onlineModule.id }
-
-        val installed = localModule != null
-        val updatable = if (installed) {
-            localModule!!.versionCode < onlineModule.versionCode
-        } else {
-            false
-        }
-
-        return ModuleState(
-            installed = installed,
-            updatable = updatable,
-            hasLicense = onlineModule.track.license.isNotBlank()
-        )
-    }
-
-    @Composable
-    fun rememberModuleState(module: OnlineModule): ModuleState {
-        return remember(key1 = module, key2 = isRefreshing) {
-            createModuleState(module)
         }
     }
 }

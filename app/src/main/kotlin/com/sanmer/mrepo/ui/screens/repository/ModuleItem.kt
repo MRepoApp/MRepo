@@ -26,13 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.online.OnlineModule
+import com.sanmer.mrepo.model.state.OnlineState
 import com.sanmer.mrepo.ui.component.Logo
 
 @Composable
 fun ModuleItem(
     module: OnlineModule,
-    updatable: Boolean,
-    installed: Boolean,
+    state: OnlineState,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     enabled: Boolean = true
@@ -42,14 +42,11 @@ fun ModuleItem(
     enabled = enabled,
     shape = RoundedCornerShape(10.dp)
 ) {
-    val hasLicense = module.track.license.isNotBlank()
-    val hasLabel = installed or hasLicense
-
     Row(
         modifier = Modifier.padding(all = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (updatable) {
+        if (state.updatable) {
             Logo(
                 icon = R.drawable.import_outline,
                 modifier = Modifier.size(40.dp),
@@ -89,19 +86,19 @@ fun ModuleItem(
                 color = MaterialTheme.colorScheme.outline
             )
 
-            if (hasLabel) {
+            if (state.hasLabel) {
                 Row(
                     modifier = Modifier.padding(top = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    if (hasLicense) {
+                    if (state.hasLicense) {
                         LabelItem(
                             text = module.track.license.toUpperCase(Locale.current)
                         )
                     }
 
-                    if (installed) {
+                    if (state.installed) {
                         LabelItem(
                             text = stringResource(id = R.string.module_label_installed).toUpperCase(Locale.current)
                         )

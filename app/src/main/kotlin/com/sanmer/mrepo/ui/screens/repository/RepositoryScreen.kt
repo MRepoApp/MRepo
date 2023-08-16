@@ -88,8 +88,7 @@ fun RepositoryScreen(
             ModulesList(
                 list = viewModel.onlineValue,
                 state = listState,
-                navController = navController,
-                getModuleState = { viewModel.rememberModuleState(it) }
+                navController = navController
             )
 
             PullRefreshIndicator(
