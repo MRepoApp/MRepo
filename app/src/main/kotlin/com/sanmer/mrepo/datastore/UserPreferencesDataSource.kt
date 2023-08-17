@@ -1,6 +1,8 @@
 package com.sanmer.mrepo.datastore
 
 import androidx.datastore.core.DataStore
+import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
+import com.sanmer.mrepo.datastore.repository.toProto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -13,7 +15,7 @@ class UserPreferencesDataSource @Inject constructor(
 
     suspend fun setWorkingMode(value: WorkingMode) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.copy {
+            it.new {
                 workingMode = value
             }
         }
@@ -21,7 +23,7 @@ class UserPreferencesDataSource @Inject constructor(
 
     suspend fun setDarkTheme(value: DarkMode) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.copy {
+            it.new {
                 darkMode = value
             }
         }
@@ -29,7 +31,7 @@ class UserPreferencesDataSource @Inject constructor(
 
     suspend fun setThemeColor(value: Int) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.copy {
+            it.new {
                 themeColor = value
             }
         }
@@ -37,7 +39,7 @@ class UserPreferencesDataSource @Inject constructor(
 
     suspend fun setDownloadPath(value: String) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.copy {
+            it.new {
                 downloadPath = value
             }
         }
@@ -45,8 +47,16 @@ class UserPreferencesDataSource @Inject constructor(
 
     suspend fun setDeleteZipFile(value: Boolean) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.copy {
+            it.new {
                 deleteZipFile = value
+            }
+        }
+    }
+
+    suspend fun setRepositoryMenu(value: RepositoryMenuExt) = withContext(Dispatchers.IO) {
+        userPreferences.updateData {
+            it.new {
+                repositoryMenu = value.toProto()
             }
         }
     }

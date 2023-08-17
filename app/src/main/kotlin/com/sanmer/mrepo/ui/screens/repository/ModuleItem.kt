@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -28,6 +29,8 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.state.OnlineState
 import com.sanmer.mrepo.ui.component.Logo
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
+import com.sanmer.mrepo.utils.extensions.toDate
 
 @Composable
 fun ModuleItem(
@@ -46,24 +49,25 @@ fun ModuleItem(
         modifier = Modifier.padding(all = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (state.updatable) {
-            Logo(
-                icon = R.drawable.import_outline,
-                modifier = Modifier.size(40.dp),
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                containerColor = MaterialTheme.colorScheme.primary
-            )
-        } else {
+        val userPreferences = LocalUserPreferences.current
+        val menu = userPreferences.repositoryMenu
+        val hasLabel = (state.hasLicense && menu.showLicense)
+                || state.installed
+
+        if (menu.showIcon) {
             Logo(
                 icon = R.drawable.box_outline,
                 modifier = Modifier.size(40.dp),
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
             )
+
+            Spacer(modifier = Modifier.width(10.dp))
         }
 
+
         Column(
-            modifier = Modifier.padding(start = 10.dp)
+            modifier = Modifier.weight(1f)
         ) {
             Text(
                 text = module.name,
@@ -86,13 +90,25 @@ fun ModuleItem(
                 color = MaterialTheme.colorScheme.outline
             )
 
-            if (state.hasLabel) {
+            if (menu.showUpdatedTime) {
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = stringResource(
+                        id = R.string.module_update_at,
+                        state.lastUpdated.toDate()
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+
+            if (hasLabel) {
                 Row(
                     modifier = Modifier.padding(top = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    if (state.hasLicense) {
+                    if (menu.showLicense) {
                         LabelItem(
                             text = module.track.license.toUpperCase(Locale.current)
                         )
@@ -110,19 +126,23 @@ fun ModuleItem(
 }
 
 @Composable
-private fun LabelItem(text: String) = Box(
-    modifier = Modifier.background(
-        color = MaterialTheme.colorScheme.primary,
-        shape = RoundedCornerShape(3.dp)
-    )
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall
-            .copy(fontSize = 8.sp),
-        color = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier
-            .padding(horizontal = 3.dp)
-            .align(Alignment.Center)
-    )
+private fun LabelItem(text: String) {
+    if (text.isBlank()) return
+
+    Box(
+        modifier = Modifier.background(
+            color = MaterialTheme.colorScheme.primary,
+            shape = RoundedCornerShape(3.dp)
+        )
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall
+                .copy(fontSize = 8.sp),
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier
+                .padding(horizontal = 3.dp)
+                .align(Alignment.Center)
+        )
+    }
 }

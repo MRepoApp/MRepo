@@ -6,10 +6,10 @@ import com.sanmer.mrepo.model.online.OnlineModule
 data class OnlineState(
     val installed: Boolean,
     val updatable: Boolean,
-    val hasLicense: Boolean
+    val hasLicense: Boolean,
+    val lastUpdated: Float
 ) {
-    val hasLabel get() = installed or hasLicense
-
+    @Suppress("FloatingPointLiteralPrecision")
     companion object {
         fun OnlineModule.createState(
             local: LocalModule?
@@ -24,8 +24,16 @@ data class OnlineState(
             return OnlineState(
                 installed = installed,
                 updatable = updatable,
-                hasLicense = track.license.isNotBlank()
+                hasLicense = track.license.isNotBlank(),
+                lastUpdated = versions.firstOrNull()?.timestamp ?: 1473339588.0f
             )
         }
+
+        fun example() = OnlineState(
+            installed = true,
+            updatable = false,
+            hasLicense = true,
+            lastUpdated = 1660640580.0f
+        )
     }
 }

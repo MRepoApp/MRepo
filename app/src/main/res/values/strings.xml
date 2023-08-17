@@ -30,6 +30,10 @@
     <!-- Repository -->
     <string name="repository_empty">Repository is empty</string>
     <string name="module_label_installed">Installed</string>
+    <!-- Advanced Menu -->
+    <string name="menu_pin_installed">Pin Installed</string>
+    <string name="menu_show_icon">Show Icon</string>
+    <string name="menu_show_license">Show License</string>
     <!-- View Module -->
     <string name="view_module_page_overview">Overview</string>
     <string name="view_module_page_versions">Versions</string>
@@ -117,6 +121,14 @@
     <string name="dialog_attention">Attention</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_ok">OK</string>
+
+    <!-- Menu -->
+    <string name="menu_advanced_menu">Advanced Menu</string>
+    <string name="menu_sort_mode">Sort Mode</string>
+    <string name="menu_sort_option_name">Name</string>
+    <string name="menu_sort_option_updated">Updated Time</string>
+    <string name="menu_descending">Descending</string>
+    <string name="menu_show_updated">Show Updated Time</string>
 
     <!-- Message -->
     <string name="message_download_success">Download successful</string>

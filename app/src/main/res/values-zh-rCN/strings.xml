@@ -30,6 +30,10 @@
     <!-- Repository -->
     <string name="repository_empty">存储库为空</string>
     <string name="module_label_installed">已安装</string>
+    <!-- Advanced Menu -->
+    <string name="menu_pin_installed">置顶已安装</string>
+    <string name="menu_show_icon">显示图标</string>
+    <string name="menu_show_license">显示许可证</string>
     <!-- View Module -->
     <string name="view_module_page_overview">概览</string>
     <string name="view_module_page_versions">版本</string>
@@ -117,6 +121,14 @@
     <string name="dialog_attention">注意</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">确定</string>
+
+    <!-- Menu -->
+    <string name="menu_advanced_menu">高级菜单</string>
+    <string name="menu_sort_mode">排序模式</string>
+    <string name="menu_sort_option_name">名字</string>
+    <string name="menu_sort_option_updated">更新时间</string>
+    <string name="menu_descending">降序</string>
+    <string name="menu_show_updated">显示更新时间</string>
 
     <!-- Message -->
     <string name="message_download_success">下载成功</string>

@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.repository
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,16 +20,17 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.RepositoryViewModel
 
@@ -39,6 +39,9 @@ fun RepositoryScreen(
     navController: NavController,
     viewModel: RepositoryViewModel = hiltViewModel()
 ) {
+    val userPreferences = LocalUserPreferences.current
+    val repositoryMenu = userPreferences.repositoryMenu
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
 
@@ -46,6 +49,8 @@ fun RepositoryScreen(
         refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.getOnlineAll() }
     )
+
+    val list = viewModel.getOnlineSortedBy(menu = repositoryMenu)
 
     BackHandler(
         enabled = viewModel.isSearch,
@@ -65,6 +70,7 @@ fun RepositoryScreen(
                 onQueryChange = { viewModel.key = it },
                 onOpenSearch = { viewModel.isSearch = true },
                 onCloseSearch = viewModel::closeSearch,
+                setMenu = viewModel::setRepositoryMenu,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -77,7 +83,7 @@ fun RepositoryScreen(
                 enabled = !viewModel.isSearch
             )
         ) {
-            if (viewModel.onlineValue.isEmpty()) {
+            if (list.isEmpty()) {
                 PageIndicator(
                     icon = R.drawable.box_outline,
                     text = if (viewModel.isSearch) R.string.search_empty else R.string.repository_empty,
@@ -85,7 +91,7 @@ fun RepositoryScreen(
             }
 
             ModulesList(
-                list = viewModel.onlineValue,
+                list = list,
                 state = listState,
                 navController = navController
             )
@@ -109,6 +115,7 @@ private fun TopBar(
     onQueryChange: (String) -> Unit,
     onOpenSearch: () -> Unit,
     onCloseSearch: () -> Unit,
+    setMenu: (RepositoryMenuExt) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) = SearchTopBar(
     isSearch = isSearch,
@@ -129,17 +136,8 @@ private fun TopBar(
             }
         }
 
-        val context = LocalContext.current
-        IconButton(
-            onClick = {
-                // TODO: Advanced Menu
-                Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
-            }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.sort_outline),
-                contentDescription = null
-            )
-        }
+        RepositoryMenu(
+            setMenu = setMenu
+        )
     }
 )

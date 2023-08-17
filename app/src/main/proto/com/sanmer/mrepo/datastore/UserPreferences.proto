@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "com/sanmer/mrepo/datastore/WorkingMode.proto";
 import "com/sanmer/mrepo/datastore/DarkMode.proto";
+import "com/sanmer/mrepo/datastore/repository/RepositoryMenu.proto";
 
 option java_package = "com.sanmer.mrepo.datastore";
 option java_multiple_files = true;
@@ -12,4 +13,6 @@ message UserPreferences {
   int32 themeColor = 3;
   string downloadPath = 4;
   bool deleteZipFile = 5;
+
+  RepositoryMenu repositoryMenu = 6;
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBar
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.component.Logo
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LabelItem
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LicenseItem
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.TrackItem
@@ -73,6 +75,9 @@ private fun topBarContent(
     module: OnlineModule,
     tracks: List<Pair<Repo, TrackJson>>
 ) : @Composable ColumnScope.() -> Unit = {
+    val userPreferences = LocalUserPreferences.current
+    val repositoryMenu = userPreferences.repositoryMenu
+
     val context = LocalContext.current
     val hasLicense = module.track.license.isNotBlank()
     val hasDonate = module.track.donate.isNotBlank()
@@ -81,17 +86,19 @@ private fun topBarContent(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalAlignment = Alignment.Top
     ) {
-        Logo(
-            icon = R.drawable.box_outline,
-            modifier = Modifier.size(55.dp),
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        if (repositoryMenu.showIcon) {
+            Logo(
+                icon = R.drawable.box_outline,
+                modifier = Modifier.size(55.dp),
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+        }
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp)
+            modifier = Modifier.weight(1f)
         ) {
             Text(
                 text = module.name,

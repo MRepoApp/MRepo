@@ -52,4 +52,8 @@ class UserPreferencesRepository @Inject constructor(
     fun setDeleteZipFile(value: Boolean) = applicationScope.launch {
         userPreferencesDataSource.setDeleteZipFile(value)
     }
+
+    fun setRepositoryMenu(value: RepositoryMenuExt) = applicationScope.launch {
+        userPreferencesDataSource.setRepositoryMenu(value)
+    }
 }
