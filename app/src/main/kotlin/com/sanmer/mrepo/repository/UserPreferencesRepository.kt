@@ -5,6 +5,7 @@ import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.UserPreferencesDataSource
 import com.sanmer.mrepo.datastore.WorkingMode
+import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
 import com.sanmer.mrepo.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -20,11 +21,11 @@ class UserPreferencesRepository @Inject constructor(
     private val localRepository: LocalRepository,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) {
-    val flow get() = userPreferencesDataSource.dataFlow
+    val data get() = userPreferencesDataSource.data
 
     init {
         applicationScope.launch {
-            val value = flow.first()
+            val value = data.first()
             if (value.isSetup) {
                 Timber.d("add default repository")
                 localRepository.insertRepo(Const.MY_REPO_URL.toRepo())

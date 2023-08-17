@@ -9,7 +9,7 @@ import javax.inject.Inject
 class UserPreferencesDataSource @Inject constructor(
     private val userPreferences: DataStore<UserPreferences>
 ) {
-    val dataFlow get() = userPreferences.data.map { it.toExt() }
+    val data get() = userPreferences.data.map { it.toExt() }
 
     suspend fun setWorkingMode(value: WorkingMode) = withContext(Dispatchers.IO) {
         userPreferences.updateData {

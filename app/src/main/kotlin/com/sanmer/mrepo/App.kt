@@ -66,7 +66,7 @@ class App : Application(), Configuration.Provider {
             .build()
 
     private fun initSuProviderImpl() {
-        userPreferences.flow
+        userPreferences.data
             .map { it.isRoot }
             .distinctUntilChanged()
             .combine(suProviderImpl.state) { isRoot, state ->
