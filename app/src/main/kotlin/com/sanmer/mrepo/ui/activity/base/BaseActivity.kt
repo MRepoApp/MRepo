@@ -7,6 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.datastore.isDarkMode
@@ -15,6 +18,7 @@ import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.theme.AppTheme
+import com.sanmer.mrepo.ui.utils.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,10 +36,14 @@ abstract class BaseActivity : ComponentActivity() {
     }
 
     fun setActivityContent(
-        content: @Composable () -> Unit
+        content: @Composable (Boolean) -> Unit
     ) = setContent {
-        val userPreferences by userPreferencesRepository.flow
-            .collectAsStateWithLifecycle(UserPreferencesExt.default())
+        var isReady by remember { mutableStateOf(false) }
+        val userPreferences by userPreferencesRepository.data
+            .collectAsStateWithLifecycle(
+                initialValue = UserPreferencesExt.default(),
+                onReady = { isReady = true }
+            )
 
         val suState by suRepository.state
             .collectAsStateWithLifecycle()
@@ -46,9 +54,10 @@ abstract class BaseActivity : ComponentActivity() {
         ) {
             AppTheme(
                 darkMode = userPreferences.isDarkMode(),
-                themeColor = userPreferences.themeColor,
-                content = content
-            )
+                themeColor = userPreferences.themeColor
+            ) {
+                content(isReady)
+            }
         }
     }
 }
