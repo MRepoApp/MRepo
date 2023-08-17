@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.ui.utils.LicenseContent
+import com.sanmer.mrepo.ui.component.LicenseContent
 import com.sanmer.mrepo.ui.utils.expandedShape
 
 @Composable

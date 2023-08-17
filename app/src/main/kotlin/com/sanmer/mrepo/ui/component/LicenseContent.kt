@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.utils
+package com.sanmer.mrepo.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -38,10 +38,7 @@ import com.sanmer.mrepo.app.event.isFailed
 import com.sanmer.mrepo.app.event.isLoading
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.model.json.License
-import com.sanmer.mrepo.ui.component.Failed
-import com.sanmer.mrepo.ui.component.Loading
-import com.sanmer.mrepo.ui.component.MarkdownText
-import com.sanmer.mrepo.ui.component.NormalChip
+import com.sanmer.mrepo.ui.utils.rememberJsonDataRequest
 import timber.log.Timber
 
 @Composable

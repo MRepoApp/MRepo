@@ -9,7 +9,7 @@ import com.sanmer.mrepo.utils.HttpUtils
 import timber.log.Timber
 
 @Composable
-fun  <T> rememberNetworkDataRequest(
+fun <T> rememberNetworkDataRequest(
     get: suspend () -> Result<T>,
     onFailure: (Throwable) -> Unit = {},
     onSuccess: (T) -> Unit
