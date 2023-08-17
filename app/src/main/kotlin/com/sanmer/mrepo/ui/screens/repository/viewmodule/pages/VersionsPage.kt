@@ -62,7 +62,7 @@ import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.expandedShape
-import com.sanmer.mrepo.ui.utils.rememberStringDataRequest
+import com.sanmer.mrepo.ui.utils.stringRequest
 import com.sanmer.mrepo.utils.extensions.toDate
 import kotlinx.coroutines.launch
 import java.io.File
@@ -259,7 +259,7 @@ private fun ChangelogItem(
     url: String
 ) {
     var changelog by remember { mutableStateOf("") }
-    val event = rememberStringDataRequest(url) { changelog = it }
+    val event = stringRequest(url) { changelog = it }
 
     Box(
         modifier = Modifier

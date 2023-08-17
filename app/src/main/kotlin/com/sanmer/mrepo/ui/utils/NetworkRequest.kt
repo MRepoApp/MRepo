@@ -9,7 +9,7 @@ import com.sanmer.mrepo.utils.HttpUtils
 import timber.log.Timber
 
 @Composable
-fun <T> rememberNetworkDataRequest(
+fun <T> launchRequest(
     get: suspend () -> Result<T>,
     onFailure: (Throwable) -> Unit = {},
     onSuccess: (T) -> Unit
@@ -42,22 +42,22 @@ fun <T> rememberNetworkDataRequest(
 }
 
 @Composable
-fun rememberStringDataRequest(
+fun stringRequest(
     url: String,
     onFailure: (Throwable) -> Unit = {},
     onSuccess: (String) -> Unit
-) = rememberNetworkDataRequest(
+) = launchRequest(
     get = { HttpUtils.requestString(url) },
     onSuccess = onSuccess,
     onFailure = onFailure
 )
 
 @Composable
-inline fun <reified T> rememberJsonDataRequest(
+inline fun <reified T> jsonRequest(
     url: String,
     noinline onFailure: (Throwable) -> Unit = {},
     noinline onSuccess: (T) -> Unit
-) = rememberNetworkDataRequest(
+) = launchRequest(
     get = { HttpUtils.requestJson(url) },
     onSuccess = onSuccess,
     onFailure = onFailure
