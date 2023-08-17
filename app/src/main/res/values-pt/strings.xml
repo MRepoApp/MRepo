@@ -9,11 +9,9 @@
     <string name="setup_non_root_title">Não Enraizado</string>
     <string name="setup_non_root_desc1">Não requer permissões de acesso enraizado</string>
     <string name="setup_non_root_desc2">Disponível: Baixar módulos</string>
-    <string name="install_title">Instalar</string>
     <string name="install_flashing">Descarregando</string>
     <string name="install_done">Concluído</string>
     <string name="install_failure">Falha</string>
-    <string name="install_reboot">Reiniciar</string>
     <string name="license_title">Ver Licença</string>
     <string name="license_osi_approved">Aprovado pela OSI</string>
     <string name="license_fsf_libre">Livre FSF</string>
@@ -69,13 +67,12 @@
     <string name="notification_name_download">Serviço de Downloads</string>
     <string name="shortcut_log_label">Registros</string>
     <string name="unknown_error">Erro desconhecido</string>
-    <string name="install_activity_label">Instalador de Módulos</string>
     <string name="settings_root_access">Acesso Enraizado: %1$s</string>
     <string name="view_module_page_about">Sobre</string>
     <string name="view_module_dir_size">Tamanho do Diretório</string>
     <string name="settings_app_desc">Configurações do aplicativo MRepo</string>
     <string name="page_repository">Repositório</string>
-    <string name="module_label_installed">Instalado</string>
+    <string name="module_installed">Instalado</string>
     <string name="view_module_page_overview">Visão geral</string>
     <string name="settings_delete_zip">Excluir arquivo Zip</string>
     <string name="settings_delete_zip_desc">Exclui o arquivo zip após a instalação ser bem-sucedida, Observe que este é o melhor esforço e não funcionará se o aplicativo não tiver permissão para excluir</string>

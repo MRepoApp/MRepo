@@ -116,7 +116,7 @@ fun ModuleItem(
 
                     if (state.installed) {
                         LabelItem(
-                            text = stringResource(id = R.string.module_label_installed).toUpperCase(Locale.current)
+                            text = stringResource(id = R.string.module_installed).toUpperCase(Locale.current)
                         )
                     }
                 }

@@ -10,12 +10,9 @@
     <string name="setup_non_root_desc2">可用：下载模块</string>
 
     <!-- Install -->
-    <string name="install_activity_label">模块安装器</string>
-    <string name="install_title">安装</string>
     <string name="install_flashing">正在刷入</string>
     <string name="install_done">完成</string>
     <string name="install_failure">失败</string>
-    <string name="install_reboot">重启</string>
 
     <!-- License -->
     <string name="license_title">查看许可证</string>
@@ -29,7 +26,7 @@
 
     <!-- Repository -->
     <string name="repository_empty">存储库为空</string>
-    <string name="module_label_installed">已安装</string>
+    <string name="module_installed">已安装</string>
     <!-- Advanced Menu -->
     <string name="menu_pin_installed">置顶已安装</string>
     <string name="menu_show_icon">显示图标</string>

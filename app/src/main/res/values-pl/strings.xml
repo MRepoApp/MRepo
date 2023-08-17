@@ -2,7 +2,6 @@
 <resources>
     <string name="setup_mode">Tryb pracy</string>
     <string name="setup_root_desc1">Wymaga dostępu do roota z Magisk lub KernelSU</string>
-    <string name="install_reboot">Restart</string>
     <string name="repository_empty">Repozytorium jest puste</string>
     <string name="view_module_local">Lokalne</string>
     <string name="view_module_version">Wersja</string>
@@ -17,9 +16,7 @@
     <string name="setup_non_root_desc1">Nie wymaga dostępu do roota</string>
     <string name="setup_non_root_desc2">Dostępne: pobieranie modułów</string>
     <string name="setup_root_desc2">Dostępne: pełna funkcjonalność</string>
-    <string name="install_activity_label">Instalator modułu</string>
     <string name="install_flashing">Wgrywanie</string>
-    <string name="install_title">Instalacja</string>
     <string name="install_done">Ukończona</string>
     <string name="install_failure">Nie powiodła się</string>
     <string name="license_title">Zobacz licencję</string>
@@ -28,7 +25,7 @@
     <string name="page_repository">Repozytorium</string>
     <string name="page_modules">Moduły</string>
     <string name="page_settings">Ustawienia</string>
-    <string name="module_label_installed">Zainstalowane</string>
+    <string name="module_installed">Zainstalowane</string>
     <string name="view_module_page_overview">Przegląd</string>
     <string name="view_module_page_versions">Wersje</string>
     <string name="view_module_page_about">Informacje</string>

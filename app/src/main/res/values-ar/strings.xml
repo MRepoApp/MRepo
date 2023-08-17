@@ -6,11 +6,9 @@
     <string name="setup_non_root_title">بدون روت</string>
     <string name="setup_non_root_desc1">لا يتطلب خصائص الروت</string>
     <string name="setup_non_root_desc2">متاح : تحميل الملف</string>
-    <string name="install_title">تنصيب</string>
     <string name="install_flashing">تفليش</string>
     <string name="install_done">إنتهى.</string>
     <string name="install_failure">فشل</string>
-    <string name="install_reboot">إعادة تشغيل</string>
     <string name="license_title">عرض الترخيص</string>
     <string name="license_osi_approved">تراخيص معتمدة</string>
     <string name="page_modules">الملفات</string>
@@ -19,7 +17,6 @@
     <string name="settings_non_root_desc">الوظائف محدودة</string>
     <string name="setup_mode">نمط العمل</string>
     <string name="setup_root_desc1">مطلوب تصريح الوصول إلى خصائص الروت من ماجيسك أو أي برنامج مسؤول آخر</string>
-    <string name="install_activity_label">تنصيب الملف</string>
     <string name="page_settings">الإعدادات</string>
     <string name="settings_root_granted">تم التصريح</string>
     <string name="settings_root_not_available">غير متاح</string>
@@ -71,7 +68,7 @@
     <string name="settings_app_theme_desc">تغيير الوضع الليلي ولوحة الألوان</string>
     <string name="settings_repo_desc">إدارة مستودعات و وحدات Magisk</string>
     <string name="repo_delete_dialog_desc1">هل انت متأكد من حذف %1$s؟</string>
-    <string name="module_label_installed">مثبته</string>
+    <string name="module_installed">مثبته</string>
     <string name="about_desc2">صنع ❤️ بواسطة %1$s</string>
     <string name="view_module_page_overview">وصف مختصر</string>
     <string name="view_module_page_about">حول الوحدة</string>

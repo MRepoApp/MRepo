@@ -168,7 +168,7 @@ private fun TopBar(
 @Composable
 private fun FloatingButton() = ExtendedFloatingActionButton(
     onClick = { ModuleUtils.reboot() },
-    text = { Text(text = stringResource(id = R.string.install_reboot)) },
+    text = { Text(text = stringResource(id = R.string.settings_menu_reboot)) },
     icon = {
         Icon(
             painter = painterResource(id = R.drawable.refresh_outline),

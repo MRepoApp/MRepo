@@ -39,7 +39,7 @@
         </activity>
 
         <activity android:name=".ui.activity.install.InstallActivity"
-            android:label="@string/install_activity_label"
+            android:label="@string/install_title"
             android:exported="true"
             android:launchMode="standard"
             android:configChanges="orientation|screenSize|screenLayout">

@@ -7,12 +7,9 @@
     <string name="setup_non_root_title">無 Root</string>
     <string name="setup_non_root_desc1">不需要 Root 授權</string>
     <string name="setup_non_root_desc2">工作狀態：僅下載</string>
-    <string name="install_activity_label">模組安裝器</string>
-    <string name="install_title">安裝</string>
     <string name="install_flashing">正在刷入</string>
     <string name="install_done">完成</string>
     <string name="install_failure">失敗</string>
-    <string name="install_reboot">重啟</string>
     <string name="license_title">閱讀授權條款</string>
     <string name="license_osi_approved">開源授權</string>
     <string name="license_fsf_libre">自由軟體</string>
@@ -43,7 +40,7 @@
     <string name="modules_empty">沒找到任何模組</string>
     <string name="search_empty">空列表</string>
     <string name="search_placeholder">搜尋…</string>
-    <string name="module_label_installed">已安裝</string>
+    <string name="module_installed">已安裝</string>
     <string name="view_module_page_overview">概覽</string>
     <string name="view_module_page_versions">版本</string>
     <string name="view_module_page_about">關於</string>

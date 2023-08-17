@@ -32,12 +32,9 @@
     <string name="setup_root_desc2">Disponibil: funcționalitate completă</string>
     <string name="setup_non_root_title">Fără acces root</string>
     <string name="setup_non_root_desc1">Nu necesită acces root</string>
-    <string name="install_activity_label">Instalator de module</string>
-    <string name="install_title">Instalează</string>
     <string name="install_flashing">Instalare</string>
     <string name="install_done">Finalizat</string>
     <string name="install_failure">Eșuat</string>
-    <string name="install_reboot">Repornește</string>
     <string name="license_title">Vezi licența</string>
     <string name="license_osi_approved">Aprobat OSI</string>
     <string name="license_fsf_libre">FSF Gratuit</string>
@@ -77,7 +74,7 @@
     <string name="view_module_version_dialog_desc">Dorești să instalezi sau să descarci această versiune a modulului\?</string>
     <string name="settings_app_desc">Setările despre aplicația MRepo în sine</string>
     <string name="settings_about">Despre</string>
-    <string name="module_label_installed">Instalat</string>
+    <string name="module_installed">Instalat</string>
     <string name="view_module_page_overview">General</string>
     <string name="view_module_page_about">Despre</string>
     <string name="view_module_description">Descriere</string>

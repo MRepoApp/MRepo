@@ -30,12 +30,9 @@
     <string name="setup_root_desc2">Disponible: funcionalidad completa</string>
     <string name="setup_non_root_title">Sin Root</string>
     <string name="setup_non_root_desc2">Disponible: descargar módulo</string>
-    <string name="install_activity_label">Instalador de módulos</string>
-    <string name="install_title">Instalar</string>
     <string name="install_flashing">Flasheando</string>
     <string name="install_done">Hecho</string>
     <string name="install_failure">Fallida</string>
-    <string name="install_reboot">Reiniciar</string>
     <string name="license_title">Ver licencia</string>
     <string name="license_osi_approved">Aprobado por OSI</string>
     <string name="license_fsf_libre">FSF Libre</string>

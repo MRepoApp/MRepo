@@ -6,12 +6,9 @@
     <string name="setup_non_root_title">Rootsuz</string>
     <string name="setup_non_root_desc1">Root erişimi gerektimez</string>
     <string name="setup_non_root_desc2">Kullanılabilir: modül indirme</string>
-    <string name="install_activity_label">Modül Yükleyici</string>
-    <string name="install_title">Yükle</string>
     <string name="install_flashing">Flaşlanıyor</string>
     <string name="install_done">Tamamlandı</string>
     <string name="install_failure">Başarısız oldu</string>
-    <string name="install_reboot">Yeniden başlat</string>
     <string name="license_title">Lisansı görüntüle</string>
     <string name="license_osi_approved">OSI Onaylı</string>
     <string name="license_fsf_libre">FSF Libre</string>
@@ -19,7 +16,7 @@
     <string name="page_modules">Modüller</string>
     <string name="page_settings">Ayarlar</string>
     <string name="repository_empty">Repo boş</string>
-    <string name="module_label_installed">Yüklü</string>
+    <string name="module_installed">Yüklü</string>
     <string name="view_module_page_overview">Genel bakış</string>
     <string name="view_module_page_versions">Sürümler</string>
     <string name="view_module_page_about">Hakkında</string>
