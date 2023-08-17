@@ -90,4 +90,9 @@
     <string name="dialog_attention">Внимание</string>
     <string name="dialog_cancel">Отменить</string>
     <string name="search_placeholder">Поиск…</string>
+    <string name="view_module_cloud">Облако</string>
+    <string name="view_module_last_updated">Последнее обновление</string>
+    <string name="view_module_homepage">Домашняя страница</string>
+    <string name="view_module_source">Исходный код</string>
+    <string name="view_module_support">Поддержка</string>
 </resources>
