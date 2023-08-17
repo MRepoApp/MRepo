@@ -21,25 +21,21 @@ import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.model.state.LocalState.Companion.createState
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class ModuleViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val userPreferencesValue get() = userPreferencesRepository.value
-    val isRoot get() = userPreferencesValue.isRoot
-    val suState get() = suRepository.state
     private val fs get() = try {
         suRepository.fs
     } catch (e: Exception) {
@@ -93,10 +89,11 @@ class ModuleViewModel @Inject constructor(
 
     fun downloader(
         context: Context,
+        downloadPath: File,
         item: VersionItem,
         install: Boolean
     ) {
-        val path = userPreferencesValue.downloadPath.resolve(
+        val path = downloadPath.resolve(
             "${online.name}_${item.versionDisplay}.zip"
                 .replace("[\\s+|/]".toRegex(), "_")
                 .replace("[^a-zA-Z0-9\\-._]".toRegex(), "")

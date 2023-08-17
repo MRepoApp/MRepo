@@ -60,17 +60,19 @@ import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.rememberStringDataRequest
 import com.sanmer.mrepo.utils.extensions.toDate
 import kotlinx.coroutines.launch
+import java.io.File
 
 @Composable
 fun VersionsPage(
     versions: List<Pair<Repo, VersionItem>>,
     isRoot: Boolean,
     getProgress: @Composable (VersionItem) -> Float,
-    downloader: (Context, VersionItem, Boolean) -> Unit
+    downloader: (Context, File, VersionItem, Boolean) -> Unit
 ) = LazyColumn(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -105,7 +107,7 @@ private fun VersionItem(
     item: VersionItem,
     repo: Repo,
     isRoot: Boolean,
-    downloader: (Context, VersionItem, Boolean) -> Unit
+    downloader: (Context, File, VersionItem, Boolean) -> Unit
 ) {
     var open by remember { mutableStateOf(false) }
     if (open) VersionItemBottomSheet(
@@ -153,7 +155,7 @@ private fun VersionItemBottomSheet(
     isRoot: Boolean,
     hasChangelog: Boolean = true,
     state: SheetState = rememberModalBottomSheetState(),
-    downloader: (Context, VersionItem, Boolean) -> Unit,
+    downloader: (Context, File, VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
@@ -200,7 +202,7 @@ private fun ColumnScope.ButtonRow(
     item: VersionItem,
     isRoot: Boolean,
     state: SheetState,
-    downloader: (Context, VersionItem, Boolean) -> Unit,
+    downloader: (Context, File, VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
 ) = Row(
     modifier = Modifier
@@ -210,12 +212,13 @@ private fun ColumnScope.ButtonRow(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.spacedBy(10.dp)
 ) {
+    val userPreferences = LocalUserPreferences.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     OutlinedButton(
         onClick = {
-            downloader(context, item, true)
+            downloader(context, userPreferences.downloadPath, item, true)
             scope.launch {
                 onClose()
                 state.hide()
@@ -234,7 +237,7 @@ private fun ColumnScope.ButtonRow(
 
     OutlinedButton(
         onClick = {
-            downloader(context, item, false)
+            downloader(context, userPreferences.downloadPath, item, false)
             scope.launch {
                 onClose()
                 state.hide()
@@ -293,7 +296,7 @@ private fun ColumnScope.ButtonColumn(
     item: VersionItem,
     isRoot: Boolean,
     state: SheetState,
-    downloader: (Context, VersionItem, Boolean) -> Unit,
+    downloader: (Context, File, VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
 ) = Column(
     modifier = Modifier
@@ -301,12 +304,13 @@ private fun ColumnScope.ButtonColumn(
         .align(Alignment.CenterHorizontally),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
+    val userPreferences = LocalUserPreferences.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     ButtonItem(
         onClick = {
-            downloader(context, item, true)
+            downloader(context, userPreferences.downloadPath, item, true)
             scope.launch {
                 onClose()
                 state.hide()
@@ -319,7 +323,7 @@ private fun ColumnScope.ButtonColumn(
 
     ButtonItem(
         onClick = {
-            downloader(context, item, false)
+            downloader(context, userPreferences.downloadPath, item, false)
             scope.launch {
                 onClose()
                 state.hide()

@@ -29,7 +29,9 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.model.state.LocalState
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.toDateTime
+import java.io.File
 
 @Composable
 fun OverviewPage(
@@ -37,7 +39,7 @@ fun OverviewPage(
     item: VersionItem?,
     local: LocalModule,
     localState: LocalState?,
-    downloader: (Context, VersionItem, Boolean) -> Unit
+    downloader: (Context, File, VersionItem, Boolean) -> Unit
 ) = Column(
     modifier = Modifier
         .fillMaxSize()
@@ -83,13 +85,14 @@ fun OverviewPage(
 @Composable
 private fun CloudItem(
     item: VersionItem,
-    downloader: (Context, VersionItem, Boolean) -> Unit
+    downloader: (Context, File, VersionItem, Boolean) -> Unit
 ) = Column(
     modifier = Modifier
         .padding(all = 16.dp)
         .fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp)
 ) {
+    val userPreferences = LocalUserPreferences.current
     val context = LocalContext.current
 
     Text(
@@ -110,7 +113,7 @@ private fun CloudItem(
         )
 
         ElevatedAssistChip(
-            onClick = { downloader(context, item, true) },
+            onClick = { downloader(context, userPreferences.downloadPath, item, true) },
             label = { Text(text = stringResource(id = R.string.module_install)) },
             leadingIcon = {
                 Icon(

@@ -8,13 +8,13 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
+import com.sanmer.mrepo.ui.providable.LocalSuState
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.OverviewPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.VersionsPage
@@ -26,7 +26,9 @@ fun ViewModuleScreen(
     navController: NavController,
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
-    val suState by viewModel.suState.collectAsStateWithLifecycle()
+    val userPreferences = LocalUserPreferences.current
+    val suState = LocalSuState.current
+
     val localState = viewModel.rememberLocalState(suState = suState)
     val (versions, tracks) = viewModel.getVersionsAndTracks()
 
@@ -64,7 +66,7 @@ fun ViewModuleScreen(
                     )
                     1 -> VersionsPage(
                         versions = versions,
-                        isRoot = viewModel.isRoot,
+                        isRoot = userPreferences.isRoot,
                         getProgress = { viewModel.rememberProgress(it) },
                         downloader = viewModel::downloader
                     )

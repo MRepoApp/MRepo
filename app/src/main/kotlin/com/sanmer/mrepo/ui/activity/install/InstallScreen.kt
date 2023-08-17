@@ -57,7 +57,7 @@ fun InstallScreen(
     val isScrollingUp = listState.isScrollingUp()
     val showFab by remember(isScrollingUp) {
         derivedStateOf {
-            isScrollingUp && viewModel.state.isFinished
+            isScrollingUp && viewModel.state.isSucceeded
         }
     }
 
@@ -76,7 +76,6 @@ fun InstallScreen(
                 when (it.nativeKeyEvent.keyCode) {
                     KeyEvent.KEYCODE_VOLUME_UP,
                     KeyEvent.KEYCODE_VOLUME_DOWN -> viewModel.state.isLoading
-
                     else -> false
                 }
             }

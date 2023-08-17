@@ -31,7 +31,6 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
-    val suState get() = suRepository.state
     private val fs get() = try {
         suRepository.fs
     } catch (e: Exception) {

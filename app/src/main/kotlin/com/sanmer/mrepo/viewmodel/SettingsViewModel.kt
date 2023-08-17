@@ -15,8 +15,6 @@ class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
-    val suState get() = suRepository.state
-
     val apiVersion get() = try {
         suRepository.version
     } catch (e: Exception) {
@@ -41,5 +39,4 @@ class SettingsViewModel @Inject constructor(
 
     fun setDeleteZipFile(value: Boolean) =
         userPreferencesRepository.setDeleteZipFile(value)
-
 }

@@ -6,15 +6,15 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.net.toUri
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.ui.activity.base.BaseActivity
+import com.sanmer.mrepo.ui.providable.LocalSuState
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.deleteLog
 import com.sanmer.mrepo.viewmodel.InstallViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import java.io.File
 
 class InstallActivity : BaseActivity() {
@@ -24,18 +24,25 @@ class InstallActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         deleteLog("module")
 
-        viewModel.suState.onEach {
-            if (it.isSucceeded) {
-                val uri = intent.data
-                if (uri != null) {
-                    viewModel.install(this, uri)
-                } else {
-                    viewModel.state.setFailed("The uri is null!")
+        setActivityContent {
+            val userPreferences = LocalUserPreferences.current
+            val suState = LocalSuState.current
+
+            LaunchedEffect(suState) {
+                if (suState.isSucceeded) {
+                    val uri = intent.data
+                    if (uri != null) {
+                        viewModel.install(
+                            context = this@InstallActivity,
+                            path = uri,
+                            deleteZipFile = userPreferences.deleteZipFile
+                        )
+                    } else {
+                        viewModel.state.setFailed("Uri is null")
+                    }
                 }
             }
-        }.launchIn(lifecycleScope)
 
-        setActivityContent {
             CompositionLocalProvider(
                 LocalViewModelStoreOwner provides this
             ) {

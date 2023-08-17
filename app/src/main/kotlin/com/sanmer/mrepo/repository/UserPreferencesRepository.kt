@@ -4,13 +4,10 @@ import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.UserPreferencesDataSource
-import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -25,20 +22,14 @@ class UserPreferencesRepository @Inject constructor(
 ) {
     val flow get() = userPreferencesDataSource.dataFlow
 
-    private var _value = UserPreferencesExt.default()
-    val value get() = _value
-
     init {
-        userPreferencesDataSource.dataFlow
-            .distinctUntilChanged()
-            .onEach {
-                if (it.isSetup) {
-                    Timber.d("add default repository")
-                    localRepository.insertRepo(Const.MY_REPO_URL.toRepo())
-                }
-
-                _value = it
-            }.launchIn(applicationScope)
+        applicationScope.launch {
+            val value = flow.first()
+            if (value.isSetup) {
+                Timber.d("add default repository")
+                localRepository.insertRepo(Const.MY_REPO_URL.toRepo())
+            }
+        }
     }
 
     fun setWorkingMode(value: WorkingMode) = applicationScope.launch {

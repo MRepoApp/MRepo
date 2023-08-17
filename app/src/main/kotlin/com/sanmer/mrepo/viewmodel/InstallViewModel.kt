@@ -13,7 +13,6 @@ import com.sanmer.mrepo.app.utils.MediaStoreUtils.displayName
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.extensions.createLog
 import com.sanmer.mrepo.utils.extensions.shareFile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
     val console = mutableStateListOf<String>()
@@ -35,9 +33,6 @@ class InstallViewModel @Inject constructor(
             super.setFailed(value)
         }
     }
-
-    val suState get() = suRepository.state
-    private val userPreferences get() = userPreferencesRepository.value
 
     init {
         Timber.d("InstallViewModel init")
@@ -54,7 +49,8 @@ class InstallViewModel @Inject constructor(
 
     fun install(
         context: Context,
-        path: Uri
+        path: Uri,
+        deleteZipFile: Boolean
     ) {
         val file = context.cacheDir.resolve("install.zip")
         path.copyTo(file)
@@ -67,7 +63,7 @@ class InstallViewModel @Inject constructor(
             onSuccess = {
                 onSucceeded(it)
                 file.delete()
-                if (userPreferences.deleteZipFile) {
+                if (deleteZipFile) {
                     path.delete()
                 }
             },
