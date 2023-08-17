@@ -15,7 +15,6 @@ class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
-    val userPreferences get() = userPreferencesRepository.flow
     val suState get() = suRepository.state
 
     val apiVersion get() = try {

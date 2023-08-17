@@ -27,11 +27,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.navigation.graphs.SettingsScreen
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.screens.settings.items.NonRootItem
 import com.sanmer.mrepo.ui.screens.settings.items.RootItem
 import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
@@ -43,9 +43,7 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val userPreferences by viewModel.userPreferences
-        .collectAsStateWithLifecycle(UserPreferencesExt.default())
-
+    val userPreferences = LocalUserPreferences.current
     val context = LocalContext.current
     val suState by viewModel.suState.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()

@@ -20,17 +20,16 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.ui.navigation.MainScreen
 import com.sanmer.mrepo.ui.navigation.graphs.modulesScreen
 import com.sanmer.mrepo.ui.navigation.graphs.repositoryScreen
 import com.sanmer.mrepo.ui.navigation.graphs.settingsScreen
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.navigatePopUpTo
 
 @Composable
-fun MainScreen(
-    userPreferences: UserPreferencesExt
-) {
+fun MainScreen() {
+    val userPreferences = LocalUserPreferences.current
     val navController = rememberNavController()
 
     Scaffold(
