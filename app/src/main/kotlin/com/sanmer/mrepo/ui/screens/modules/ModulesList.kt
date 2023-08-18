@@ -75,7 +75,7 @@ fun ModulesList(
 }
 
 @Composable
-private fun ModuleItem(
+fun ModuleItem(
     module: LocalModule,
     state: LocalState,
     suState: Event,
@@ -103,10 +103,10 @@ private fun ModuleItem(
             State.ZYGISK_DISABLE -> stateIndicator(R.drawable.danger_outline)
             else -> null
         },
-        leadingButton = if (uiState.manager != null) {
-            manager(uiState.manager)
-        } else {
-            null
+        leadingButton = {
+            if (uiState.manager != null) {
+                Manager(uiState.manager)
+            }
         },
         trailingButton = {
             RemoveOrRestore(
@@ -149,15 +149,13 @@ private fun RemoveOrRestore(
 }
 
 @Composable
-private fun manager(
+private fun Manager(
     onClick: () -> Unit
-): @Composable RowScope.() -> Unit = {
-    FilledTonalIconButton(
-        onClick = onClick
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.setting_outline),
-            contentDescription = null,
-        )
-    }
+) = FilledTonalIconButton(
+    onClick = onClick
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.setting_outline),
+        contentDescription = null,
+    )
 }

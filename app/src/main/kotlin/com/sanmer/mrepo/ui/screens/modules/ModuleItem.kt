@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.state.LocalState
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
+import com.sanmer.mrepo.utils.extensions.formatSize
 import com.sanmer.mrepo.utils.extensions.toDate
 
 @Composable
@@ -53,6 +55,9 @@ fun ModuleItem(
     tonalElevation = 1.dp,
     shape = RoundedCornerShape(20.dp)
 ) {
+    val userPreferences = LocalUserPreferences.current
+    val menu = userPreferences.modulesMenu
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -87,6 +92,16 @@ fun ModuleItem(
                         textDecoration = decoration,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+
+                    if (state.lastModified != null && menu.showUpdatedTime) {
+                        Text(
+                            text = stringResource(id = R.string.module_update_at,
+                                state.lastModified.toDate()),
+                            style = MaterialTheme.typography.bodySmall,
+                            textDecoration = decoration,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    }
                 }
 
                 switch?.invoke()
@@ -101,19 +116,6 @@ fun ModuleItem(
                 textDecoration = decoration,
                 color = MaterialTheme.colorScheme.outline
             )
-
-            if (state.lastModified != null) {
-                Text(
-                    modifier = Modifier
-                        .alpha(alpha = alpha)
-                        .padding(top = 8.dp, start = 16.dp),
-                    text = stringResource(id = R.string.module_update_at,
-                        state.lastModified.toDate()),
-                    style = MaterialTheme.typography.bodySmall,
-                    textDecoration = decoration,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
 
             HorizontalDivider(
                 thickness = 1.5.dp,

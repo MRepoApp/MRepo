@@ -1,0 +1,152 @@
+package com.sanmer.mrepo.ui.screens.modules
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
+import com.sanmer.mrepo.datastore.repository.Option
+import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.online.OnlineModule
+import com.sanmer.mrepo.model.state.LocalState
+import com.sanmer.mrepo.model.state.OnlineState
+import com.sanmer.mrepo.ui.component.Segment
+import com.sanmer.mrepo.ui.component.SegmentedButtons
+import com.sanmer.mrepo.ui.component.SegmentedButtonsDefaults
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
+import com.sanmer.mrepo.ui.screens.repository.MenuChip
+import com.sanmer.mrepo.ui.utils.expandedShape
+import com.sanmer.mrepo.viewmodel.ModuleViewModel
+import com.sanmer.mrepo.viewmodel.ModulesViewModel
+
+@Composable
+fun ModulesMenu(
+    setMenu: (ModulesMenuExt) -> Unit
+) {
+    val userPreferences = LocalUserPreferences.current
+    var open by rememberSaveable { mutableStateOf(false) }
+
+    IconButton(
+        onClick = { open = true }
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.menu_outline),
+            contentDescription = null
+        )
+
+        if (open) {
+            BottomSheet(
+                onClose = { open = false },
+                menu = userPreferences.modulesMenu,
+                setMenu = setMenu
+            )
+        }
+    }
+}
+
+@Composable
+private fun BottomSheet(
+    state: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    onClose: () -> Unit,
+    menu: ModulesMenuExt,
+    setMenu: (ModulesMenuExt) -> Unit
+) = ModalBottomSheet(
+    onDismissRequest = onClose,
+    sheetState = state,
+    shape = BottomSheetDefaults.expandedShape(15.dp),
+    windowInsets = WindowInsets.navigationBars
+) {
+    val options = listOf(
+        Option.NAME to R.string.menu_sort_option_name,
+        Option.UPDATED_TIME to R.string.menu_sort_option_updated
+    )
+
+    Text(
+        text = stringResource(id = R.string.menu_advanced_menu),
+        style = MaterialTheme.typography.headlineSmall,
+        modifier = Modifier.align(Alignment.CenterHorizontally)
+    )
+
+    Column(
+        modifier = Modifier.padding(all = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.menu_sort_mode),
+            style = MaterialTheme.typography.titleSmall
+        )
+
+        SegmentedButtons(
+            border = SegmentedButtonsDefaults.border(
+                color = MaterialTheme.colorScheme.secondary
+            )
+        ) {
+            options.forEach { (option, label) ->
+                Segment(
+                    selected = option == menu.option,
+                    onClick = { setMenu(menu.copy(option = option)) },
+                    colors = SegmentedButtonsDefaults.buttonColor(
+                        selectedContainerColor = MaterialTheme.colorScheme.secondary,
+                        selectedContentColor = MaterialTheme.colorScheme.onSecondary
+                    ),
+                    icon = null
+                ) {
+                    Text(text = stringResource(id = label))
+                }
+            }
+        }
+
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .wrapContentHeight(align = Alignment.Top),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            MenuChip(
+                selected = menu.descending,
+                onClick = { setMenu(menu.copy(descending = !menu.descending)) },
+                label = { Text(text = stringResource(id = R.string.menu_descending)) }
+            )
+
+            MenuChip(
+                selected = menu.pinEnabled,
+                onClick = { setMenu(menu.copy(pinEnabled = !menu.pinEnabled)) },
+                label = { Text(text = stringResource(id = R.string.menu_pin_enabled)) }
+            )
+
+            MenuChip(
+                selected = menu.showUpdatedTime,
+                onClick = { setMenu(menu.copy(showUpdatedTime = !menu.showUpdatedTime)) },
+                label = { Text(text = stringResource(id = R.string.menu_show_updated)) }
+            )
+        }
+    }
+}

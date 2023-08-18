@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.modules
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -42,11 +41,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.providable.LocalSuState
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
@@ -57,6 +58,10 @@ fun ModulesScreen(
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
     val suState = LocalSuState.current
+    val userPreferences = LocalUserPreferences.current
+    val modulesMenu = userPreferences.modulesMenu
+
+    val list = viewModel.getLocalSortedBy(menu = modulesMenu)
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
@@ -91,6 +96,7 @@ fun ModulesScreen(
                 onQueryChange = { viewModel.key = it },
                 onOpenSearch = { viewModel.isSearch = true },
                 onCloseSearch = viewModel::closeSearch,
+                setMenu = viewModel::setModulesMenu,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -118,7 +124,7 @@ fun ModulesScreen(
                 enabled = !viewModel.isSearch
             )
         ) {
-            if (viewModel.localValue.isEmpty()) {
+            if (list.isEmpty()) {
                 PageIndicator(
                     icon = R.drawable.command_outline,
                     text = if (viewModel.isSearch) R.string.search_empty else R.string.modules_empty,
@@ -126,7 +132,7 @@ fun ModulesScreen(
             }
 
             ModulesList(
-                list = viewModel.localValue,
+                list = list,
                 state = listState,
                 suState = suState,
                 getUiState = { viewModel.rememberUiState(it) }
@@ -151,6 +157,7 @@ private fun TopBar(
     onQueryChange: (String) -> Unit,
     onOpenSearch: () -> Unit,
     onCloseSearch: () -> Unit,
+    setMenu: (ModulesMenuExt) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) = SearchTopBar(
     isSearch = isSearch,
@@ -171,18 +178,9 @@ private fun TopBar(
             }
         }
 
-        val context = LocalContext.current
-        IconButton(
-            onClick = {
-                // TODO: Advanced Menu
-                Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
-            }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.sort_outline),
-                contentDescription = null
-            )
-        }
+        ModulesMenu(
+            setMenu = setMenu
+        )
     }
 )
 

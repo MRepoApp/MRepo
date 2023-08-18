@@ -80,19 +80,17 @@ object ModuleUtils {
     fun launchManger(
         context: Context,
         module: LocalModule
-    ): (() -> Unit)? = if (module.isLsposed) {
-        { launchLSPManger(context) }
-    } else {
-        null
+    ): (() -> Unit)? = when {
+        module.isLsposed -> {
+            { launchLSPManger(context) }
+        }
+        else -> null
     }
 
     private val LocalModule.isLsposed get() =
         id == "zygisk_lsposed" || id == "riru_lsposed"
 
-    private fun launchLSPManger(
-        context: Context,
-        onFailure: (String) -> Unit = {},
-    ) {
+    private fun launchLSPManger(context: Context) {
         context.packageManager
             .getLaunchIntentForPackage("org.lsposed.manager")
             ?.let {
@@ -106,7 +104,6 @@ object ModuleUtils {
             .submit {
                 if (!it.isSuccess) {
                     Timber.e("launchLSPManger failed: ${it.output}")
-                    onFailure(it.output)
                 }
             }
     }

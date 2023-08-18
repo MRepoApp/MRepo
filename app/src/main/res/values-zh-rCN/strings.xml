@@ -126,6 +126,7 @@
     <string name="menu_sort_option_name">名字</string>
     <string name="menu_sort_option_updated">更新时间</string>
     <string name="menu_descending">降序</string>
+    <string name="menu_pin_enabled">置顶已启用</string>
     <string name="menu_show_updated">显示更新时间</string>
 
     <!-- Message -->

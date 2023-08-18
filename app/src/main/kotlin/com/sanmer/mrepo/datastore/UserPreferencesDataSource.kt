@@ -1,6 +1,8 @@
 package com.sanmer.mrepo.datastore
 
 import androidx.datastore.core.DataStore
+import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
+import com.sanmer.mrepo.datastore.modules.toProto
 import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
 import com.sanmer.mrepo.datastore.repository.toProto
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +59,14 @@ class UserPreferencesDataSource @Inject constructor(
         userPreferences.updateData {
             it.new {
                 repositoryMenu = value.toProto()
+            }
+        }
+    }
+
+    suspend fun setModulesMenu(value: ModulesMenuExt) = withContext(Dispatchers.IO) {
+        userPreferences.updateData {
+            it.new {
+                modulesMenu = value.toProto()
             }
         }
     }

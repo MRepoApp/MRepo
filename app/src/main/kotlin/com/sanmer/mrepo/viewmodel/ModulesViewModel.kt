@@ -12,12 +12,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
+import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
+import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.model.state.LocalState.Companion.createState
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository
+import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.ModuleUtils
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +33,7 @@ import javax.inject.Inject
 class ModulesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
     private val fs get() = try {
@@ -50,14 +55,14 @@ class ModulesViewModel @Inject constructor(
             module.name
         }
 
-    private val localSearch by derivedStateOf {
+    private val _local by derivedStateOf {
         local.filter { (_, module) ->
             if (key.isBlank()) return@filter true
             key.uppercase() in "${module.name}${module.author}".uppercase()
         }
     }
 
-    val localValue get() = (if (isSearch) localSearch else local)
+    private val values get() = (if (isSearch) _local else local)
 
     var isRefreshing by mutableStateOf(false)
         private set
@@ -71,6 +76,45 @@ class ModulesViewModel @Inject constructor(
         Timber.d("ModulesViewModel init")
     }
 
+    @Composable
+    fun getLocalSortedBy(
+        menu: ModulesMenuExt
+    ): List<Pair<LocalState, LocalModule>> {
+        val list = remember(menu) {
+            derivedStateOf {
+                values.sortedWith(
+                    comparator(menu.option, menu.descending)
+                ).let { v ->
+                    if (menu.pinEnabled) {
+                        v.sortedByDescending { it.second.state == State.ENABLE }
+                    } else {
+                        v
+                    }
+                }
+            }
+        }
+
+        return list.value
+    }
+
+    private fun comparator(
+        option: Option,
+        descending: Boolean
+    ): Comparator<Pair<LocalState, LocalModule>> = if (descending) {
+        when (option) {
+            Option.NAME -> compareByDescending { it.second.name }
+            Option.UPDATED_TIME -> compareBy { it.first.lastModified }
+            else -> compareByDescending { null }
+        }
+
+    } else {
+        when (option) {
+            Option.NAME -> compareBy { it.second.name }
+            Option.UPDATED_TIME -> compareByDescending { it.first.lastModified }
+            else -> compareByDescending { null }
+        }
+    }
+
     fun closeSearch() {
         isSearch = false
         key = ""
@@ -81,6 +125,9 @@ class ModulesViewModel @Inject constructor(
             modulesRepository.getLocalAll()
         }
     }
+
+    fun setModulesMenu(value: ModulesMenuExt) =
+        userPreferencesRepository.setModulesMenu(value)
 
     @Stable
     data class UiState(

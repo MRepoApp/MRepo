@@ -4,6 +4,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.OsUtils
+import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
+import com.sanmer.mrepo.datastore.modules.toExt
+import com.sanmer.mrepo.datastore.modules.toProto
 import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
 import com.sanmer.mrepo.datastore.repository.toExt
 import com.sanmer.mrepo.datastore.repository.toProto
@@ -20,7 +23,8 @@ data class UserPreferencesExt(
     val themeColor: Int,
     val downloadPath: File,
     val deleteZipFile: Boolean,
-    val repositoryMenu: RepositoryMenuExt
+    val repositoryMenu: RepositoryMenuExt,
+    val modulesMenu: ModulesMenuExt
 ) {
     companion object {
         fun default() = UserPreferencesExt(
@@ -29,7 +33,8 @@ data class UserPreferencesExt(
             themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
             downloadPath = Const.DIR_PUBLIC_DOWNLOADS.resolve("MRepo"),
             deleteZipFile = true,
-            repositoryMenu = RepositoryMenuExt.default()
+            repositoryMenu = RepositoryMenuExt.default(),
+            modulesMenu = ModulesMenuExt.default()
         )
     }
 }
@@ -48,6 +53,7 @@ fun UserPreferencesExt.toProto(): UserPreferences = UserPreferences.newBuilder()
     .setDownloadPath(downloadPath.absolutePath)
     .setDeleteZipFile(deleteZipFile)
     .setRepositoryMenu(repositoryMenu.toProto())
+    .setModulesMenu(modulesMenu.toProto())
     .build()
 
 fun UserPreferences.toExt() = UserPreferencesExt(
@@ -56,7 +62,8 @@ fun UserPreferences.toExt() = UserPreferencesExt(
     themeColor = themeColor,
     downloadPath = downloadPath.toFile(),
     deleteZipFile = deleteZipFile,
-    repositoryMenu = repositoryMenuOrNull?.toExt() ?: RepositoryMenuExt.default()
+    repositoryMenu = repositoryMenuOrNull?.toExt() ?: RepositoryMenuExt.default(),
+    modulesMenu = modulesMenuOrNull?.toExt() ?: ModulesMenuExt.default()
 )
 
 fun UserPreferences.new(
