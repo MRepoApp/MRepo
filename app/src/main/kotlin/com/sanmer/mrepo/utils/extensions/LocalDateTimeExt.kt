@@ -21,4 +21,9 @@ fun Long.toDateTime(): String {
     return instant.toLocalDateTime(TimeZone.currentSystemDefault()).toString()
 }
 
+fun Long.toDate(): String {
+    val instant = Instant.fromEpochMilliseconds(this)
+    return instant.toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
+}
+
 fun LocalDateTime.Companion.now() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())

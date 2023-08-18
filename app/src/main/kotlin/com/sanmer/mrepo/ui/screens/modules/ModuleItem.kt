@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.state.LocalState
+import com.sanmer.mrepo.utils.extensions.toDate
 
 @Composable
 fun ModuleItem(
@@ -107,7 +108,7 @@ fun ModuleItem(
                         .alpha(alpha = alpha)
                         .padding(top = 8.dp, start = 16.dp),
                     text = stringResource(id = R.string.module_update_at,
-                        state.lastModified),
+                        state.lastModified.toDate()),
                     style = MaterialTheme.typography.bodySmall,
                     textDecoration = decoration,
                     color = MaterialTheme.colorScheme.outline

@@ -30,6 +30,7 @@ import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
+import com.sanmer.mrepo.utils.extensions.formatSize
 import com.sanmer.mrepo.utils.extensions.toDateTime
 import java.io.File
 
@@ -159,12 +160,12 @@ private fun LocalItem(
 
     ValueItem(
         key = stringResource(id = R.string.view_module_last_modified),
-        value = state.lastModified
+        value = state.lastModified?.toDateTime()
     )
 
     ValueItem(
         key = stringResource(id = R.string.view_module_dir_size),
-        value = state.size
+        value = state.size?.formatSize()
     )
 }
 

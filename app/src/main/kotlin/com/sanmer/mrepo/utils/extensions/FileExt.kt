@@ -5,6 +5,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+import kotlin.math.log10
+import kotlin.math.pow
 
 fun String.toFile() = File(this)
 
@@ -22,6 +24,15 @@ val File.totalSize: Long get() {
 
     return size
 }
+
+fun Long.formatSize() = if (this < 0){
+    "0 B"
+} else {
+    val units = listOf("B", "KB", "MB")
+    val group = (log10(toDouble()) / log10(1024.0)).toInt()
+    String.format("%.2f %s", this / 1024.0.pow(group.toDouble()), units[group])
+}
+
 
 @Throws(IOException::class)
 fun File.unzip(folder: File, path: String = "", junkPath: Boolean = false) {
