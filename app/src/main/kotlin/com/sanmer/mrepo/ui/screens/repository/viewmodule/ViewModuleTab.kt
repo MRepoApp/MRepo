@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.material.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TabPosition
@@ -41,6 +43,7 @@ val pages = listOf(
 @Composable
 fun ViewModuleTab(
     state: PagerState,
+    updatableSize: Int,
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
@@ -61,24 +64,40 @@ fun ViewModuleTab(
             )
         }
     ) {
-        pages.forEachIndexed { id, text ->
+        pages.forEachIndexed { index, text ->
             Tab(
                 modifier = Modifier.padding(vertical = 12.dp),
-                selected = state.currentPage == id,
+                selected = state.currentPage == index,
                 onClick = {
                     scope.launch {
-                        state.animateScrollToPage(id)
+                        state.animateScrollToPage(index)
                     }
                 },
                 selectedContentColor = MaterialTheme.colorScheme.primary,
                 unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant
             ) {
-                Text(
-                    text = stringResource(id = text),
-                    style = MaterialTheme.typography.labelLarge,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                BadgedBox(
+                    badge = {
+                        if (index == 1 && updatableSize != 0) {
+                            Badge(
+                                backgroundColor = MaterialTheme.colorScheme.error
+                            ) {
+                                Text(
+                                    text = updatableSize.toString(),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onError
+                                )
+                            }
+                        }
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = text),
+                        style = MaterialTheme.typography.labelLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }

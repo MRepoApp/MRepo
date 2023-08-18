@@ -50,7 +50,10 @@ fun ViewModuleScreen(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            ViewModuleTab(state = pagerState)
+            ViewModuleTab(
+                state = pagerState,
+                updatableSize = viewModel.updatableSize
+            )
 
             HorizontalPager(
                 state = pagerState,
@@ -66,6 +69,7 @@ fun ViewModuleScreen(
                     )
                     1 -> VersionsPage(
                         versions = versions,
+                        localVersionCode = viewModel.localVersionCode,
                         isRoot = userPreferences.isRoot,
                         getProgress = { viewModel.rememberProgress(it) },
                         downloader = viewModel::downloader

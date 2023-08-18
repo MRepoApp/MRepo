@@ -43,7 +43,7 @@ fun TrackItem(
 ) = Box {
     var open by rememberSaveable { mutableStateOf(false) }
 
-    LabelItem(
+    TagItem(
         icon = R.drawable.tag_outline,
         onClick = { open = true }
     )

@@ -27,8 +27,10 @@
     <!-- Repository -->
     <string name="repository_empty">存储库为空</string>
     <string name="module_installed">已安装</string>
+    <string name="module_new">新</string>
     <!-- Advanced Menu -->
     <string name="menu_pin_installed">置顶已安装</string>
+    <string name="menu_pin_updatable">置顶可更新</string>
     <string name="menu_show_icon">显示图标</string>
     <string name="menu_show_license">显示许可证</string>
     <!-- View Module -->
@@ -54,7 +56,6 @@
 
     <!-- Modules -->
     <string name="modules_empty">没找到任何模块</string>
-    <!-- Module Item -->
     <string name="module_version_author">%1$s，作者 %2$s</string>
     <string name="module_remove">移除</string>
     <string name="module_restore">还原</string>

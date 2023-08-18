@@ -14,7 +14,7 @@ data class OnlineState(
         fun OnlineModule.createState(
             local: LocalModule?
         ): OnlineState {
-            val installed = local != null
+            val installed = local != null && local.id == id
             val updatable = if (installed) {
                 local!!.versionCode < versionCode
             } else {

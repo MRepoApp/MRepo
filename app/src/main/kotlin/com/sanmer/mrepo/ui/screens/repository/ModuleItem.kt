@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
@@ -65,7 +68,6 @@ fun ModuleItem(
             Spacer(modifier = Modifier.width(10.dp))
         }
 
-
         Column(
             modifier = Modifier.weight(1f)
         ) {
@@ -106,7 +108,7 @@ fun ModuleItem(
                 Row(
                     modifier = Modifier.padding(top = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     if (menu.showLicense) {
                         LabelItem(
@@ -114,10 +116,20 @@ fun ModuleItem(
                         )
                     }
 
-                    if (state.installed) {
-                        LabelItem(
-                            text = stringResource(id = R.string.module_installed).toUpperCase(Locale.current)
-                        )
+                    when {
+                        state.updatable ->
+                            LabelItem(
+                                text = stringResource(id = R.string.module_new)
+                                    .toUpperCase(Locale.current),
+                                containerColor = MaterialTheme.colorScheme.error,
+                                contentColor = MaterialTheme.colorScheme.onError
+                            )
+
+                        state.installed ->
+                            LabelItem(
+                                text = stringResource(id = R.string.module_installed)
+                                    .toUpperCase(Locale.current)
+                            )
                     }
                 }
             }
@@ -126,20 +138,27 @@ fun ModuleItem(
 }
 
 @Composable
-private fun LabelItem(text: String) {
+fun LabelItem(
+    text: String,
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    shape: Shape = RoundedCornerShape(3.dp)
+) {
     if (text.isBlank()) return
 
     Box(
-        modifier = Modifier.background(
-            color = MaterialTheme.colorScheme.primary,
-            shape = RoundedCornerShape(3.dp)
-        )
+        modifier = Modifier
+            .background(
+                color = containerColor,
+                shape = shape
+            ),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall
                 .copy(fontSize = 8.sp),
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = contentColor,
             modifier = Modifier
                 .padding(horizontal = 3.dp)
                 .align(Alignment.Center)

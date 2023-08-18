@@ -52,6 +52,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.isLoading
@@ -61,6 +63,7 @@ import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
+import com.sanmer.mrepo.ui.screens.repository.LabelItem
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.stringRequest
 import com.sanmer.mrepo.utils.extensions.toDate
@@ -70,6 +73,7 @@ import java.io.File
 @Composable
 fun VersionsPage(
     versions: List<Pair<Repo, VersionItem>>,
+    localVersionCode: Int,
     isRoot: Boolean,
     getProgress: @Composable (VersionItem) -> Float,
     downloader: (Context, File, VersionItem, Boolean) -> Unit
@@ -83,6 +87,7 @@ fun VersionsPage(
         VersionItem(
             item = item,
             repo = repo,
+            localVersionCode = localVersionCode,
             isRoot = isRoot,
             downloader = downloader
         )
@@ -106,6 +111,7 @@ fun VersionsPage(
 private fun VersionItem(
     item: VersionItem,
     repo: Repo,
+    localVersionCode: Int,
     isRoot: Boolean,
     downloader: (Context, File, VersionItem, Boolean) -> Unit
 ) {
@@ -129,10 +135,24 @@ private fun VersionItem(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
-                text = item.versionDisplay,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = item.versionDisplay,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                if (localVersionCode < item.versionCode) {
+                    LabelItem(
+                        text = stringResource(id = R.string.module_new)
+                            .toUpperCase(Locale.current),
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    )
+                }
+            }
 
             Text(
                 text = stringResource(id = R.string.view_module_provided, repo.name),

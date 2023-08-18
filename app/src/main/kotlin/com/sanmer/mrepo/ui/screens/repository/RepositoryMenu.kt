@@ -162,6 +162,12 @@ private fun BottomSheet(
             )
 
             MenuChip(
+                selected = menu.pinUpdatable,
+                onClick = { setMenu(menu.copy(pinUpdatable = !menu.pinUpdatable)) },
+                label = { Text(text = stringResource(id = R.string.menu_pin_updatable)) }
+            )
+
+            MenuChip(
                 selected = menu.showIcon,
                 onClick = { setMenu(menu.copy(showIcon = !menu.showIcon)) },
                 label = { Text(text = stringResource(id = R.string.menu_show_icon)) }

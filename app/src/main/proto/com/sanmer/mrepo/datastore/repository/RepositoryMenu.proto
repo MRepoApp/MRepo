@@ -10,9 +10,10 @@ enum Option {
 
 message RepositoryMenu {
   Option option = 1;
-  bool pinInstalled = 2;
-  bool descending = 3;
-  bool showIcon = 4;
-  bool showLicense = 5;
-  bool showUpdatedTime = 6;
+  bool descending = 2;
+  bool pinInstalled = 3;
+  bool pinUpdatable = 4;
+  bool showIcon = 5;
+  bool showLicense = 6;
+  bool showUpdatedTime = 7;
 }

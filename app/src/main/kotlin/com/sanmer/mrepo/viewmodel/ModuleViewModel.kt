@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +52,11 @@ class ModuleViewModel @Inject constructor(
 
     var local by mutableStateOf(LocalModule.example())
         private set
+    private val installed get() = local.id == online.id
+    val localVersionCode get() = if (installed) local.versionCode else Int.MAX_VALUE
+
+    var updatableSize by mutableIntStateOf(0)
+        private set
 
     init {
         Timber.d("ModuleViewModel init: $moduleId")
@@ -81,6 +87,10 @@ class ModuleViewModel @Inject constructor(
 
                 versions.add(item)
                 if (track !in tracks) tracks.add(track)
+            }
+
+            if (installed) {
+                updatableSize = versions.count { it.second.versionCode > local.versionCode }
             }
         }
 
@@ -122,7 +132,7 @@ class ModuleViewModel @Inject constructor(
 
         LaunchedEffect(key1 = suState, key2 = local) {
             launch(Dispatchers.Default) {
-                if (local != LocalModule.example()) {
+                if (installed) {
                     state.value = local.createState(fs)
                 }
             }

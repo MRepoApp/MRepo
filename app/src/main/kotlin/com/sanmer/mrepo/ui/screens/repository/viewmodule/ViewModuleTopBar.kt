@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -30,8 +32,8 @@ import com.sanmer.mrepo.ui.component.CollapsingTopAppBar
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
-import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LabelItem
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LicenseItem
+import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.TagItem
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.TrackItem
 import com.sanmer.mrepo.utils.extensions.openUrl
 
@@ -114,11 +116,14 @@ private fun topBarContent(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
+
             Text(
-                text = if (hasLicense) {
-                    "ID = ${module.id}, License = ${module.track.license}"
-                } else {
-                    "ID = ${module.id}"
+                text = buildAnnotatedString {
+                    append("ID = ${module.id}")
+                    if (hasLicense) {
+                        append(", ")
+                        append("License = ${module.track.license}")
+                    }
                 },
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.outline
@@ -144,7 +149,7 @@ private fun topBarContent(
         }
 
         if (hasDonate) {
-            LabelItem(
+            TagItem(
                 icon = R.drawable.coin_outline,
                 onClick = { context.openUrl(module.track.donate) }
             )

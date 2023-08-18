@@ -67,10 +67,16 @@ class RepositoryViewModel @Inject constructor(
                 values.sortedWith(
                     comparator(menu.option, menu.descending)
                 ).let { v ->
-                    if (menu.pinInstalled) {
+                    val a = if (menu.pinInstalled) {
                         v.sortedByDescending { it.first.installed }
                     } else {
                         v
+                    }
+
+                    if (menu.pinUpdatable) {
+                        a.sortedByDescending { it.first.updatable }
+                    } else {
+                        a
                     }
                 }
             }

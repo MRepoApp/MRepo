@@ -27,7 +27,7 @@ fun LicenseItem(
 ) = Box {
     var open by rememberSaveable { mutableStateOf(false) }
 
-    LabelItem(
+    TagItem(
         icon = R.drawable.receipt_search_outline,
         onClick = { open = true }
     )
