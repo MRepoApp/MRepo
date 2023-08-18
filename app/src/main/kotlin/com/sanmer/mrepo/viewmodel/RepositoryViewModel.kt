@@ -85,21 +85,23 @@ class RepositoryViewModel @Inject constructor(
         return list.value
     }
 
-    private fun comparator(option: Option, descending: Boolean): Comparator<Pair<OnlineState, OnlineModule>> =
-        if (descending) {
-            when (option) {
-                Option.NAME -> compareByDescending { it.second.name }
-                Option.UPDATED_TIME -> compareBy { it.first.lastUpdated }
-                else -> compareByDescending { null }
-            }
-
-        } else {
-            when (option) {
-                Option.NAME -> compareBy { it.second.name }
-                Option.UPDATED_TIME -> compareByDescending { it.first.lastUpdated }
-                else -> compareByDescending { null }
-            }
+    private fun comparator(
+        option: Option,
+        descending: Boolean
+    ): Comparator<Pair<OnlineState, OnlineModule>> = if (descending) {
+        when (option) {
+            Option.NAME -> compareByDescending { it.second.name }
+            Option.UPDATED_TIME -> compareBy { it.first.lastUpdated }
+            else -> compareByDescending { null }
         }
+
+    } else {
+        when (option) {
+            Option.NAME -> compareBy { it.second.name }
+            Option.UPDATED_TIME -> compareByDescending { it.first.lastUpdated }
+            else -> compareByDescending { null }
+        }
+    }
 
     fun closeSearch() {
         isSearch = false

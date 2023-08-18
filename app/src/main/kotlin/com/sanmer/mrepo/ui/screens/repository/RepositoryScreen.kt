@@ -42,6 +42,8 @@ fun RepositoryScreen(
     val userPreferences = LocalUserPreferences.current
     val repositoryMenu = userPreferences.repositoryMenu
 
+    val list = viewModel.getOnlineSortedBy(menu = repositoryMenu)
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
 
@@ -49,8 +51,6 @@ fun RepositoryScreen(
         refreshing = viewModel.isRefreshing,
         onRefresh = { viewModel.getOnlineAll() }
     )
-
-    val list = viewModel.getOnlineSortedBy(menu = repositoryMenu)
 
     BackHandler(
         enabled = viewModel.isSearch,

@@ -51,11 +51,6 @@ import com.sanmer.mrepo.ui.component.SegmentedButtonsDefaults
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.expandedShape
 
-val options = listOf(
-    Option.NAME to R.string.menu_sort_option_name,
-    Option.UPDATED_TIME to R.string.menu_sort_option_updated
-)
-
 @Composable
 fun RepositoryMenu(
     setMenu: (RepositoryMenuExt) -> Unit
@@ -93,6 +88,11 @@ private fun BottomSheet(
     shape = BottomSheetDefaults.expandedShape(15.dp),
     windowInsets = WindowInsets.navigationBars
 ) {
+    val options = listOf(
+        Option.NAME to R.string.menu_sort_option_name,
+        Option.UPDATED_TIME to R.string.menu_sort_option_updated
+    )
+
     Text(
         text = stringResource(id = R.string.menu_advanced_menu),
         style = MaterialTheme.typography.headlineSmall,

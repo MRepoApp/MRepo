@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -48,15 +47,15 @@ fun ModuleItem(
     enabled = enabled,
     shape = RoundedCornerShape(10.dp)
 ) {
+    val userPreferences = LocalUserPreferences.current
+    val menu = userPreferences.repositoryMenu
+    val hasLabel = (state.hasLicense && menu.showLicense)
+            || state.installed
+
     Row(
         modifier = Modifier.padding(all = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val userPreferences = LocalUserPreferences.current
-        val menu = userPreferences.repositoryMenu
-        val hasLabel = (state.hasLicense && menu.showLicense)
-                || state.installed
-
         if (menu.showIcon) {
             Logo(
                 icon = R.drawable.box_outline,
