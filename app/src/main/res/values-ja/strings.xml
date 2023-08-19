@@ -39,7 +39,6 @@
     <string name="app_theme_dark_theme_dark">ダーク</string>
     <string name="repo_options_update">更新</string>
     <string name="app_theme_dark_theme_light">ライト</string>
-    <string name="repo_options_share">共有</string>
     <string name="message_download_success">ダウンロードに成功</string>
     <string name="message_loading">読み込み中…</string>
     <string name="settings_menu_reboot_recovery">Recovery へ再起動</string>

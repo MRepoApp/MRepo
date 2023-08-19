@@ -59,7 +59,6 @@
     <string name="app_theme_dark_theme_dark">Karanlık</string>
     <string name="repo_modules">%1$d modül</string>
     <string name="repo_options_update">Güncelle</string>
-    <string name="repo_options_share">Paylaş</string>
     <string name="repo_options_delete">Sil</string>
     <string name="repo_delete_dialog_desc2">İpucu: Yüklü tüm modüller cihazınızda kalacaktır.</string>
     <string name="repo_add_dialog_title">Repo ekle</string>

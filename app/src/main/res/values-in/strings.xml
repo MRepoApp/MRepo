@@ -64,7 +64,6 @@
     <string name="app_theme_dark_theme_dark">Gelap</string>
     <string name="repo_modules">%1$d modul</string>
     <string name="repo_options_update">Perbarui</string>
-    <string name="repo_options_share">Bagikan</string>
     <string name="repo_options_delete">Hapus</string>
     <string name="repo_delete_dialog_desc1">Apakah Anda yakin akan menghapus %1$s\?</string>
     <string name="view_module_version_dialog_desc">Apakah Anda ingin memasang atau men-download modul versi ini\?</string>

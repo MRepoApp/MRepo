@@ -102,7 +102,6 @@
     <string name="repo_update_at">Updated at: %1$s</string>
     <string name="repo_incompatible">Incompatible</string>
     <string name="repo_options_update">Update</string>
-    <string name="repo_options_share">Share</string>
     <string name="repo_options_delete">Delete</string>
     <string name="repo_delete_dialog_desc1">Are you sure to delete %1$s?</string>
     <string name="repo_delete_dialog_desc2">Tip: All installed modules will be retained on your device.</string>

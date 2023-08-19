@@ -48,7 +48,6 @@
     <string name="module_download">Descarcă</string>
     <string name="search_placeholder">Căutare…</string>
     <string name="view_module_page_versions">Versiuni</string>
-    <string name="repo_options_share">Partajează</string>
     <string name="settings_app_theme_desc">Schimbă modul de noapte și paleta tematică</string>
     <string name="settings_repo_desc">Gestionează depozitele de module Magisk</string>
     <string name="app_theme_dark_theme">Tema întunecată</string>

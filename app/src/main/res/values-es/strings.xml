@@ -53,7 +53,6 @@
     <string name="app_theme_dark_theme_dark">Oscuro</string>
     <string name="repo_modules">%1$d módulos</string>
     <string name="repo_options_update">Actualización</string>
-    <string name="repo_options_share">Compartir</string>
     <string name="repo_options_delete">Eliminar</string>
     <string name="repo_delete_dialog_desc1">¿Estás seguro de eliminarlo %1$s\?</string>
     <string name="repo_delete_dialog_desc2">Sugerencia: Todos los módulos instalados permanecerán en tu dispositivo.</string>
