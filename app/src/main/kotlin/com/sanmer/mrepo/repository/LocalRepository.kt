@@ -16,7 +16,6 @@ import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.utils.extensions.merge
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -41,21 +40,15 @@ class LocalRepository @Inject constructor(
 
     init {
         getLocalAllAsFlow()
-            .distinctUntilChanged()
             .onEach { list ->
-                if (list.isEmpty()) return@onEach
-
                 _local = list
-                Timber.d("update local modules")
+                Timber.d("update local: ${list.size}")
             }.launchIn(applicationScope)
 
         getOnlineAllAsFlow()
-            .distinctUntilChanged()
             .onEach { list ->
-                if (list.isEmpty()) return@onEach
-
                 _online = list
-                Timber.d("update online modules")
+                Timber.d("update online: ${list.size}")
             }.launchIn(applicationScope)
     }
 
@@ -87,10 +80,6 @@ class LocalRepository @Inject constructor(
 
     suspend fun insertRepo(value: Repo) = withContext(Dispatchers.IO) {
         repoDao.insert(value)
-    }
-
-    suspend fun updateRepo(value: Repo) = withContext(Dispatchers.IO) {
-        repoDao.update(value)
     }
 
     suspend fun deleteRepo(value: Repo) = withContext(Dispatchers.IO) {

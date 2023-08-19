@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.sanmer.mrepo.database.entity.Repo
 import kotlinx.coroutines.flow.Flow
 
@@ -20,11 +19,8 @@ interface RepoDao {
     @Query("SELECT * FROM repos WHERE url = :url LIMIT 1")
     fun getByUrl(url: String): Repo
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: Repo)
-
-    @Update
-    suspend fun update(value: Repo)
 
     @Delete
     suspend fun delete(value: Repo)

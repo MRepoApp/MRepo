@@ -57,7 +57,7 @@ class RepositoriesViewModel @Inject constructor(
     }
 
     fun update(repo: Repo) = viewModelScope.launch {
-        localRepository.updateRepo(repo)
+        localRepository.insertRepo(repo)
     }
 
     fun delete(repo: Repo) = viewModelScope.launch {
