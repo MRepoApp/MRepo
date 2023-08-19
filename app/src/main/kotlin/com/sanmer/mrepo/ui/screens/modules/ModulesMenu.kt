@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.modules
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -9,14 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -30,21 +27,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.datastore.repository.Option
-import com.sanmer.mrepo.model.local.LocalModule
-import com.sanmer.mrepo.model.online.OnlineModule
-import com.sanmer.mrepo.model.state.LocalState
-import com.sanmer.mrepo.model.state.OnlineState
+import com.sanmer.mrepo.ui.component.MenuChip
 import com.sanmer.mrepo.ui.component.Segment
 import com.sanmer.mrepo.ui.component.SegmentedButtons
 import com.sanmer.mrepo.ui.component.SegmentedButtonsDefaults
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
-import com.sanmer.mrepo.ui.screens.repository.MenuChip
 import com.sanmer.mrepo.ui.utils.expandedShape
-import com.sanmer.mrepo.viewmodel.ModuleViewModel
-import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun ModulesMenu(

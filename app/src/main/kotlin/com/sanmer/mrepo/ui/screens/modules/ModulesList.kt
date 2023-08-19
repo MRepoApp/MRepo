@@ -126,7 +126,7 @@ private fun RemoveOrRestore(
 ) = FilledTonalButton(
     onClick = onClick,
     enabled = enabled,
-    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 12.dp)
+    contentPadding = PaddingValues(horizontal = 12.dp)
 ) {
     Icon(
         modifier = Modifier.size(20.dp),

@@ -1,8 +1,6 @@
 package com.sanmer.mrepo.ui.screens.repository
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,18 +16,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.state.OnlineState
+import com.sanmer.mrepo.ui.component.LabelItem
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.toDate
@@ -133,34 +129,5 @@ fun ModuleItem(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun LabelItem(
-    text: String,
-    containerColor: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
-    shape: Shape = RoundedCornerShape(3.dp)
-) {
-    if (text.isBlank()) return
-
-    Box(
-        modifier = Modifier
-            .background(
-                color = containerColor,
-                shape = shape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall
-                .copy(fontSize = 8.sp),
-            color = contentColor,
-            modifier = Modifier
-                .padding(horizontal = 3.dp)
-                .align(Alignment.Center)
-        )
     }
 }

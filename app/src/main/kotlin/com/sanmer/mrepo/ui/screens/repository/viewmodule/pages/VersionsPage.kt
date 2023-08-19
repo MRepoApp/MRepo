@@ -60,10 +60,10 @@ import com.sanmer.mrepo.app.event.isLoading
 import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.online.VersionItem
+import com.sanmer.mrepo.ui.component.LabelItem
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
-import com.sanmer.mrepo.ui.screens.repository.LabelItem
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.stringRequest
 import com.sanmer.mrepo.utils.extensions.toDate

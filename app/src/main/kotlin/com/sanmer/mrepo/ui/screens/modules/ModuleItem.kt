@@ -35,7 +35,6 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
-import com.sanmer.mrepo.utils.extensions.formatSize
 import com.sanmer.mrepo.utils.extensions.toDate
 
 @Composable
@@ -120,12 +119,12 @@ fun ModuleItem(
             HorizontalDivider(
                 thickness = 1.5.dp,
                 color = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(top = 8.dp)
             )
 
             Row(
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
