@@ -20,7 +20,6 @@
     <string name="page_settings">الإعدادات</string>
     <string name="settings_root_granted">تم التصريح</string>
     <string name="settings_root_not_available">غير متاح</string>
-    <string name="repo_notification_desc">هي مسؤولية مالك المستودع. في حال وجود مشاكل حول هذا المستودع ، يرجى الاتصال بمالكه.</string>
     <string name="module_version_author">%1$sبواسطة%2$s</string>
     <string name="license_fsf_libre">FSF الحر</string>
     <string name="settings_menu_reboot">إعادة تشغيل</string>
@@ -85,6 +84,5 @@
     <string name="view_module_version_dialog_desc">هل تريد تثبيت او تنزيل هذا الإصدار من الوحدة؟</string>
     <string name="settings_app_desc">اعدادات حول تطبيق MRepo نفسه</string>
     <string name="settings_about">حول</string>
-    <string name="repo_notification_title">عرض محتويات الوحدات</string>
     <string name="about_app_version">الإصدار %1$s (%2$s)</string>
 </resources>

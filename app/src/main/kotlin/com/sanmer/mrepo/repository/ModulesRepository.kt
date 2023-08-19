@@ -25,40 +25,24 @@ class ModulesRepository @Inject constructor(
             }
     }
 
-    suspend fun getRepoAll() = withContext(Dispatchers.IO) {
-        localRepository.getEnableAll().map { repo ->
-            runRequest {
-                val api = RepoApi.build(repo.url)
-                return@runRequest api.getModules().execute()
-            }.onSuccess { modulesJson ->
-                val new = repo.copy(modulesJson)
-                if (!new.isCompatible) {
-                    localRepository.updateRepo(new.copy(enable = false))
-                    return@onSuccess
-                } else {
-                    localRepository.updateRepo(new)
-                }
-
-                localRepository.deleteOnlineByUrl(repo.url)
-                localRepository.insertOnline(
-                    list = modulesJson.modules,
-                    repoUrl = repo.url
-                )
-            }.onFailure {
-                Timber.e(it, "getRepoAll: ${repo.url}")
-            }
+    suspend fun getRepoAll() =
+        localRepository.getEnableAll().map {
+            getRepo(it)
         }
-    }
 
     suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
-        runRequest(
-            run = {
-                val api = RepoApi.build(repo.url)
-                api.getModules().execute()
-            }
-        ) {
-            val new = repo.copy(it)
-            if (new.isCompatible) new else new.copy(enable = false)
+        runRequest {
+            val api = RepoApi.build(repo.url)
+            return@runRequest api.getModules().execute()
+        }.onSuccess { modulesJson ->
+            localRepository.updateRepo(repo.copy(modulesJson))
+            localRepository.deleteOnlineByUrl(repo.url)
+            localRepository.insertOnline(
+                list = modulesJson.modules,
+                repoUrl = repo.url
+            )
+        }.onFailure {
+            Timber.e(it, "getRepo: ${repo.url}")
         }
     }
 }

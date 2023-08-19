@@ -59,7 +59,6 @@
     <string name="repo_delete_dialog_desc2">Astuce : Tous les modules installés resteront sur votre périphérique.</string>
     <string name="repo_add_dialog_title">ajouter dépôt</string>
     <string name="repo_add_dialog_add">Ajouter</string>
-    <string name="repo_notification_desc">L\’examen de contenu des modules est de la responsabilité des propriétaires du dépôt. Pour tout problème à propos de ce dépôt, merci de contacter son propriétaire.</string>
     <string name="dialog_attention">Attention</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="dialog_ok">OK</string>

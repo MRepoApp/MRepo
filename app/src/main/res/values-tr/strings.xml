@@ -65,8 +65,6 @@
     <string name="repo_add_dialog_title">Repo ekle</string>
     <string name="repo_delete_dialog_desc1">%1$s silmek istediğinizden emin misiniz\?</string>
     <string name="repo_add_dialog_add">Ekle</string>
-    <string name="repo_notification_title">Modüllerin İçerik İncelemesi</string>
-    <string name="repo_notification_desc">Bu, repo sahibinin sorumluluğundadır. Bir repoyla ilgili herhangi bir sorun için lütfen sahibiyle iletişime geçin.</string>
     <string name="about_app_version">Sürüm %1$s (%2$s)</string>
     <string name="about_desc1">Magisk ve KernelSU için modül repoları sağlayın ve modülleri yönetin.</string>
     <string name="about_desc2">%1$s tarafından ❤️ ile yapılmıştır</string>
@@ -87,7 +85,6 @@
     <string name="settings_root_not_available">Mevcut değil</string>
     <string name="settings_menu_reboot_userspace">Arayüzü yeniden başlat</string>
     <string name="settings_menu_reboot_bootloader">Bootloader modunda başlat</string>
-    <string name="repo_incompatible_desc">Şimdiki sürüm %1$d, lütfen %2$d sürümüne güncelleyin</string>
     <string name="view_module_last_updated">Son güncelleme</string>
     <string name="view_module_cloud">Bulut</string>
     <string name="view_module_homepage">Anaysayfa</string>

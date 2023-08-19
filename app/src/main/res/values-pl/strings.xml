@@ -72,8 +72,6 @@
     <string name="repo_delete_dialog_desc2">Wszystkie zainstalowane moduły pozostaną na urządzeniu.</string>
     <string name="repo_add_dialog_title">Dodaj repozytorium</string>
     <string name="repo_add_dialog_add">Dodaj</string>
-    <string name="repo_notification_title">Przegląd zawartości modułów</string>
-    <string name="repo_notification_desc">Odpowiada za to właściciel repozytorium. W razie problemów z repozytorium, skontaktuj się z jego właścicielem.</string>
     <string name="about_app_version">Wersja %1$s (%2$s)</string>
     <string name="about_desc1">Zarządza repozytoriami, modułami Magisk i KernelSU.</string>
     <string name="about_desc2">Stworzone z ❤️ przez %1$s</string>
@@ -87,7 +85,6 @@
     <string name="search_empty">Nic nie znaleziono</string>
     <string name="search_placeholder">Wyszukaj…</string>
     <string name="unknown_error">Nieznany błąd</string>
-    <string name="repo_incompatible_desc">Aktualna wersja to %1$d, zaktualizuj do wersji %2$d</string>
     <string name="view_module_cloud">Chmura</string>
     <string name="view_module_source">Kod źródłowy</string>
     <string name="view_module_last_updated">Zaktualizowano</string>

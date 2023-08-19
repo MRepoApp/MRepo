@@ -37,7 +37,7 @@ class RepositoriesViewModel @Inject constructor(
     var progress by mutableStateOf(false)
         private set
 
-    private inline fun <T> T.updateProgress(callback: T.() -> Unit) {
+    private inline fun <T> T.refreshing(callback: T.() -> Unit) {
         progress  = true
         callback()
         progress = false
@@ -48,18 +48,14 @@ class RepositoriesViewModel @Inject constructor(
     }
 
     fun insert(
-        repoUrl: String,
-        onFailure: (Repo, Throwable) -> Unit
+        repo: Repo,
+        onFailure: (Throwable) -> Unit
     ) = viewModelScope.launch {
-        updateProgress {
-            val repo = repoUrl.toRepo()
-
+        refreshing {
             modulesRepository.getRepo(repo)
-                .onSuccess {
-                    localRepository.insertRepo(it)
-                }.onFailure {
-                    onFailure(repo, it)
-                    Timber.e(it, "getRepo: $repoUrl")
+                .onFailure {
+                    onFailure(it)
+                    Timber.e(it, "getRepo: ${repo.url}")
                 }
         }
     }
@@ -77,14 +73,18 @@ class RepositoriesViewModel @Inject constructor(
         repo: Repo,
         onFailure: (Throwable) -> Unit
     ) = viewModelScope.launch {
-        updateProgress {
+        refreshing {
             modulesRepository.getRepo(repo)
-                .onSuccess {
-                    localRepository.updateRepo(it)
-                }.onFailure {
+                .onFailure {
                     onFailure(it)
                     Timber.e(it, "getUpdate: ${repo.url}")
                 }
+        }
+    }
+
+    fun getRepoAll() = viewModelScope.launch {
+        refreshing {
+            modulesRepository.getRepoAll()
         }
     }
 }

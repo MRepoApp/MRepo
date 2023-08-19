@@ -100,16 +100,14 @@
     <!-- Repo -->
     <string name="repo_modules">%1$d modules</string>
     <string name="repo_update_at">Updated at: %1$s</string>
-    <string name="repo_incompatible_desc">The current version is %1$d, please upgrade version to %2$d</string>
+    <string name="repo_incompatible">Incompatible</string>
     <string name="repo_options_update">Update</string>
     <string name="repo_options_share">Share</string>
     <string name="repo_options_delete">Delete</string>
     <string name="repo_delete_dialog_desc1">Are you sure to delete %1$s?</string>
-    <string name="repo_delete_dialog_desc2">Tip: All installed modules will remain on your device.</string>
+    <string name="repo_delete_dialog_desc2">Tip: All installed modules will be retained on your device.</string>
     <string name="repo_add_dialog_title">Add repository</string>
     <string name="repo_add_dialog_add">Add</string>
-    <string name="repo_notification_title">Content Review of Modules</string>
-    <string name="repo_notification_desc">It is the responsibility of the repository owner. For any issues about this repository, please contact its owner.</string>
     <!-- About -->
     <string name="about_app_version">Version %1$s (%2$s)</string>
     <string name="about_desc1">Provide modules repositories and Manage modules for Magisk and KernelSU.</string>

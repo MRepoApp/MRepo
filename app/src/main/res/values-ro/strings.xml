@@ -59,7 +59,6 @@
     <string name="repo_delete_dialog_desc2">Sfat: Toate modulele instalate vor rămâne pe dispozitivul tău.</string>
     <string name="repo_add_dialog_title">Adaugă un depozit</string>
     <string name="repo_add_dialog_add">Adaugă</string>
-    <string name="repo_notification_desc">Este responsabilitatea proprietarului depozitului. Pentru orice probleme legate de acest depozit, contactează proprietarul acestuia.</string>
     <string name="dialog_attention">Atenție</string>
     <string name="dialog_cancel">Anulează</string>
     <string name="dialog_ok">OK</string>
@@ -82,7 +81,6 @@
     <string name="view_module_version">Versiune</string>
     <string name="view_module_module_directory">Locația modulelor</string>
     <string name="view_module_last_modified">Ultima modificare</string>
-    <string name="repo_notification_title">Revizuirea conținutului modulelor</string>
     <string name="about_app_version">Versiunea %1$s (%2$s)</string>
     <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
     <string name="about_desc2">Făcut cu ❤️ de %1$s</string>

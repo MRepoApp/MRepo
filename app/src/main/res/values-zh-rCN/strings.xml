@@ -100,7 +100,7 @@
     <!-- Repo -->
     <string name="repo_modules">%1$d 个模块</string>
     <string name="repo_update_at">更新于：%1$s</string>
-    <string name="repo_incompatible_desc">当前版本为 %1$d，请升级至 %2$d</string>
+    <string name="repo_incompatible">不兼容</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_share">分享</string>
     <string name="repo_options_delete">删除</string>
@@ -108,8 +108,6 @@
     <string name="repo_delete_dialog_desc2">提示：已安装的所有模块会保留在你的设备上。</string>
     <string name="repo_add_dialog_title">添加存储库</string>
     <string name="repo_add_dialog_add">添加</string>
-    <string name="repo_notification_title">模块的内容审查</string>
-    <string name="repo_notification_desc">由存储库所有者负责。关于该存储库的任何问题，请联系其所有者。</string>
     <!-- About -->
     <string name="about_app_version">版本 %1$s (%2$s)</string>
     <string name="about_desc1">为 Magisk 和 KernelSU 提供模块存储库以及模块管理。</string>

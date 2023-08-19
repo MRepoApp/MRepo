@@ -2,310 +2,165 @@ package com.sanmer.mrepo.ui.screens.settings.repositories
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.model.online.ModulesJson
-import com.sanmer.mrepo.ui.component.Checkbox
-import com.sanmer.mrepo.ui.component.DropdownMenu
-import com.sanmer.mrepo.utils.extensions.shareText
+import com.sanmer.mrepo.ui.component.LabelItem
 import com.sanmer.mrepo.utils.extensions.toDateTime
-
-private enum class Menu(
-    @StringRes val label: Int,
-    @DrawableRes val icon: Int
-) {
-    Update(
-        label = R.string.repo_options_update,
-        icon = R.drawable.import_outline
-    ),
-
-    Share(
-        label = R.string.repo_options_share,
-        icon = R.drawable.send_outline
-    ),
-
-    Delete(
-        label = R.string.repo_options_delete,
-        icon = R.drawable.trash_outline
-    )
-}
-
-private val options = listOf(
-    Menu.Update,
-    Menu.Share,
-    Menu.Delete
-)
 
 @Composable
 fun RepositoryItem(
     repo: Repo,
-    deleteRepo: (Repo) -> Unit,
-    updateRepo: (Repo) -> Unit,
-    getRepoUpdate: (Repo, (Throwable) -> Unit) -> Unit
+    toggle: (Boolean) -> Unit,
+    onUpdate: () -> Unit,
+    onDelete: () -> Unit,
+) = Surface(
+    shape = RoundedCornerShape(12.dp),
+    color = MaterialTheme.colorScheme.surface,
+    tonalElevation = 1.dp,
+    onClick = { toggle(!repo.enable) },
 ) {
-    val context = LocalContext.current
-
-    var delete by remember { mutableStateOf(false) }
-    if (delete) DeleteDialog(
-        repo = repo,
-        onClose = { delete = false },
-        onConfirm = { deleteRepo(repo) }
-    )
-
-    var failure by remember { mutableStateOf(false) }
-    var message: String? by remember { mutableStateOf(null) }
-    if (failure) FailureDialog(
-        repo = repo,
-        message = message,
-        onClose = {
-            failure = false
-            message = null
-        }
-    )
-
-    val onUpdate: () -> Unit = {
-        getRepoUpdate(repo) {
-            failure = true
-            message = it.message
-        }
+    val (alpha, textDecoration) = when {
+        !repo.isCompatible -> 0.5f to TextDecoration.LineThrough
+        !repo.enable -> 0.5f to TextDecoration.None
+        else -> 1f to TextDecoration.None
     }
 
-    var expanded by remember { mutableStateOf(false) }
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { expanded = false },
-        offset = DpOffset(12.dp, 12.dp),
-        shape = RoundedCornerShape(15.dp),
-        contentAlignment = Alignment.TopEnd,
-        surface = {
-            RepoItem(
-                repo = repo,
-                onChange = { updateRepo(repo.copy(enable = it)) },
-                onIconClick = { expanded = true }
-            )
-        }
-    ) {
-        options.forEach { option ->
-            MenuItem(
-                value = option,
-                onClose = { expanded = false },
-                onDelete = { delete = true },
-                onShare = { context.shareText(repo.url) },
-                onUpdate = onUpdate
-            )
-        }
-    }
-}
-
-@Composable
-private fun RepoItem(
-    repo: Repo,
-    onChange: (Boolean) -> Unit,
-    onIconClick: () -> Unit
-) {
-    val alpha by remember {
-        derivedStateOf { if (repo.isCompatible) 1f else 0.6f }
-    }
-
-    val (checkedState, onStateChange) = remember {
-        mutableStateOf(repo.enable && repo.isCompatible)
-    }
-
-    Row(
+    Column(
         modifier = Modifier
-            .alpha(alpha)
-            .clip(RoundedCornerShape(10.dp))
-            .toggleable(
-                enabled = repo.isCompatible,
-                value = checkedState,
-                onValueChange = {
-                    onStateChange(it)
-                    onChange(it)
-                }
-            )
-            .padding(all = 16.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(all = 12.dp)
+            .fillMaxWidth()
     ) {
-        Checkbox(
-            checked = checkedState,
-            onCheckedChange = null
-        )
-
-        Spacer(modifier = Modifier.width(16.dp))
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+        Row(
+            verticalAlignment = Alignment.Top
         ) {
-            Text(
-                text = repo.name,
-                style = MaterialTheme.typography.titleSmall
-            )
+            Crossfade(
+                targetState = repo.enable,
+                label = "RepositoryItem"
+            ) {
+                if (it) {
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        painter = painterResource(id = R.drawable.tick_circle_bold),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                } else {
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        painter = painterResource(id = R.drawable.close_circle_bold),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
 
-            Text(
-                text = stringResource(
-                    id = R.string.repo_modules,
-                    repo.metadata.size
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
-            )
-            Text(
-                text = stringResource(
-                    id = R.string.repo_update_at,
-                    repo.metadata.timestamp.toDateTime()
-                ),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.outline
-            )
-
-            if (!repo.isCompatible) {
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .alpha(alpha),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
                 Text(
-                    text = stringResource(
-                        id = R.string.repo_incompatible_desc,
-                        repo.metadata.version, ModulesJson.CURRENT_VERSION
-                    ),
+                    text = repo.name,
+                    style = MaterialTheme.typography.titleSmall
+                        .copy(fontWeight = FontWeight.Bold),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    textDecoration = textDecoration
+                )
+
+                Text(
+                    text = stringResource(id = R.string.module_update_at,
+                        repo.metadata.timestamp.toDateTime()),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error
+                    color = MaterialTheme.colorScheme.outline,
+                    textDecoration = textDecoration
+                )
+            }
+
+            if (repo.isCompatible) {
+                LabelItem(
+                    text = stringResource(id = R.string.repo_modules,
+                        repo.metadata.size)
+                )
+            } else {
+                LabelItem(
+                    text = stringResource(id = R.string.repo_incompatible)
+                        .toUpperCase(Locale.current),
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
                 )
             }
         }
 
-        IconButton(
-            onClick = onIconClick
+        Row(
+            modifier = Modifier.padding(top = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null
+            Spacer(modifier = Modifier.weight(1f))
+
+            ButtonItem(
+                icon = R.drawable.import_outline,
+                label = R.string.repo_options_update,
+                onClick = onUpdate
+            )
+
+            ButtonItem(
+                icon = R.drawable.trash_outline,
+                label = R.string.repo_options_delete,
+                onClick = onDelete
             )
         }
     }
 }
 
 @Composable
-private fun MenuItem(
-    value: Menu,
-    onClose: () -> Unit,
-    onDelete: () -> Unit,
-    onShare: () -> Unit,
-    onUpdate: () -> Unit
-) = DropdownMenuItem(
-    leadingIcon = {
-        Icon(
-            modifier = Modifier.size(22.dp),
-            painter = painterResource(id = value.icon),
-            contentDescription = null
-        )
-    },
-    text = { Text(text = stringResource(id = value.label)) },
-    onClick = {
-        when (value) {
-            Menu.Delete -> onDelete()
-            Menu.Share -> onShare()
-            Menu.Update -> onUpdate()
-        }
-        onClose()
-    }
-)
+private fun ButtonItem(
+    @DrawableRes icon: Int,
+    @StringRes label: Int,
+    onClick: () -> Unit
+) = FilledTonalButton(
+    onClick = onClick,
+    contentPadding = PaddingValues(horizontal = 12.dp)
+) {
+    Icon(
+        modifier = Modifier.size(20.dp),
+        painter = painterResource(id = icon),
+        contentDescription = null
+    )
 
-@Composable
-private fun DeleteDialog(
-    repo: Repo,
-    onClose: () -> Unit,
-    onConfirm: () -> Unit
-) = AlertDialog(
-    shape = RoundedCornerShape(20.dp),
-    onDismissRequest = onClose,
-    title = { Text(text = stringResource(id = R.string.dialog_attention)) },
-    text = {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = stringResource(id = R.string.repo_delete_dialog_desc1, repo.name))
-
-            Spacer(modifier = Modifier.height(30.dp))
-            Text(text = stringResource(id = R.string.repo_delete_dialog_desc2))
-        }
-    },
-    confirmButton = {
-        TextButton(
-            onClick = {
-                onConfirm()
-                onClose()
-            }
-        ) {
-            Text(text = stringResource(id = R.string.repo_options_delete))
-        }
-    },
-    dismissButton = {
-        TextButton(
-            onClick = onClose
-        ) {
-            Text(text = stringResource(id = R.string.dialog_cancel))
-        }
-    }
-)
-
-@Composable
-fun FailureDialog(
-    repo: Repo,
-    message: String?,
-    onClose: () -> Unit
-) = AlertDialog(
-    shape = RoundedCornerShape(20.dp),
-    onDismissRequest = onClose,
-    title = { Text(text = repo.name) },
-    text = {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = message.toString(),
-                maxLines = 5,
-            )
-        }
-    },
-    confirmButton = {
-        TextButton(
-            onClick = onClose
-        ) {
-            Text(text = stringResource(id = R.string.dialog_ok))
-        }
-    }
-)
+    Spacer(modifier = Modifier.width(6.dp))
+    Text(
+        text = stringResource(id = label)
+    )
+}

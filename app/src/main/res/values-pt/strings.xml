@@ -58,7 +58,6 @@
     <string name="repo_delete_dialog_desc2">Dica: Todos os módulos permanecerão instalados em seu dispositivo.</string>
     <string name="repo_add_dialog_title">Adicionar repositório</string>
     <string name="repo_add_dialog_add">Adicionar</string>
-    <string name="repo_notification_desc">A revisão do conteúdo dos módulos é de responsabilidade do proprietário do repositório. Para quaisquer reclamações sobre este repositório, por favor, contate seu proprietário.</string>
     <string name="dialog_attention">Atenção</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_ok">Ok</string>
@@ -83,7 +82,6 @@
     <string name="view_module_module_directory">Diretório dos Módulos</string>
     <string name="view_module_version_dialog_desc">Você deseja instalar ou baixar esta versão desse módulo\?</string>
     <string name="settings_about">Sobre</string>
-    <string name="repo_notification_title">Revisão do conteúdo dos Módulos</string>
     <string name="about_app_version">Versão %1$s (%2$s)</string>
     <string name="about_desc1">Disponibiliza repositórios de módulos e gerencia módulos do Magisk e KernelSU.</string>
     <string name="about_desc2">Feito com ❤️ por %1$s</string>

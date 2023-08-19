@@ -47,7 +47,6 @@
     <string name="setup_non_root_desc1">No requiere acceso Root</string>
     <string name="settings_non_root_desc">La funcionalidad es limitada</string>
     <string name="app_theme_palette">Colores del fondo</string>
-    <string name="repo_notification_desc">La revisión del contenido de los módulos es responsabilidad del propietario del repositorio. Para cualquier cuestión sobre este repositorio, póngase en contacto con su propietario.</string>
     <string name="app_theme_dark_theme">Tema oscuro</string>
     <string name="app_theme_dark_theme_auto">Automático</string>
     <string name="app_theme_dark_theme_light">Claro</string>

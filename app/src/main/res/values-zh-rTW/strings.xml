@@ -74,8 +74,6 @@
     <string name="repo_delete_dialog_desc2">提示：已安裝的所有模組會保留在你的裝置上。</string>
     <string name="repo_add_dialog_title">新增儲存庫</string>
     <string name="repo_add_dialog_add">新增</string>
-    <string name="repo_notification_title">模組的內容審查</string>
-    <string name="repo_notification_desc">模組的內容審查由儲存庫所有者負責。關於該儲存庫的任何問題，請聯絡其所有者。</string>
     <string name="about_app_version">版本 %1$s (%2$s)</string>
     <string name="about_desc1">為 Magisk 和 KernelSU 提供模組儲存庫以及模組管理。</string>
     <string name="about_desc2">由 %1$s 用 ❤️ 製作</string>

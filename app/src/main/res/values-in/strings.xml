@@ -2,12 +2,10 @@
 <resources>
     <string name="setup_non_root_desc1">Tidak memerlukan akses Root</string>
     <string name="module_remove">Hapus</string>
-    <string name="repo_incompatible_desc">Versi saat ini adalah %1$d, harap upgrade versi ke %2$d</string>
     <string name="install_flashing">Flashing</string>
     <string name="page_repository">Repositori</string>
     <string name="view_module_module_directory">Direktori Modul</string>
     <string name="settings_log_viewer_desc">Melihat log jalannya aplikasi</string>
-    <string name="repo_notification_desc">Ini adalah tanggung jawab pemilik repositori. Untuk masalah apa pun mengenai repositori ini, silakan hubungi pemiliknya.</string>
     <string name="view_module_last_modified">Terakhir Diubah</string>
     <string name="settings_app_desc">Setelan seputar aplikasi MRepo ini sendiri</string>
     <string name="setup_mode">Mode Kerja</string>
@@ -74,7 +72,6 @@
     <string name="repo_delete_dialog_desc2">Tip: Semua modul yang terpasang akan tetap ada di perangkat Anda.</string>
     <string name="repo_add_dialog_title">Tambah repositori</string>
     <string name="repo_add_dialog_add">Tambah</string>
-    <string name="repo_notification_title">Tinjauan Isi Modul</string>
     <string name="about_app_version">Versi %1$s (%2$s)</string>
     <string name="about_desc1">Menyediakan repositori modul dan Mengelola modul untuk Magisk dan KernelSU.</string>
     <string name="about_desc2">Dibuat dengan ❤️ oleh %1$s</string>

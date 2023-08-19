@@ -79,8 +79,6 @@
     <string name="repo_delete_dialog_desc2">Заметка: все установленные модули останутся на вашем устройстве.</string>
     <string name="repo_add_dialog_title">Добавить репозиторий</string>
     <string name="repo_add_dialog_add">Добавить</string>
-    <string name="repo_notification_title">Обзор содержания модулей</string>
-    <string name="repo_notification_desc">Ответственность за это лежит на владельце репозитория. По любым вопросам, связанным с этим репозиторием, пожалуйста, обращайтесь к его владельцу.</string>
     <string name="about_app_version">Версия %1$s (%2$s)</string>
     <string name="about_desc1">Предоставление репозиториев модулей и управление модулями для Magisk и KernelSU.</string>
     <string name="about_desc2">Сделано с ❤️ %1$s</string>
