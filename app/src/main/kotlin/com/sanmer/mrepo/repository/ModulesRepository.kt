@@ -37,7 +37,7 @@ class ModulesRepository @Inject constructor(
             val api = RepoApi.build(repo.url)
             return@runRequest api.getModules().execute()
         }.onSuccess { modulesJson ->
-            localRepository.updateRepo(repo.copy(modulesJson))
+            localRepository.insertRepo(repo.copy(modulesJson))
             localRepository.deleteOnlineByUrl(repo.url)
             localRepository.insertOnline(
                 list = modulesJson.modules,
