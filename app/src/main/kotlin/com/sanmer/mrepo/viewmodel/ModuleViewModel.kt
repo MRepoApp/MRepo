@@ -3,15 +3,14 @@ package com.sanmer.mrepo.viewmodel
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.local.LocalModule
@@ -44,16 +43,22 @@ class ModuleViewModel @Inject constructor(
     }
 
     private val moduleId: String = checkNotNull(savedStateHandle["moduleId"])
-    private var _online: OnlineModule? by mutableStateOf(null)
-    val online get() = checkNotNull(_online)
+    var online: OnlineModule by mutableStateOf(OnlineModule.example())
+        private set
+
     val isEmptyAbout get() = online.track.homepage.isBlank()
             && online.track.source.isBlank()
             && online.track.support.isBlank()
 
     var local by mutableStateOf(LocalModule.example())
         private set
+
     private val installed get() = local.id == online.id
     val localVersionCode get() = if (installed) local.versionCode else Int.MAX_VALUE
+
+    private var localState: LocalState? by mutableStateOf(null)
+    val versions = mutableStateListOf<Pair<Repo, VersionItem>>()
+    val tracks = mutableStateListOf<Pair<Repo, TrackJson>>()
 
     var updatableSize by mutableIntStateOf(0)
         private set
@@ -61,8 +66,13 @@ class ModuleViewModel @Inject constructor(
     init {
         Timber.d("ModuleViewModel init: $moduleId")
 
+        getModule()
+        getVersionsAndTracks()
+    }
+
+    private fun getModule() {
         localRepository.online.first { it.id == moduleId }.apply {
-            _online = this
+            online = this
         }
 
         localRepository.local.find { it.id == moduleId }?.let {
@@ -70,31 +80,23 @@ class ModuleViewModel @Inject constructor(
         }
     }
 
-    @Composable
-    fun getVersionsAndTracks(): Pair<List<Pair<Repo, VersionItem>>, List<Pair<Repo, TrackJson>>> {
-        val versions = remember { mutableStateListOf<Pair<Repo, VersionItem>>() }
-        val tracks = remember { mutableStateListOf<Pair<Repo, TrackJson>>() }
+    private fun getVersionsAndTracks() = viewModelScope.launch {
+        online.versions.forEach {
+            val repo = localRepository.getRepoByUrl(it.repoUrl)
 
-        LaunchedEffect(online) {
-            online.versions.forEach {
-                val repo = localRepository.getRepoByUrl(it.repoUrl)
+            val item = repo to it
+            val track =  repo to localRepository.getOnlineByIdAndUrl(
+                id = online.id,
+                repoUrl = it.repoUrl
+            ).track
 
-                val item = repo to it
-                val track =  repo to localRepository.getOnlineByIdAndUrl(
-                    id = online.id,
-                    repoUrl = it.repoUrl
-                ).track
-
-                versions.add(item)
-                if (track !in tracks) tracks.add(track)
-            }
-
-            if (installed) {
-                updatableSize = versions.count { it.second.versionCode > local.versionCode }
-            }
+            versions.add(item)
+            if (track !in tracks) tracks.add(track)
         }
 
-        return versions to tracks
+        if (installed) {
+            updatableSize = versions.count { it.second.versionCode > local.versionCode }
+        }
     }
 
     fun downloader(
@@ -126,18 +128,14 @@ class ModuleViewModel @Inject constructor(
     fun rememberLocalState(
         suState: Event
     ): LocalState? {
-        val state: MutableState<LocalState?> = remember {
-            mutableStateOf(null)
-        }
-
         LaunchedEffect(key1 = suState, key2 = local) {
             launch(Dispatchers.Default) {
-                if (installed) {
-                    state.value = local.createState(fs)
+                if (installed && localState == null) {
+                    localState = local.createState(fs)
                 }
             }
         }
 
-        return state.value
+        return localState
     }
 }
