@@ -42,9 +42,11 @@ fun RepositoryList(
         items = list,
         key = { it.url }
     ) { repo ->
+        val value by remember(list) { mutableStateOf(repo) }
+
         RepositoryItem(
-            repo = repo,
-            toggle = { update(repo.copy(enable = it)) },
+            repo = value,
+            toggle = { update(it) },
             onUpdate = getUpdate,
             onDelete = delete,
         )
@@ -54,7 +56,7 @@ fun RepositoryList(
 @Composable
 private fun RepositoryItem(
     repo: Repo,
-    toggle: (Boolean) -> Unit,
+    toggle: (Repo) -> Unit,
     onUpdate: (Repo, (Throwable) -> Unit) -> Unit,
     onDelete: (Repo) -> Unit,
 ) {
@@ -76,18 +78,18 @@ private fun RepositoryItem(
         }
     )
 
-    val update = {
-        onUpdate(repo) {
-            failure = true
-            message = it.message
-        }
-    }
-
     RepositoryItem(
         repo = repo,
-        toggle = toggle,
-        onUpdate = update,
-        onDelete = { delete = true }
+        toggle = {
+            toggle(repo.copy(enable = it))
+        },
+        update = {
+            onUpdate(repo) {
+                failure = true
+                message = it.message
+            }
+        },
+        delete = { delete = true }
     )
 }
 

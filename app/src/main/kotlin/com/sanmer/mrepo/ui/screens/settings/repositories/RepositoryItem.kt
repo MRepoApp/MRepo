@@ -39,8 +39,8 @@ import com.sanmer.mrepo.utils.extensions.toDateTime
 fun RepositoryItem(
     repo: Repo,
     toggle: (Boolean) -> Unit,
-    onUpdate: () -> Unit,
-    onDelete: () -> Unit,
+    update: () -> Unit,
+    delete: () -> Unit,
 ) = Surface(
     shape = RoundedCornerShape(12.dp),
     color = MaterialTheme.colorScheme.surface,
@@ -132,13 +132,13 @@ fun RepositoryItem(
             ButtonItem(
                 icon = R.drawable.import_outline,
                 label = R.string.repo_options_update,
-                onClick = onUpdate
+                onClick = update
             )
 
             ButtonItem(
                 icon = R.drawable.trash_outline,
                 label = R.string.repo_options_delete,
-                onClick = onDelete
+                onClick = delete
             )
         }
     }
