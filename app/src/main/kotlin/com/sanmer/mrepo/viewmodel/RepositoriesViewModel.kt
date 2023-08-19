@@ -84,7 +84,7 @@ class RepositoriesViewModel @Inject constructor(
 
     fun getRepoAll() = viewModelScope.launch {
         refreshing {
-            modulesRepository.getRepoAll()
+            modulesRepository.getRepoAll(onlyEnable = false)
         }
     }
 }

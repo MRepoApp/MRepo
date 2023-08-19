@@ -14,8 +14,8 @@ interface RepoDao {
     @Query("SELECT * FROM repos")
     fun getAllAsFlow(): Flow<List<Repo>>
 
-    @Query("SELECT * FROM repos WHERE enable = 1")
-    fun getEnableAll(): List<Repo>
+    @Query("SELECT * FROM repos")
+    fun getAll(): List<Repo>
 
     @Query("SELECT * FROM repos WHERE url = :url LIMIT 1")
     fun getByUrl(url: String): Repo

@@ -25,8 +25,10 @@ class ModulesRepository @Inject constructor(
             }
     }
 
-    suspend fun getRepoAll() =
-        localRepository.getEnableAll().map {
+    suspend fun getRepoAll(onlyEnable: Boolean = true) =
+        localRepository.getRepoAll().filter {
+            if (onlyEnable) it.enable else true
+        }.map {
             getRepo(it)
         }
 

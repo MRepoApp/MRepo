@@ -77,8 +77,8 @@ class LocalRepository @Inject constructor(
 
     fun getRepoAllAsFlow() = repoDao.getAllAsFlow()
 
-    suspend fun getEnableAll() = withContext(Dispatchers.IO) {
-        repoDao.getEnableAll()
+    suspend fun getRepoAll() = withContext(Dispatchers.IO) {
+        repoDao.getAll()
     }
 
     suspend fun getRepoByUrl(url: String) = withContext(Dispatchers.IO) {
