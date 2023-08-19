@@ -8,7 +8,6 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,10 +52,7 @@ class RepositoriesViewModel @Inject constructor(
     ) = viewModelScope.launch {
         refreshing {
             modulesRepository.getRepo(repo)
-                .onFailure {
-                    onFailure(it)
-                    Timber.e(it, "getRepo: ${repo.url}")
-                }
+                .onFailure(onFailure)
         }
     }
 
@@ -75,10 +71,7 @@ class RepositoriesViewModel @Inject constructor(
     ) = viewModelScope.launch {
         refreshing {
             modulesRepository.getRepo(repo)
-                .onFailure {
-                    onFailure(it)
-                    Timber.e(it, "getUpdate: ${repo.url}")
-                }
+                .onFailure(onFailure)
         }
     }
 
