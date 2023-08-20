@@ -20,7 +20,6 @@ import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
-import com.sanmer.mrepo.utils.extensions.getUriForFile
 import com.sanmer.mrepo.utils.extensions.parcelable
 import com.sanmer.mrepo.utils.extensions.toFile
 import kotlinx.coroutines.Dispatchers
@@ -123,14 +122,6 @@ class DownloadService : LifecycleService() {
                 InstallActivity.start(context = context, path = path)
             }
 
-            if (task.install && path.name.endsWith(".apk")) {
-                runCatching {
-                    apkInstall(path)
-                }.onFailure {
-                    Timber.e(it, "apk install failed")
-                }
-            }
-
             tasks.remove(task)
         }
 
@@ -163,25 +154,6 @@ class DownloadService : LifecycleService() {
         }.onFailure {
             failed(it.message)
         }
-    }
-
-    private fun apkInstall(path: File) {
-        val apk = cacheDir.resolve("app-release.apk").apply {
-            delete()
-        }
-        contentResolver.openInputStream(path.toUri())!!.use {
-            it.copyTo(apk.outputStream())
-        }
-
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
-            setDataAndType(
-                context.getUriForFile(apk),
-                "application/vnd.android.package-archive"
-            )
-        }
-
-        startActivity(intent)
     }
 
     private fun setForeground() {
