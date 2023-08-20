@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_app_theme_desc">Смена ночного режима и цветовой схемы</string>
+    <string name="settings_app_theme_desc">Смена цветовой схемы и ночного режима</string>
     <string name="settings_delete_zip_desc">Удаление zip файла модуля после успешной установки. Будет выполнено суперпользователем</string>
     <string name="setup_mode">Режим работы</string>
     <string name="setup_root_title">Рут</string>
@@ -17,7 +17,7 @@
     <string name="repository_empty">Репозиторий пуст</string>
     <string name="module_installed">Установлено</string>
     <string name="view_module_page_overview">Главное</string>
-    <string name="view_module_page_versions">Версия</string>
+    <string name="view_module_page_versions">Версии</string>
     <string name="view_module_page_about">О модуле</string>
     <string name="license_fsf_libre">FSF Libre</string>
     <string name="view_module_local">Локальные</string>
@@ -37,7 +37,7 @@
     <string name="settings_app_desc">Настройки приложения MRepo</string>
     <string name="settings_about">О приложении</string>
     <string name="settings_root_access">Рут доступ: %1$s</string>
-    <string name="settings_root_provider">Предоставлено %1$s</string>
+    <string name="settings_root_provider">Предоставитель: %1$s</string>
     <string name="settings_root_granted">предоставлен</string>
     <string name="settings_root_not_available">Недоступно</string>
     <string name="settings_root_none">Нету</string>
@@ -88,4 +88,22 @@
     <string name="view_module_homepage">Домашняя страница</string>
     <string name="view_module_source">Исходный код</string>
     <string name="view_module_support">Поддержка</string>
+    <string name="repo_details">Детали</string>
+    <string name="module_new">Новый</string>
+    <string name="menu_pin_installed">Пин-код установлен</string>
+    <string name="menu_pin_updatable">Пин-код обновлён</string>
+    <string name="menu_show_icon">Показать иконку</string>
+    <string name="menu_show_license">Показать лицензию</string>
+    <string name="view_module_view_track">Просмотр трека</string>
+    <string name="view_module_type">Тип: %1$s</string>
+    <string name="view_module_added">Добавлено: %1$s</string>
+    <string name="repo_update_at">Обновлено: %1$s</string>
+    <string name="repo_incompatible">Несовместимо</string>
+    <string name="menu_advanced_menu">Расширенное меню</string>
+    <string name="menu_sort_mode">Режим сортировки</string>
+    <string name="menu_sort_option_name">Имя</string>
+    <string name="menu_sort_option_updated">Время обновления</string>
+    <string name="menu_descending">По убыванию</string>
+    <string name="menu_pin_enabled">Пин-код включен</string>
+    <string name="menu_show_updated">Показать обновленное время</string>
 </resources>
