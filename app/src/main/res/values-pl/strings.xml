@@ -67,8 +67,7 @@
     <string name="repo_modules">Ilość modułów: %1$d</string>
     <string name="repo_options_update">Zaktualizuj</string>
     <string name="repo_options_delete">Usuń</string>
-    <string name="repo_delete_dialog_desc1">Usunąć %1$s\?</string>
-    <string name="repo_delete_dialog_desc2">Wszystkie zainstalowane moduły pozostaną na urządzeniu.</string>
+    <string name="repo_delete_dialog_desc">Usunąć %1$s\?</string>
     <string name="repo_add_dialog_title">Dodaj repozytorium</string>
     <string name="repo_add_dialog_add">Dodaj</string>
     <string name="about_app_version">Wersja %1$s (%2$s)</string>

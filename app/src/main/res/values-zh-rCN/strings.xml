@@ -101,10 +101,10 @@
     <string name="repo_modules">%1$d 个模块</string>
     <string name="repo_update_at">更新于：%1$s</string>
     <string name="repo_incompatible">不兼容</string>
+    <string name="repo_details">详情</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_delete">删除</string>
-    <string name="repo_delete_dialog_desc1">你确定要删除 %1$s？</string>
-    <string name="repo_delete_dialog_desc2">提示：已安装的所有模块会保留在你的设备上。</string>
+    <string name="repo_delete_dialog_desc">你确定要删除 %1$s？</string>
     <string name="repo_add_dialog_title">添加存储库</string>
     <string name="repo_add_dialog_add">添加</string>
     <!-- About -->

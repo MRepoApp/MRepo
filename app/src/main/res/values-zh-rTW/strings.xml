@@ -69,8 +69,7 @@
     <string name="repo_modules">%1$d 個模組</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_delete">刪除</string>
-    <string name="repo_delete_dialog_desc1">你確定要刪除 %1$s？</string>
-    <string name="repo_delete_dialog_desc2">提示：已安裝的所有模組會保留在你的裝置上。</string>
+    <string name="repo_delete_dialog_desc">你確定要刪除 %1$s？</string>
     <string name="repo_add_dialog_title">新增儲存庫</string>
     <string name="repo_add_dialog_add">新增</string>
     <string name="about_app_version">版本 %1$s (%2$s)</string>

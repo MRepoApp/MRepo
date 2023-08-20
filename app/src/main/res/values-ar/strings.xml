@@ -52,7 +52,6 @@
     <string name="repo_options_update">تحديث</string>
     <string name="repo_options_delete">حذف</string>
     <string name="repo_modules">%1$d وحدات</string>
-    <string name="repo_delete_dialog_desc2">نصيحة: ستبقى جميع الوحدات المثبتة على جهازك.</string>
     <string name="repo_add_dialog_title">اضافة مستودع</string>
     <string name="repo_add_dialog_add">اضافة</string>
     <string name="dialog_attention">ملاحظة</string>
@@ -65,7 +64,7 @@
     <string name="unknown_error">خطاء غير معروف</string>
     <string name="settings_app_theme_desc">تغيير الوضع الليلي ولوحة الألوان</string>
     <string name="settings_repo_desc">إدارة مستودعات و وحدات Magisk</string>
-    <string name="repo_delete_dialog_desc1">هل انت متأكد من حذف %1$s؟</string>
+    <string name="repo_delete_dialog_desc">هل انت متأكد من حذف %1$s؟</string>
     <string name="module_installed">مثبته</string>
     <string name="about_desc2">صنع ❤️ بواسطة %1$s</string>
     <string name="view_module_page_overview">وصف مختصر</string>

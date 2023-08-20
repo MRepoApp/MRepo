@@ -54,8 +54,7 @@
     <string name="repo_modules">%1$d módulos</string>
     <string name="repo_options_update">Actualización</string>
     <string name="repo_options_delete">Eliminar</string>
-    <string name="repo_delete_dialog_desc1">¿Estás seguro de eliminarlo %1$s\?</string>
-    <string name="repo_delete_dialog_desc2">Sugerencia: Todos los módulos instalados permanecerán en tu dispositivo.</string>
+    <string name="repo_delete_dialog_desc">¿Estás seguro de eliminarlo %1$s\?</string>
     <string name="repo_add_dialog_title">Agregar repositorio</string>
     <string name="repo_add_dialog_add">Agregar</string>
     <string name="dialog_attention">Atención</string>

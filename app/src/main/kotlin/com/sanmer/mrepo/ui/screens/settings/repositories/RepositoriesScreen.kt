@@ -121,7 +121,7 @@ fun RepositoriesScreen(
                 )
             }
 
-            RepositoryList(
+            RepositoriesList(
                 list = list,
                 state = listSate,
                 update = viewModel::update,

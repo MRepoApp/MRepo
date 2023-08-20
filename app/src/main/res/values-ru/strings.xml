@@ -74,8 +74,7 @@
     <string name="settings_menu_reboot_download">Перезагрузка в режим загрузки</string>
     <string name="repo_options_update">Обновить</string>
     <string name="repo_options_delete">Удалить</string>
-    <string name="repo_delete_dialog_desc1">Вы уверены что хотите удалить %1$s\?</string>
-    <string name="repo_delete_dialog_desc2">Заметка: все установленные модули останутся на вашем устройстве.</string>
+    <string name="repo_delete_dialog_desc">Вы уверены что хотите удалить %1$s\?</string>
     <string name="repo_add_dialog_title">Добавить репозиторий</string>
     <string name="repo_add_dialog_add">Добавить</string>
     <string name="about_app_version">Версия %1$s (%2$s)</string>
