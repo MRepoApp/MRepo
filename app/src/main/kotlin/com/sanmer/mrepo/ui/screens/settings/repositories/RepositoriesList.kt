@@ -5,13 +5,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,13 +35,11 @@ fun RepositoriesList(
     contentPadding = PaddingValues(10.dp),
     verticalArrangement = Arrangement.spacedBy(10.dp),
 ) {
-    itemsIndexed(
+    items(
         items = list,
-        key = { _, repo ->
-            repo.url
-        }
-    ) { index, _ ->
-        val value by remember(list) { derivedStateOf { list[index] } }
+        key = { it.url }
+    ) { repo ->
+        val value by remember(list) { mutableStateOf(repo) }
 
         RepositoryItem(
             repo = value,
