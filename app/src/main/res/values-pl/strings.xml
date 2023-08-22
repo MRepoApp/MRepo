@@ -91,4 +91,19 @@
     <string name="view_module_view_track">Zobacz ścieżkę</string>
     <string name="view_module_type">Typ: %1$s</string>
     <string name="view_module_added">Dodano w: %1$s</string>
+    <string name="repo_details">Szczegóły</string>
+    <string name="menu_show_updated">Pokaż czas aktualizacji</string>
+    <string name="menu_sort_option_name">Nazwa</string>
+    <string name="menu_sort_option_updated">Czas aktualizacji</string>
+    <string name="menu_descending">Malejąco</string>
+    <string name="menu_pin_installed">Przypnij zainstalowane</string>
+    <string name="menu_pin_updatable">Przypnij aktualizowalne</string>
+    <string name="menu_pin_enabled">Przypnij aktywowane</string>
+    <string name="menu_show_icon">Pokaż ikonę</string>
+    <string name="menu_show_license">Pokaż licencję</string>
+    <string name="repo_update_at">Zaktualizowano: %1$s</string>
+    <string name="repo_incompatible">Niekompatybilne</string>
+    <string name="menu_advanced_menu">Menu zaawansowane</string>
+    <string name="menu_sort_mode">Tryb sortowania</string>
+    <string name="module_new">Nowy</string>
 </resources>
