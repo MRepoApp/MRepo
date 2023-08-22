@@ -48,7 +48,7 @@
     <string name="module_download">Descarcă</string>
     <string name="search_placeholder">Căutare…</string>
     <string name="view_module_page_versions">Versiuni</string>
-    <string name="settings_app_theme_desc">Schimbă modul de noapte și paleta tematică</string>
+    <string name="settings_app_theme_desc">Schimbă schema de culori și modul de noapte</string>
     <string name="settings_repo_desc">Gestionează depozitele de module Magisk</string>
     <string name="app_theme_dark_theme">Tema întunecată</string>
     <string name="app_theme_dark_theme_dark">Întunecată</string>
@@ -66,7 +66,7 @@
     <string name="shortcut_log_label">Jurnale</string>
     <string name="unknown_error">Eroare necunoscută</string>
     <string name="settings_delete_zip">Șterge fișierul Zip</string>
-    <string name="settings_delete_zip_desc">Ștergere zip după ce instalarea a reușit, reține că acesta este cel mai bun efort și nu va funcționa dacă aplicația nu are permisiunea de a șterge</string>
+    <string name="settings_delete_zip_desc">Șterge fișierul zip al modulului după ce instalarea a reușit, aceasta va fi executată de Super-utilizator</string>
     <string name="page_repository">Depozit</string>
     <string name="view_module_version_dialog_desc">Dorești să instalezi sau să descarci această versiune a modulului\?</string>
     <string name="settings_app_desc">Setările despre aplicația MRepo în sine</string>
@@ -83,4 +83,27 @@
     <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
     <string name="about_desc2">Făcut cu ❤️ de %1$s</string>
     <string name="view_module_dir_size">Dimensiunea dosarului</string>
+    <string name="repo_details">Detalii</string>
+    <string name="view_module_added">Adăugat la: %1$s</string>
+    <string name="menu_pin_installed">Fixare instalate</string>
+    <string name="menu_show_icon">Afișare pictogramă</string>
+    <string name="menu_show_license">Afișare licență</string>
+    <string name="module_new">Nou</string>
+    <string name="menu_pin_updatable">Fixare actualizabile</string>
+    <string name="repo_update_at">Actualizat la: %1$s</string>
+    <string name="repo_incompatible">Incompatibil</string>
+    <string name="menu_advanced_menu">Meniu avansat</string>
+    <string name="menu_sort_mode">Mod de sortare</string>
+    <string name="menu_sort_option_name">Nume</string>
+    <string name="menu_descending">Descendent</string>
+    <string name="menu_pin_enabled">Fixare activate</string>
+    <string name="menu_show_updated">Afișează data actualizării</string>
+    <string name="view_module_cloud">Cloud</string>
+    <string name="view_module_last_updated">Ultima actualizare</string>
+    <string name="view_module_source">Cod sursă</string>
+    <string name="view_module_homepage">Pagina web</string>
+    <string name="view_module_support">Suport</string>
+    <string name="view_module_view_track">Vizualizare cale</string>
+    <string name="view_module_type">Tip: %1$s</string>
+    <string name="menu_sort_option_updated">Data actualizării</string>
 </resources>
