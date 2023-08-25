@@ -24,12 +24,12 @@ class InstallActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         deleteLog("module")
 
-        setActivityContent {
+        setActivityContent { isReady ->
             val userPreferences = LocalUserPreferences.current
             val suState = LocalSuState.current
 
-            LaunchedEffect(suState) {
-                if (suState.isSucceeded) {
+            LaunchedEffect(key1=suState, key2=isReady) {
+                if (suState.isSucceeded && isReady) {
                     val uri = intent.data
                     if (uri != null) {
                         viewModel.install(
