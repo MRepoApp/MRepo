@@ -49,7 +49,7 @@
     <string name="settings_menu_reboot_recovery">Recovery modunda başlat</string>
     <string name="settings_menu_reboot_edl">EDL modunda başlat</string>
     <string name="settings_download_path">İndirme Yolu</string>
-    <string name="settings_app_theme_desc">Gece modu ve renk paletini değiştirin</string>
+    <string name="settings_app_theme_desc">Renk paleti ve gece modunu değiştirin</string>
     <string name="settings_app_theme">Uygulama Teması</string>
     <string name="app_theme_dark_theme">Karanlık Tema</string>
     <string name="app_theme_dark_theme_auto">Otomatik</string>
@@ -91,4 +91,19 @@
     <string name="view_module_view_track">İzi görüntüle</string>
     <string name="view_module_type">Tip: %1$s</string>
     <string name="view_module_added">%1$s tarihinde eklendi</string>
+    <string name="menu_pin_installed">Yüklenenleri sabitle</string>
+    <string name="menu_pin_updatable">Güncellenebilir olanları sabitle</string>
+    <string name="menu_show_icon">Simge göster</string>
+    <string name="menu_show_license">Lisansı göster</string>
+    <string name="repo_update_at">%1$s tarihinde güncellendi</string>
+    <string name="repo_incompatible">Uyumlu değil</string>
+    <string name="repo_details">Detaylar</string>
+    <string name="menu_advanced_menu">Gelişmiş menü</string>
+    <string name="menu_sort_mode">Sıralama şekli</string>
+    <string name="menu_descending">Azalan</string>
+    <string name="menu_show_updated">Güncelleme tarihini göster</string>
+    <string name="menu_pin_enabled">Aktif olanları sabitle</string>
+    <string name="module_new">Yeni</string>
+    <string name="menu_sort_option_name">İsim</string>
+    <string name="menu_sort_option_updated">Güncelleme tarihi</string>
 </resources>
