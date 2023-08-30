@@ -54,7 +54,7 @@
     <string name="settings_menu_reboot_download">Reboot ke Download</string>
     <string name="settings_menu_reboot_edl">Reboot ke EDL</string>
     <string name="settings_app_theme">Tema Aplikasi</string>
-    <string name="settings_app_theme_desc">Mengubah mode malam dan palet tema</string>
+    <string name="settings_app_theme_desc">Mengubah skema warna dan mode malam</string>
     <string name="settings_download_path">Jalur Download</string>
     <string name="settings_delete_zip">Hapus File Zip</string>
     <string name="settings_delete_zip_desc">Hapus modul zip setelah pemasangan berhasil, ini akan dieksekusi dengan Superuser</string>
@@ -85,10 +85,25 @@
     <string name="unknown_error">Kesalahan tidak diketahui</string>
     <string name="view_module_cloud">Cloud</string>
     <string name="view_module_last_updated">Terakhir diperbarui</string>
-    <string name="view_module_homepage">Beranda</string>
+    <string name="view_module_homepage">Homepage</string>
     <string name="view_module_source">Source Code</string>
     <string name="view_module_support">Dukungan</string>
     <string name="view_module_view_track">Lihat Track</string>
     <string name="view_module_type">Jenis: %1$s</string>
     <string name="view_module_added">Ditambahkan pada: %1$s</string>
+    <string name="menu_show_icon">Tampilkan Ikon</string>
+    <string name="repo_update_at">Diperbarui pada: %1$s</string>
+    <string name="menu_advanced_menu">Menu Lanjutan</string>
+    <string name="menu_sort_mode">Mode Urutkan</string>
+    <string name="menu_sort_option_name">Nama</string>
+    <string name="menu_descending">Menurun</string>
+    <string name="menu_pin_enabled">Pin Diaktifkan</string>
+    <string name="menu_pin_updatable">Pin Yg. Dapat Diperbarui</string>
+    <string name="module_new">Baru</string>
+    <string name="menu_pin_installed">Pin Yang Terpasang</string>
+    <string name="menu_show_license">Tampilkan Lisensi</string>
+    <string name="repo_incompatible">Tidak kompatibel</string>
+    <string name="repo_details">Detail</string>
+    <string name="menu_sort_option_updated">Waktu Diperbarui</string>
+    <string name="menu_show_updated">Tampilkan Waktu Terbaru</string>
 </resources>
