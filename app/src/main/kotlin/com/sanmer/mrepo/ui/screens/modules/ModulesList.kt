@@ -1,11 +1,9 @@
 package com.sanmer.mrepo.ui.screens.modules
 
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,9 +27,7 @@ import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.state.LocalState
-import com.sanmer.mrepo.ui.component.FastScrollbar
-import com.sanmer.mrepo.ui.utils.rememberFastScroller
-import com.sanmer.mrepo.ui.utils.scrollbarState
+import com.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
@@ -47,7 +43,7 @@ fun ModulesList(
         state = state,
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(
             items = list,
@@ -62,14 +58,9 @@ fun ModulesList(
         }
     }
 
-    FastScrollbar(
-        modifier = Modifier
-            .fillMaxHeight()
-            .align(Alignment.CenterEnd),
-        state = state.scrollbarState(),
-        orientation = Orientation.Vertical,
-        scrollInProgress = state.isScrollInProgress,
-        onThumbDisplaced = state.rememberFastScroller(),
+    VerticalFastScrollbar(
+        state = state,
+        modifier = Modifier.align(Alignment.CenterEnd)
     )
 }
 
