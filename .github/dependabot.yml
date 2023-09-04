@@ -1,11 +1,17 @@
 version: 2
 updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "21:00"
   - package-ecosystem: gradle
     directory: "/"
     schedule:
       interval: daily
       time: "21:00"
     open-pull-requests-limit: 10
+    labels: [ "dependencies" ]
     target-branch: main
     registries:
       - maven-google
