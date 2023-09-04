@@ -5,6 +5,8 @@ updates:
     schedule:
       interval: "daily"
       time: "21:00"
+    open-pull-requests-limit: 10
+    labels: [ "github_actions" ]
   - package-ecosystem: gradle
     directory: "/"
     schedule:
