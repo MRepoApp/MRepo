@@ -94,13 +94,13 @@
     <string name="menu_sort_mode">Mode Urutkan</string>
     <string name="menu_sort_option_name">Nama</string>
     <string name="menu_descending">Menurun</string>
-    <string name="menu_pin_enabled">Pin Diaktifkan</string>
+    <string name="menu_pin_enabled">Pin Yang Aktif</string>
     <string name="menu_pin_updatable">Pin Yg. Dapat Diperbarui</string>
     <string name="module_new">Baru</string>
     <string name="menu_pin_installed">Pin Yang Terpasang</string>
     <string name="menu_show_license">Tampilkan Lisensi</string>
     <string name="repo_incompatible">Tidak kompatibel</string>
     <string name="repo_details">Detail</string>
-    <string name="menu_sort_option_updated">Waktu Diperbarui</string>
-    <string name="menu_show_updated">Tampilkan Waktu Terbaru</string>
+    <string name="menu_sort_option_updated">Waktu Terbaru</string>
+    <string name="menu_show_updated">Tampilkan Waktu Pembaruan</string>
 </resources>
