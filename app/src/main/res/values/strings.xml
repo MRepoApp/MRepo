@@ -63,12 +63,10 @@
     <string name="module_download">Download</string>
 
     <!-- Settings -->
-    <string name="settings_log_viewer">Log Viewer</string>
-    <string name="settings_log_viewer_desc">View application runtime logs</string>
-    <string name="settings_repo">Repositories</string>
-    <string name="settings_repo_desc">Manage Magisk modules repositories</string>
     <string name="settings_app">App</string>
     <string name="settings_app_desc">Settings about MRepo app itself</string>
+    <string name="settings_repo">Repositories</string>
+    <string name="settings_repo_desc">Manage Magisk modules repositories</string>
     <string name="settings_about">About</string>
     <!-- Root Item -->
     <string name="settings_root_access">Root Access: %1$s</string>
@@ -132,9 +130,6 @@
 
     <!-- Notification -->
     <string name="notification_name_download">Download Service</string>
-
-    <!-- Shortcut -->
-    <string name="shortcut_log_label">Logs</string>
 
     <!-- Search -->
     <string name="search_empty">Empty list</string>

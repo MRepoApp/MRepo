@@ -53,8 +53,6 @@
     <string name="view_module_provided">由 %1$s 提供</string>
     <string name="settings_app_theme">主題</string>
     <string name="settings_app_theme_desc">更改深色模式和主題調色盤</string>
-    <string name="settings_log_viewer">日誌檢視器</string>
-    <string name="settings_log_viewer_desc">檢視應用程式執行日誌</string>
     <string name="settings_app">應用程式</string>
     <string name="settings_download_path">下載路徑</string>
     <string name="settings_repo">儲存庫</string>
@@ -81,7 +79,6 @@
     <string name="message_download_success">下載成功</string>
     <string name="message_loading">載入中…</string>
     <string name="notification_name_download">下載服務</string>
-    <string name="shortcut_log_label">日誌</string>
     <string name="unknown_error">未知錯誤</string>
 
 </resources>

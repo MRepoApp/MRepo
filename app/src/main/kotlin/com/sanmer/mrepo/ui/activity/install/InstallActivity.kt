@@ -13,7 +13,6 @@ import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.ui.activity.base.BaseActivity
 import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
-import com.sanmer.mrepo.utils.extensions.deleteLog
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import java.io.File
 
@@ -22,7 +21,6 @@ class InstallActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        deleteLog("module")
 
         setActivityContent { isReady ->
             val userPreferences = LocalUserPreferences.current

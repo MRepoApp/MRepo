@@ -2,7 +2,6 @@
 <resources>
     <string name="settings_app_theme_desc">Cambiar modo noche y colores del fondo</string>
     <string name="settings_menu_reboot_bootloader">Reiniciar a Bootloader</string>
-    <string name="settings_log_viewer_desc">Ver los registros de ejecución de la aplicación</string>
     <string name="settings_menu_reboot_edl">Reiniciar a EDL</string>
     <string name="module_version_author">%1$s por %2$s</string>
     <string name="module_remove">Eliminar</string>
@@ -16,7 +15,6 @@
     <string name="view_module_provided">Proporcionado por %1$s</string>
     <string name="settings_app_theme">Temas de la App</string>
     <string name="settings_menu_reboot_download">Reiniciar a Download</string>
-    <string name="settings_log_viewer">Visor de registros</string>
     <string name="settings_app">App</string>
     <string name="settings_download_path">Ruta de descarga</string>
     <string name="settings_repo">Repositorio</string>
@@ -63,7 +61,6 @@
     <string name="message_download_success">Descarga con éxito</string>
     <string name="message_loading">Cargando…</string>
     <string name="notification_name_download">Servicio de descarga</string>
-    <string name="shortcut_log_label">Registros</string>
     <string name="unknown_error">Error desconocido</string>
     <string name="view_module_last_updated">Última actualización</string>
     <string name="view_module_local">Local</string>

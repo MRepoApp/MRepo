@@ -13,8 +13,6 @@ import com.sanmer.mrepo.app.utils.MediaStoreUtils.displayName
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.utils.extensions.createLog
-import com.sanmer.mrepo.utils.extensions.shareFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -80,15 +78,5 @@ class InstallViewModel @Inject constructor(
         }
     }.onFailure {
         Timber.e(it)
-    }
-
-    fun sendLogFile(context: Context) {
-        val text = console.joinToString(separator = "\n")
-        val logFile = context.createLog("module")
-            .apply {
-                writeText(text)
-            }
-
-        context.shareFile(logFile, "text/plain")
     }
 }

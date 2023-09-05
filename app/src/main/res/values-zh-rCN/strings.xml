@@ -63,12 +63,10 @@
     <string name="module_download">下载</string>
 
     <!-- Settings-->
-    <string name="settings_log_viewer">日志查看器</string>
-    <string name="settings_log_viewer_desc">查看应用运行时日志</string>
-    <string name="settings_repo">存储库</string>
-    <string name="settings_repo_desc">管理 Magisk 模块存储库</string>
     <string name="settings_app">应用</string>
     <string name="settings_app_desc">关于 MRepo 应用本身的设置</string>
+    <string name="settings_repo">存储库</string>
+    <string name="settings_repo_desc">管理 Magisk 模块存储库</string>
     <string name="settings_about">关于</string>
     <!-- Root Item -->
     <string name="settings_root_access">Root 权限：%1$s</string>
@@ -132,9 +130,6 @@
 
     <!-- Notification -->
     <string name="notification_name_download">下载服务</string>
-
-    <!-- Shortcut -->
-    <string name="shortcut_log_label">日志</string>
 
     <!-- Search -->
     <string name="search_empty">空列表</string>

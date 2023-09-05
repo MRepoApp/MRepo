@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.activity.install
 
-import android.content.Context
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -34,7 +33,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -85,7 +83,6 @@ fun InstallScreen(
         topBar = {
             TopBar(
                 state = viewModel.state,
-                sendLogFile = viewModel::sendLogFile,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -139,7 +136,6 @@ private fun Console(
 @Composable
 private fun TopBar(
     state: State,
-    sendLogFile: (Context) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
     title = stringResource(id = R.string.install_title),
@@ -151,10 +147,10 @@ private fun TopBar(
     scrollBehavior = scrollBehavior,
     enable = state.isFinished,
     actions = {
-        val context = LocalContext.current
         if (state.isFinished) {
             IconButton(
-                onClick = { sendLogFile(context) }
+                onClick = {},
+                enabled = false
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.send_outline),

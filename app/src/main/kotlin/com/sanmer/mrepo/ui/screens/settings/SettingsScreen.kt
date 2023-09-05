@@ -19,14 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.ui.activity.log.LogActivity
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.navigation.graphs.SettingsScreen
@@ -46,7 +44,6 @@ fun SettingsScreen(
     val userPreferences = LocalUserPreferences.current
     val suState = LocalSuState.current
 
-    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
@@ -74,11 +71,11 @@ fun SettingsScreen(
             }
 
             SettingNormalItem(
-                icon = R.drawable.health_outline,
-                text = stringResource(id = R.string.settings_log_viewer),
-                subText = stringResource(id = R.string.settings_log_viewer_desc),
+                icon = R.drawable.layer_outline,
+                text = stringResource(id = R.string.settings_app),
+                subText = stringResource(id = R.string.settings_app_desc),
                 onClick = {
-                    LogActivity.start(context)
+                    navController.navigateSingleTopTo(SettingsScreen.App.route)
                 }
             )
 
@@ -88,15 +85,6 @@ fun SettingsScreen(
                 subText = stringResource(id = R.string.settings_repo_desc),
                 onClick = {
                     navController.navigateSingleTopTo(SettingsScreen.Repositories.route)
-                }
-            )
-
-            SettingNormalItem(
-                icon = R.drawable.layer_outline,
-                text = stringResource(id = R.string.settings_app),
-                subText = stringResource(id = R.string.settings_app_desc),
-                onClick = {
-                    navController.navigateSingleTopTo(SettingsScreen.App.route)
                 }
             )
 

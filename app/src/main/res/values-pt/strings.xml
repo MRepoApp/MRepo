@@ -39,8 +39,6 @@
     <string name="view_module_provided">Disponibilizado por %1$s</string>
     <string name="settings_app_theme">Tema do Aplicativo</string>
     <string name="settings_app_theme_desc">Mudar paleta de cores e modo escuro</string>
-    <string name="settings_log_viewer">Visualizador de Registros</string>
-    <string name="settings_log_viewer_desc">Ver registros de execução dos aplicativos</string>
     <string name="settings_app">Aplicativo</string>
     <string name="settings_download_path">Caminho dos Downloads</string>
     <string name="settings_repo">Repositório</string>
@@ -62,7 +60,6 @@
     <string name="message_download_success">Download com sucesso</string>
     <string name="message_loading">Carregando…</string>
     <string name="notification_name_download">Serviço de Downloads</string>
-    <string name="shortcut_log_label">Registros</string>
     <string name="unknown_error">Erro desconhecido</string>
     <string name="settings_root_access">Acesso Enraizado: %1$s</string>
     <string name="view_module_page_about">Sobre</string>

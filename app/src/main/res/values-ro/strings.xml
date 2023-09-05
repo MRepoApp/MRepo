@@ -19,8 +19,6 @@
     <string name="search_empty">Listă goală</string>
     <string name="view_module_provided">Furnizat de %1$s</string>
     <string name="settings_app_theme">Tema aplicației</string>
-    <string name="settings_log_viewer">Vizualizator de jurnale</string>
-    <string name="settings_log_viewer_desc">Vizualizează jurnalele de rulare a aplicației</string>
     <string name="settings_app">Aplicație</string>
     <string name="settings_download_path">Calea de descărcare</string>
     <string name="settings_repo">Depozite</string>
@@ -63,7 +61,6 @@
     <string name="message_download_success">Descărcare reușită</string>
     <string name="message_loading">Se încarcă…</string>
     <string name="notification_name_download">Serviciu de descărcare</string>
-    <string name="shortcut_log_label">Jurnale</string>
     <string name="unknown_error">Eroare necunoscută</string>
     <string name="settings_delete_zip">Șterge fișierul Zip</string>
     <string name="settings_delete_zip_desc">Șterge fișierul zip al modulului după ce instalarea a reușit, aceasta va fi executată de Super-utilizator</string>

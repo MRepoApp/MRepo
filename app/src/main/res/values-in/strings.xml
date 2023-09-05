@@ -5,7 +5,6 @@
     <string name="install_flashing">Flashing</string>
     <string name="page_repository">Repositori</string>
     <string name="view_module_module_directory">Direktori Modul</string>
-    <string name="settings_log_viewer_desc">Melihat log jalannya aplikasi</string>
     <string name="view_module_last_modified">Terakhir Diubah</string>
     <string name="settings_app_desc">Setelan seputar aplikasi MRepo ini sendiri</string>
     <string name="setup_mode">Mode Kerja</string>
@@ -36,7 +35,6 @@
     <string name="module_restore">Pulihkan</string>
     <string name="module_install">Pasang</string>
     <string name="module_download">Download</string>
-    <string name="settings_log_viewer">Log Viewer</string>
     <string name="settings_repo">Repositori</string>
     <string name="settings_repo_desc">Kelola repositori modul Magisk</string>
     <string name="settings_app">App</string>
@@ -79,7 +77,6 @@
     <string name="message_download_success">Download berhasil</string>
     <string name="message_loading">Memuat…</string>
     <string name="notification_name_download">Layanan Download</string>
-    <string name="shortcut_log_label">Log</string>
     <string name="search_empty">Daftar kosong</string>
     <string name="search_placeholder">Cari…</string>
     <string name="unknown_error">Kesalahan tidak diketahui</string>

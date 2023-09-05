@@ -34,7 +34,6 @@
     <string name="module_restore">Geri yükle</string>
     <string name="module_install">Yükle</string>
     <string name="module_download">İndir</string>
-    <string name="settings_log_viewer">Log Görüntüleme</string>
     <string name="settings_repo">Repolar</string>
     <string name="settings_repo_desc">Magisk modül repolarını yönetin</string>
     <string name="settings_app">Uygulama</string>
@@ -72,13 +71,11 @@
     <string name="message_download_success">İndirme başarılı</string>
     <string name="message_loading">Yükleniyor…</string>
     <string name="notification_name_download">İndirme Hizmeti</string>
-    <string name="shortcut_log_label">Loglar</string>
     <string name="search_empty">Liste boş</string>
     <string name="search_placeholder">Ara…</string>
     <string name="unknown_error">Bilinmeyen hata</string>
     <string name="settings_delete_zip_desc">Yükleme başarıyla tamamlandıktan sonra modülün zip dosyasını sil, bu Superuser ile gerçekleştirilir</string>
     <string name="setup_root_desc1">Magisk veya KernelSU\'dan Root erişimi gerektir</string>
-    <string name="settings_log_viewer_desc">Uygulama çalışma zamanı günlüklerini görüntüleyin</string>
     <string name="settings_app_desc">MRepo uygulamasının ayarları</string>
     <string name="settings_root_not_available">Mevcut değil</string>
     <string name="settings_menu_reboot_userspace">Arayüzü yeniden başlat</string>

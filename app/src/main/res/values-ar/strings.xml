@@ -38,8 +38,6 @@
     <string name="view_module_page_versions">الإصدارات</string>
     <string name="view_module_provided">مقدم بواسطة%1$s</string>
     <string name="settings_app_theme">سمة التطبيق</string>
-    <string name="settings_log_viewer">عارض السجل</string>
-    <string name="settings_log_viewer_desc">عرض سجلات وقت تشغيل التطبيق</string>
     <string name="settings_app">تطبيق</string>
     <string name="search_empty">قائمة فارغة</string>
     <string name="settings_download_path">مسار التنزيل</string>
@@ -60,7 +58,6 @@
     <string name="message_download_success">تم التنزيل بنجاح</string>
     <string name="message_loading">انتظار…</string>
     <string name="notification_name_download">خدمة التنزيل</string>
-    <string name="shortcut_log_label">السجلات</string>
     <string name="unknown_error">خطاء غير معروف</string>
     <string name="settings_app_theme_desc">تغيير الوضع الليلي ولوحة الألوان</string>
     <string name="settings_repo_desc">إدارة مستودعات و وحدات Magisk</string>

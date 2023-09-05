@@ -28,12 +28,9 @@
     <string name="module_restore">復元</string>
     <string name="settings_repo">リポジトリ</string>
     <string name="app_theme_dark_theme_auto">自動</string>
-    <string name="shortcut_log_label">ログ</string>
     <string name="dialog_attention">注意</string>
     <string name="repo_add_dialog_add">追加</string>
     <string name="settings_non_root_desc">機能が制限されています</string>
-    <string name="settings_log_viewer">ログビューワー</string>
-    <string name="settings_log_viewer_desc">アプリケーションの実行ログを表示する</string>
     <string name="settings_download_path">ダウンロード場所</string>
     <string name="app_theme_dark_theme">ダークテーマ</string>
     <string name="app_theme_dark_theme_dark">ダーク</string>

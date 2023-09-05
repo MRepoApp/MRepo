@@ -40,8 +40,6 @@
     <string name="module_restore">Przywróć</string>
     <string name="module_install">Instaluj</string>
     <string name="module_download">Pobierz</string>
-    <string name="settings_log_viewer">Przeglądarka logów</string>
-    <string name="settings_log_viewer_desc">Zobacz dzienniki działania aplikacji</string>
     <string name="settings_repo">Repozytoria</string>
     <string name="settings_repo_desc">Zarządzaj repozytoriami modułów Magisk</string>
     <string name="settings_app">Aplikacja</string>
@@ -79,7 +77,6 @@
     <string name="message_download_success">Pobieranie zakończone sukcesem</string>
     <string name="message_loading">Wczytywanie…</string>
     <string name="notification_name_download">Usługa pobierania</string>
-    <string name="shortcut_log_label">Logi</string>
     <string name="search_empty">Nic nie znaleziono</string>
     <string name="search_placeholder">Wyszukaj…</string>
     <string name="unknown_error">Nieznany błąd</string>
