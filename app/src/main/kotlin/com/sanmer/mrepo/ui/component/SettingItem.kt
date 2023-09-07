@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -174,7 +173,6 @@ fun <T> SettingMenuItem(
     DropdownMenu(
         expanded = expanded,
         offset = DpOffset(16.dp, 16.dp),
-        shape = RoundedCornerShape(15.dp),
         onDismissRequest = { expanded = false },
         contentAlignment = Alignment.TopStart,
         surface = {

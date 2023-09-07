@@ -3,7 +3,6 @@ package com.sanmer.mrepo.ui.screens.settings
 import android.content.Context
 import android.os.PowerManager
 import androidx.annotation.StringRes
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,8 +65,7 @@ fun SettingsMenu(
 ) = DropdownMenu(
     expanded = expanded,
     onDismissRequest = onClose,
-    offset = DpOffset(0.dp, 5.dp),
-    shape = RoundedCornerShape(15.dp)
+    offset = DpOffset(0.dp, 10.dp)
 ) {
     val powerManager = LocalContext.current.getSystemService(Context.POWER_SERVICE) as PowerManager?
     if (OsUtils.atLeastR && powerManager?.isRebootingUserspaceSupported == true) {
