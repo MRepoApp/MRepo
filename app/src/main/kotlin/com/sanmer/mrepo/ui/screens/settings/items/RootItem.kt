@@ -30,7 +30,7 @@ fun RootItem(
 ) = Surface(
     modifier = Modifier.padding(all = 18.dp),
     shape = RoundedCornerShape(15.dp),
-    color = MaterialTheme.colorScheme.surfaceVariant
+    color = MaterialTheme.colorScheme.secondaryContainer
 ) {
     Row(
         modifier = Modifier
@@ -62,7 +62,8 @@ fun RootItem(
                     stringResource(id = R.string.settings_root_access,
                         stringResource(id = R.string.settings_root_none))
                 },
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
 
             Text(
@@ -74,7 +75,7 @@ fun RootItem(
                         stringResource(id = R.string.settings_root_not_available))
                 },
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
     }

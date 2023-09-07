@@ -106,12 +106,10 @@ private fun ViewLicense(
     verticalArrangement = Arrangement.spacedBy(18.dp),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
-    OutlinedCard(
+    Surface(
         shape = RoundedCornerShape(15.dp),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        tonalElevation = 6.dp,
+        border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline)
     ) {
         Column(
             modifier = Modifier
@@ -126,13 +124,10 @@ private fun ViewLicense(
             )
 
             if (license.seeAlso.isNotEmpty()) {
-                val text = license.seeAlso
-                    .joinToString(separator = "\n") {
-                        " - [${it}](${it})"
-                    }
-
                 MarkdownText(
-                    text = text,
+                    text = license.seeAlso.joinToString(separator = "\n") {
+                        " - [${it}](${it})"
+                    },
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

@@ -56,8 +56,8 @@ fun ModuleItem(
             Logo(
                 icon = R.drawable.box_outline,
                 modifier = Modifier.size(40.dp),
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
 
             Spacer(modifier = Modifier.width(10.dp))

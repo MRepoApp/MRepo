@@ -34,8 +34,8 @@ fun WorkingModeItem(
     Surface(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
-        tonalElevation = if (selected) 2.dp else 0.dp,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        tonalElevation = if (selected) 4.dp else 0.dp,
+        border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline),
         shape = RoundedCornerShape(15.dp)
     ) {
         Column(

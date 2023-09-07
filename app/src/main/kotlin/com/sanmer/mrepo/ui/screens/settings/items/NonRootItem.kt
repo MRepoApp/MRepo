@@ -25,7 +25,7 @@ import com.sanmer.mrepo.R
 fun NonRootItem() = Surface(
     modifier = Modifier.padding(all = 18.dp),
     shape = RoundedCornerShape(15.dp),
-    color = MaterialTheme.colorScheme.surfaceVariant
+    color = MaterialTheme.colorScheme.secondaryContainer
 ) {
     Row(
         modifier = Modifier
@@ -47,12 +47,14 @@ fun NonRootItem() = Surface(
         ) {
             Text(
                 text = stringResource(id = R.string.settings_non_root),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
+
             Text(
                 text = stringResource(id = R.string.settings_non_root_desc),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
     }

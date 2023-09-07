@@ -96,7 +96,6 @@ private fun BottomSheet(
         Surface(
             modifier = Modifier.padding(bottom = 8.dp),
             shape = RoundedCornerShape(10.dp),
-            color = MaterialTheme.colorScheme.surface,
             tonalElevation = 6.dp,
             border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline)
         ) {
