@@ -1,5 +1,5 @@
 # MRepo
-[![release](https://img.shields.io/github/v/release/ya0211/MRepo?label=release&color=red)](https://github.com/ya0211/MRepo/releases) [![download](https://shields.io/github/downloads/ya0211/MRepo/total?label=download)](https://github.com/ya0211/MRepo/releases/latest) [![license](https://img.shields.io/github/license/ya0211/MRepo)](LICENSE) [![follow](https://img.shields.io/badge/follow-Telegram-blue.svg?label=follow)](https://t.me/mrepo_news) [![translated](https://weblate.sanmer.dev/widgets/mrepo/-/svg-badge.svg)](https://weblate.sanmer.dev/engage/mrepo/)
+[![release](https://img.shields.io/github/v/release/ya0211/MRepo?label=release&color=red)](https://github.com/ya0211/MRepo/releases) [![download](https://shields.io/github/downloads/ya0211/MRepo/total?label=download)](https://github.com/ya0211/MRepo/releases/latest) [![license](https://img.shields.io/github/license/ya0211/MRepo?color=orange)](LICENSE) [![follow](https://img.shields.io/badge/Telegram-blue.svg?label=follow)](https://t.me/mrepo_news) [![translated](https://weblate.sanmer.dev/widgets/mrepo/-/svg-badge.svg)](https://weblate.sanmer.dev/engage/mrepo/)
 
 MRepo (short for `My Repository` or `Modules(Magisk) Repository`) is an Android app that helps manage your own modules repository.
 
