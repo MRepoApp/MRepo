@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_root_access">تصريح الروت%1$s</string>
+    <string name="settings_root_access">تصريح الروت: %1$s</string>
     <string name="setup_root_title">روت</string>
     <string name="setup_root_desc2">متاح : الوصول الكامل للوظائف</string>
     <string name="setup_non_root_title">بدون روت</string>
     <string name="setup_non_root_desc1">لا يتطلب خصائص الروت</string>
     <string name="setup_non_root_desc2">متاح : تحميل الملف</string>
     <string name="install_flashing">تفليش</string>
-    <string name="install_done">إنتهى.</string>
+    <string name="install_done">إنتهى</string>
     <string name="install_failure">فشل</string>
     <string name="license_title">عرض الترخيص</string>
     <string name="license_osi_approved">تراخيص معتمدة</string>
-    <string name="page_modules">الملفات</string>
+    <string name="page_modules">الوحدات</string>
     <string name="settings_root_provider">المزود%1$s</string>
     <string name="settings_root_none">غير متوفر</string>
     <string name="settings_non_root_desc">الوظائف محدودة</string>
@@ -60,12 +60,12 @@
     <string name="notification_name_download">خدمة التنزيل</string>
     <string name="unknown_error">خطاء غير معروف</string>
     <string name="settings_app_theme_desc">تغيير الوضع الليلي ولوحة الألوان</string>
-    <string name="settings_repo_desc">إدارة مستودعات و وحدات Magisk</string>
+    <string name="settings_repo_desc">إدارة مستودعات و وحدات ماجيسك</string>
     <string name="repo_delete_dialog_desc">هل انت متأكد من حذف %1$s؟</string>
     <string name="module_installed">مثبته</string>
     <string name="about_desc2">صنع ❤️ بواسطة %1$s</string>
     <string name="view_module_page_overview">وصف مختصر</string>
-    <string name="view_module_page_about">حول الوحدة</string>
+    <string name="view_module_page_about">حول</string>
     <string name="view_module_description">الوصف</string>
     <string name="view_module_local">محلي</string>
     <string name="view_module_version">الإصدار</string>
@@ -80,4 +80,27 @@
     <string name="settings_app_desc">اعدادات حول تطبيق MRepo نفسه</string>
     <string name="settings_about">حول</string>
     <string name="about_app_version">الإصدار %1$s (%2$s)</string>
+    <string name="repo_details">التفاصيل</string>
+    <string name="menu_show_updated">عرض وقت الحديث</string>
+    <string name="module_new">جديد</string>
+    <string name="menu_pin_updatable">تدبيس القابلة لتحديث</string>
+    <string name="view_module_cloud">سحابي</string>
+    <string name="menu_pin_installed">تدبيس المثبتة</string>
+    <string name="menu_show_icon">عرض الايقونة</string>
+    <string name="menu_show_license">عرض الرخصة</string>
+    <string name="view_module_homepage">الصفحة الرئيسية</string>
+    <string name="view_module_source">الرمز المصدري</string>
+    <string name="view_module_support">الدعم</string>
+    <string name="view_module_view_track">عرض المسار</string>
+    <string name="view_module_type">النوع: %1$s</string>
+    <string name="view_module_added">مضاف في : %1$s</string>
+    <string name="view_module_last_updated">المحدثه مؤخرا</string>
+    <string name="repo_update_at">محدث في: %1$s</string>
+    <string name="repo_incompatible">غير متوافق</string>
+    <string name="menu_advanced_menu">القائمة المتقدمة</string>
+    <string name="menu_sort_mode">وضع الفرز</string>
+    <string name="menu_sort_option_name">الاسم</string>
+    <string name="menu_sort_option_updated">وقت التحديث</string>
+    <string name="menu_descending">تنازلي</string>
+    <string name="menu_pin_enabled">تدبيس المفعلة</string>
 </resources>
