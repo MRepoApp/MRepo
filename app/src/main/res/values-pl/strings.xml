@@ -9,7 +9,7 @@
     <string name="settings_app_desc">Ustawienia aplikacji MRepo</string>
     <string name="settings_menu_reboot_recovery">Restartuj do Recovery</string>
     <string name="settings_delete_zip">Usuwaj plik zip</string>
-    <string name="settings_delete_zip_desc">Usuwa plik zip modułu po pomyślnej instalacji. Zostanie to wykonane przez superusera</string>
+    <string name="settings_delete_zip_desc">Usuwa plik zip modułu (za pomocą roota) po pomyślnej instalacji</string>
     <string name="app_theme_palette">Paleta barw</string>
     <string name="setup_root_title">Root</string>
     <string name="setup_non_root_title">Bez roota</string>
@@ -17,7 +17,7 @@
     <string name="setup_non_root_desc2">Dostępne: pobieranie modułów</string>
     <string name="setup_root_desc2">Dostępne: pełna funkcjonalność</string>
     <string name="install_flashing">Wgrywanie</string>
-    <string name="install_done">Ukończona</string>
+    <string name="install_done">Ukończono</string>
     <string name="install_failure">Niepowodzenie</string>
     <string name="license_title">Zobacz licencję</string>
     <string name="license_osi_approved">Zatwierdzone przez OSI</string>
