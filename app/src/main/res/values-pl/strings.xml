@@ -18,7 +18,7 @@
     <string name="setup_root_desc2">Dostępne: pełna funkcjonalność</string>
     <string name="install_flashing">Wgrywanie</string>
     <string name="install_done">Ukończona</string>
-    <string name="install_failure">Nie powiodła się</string>
+    <string name="install_failure">Niepowodzenie</string>
     <string name="license_title">Zobacz licencję</string>
     <string name="license_osi_approved">Zatwierdzone przez OSI</string>
     <string name="license_fsf_libre">FSF Libre</string>
