@@ -163,6 +163,6 @@ class MagiskApi(
         onSuccess = onSuccess,
         onFailure = onFailure,
         zipFile = zipFile,
-        cmd = "magisk --install-module ${zipFile.absolutePath}"
+        cmd = "magisk --install-module '${zipFile.absolutePath}'"
     )
 }

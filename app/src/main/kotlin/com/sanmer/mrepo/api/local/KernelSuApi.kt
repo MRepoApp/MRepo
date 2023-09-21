@@ -126,6 +126,6 @@ class KernelSuApi(private val context: Context) {
         onSuccess = onSuccess,
         onFailure = onFailure,
         zipFile = zipFile,
-        cmd = "$ksud module install ${zipFile.absolutePath}"
+        cmd = "$ksud module install '${zipFile.absolutePath}'"
     )
 }
