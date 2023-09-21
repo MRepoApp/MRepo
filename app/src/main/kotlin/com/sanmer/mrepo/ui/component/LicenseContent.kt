@@ -166,7 +166,7 @@ private fun LabelsItem(
 
     if (license.isOsiApproved) {
         LabelItem(
-            painter = painterResource(id = R.drawable.ic_osi),
+            painter = painterResource(id = R.drawable.osi),
             text = stringResource(id = R.string.license_osi_approved)
         )
     }

@@ -37,7 +37,7 @@ fun TopAppBarTitle(
     if (BuildConfig.IS_DEV_VERSION) {
         Spacer(modifier = Modifier.width(10.dp))
         Icon(
-            painter = painterResource(id = R.drawable.ic_ci_label),
+            painter = painterResource(id = R.drawable.ci_label),
             contentDescription = null,
             tint = LocalContentColor.current
         )

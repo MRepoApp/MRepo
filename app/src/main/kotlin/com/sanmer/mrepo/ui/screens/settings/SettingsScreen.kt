@@ -102,7 +102,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                icon = R.drawable.ic_logo,
+                icon = R.drawable.launcher_outline,
                 text = stringResource(id = R.string.settings_about),
                 subText = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                 onClick = {

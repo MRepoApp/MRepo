@@ -56,7 +56,7 @@ object NotificationUtils {
         context: Context,
         channelId: String
     ) = NotificationCompat.Builder(context, channelId)
-        .setSmallIcon(R.drawable.ic_logo)
+        .setSmallIcon(R.drawable.launcher_outline)
         .setSilent(true)
 
     fun buildNotification(channelId: String) = buildNotification(context, channelId)
