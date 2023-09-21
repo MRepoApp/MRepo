@@ -32,30 +32,31 @@ sealed class Colors(
         darkColorScheme = dynamicDarkColorScheme(context)
     ) {
         companion object {
+            @Suppress("ConstPropertyName")
             const val id = -1
         }
     }
-    object Sakura : Colors(
+    data object Sakura : Colors(
         id = 0,
         lightColorScheme = SakuraLightColorScheme,
         darkColorScheme = SakuraDarkColorScheme
     )
-    object DeepPurple : Colors(
+    data object DeepPurple : Colors(
         id = 1,
         lightColorScheme = DeepPurpleLightColorScheme,
         darkColorScheme = DeepPurpleDarkColorScheme
     )
-    object Blue: Colors(
+    data object Blue: Colors(
         id = 2,
         lightColorScheme = BlueLightColorScheme,
         darkColorScheme = BlueDarkColorScheme
     )
-    object Cyan: Colors(
+    data object Cyan: Colors(
         id = 3,
         lightColorScheme = CyanLightColorScheme,
         darkColorScheme = CyanDarkColorScheme
     )
-    object Orange: Colors(
+    data object Orange: Colors(
         id = 4,
         lightColorScheme = OrangeLightColorScheme,
         darkColorScheme = OrangeDarkColorScheme
