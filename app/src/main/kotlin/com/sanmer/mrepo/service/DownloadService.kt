@@ -17,7 +17,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.NotificationUtils
-import com.sanmer.mrepo.ui.activity.install.InstallActivity
 import com.sanmer.mrepo.ui.activity.main.MainActivity
 import com.sanmer.mrepo.utils.HttpUtils
 import com.sanmer.mrepo.utils.extensions.parcelable
@@ -117,10 +116,6 @@ class DownloadService : LifecycleService() {
                 message = message,
                 silent = true
             )
-
-            if (task.install && path.name.endsWith(".zip")) {
-                InstallActivity.start(context = context, path = path)
-            }
 
             tasks.remove(task)
         }

@@ -36,19 +36,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.install.InstallActivity"
-            android:label="@string/install_title"
-            android:exported="true"
-            android:launchMode="standard"
-            android:configChanges="orientation|screenSize|screenLayout">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="application/zip"/>
-                <data android:scheme="content"/>
-            </intent-filter>
-        </activity>
-
         <service android:name=".service.DownloadService"
             android:foregroundServiceType="dataSync"
             android:exported="false"/>
