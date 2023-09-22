@@ -2,13 +2,13 @@ package com.sanmer.mrepo
 
 import android.app.Application
 import android.content.Context
-import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import com.sanmer.mrepo.app.event.isFailed
 import com.sanmer.mrepo.app.event.isNon
 import com.sanmer.mrepo.app.event.isSucceeded
+import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.di.MainScope
 import com.sanmer.mrepo.provider.SuProviderImpl
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -55,9 +55,10 @@ class App : Application(), Configuration.Provider {
         super.onCreate()
         app = this
 
+        NotificationUtils.init(this)
+
         initSuProviderImpl()
         workManger.enqueue(RepoWork.OneTimeWork)
-        ShortcutManagerCompat.removeAllDynamicShortcuts(this)
     }
 
     override fun getWorkManagerConfiguration() =
