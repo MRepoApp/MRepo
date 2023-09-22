@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.activity.main
+package com.sanmer.mrepo.ui.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
