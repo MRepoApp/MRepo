@@ -1,7 +1,6 @@
 package com.sanmer.mrepo
 
 import android.app.Application
-import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
@@ -53,7 +52,6 @@ class App : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        app = this
 
         NotificationUtils.init(this)
 
@@ -81,10 +79,5 @@ class App : Application(), Configuration.Provider {
                     else -> {}
                 }
             }.launchIn(mainScope)
-    }
-
-    companion object {
-        private lateinit var app: App
-        val context: Context get() = app
     }
 }
