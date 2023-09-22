@@ -112,7 +112,7 @@ class ModuleViewModel @Inject constructor(
     }
 
     private fun VersionItem.filename() = "${online.name}_${versionDisplay}.zip"
-        .replace("/", "_")
+        .replace("[\\s+|/]".toRegex(), "_")
 
     fun downloader(
         context: Context,
