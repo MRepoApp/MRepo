@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.ui.activity
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -14,7 +15,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -22,6 +22,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.sanmer.mrepo.ui.animate.slideInBottomToTop
+import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.navigation.MainScreen
 import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
 import com.sanmer.mrepo.ui.navigation.graphs.modulesScreen
@@ -43,18 +45,18 @@ fun MainScreen() {
         }
     }
 
-    val navBarAlpha by animateFloatAsState(
-        targetValue = if (showNav) 1f else 0f,
-        label = "navBarAlpha"
-    )
-
     Scaffold(
         bottomBar = {
-            BottomNav(
-                navController = navController,
-                isRoot = userPreferences.isRoot,
-                modifier = Modifier.alpha(navBarAlpha)
-            )
+            AnimatedVisibility(
+                visible = showNav,
+                enter = slideInBottomToTop(tween(350)),
+                exit = slideOutTopToBottom(tween(350))
+            ) {
+                BottomNav(
+                    navController = navController,
+                    isRoot = userPreferences.isRoot
+                )
+            }
         }
     ) {
         NavHost(
@@ -78,8 +80,7 @@ fun MainScreen() {
 @Composable
 private fun BottomNav(
     navController: NavController,
-    isRoot: Boolean,
-    modifier: Modifier = Modifier
+    isRoot: Boolean
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -95,7 +96,7 @@ private fun BottomNav(
     }
 
     NavigationBar(
-        modifier = modifier.imePadding()
+        modifier = Modifier.imePadding()
     ) {
         mainScreens.forEach { screen ->
             val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
