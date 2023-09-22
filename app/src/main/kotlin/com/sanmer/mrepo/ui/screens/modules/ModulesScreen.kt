@@ -34,12 +34,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.getAbsoluteFileForUri
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
@@ -190,11 +192,13 @@ private fun TopBar(
 private fun FloatingButton(
     navController: NavController
 ) {
+    val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
 
-        navController.navigateSingleTopTo(InstallViewModel.createRoute(uri))
+        val path = getAbsoluteFileForUri(context, uri)
+        navController.navigateSingleTopTo(InstallViewModel.createRoute(path))
     }
 
     LaunchedEffect(interactionSource) {

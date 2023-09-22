@@ -1,13 +1,11 @@
 package com.sanmer.mrepo.viewmodel
 
-import android.net.Uri
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.State
-import com.sanmer.mrepo.app.utils.MediaStoreUtils.absolutePath
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
@@ -79,12 +77,6 @@ class InstallViewModel @Inject constructor(
     }
 
     companion object {
-        fun createRoute(uri: Uri) =
-            ModulesScreen.Install.route.replace(
-                "{path}",
-                uri.absolutePath.replace("/", "@")
-            )
-
         fun createRoute(path: File) =
             ModulesScreen.Install.route.replace(
                 "{path}",

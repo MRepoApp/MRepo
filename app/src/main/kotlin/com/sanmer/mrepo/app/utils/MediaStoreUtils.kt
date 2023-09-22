@@ -1,24 +1,19 @@
 package com.sanmer.mrepo.app.utils
 
 import android.Manifest
+import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.system.Os
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.core.net.toFile
-import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.sanmer.mrepo.App
 import com.sanmer.mrepo.utils.extensions.toFile
-import java.io.File
 
 object MediaStoreUtils {
-    private val context by lazy { App.context }
-    private val cr by lazy { context.contentResolver }
-
     @Composable
     fun PermissionState() {
         val permissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -30,49 +25,44 @@ object MediaStoreUtils {
         }
     }
 
-    val Uri.displayName: String get() {
-        if (scheme == "file") {
-            return toFile().name
+    fun getDisplayNameForUri(context: Context, uri: Uri): String {
+        if (uri.scheme == "file") {
+            return uri.toFile().name
         }
 
-        require(scheme == "content") { "Uri lacks 'content' scheme: $this" }
+        require(uri.scheme == "content") { "Uri lacks 'content' scheme: $uri" }
 
         val projection = arrayOf(OpenableColumns.DISPLAY_NAME)
-        cr.query(this, projection, null, null, null)?.use { cursor ->
+        val cr = context.contentResolver
+        cr.query(uri, projection, null, null, null)?.use { cursor ->
             val displayNameColumn = cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
             if (cursor.moveToFirst()) {
                 return cursor.getString(displayNameColumn)
             }
         }
 
-        return this.toString()
+        return uri.toString()
     }
 
-    fun Uri.copyTo(new: File) {
-        cr.openInputStream(this)?.use { input ->
-            cr.openOutputStream(new.toUri())?.use { output ->
-                input.copyTo(output)
-            }
-        }
-    }
-
-    val Uri.absolutePath: String get() {
-        if (scheme == "file") {
-            return toFile().absolutePath
+    fun getAbsolutePathForUri(context: Context, uri: Uri): String {
+        if (uri.scheme == "file") {
+            return uri.toFile().absolutePath
         }
 
-        require(scheme == "content") { "Uri lacks 'content' scheme: $this" }
+        require(uri.scheme == "content") { "Uri lacks 'content' scheme: $uri" }
 
-        val uri = try {
-            DocumentFile.fromTreeUri(context, this)?.uri ?: return this.toString()
+        val newUri = try {
+            checkNotNull(DocumentFile.fromTreeUri(context, uri)?.uri)
         } catch (e: Exception) {
-            this
+            uri
         }
 
-        return cr.openFileDescriptor(uri, "r")?.use {
+        val cr =  context.contentResolver
+        return cr.openFileDescriptor(newUri, "r")?.use {
             Os.readlink("/proc/self/fd/${it.fd}")
-        } ?: this.toString()
+        } ?: uri.toString()
     }
 
-    val Uri.absoluteFile get() = absolutePath.toFile()
+    fun getAbsoluteFileForUri(context: Context, uri: Uri) =
+        getAbsolutePathForUri(context, uri).toFile()
 }

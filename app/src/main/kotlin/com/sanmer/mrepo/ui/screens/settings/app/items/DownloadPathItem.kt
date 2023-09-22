@@ -25,7 +25,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.utils.MediaStoreUtils.absoluteFile
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.getAbsoluteFileForUri
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TextFieldDialog
 import com.sanmer.mrepo.utils.extensions.toFile
@@ -80,7 +80,7 @@ private fun EditDialog(
         val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         context.contentResolver.takePersistableUriPermission(uri, flags)
 
-        newPath = uri.absoluteFile
+        newPath = getAbsoluteFileForUri(context, uri)
         parent = newPath.parent
         name = newPath.name
     }
