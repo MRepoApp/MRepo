@@ -4,6 +4,7 @@ import android.content.Context
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.utils.extensions.output
+import com.sanmer.mrepo.utils.extensions.tmpDir
 import com.sanmer.mrepo.utils.extensions.unzip
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
@@ -24,9 +25,11 @@ object ModuleUtils {
                 str?.let(console)
             }
         })
-        .submit {
-            if (it.isSuccess) {
-                val tmp = context.cacheDir.resolve("tmp").apply {
+        .submit { r ->
+            if (!r.isSuccess) {
+                onFailure()
+            } else {
+                val tmp = context.tmpDir.apply {
                     if (!exists()) mkdirs()
                 }
 
@@ -42,8 +45,6 @@ object ModuleUtils {
                 }
 
                 Shell.cmd("rm -rf ${tmp.absolutePath}").submit()
-            } else {
-                onFailure()
             }
         }
 

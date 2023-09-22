@@ -8,6 +8,8 @@ import androidx.core.content.FileProvider
 import com.sanmer.mrepo.BuildConfig
 import java.io.File
 
+val Context.tmpDir get() = cacheDir.resolve("tmp")
+
 fun Context.renameDatabase(old: String, new: String) {
     databaseList().forEach {
         if (it.startsWith(old)) {

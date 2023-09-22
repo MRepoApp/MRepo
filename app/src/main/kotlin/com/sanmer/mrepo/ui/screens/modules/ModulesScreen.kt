@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.utils.MediaStoreUtils.getAbsoluteFileForUri
+import com.sanmer.mrepo.app.utils.MediaStoreUtils.copyToTmp
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
@@ -197,7 +197,7 @@ private fun FloatingButton(
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
 
-        val path = getAbsoluteFileForUri(context, uri)
+        val path = copyToTmp(context, uri)
         navController.navigateSingleTopTo(InstallViewModel.createRoute(path))
     }
 
