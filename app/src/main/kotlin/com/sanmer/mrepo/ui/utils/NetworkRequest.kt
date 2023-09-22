@@ -2,9 +2,11 @@ package com.sanmer.mrepo.ui.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.utils.HttpUtils
 import timber.log.Timber
 
@@ -14,31 +16,21 @@ fun <T> launchRequest(
     onFailure: (Throwable) -> Unit = {},
     onSuccess: (T) -> Unit
 ): Event {
-    val state = remember {
-        object : State(initial = Event.LOADING) {
-            override fun setSucceeded(value: Any?) {
-                @Suppress("UNCHECKED_CAST")
-                onSuccess(value as T)
-                super.setSucceeded(value)
-            }
-
-            override fun setFailed(value: Any?) {
-                onFailure(value as Throwable)
-                super.setFailed(value)
-            }
-        }
-    }
+    var event by remember { mutableStateOf(Event.LOADING) }
 
     LaunchedEffect(null) {
         get().onSuccess {
-            state.setSucceeded(it)
+            event = Event.SUCCEEDED
+            onSuccess(it)
         }.onFailure {
-            state.setFailed(it)
+            event = Event.FAILED
+            onFailure(it)
+
             Timber.e(it)
         }
     }
 
-    return state.event
+    return event
 }
 
 @Composable

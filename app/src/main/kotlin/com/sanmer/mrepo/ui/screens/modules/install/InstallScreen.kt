@@ -40,7 +40,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.app.event.State
+import com.sanmer.mrepo.app.event.isFinished
+import com.sanmer.mrepo.app.event.isLoading
+import com.sanmer.mrepo.app.event.isSucceeded
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.utils.ModuleUtils
@@ -57,7 +59,7 @@ fun InstallScreen(
     val isScrollingUp = listState.isScrollingUp()
     val showFab by remember(isScrollingUp) {
         derivedStateOf {
-            isScrollingUp && viewModel.state.isSucceeded
+            isScrollingUp && viewModel.event.isSucceeded
         }
     }
 
@@ -66,7 +68,7 @@ fun InstallScreen(
     }
 
     BackHandler(
-        enabled = viewModel.state.isLoading,
+        enabled = viewModel.event.isLoading,
         onBack = {}
     )
 
@@ -75,7 +77,7 @@ fun InstallScreen(
             .onKeyEvent {
                 when (it.nativeKeyEvent.keyCode) {
                     KeyEvent.KEYCODE_VOLUME_UP,
-                    KeyEvent.KEYCODE_VOLUME_DOWN -> viewModel.state.isLoading
+                    KeyEvent.KEYCODE_VOLUME_DOWN -> viewModel.event.isLoading
                     else -> false
                 }
             }
@@ -84,7 +86,7 @@ fun InstallScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
-                state = viewModel.state,
+                event = viewModel.event,
                 navController = navController,
                 scrollBehavior = scrollBehavior
             )
@@ -138,20 +140,20 @@ private fun Console(
 
 @Composable
 private fun TopBar(
-    state: State,
+    event: Event,
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
     title = stringResource(id = R.string.module_install),
-    subtitle = stringResource(id = when (state.event) {
+    subtitle = stringResource(id = when (event) {
         Event.LOADING -> R.string.install_flashing
         Event.FAILED -> R.string.install_failure
         else -> R.string.install_done
     }),
     scrollBehavior = scrollBehavior,
-    enable = state.isFinished,
+    enable = event.isFinished,
     actions = {
-        if (state.isFinished) {
+        if (event.isFinished) {
             IconButton(
                 onClick = {},
                 enabled = false

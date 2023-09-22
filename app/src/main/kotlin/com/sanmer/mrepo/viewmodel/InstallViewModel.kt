@@ -1,11 +1,13 @@
 package com.sanmer.mrepo.viewmodel
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.app.event.State
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
@@ -30,12 +32,8 @@ class InstallViewModel @Inject constructor(
     private val zipFile = getPath(path).toFile()
 
     val console = mutableStateListOf<String>()
-    val state = object : State(initial = Event.LOADING) {
-        override fun setFailed(value: Any?) {
-            value?.let { send(it.toString())}
-            super.setFailed(value)
-        }
-    }
+    var event by mutableStateOf(Event.LOADING)
+        private set
 
     init {
         Timber.d("InstallViewModel init")
@@ -47,7 +45,7 @@ class InstallViewModel @Inject constructor(
     private val onSucceeded: (LocalModule) -> Unit = {
         viewModelScope.launch {
             localRepository.insertLocal(it)
-            state.setSucceeded()
+            event = Event.SUCCEEDED
         }
     }
 
@@ -65,7 +63,7 @@ class InstallViewModel @Inject constructor(
                 if (deleteZipFile) deleteBySu()
             },
             onFailure = {
-                state.setFailed()
+                event = Event.FAILED
             }
         )
     }
