@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.activity.install
+package com.sanmer.mrepo.ui.screens.modules.install
 
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.app.event.State
@@ -47,6 +48,7 @@ import com.sanmer.mrepo.viewmodel.InstallViewModel
 
 @Composable
 fun InstallScreen(
+    navController: NavController,
     viewModel: InstallViewModel = hiltViewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -83,6 +85,7 @@ fun InstallScreen(
         topBar = {
             TopBar(
                 state = viewModel.state,
+                navController = navController,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -136,9 +139,10 @@ private fun Console(
 @Composable
 private fun TopBar(
     state: State,
+    navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
-    title = stringResource(id = R.string.install_title),
+    title = stringResource(id = R.string.module_install),
     subtitle = stringResource(id = when (state.event) {
         Event.LOADING -> R.string.install_flashing
         Event.FAILED -> R.string.install_failure
@@ -158,7 +162,8 @@ private fun TopBar(
                 )
             }
         }
-    }
+    },
+    navController = navController
 )
 
 @Composable

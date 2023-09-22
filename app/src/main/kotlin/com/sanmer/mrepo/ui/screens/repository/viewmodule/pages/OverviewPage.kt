@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.repository.viewmodule.pages
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,10 +27,8 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.model.state.LocalState
-import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.formatSize
 import com.sanmer.mrepo.utils.extensions.toDateTime
-import java.io.File
 
 @Composable
 fun OverviewPage(
@@ -40,7 +36,7 @@ fun OverviewPage(
     item: VersionItem?,
     local: LocalModule,
     localState: LocalState?,
-    downloader: (Context, File, VersionItem, Boolean) -> Unit
+    onInstall: (VersionItem) -> Unit
 ) = Column(
     modifier = Modifier
         .fillMaxSize()
@@ -69,7 +65,7 @@ fun OverviewPage(
     if (item != null) {
         CloudItem(
             item = item,
-            downloader = downloader
+            onInstall = onInstall
         )
         HorizontalDivider(thickness = 0.9.dp)
     }
@@ -86,16 +82,13 @@ fun OverviewPage(
 @Composable
 private fun CloudItem(
     item: VersionItem,
-    downloader: (Context, File, VersionItem, Boolean) -> Unit
+    onInstall: (VersionItem) -> Unit
 ) = Column(
     modifier = Modifier
         .padding(all = 16.dp)
         .fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp)
 ) {
-    val userPreferences = LocalUserPreferences.current
-    val context = LocalContext.current
-
     Text(
         text = stringResource(id = R.string.view_module_cloud),
         style = MaterialTheme.typography.titleSmall,
@@ -114,7 +107,7 @@ private fun CloudItem(
         )
 
         ElevatedAssistChip(
-            onClick = { downloader(context, userPreferences.downloadPath, item, true) },
+            onClick = { onInstall(item) },
             label = { Text(text = stringResource(id = R.string.module_install)) },
             leadingIcon = {
                 Icon(

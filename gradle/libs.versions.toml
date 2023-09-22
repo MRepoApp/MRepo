@@ -43,6 +43,7 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "androidxDocumentFile" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }

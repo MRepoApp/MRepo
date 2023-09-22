@@ -127,6 +127,7 @@ dependencies {
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.documentfile)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.viewModel.compose)
