@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.viewmodel
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
@@ -8,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +20,6 @@ import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
-import com.sanmer.mrepo.utils.ModuleUtils
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -134,27 +131,23 @@ class ModulesViewModel @Inject constructor(
         val alpha: Float = 1f,
         val decoration: TextDecoration = TextDecoration.None,
         val toggle: (Boolean) -> Unit = {},
-        val change: () -> Unit = {},
-        val manager: (() -> Unit)? = null
+        val change: () -> Unit = {}
     )
 
     private fun createUiState(
-        context: Context,
         module: LocalModule
     ): UiState = when (module.state) {
         State.ENABLE -> UiState(
             alpha = 1f,
             decoration = TextDecoration.None,
             toggle = { suRepository.disable(module) },
-            change = { suRepository.remove(module) },
-            manager = ModuleUtils.launchManger(context, module)
+            change = { suRepository.remove(module) }
         )
 
         State.DISABLE -> UiState(
             alpha = 0.5f,
             toggle = { suRepository.enable(module) },
-            change = { suRepository.remove(module) },
-            manager = ModuleUtils.launchManger(context, module)
+            change = { suRepository.remove(module) }
         )
 
         State.REMOVE -> UiState(
@@ -172,10 +165,8 @@ class ModulesViewModel @Inject constructor(
 
     @Composable
     fun rememberUiState(module: LocalModule): UiState {
-        val context = LocalContext.current
-
         return remember(key1 = module.state, key2 = isRefreshing) {
-            createUiState(context, module)
+            createUiState(module)
         }
     }
 }

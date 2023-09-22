@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -93,11 +92,6 @@ fun ModuleItem(
             State.ZYGISK_DISABLE -> stateIndicator(R.drawable.danger_outline)
             else -> null
         },
-        leadingButton = {
-            if (uiState.manager != null) {
-                Manager(uiState.manager)
-            }
-        },
         trailingButton = {
             RemoveOrRestore(
                 module = module,
@@ -135,17 +129,5 @@ private fun RemoveOrRestore(
         } else {
             R.string.module_remove
         })
-    )
-}
-
-@Composable
-private fun Manager(
-    onClick: () -> Unit
-) = FilledTonalIconButton(
-    onClick = onClick
-) {
-    Icon(
-        painter = painterResource(id = R.drawable.setting_outline),
-        contentDescription = null,
     )
 }

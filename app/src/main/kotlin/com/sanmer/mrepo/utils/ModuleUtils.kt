@@ -3,7 +3,6 @@ package com.sanmer.mrepo.utils
 import android.content.Context
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
-import com.sanmer.mrepo.utils.extensions.output
 import com.sanmer.mrepo.utils.extensions.tmpDir
 import com.sanmer.mrepo.utils.extensions.unzip
 import com.topjohnwu.superuser.CallbackList
@@ -76,37 +75,6 @@ object ModuleUtils {
         }
     }.onFailure {
         Timber.e(it, "parseProps")
-    }
-
-    fun launchManger(
-        context: Context,
-        module: LocalModule
-    ): (() -> Unit)? = when {
-        module.isLsposed -> {
-            { launchLSPManger(context) }
-        }
-        else -> null
-    }
-
-    private val LocalModule.isLsposed get() =
-        id == "zygisk_lsposed" || id == "riru_lsposed"
-
-    private fun launchLSPManger(context: Context) {
-        context.packageManager
-            .getLaunchIntentForPackage("org.lsposed.manager")
-            ?.let {
-                context.startActivity(it)
-                return
-            }
-
-        Shell.cmd("am start " +
-                "-a android.intent.action.MAIN " +
-                "-c org.lsposed.manager.LAUNCH_MANAGER com.android.shell/.BugreportWarningActivity")
-            .submit {
-                if (!it.isSuccess) {
-                    Timber.e("launchLSPManger failed: ${it.output}")
-                }
-            }
     }
 
     fun reboot(reason: String = "") {
