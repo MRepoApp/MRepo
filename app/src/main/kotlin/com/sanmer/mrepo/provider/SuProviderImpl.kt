@@ -8,7 +8,7 @@ import android.os.IBinder
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.api.local.LocalApi
-import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.utils.extensions.toFile
 import com.topjohnwu.superuser.NoShellException
 import com.topjohnwu.superuser.Shell

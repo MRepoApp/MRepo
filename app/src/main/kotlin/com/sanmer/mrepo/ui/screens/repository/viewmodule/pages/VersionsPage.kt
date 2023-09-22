@@ -54,8 +54,8 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.event.isLoading
-import com.sanmer.mrepo.app.event.isSucceeded
+import com.sanmer.mrepo.app.isLoading
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.LabelItem

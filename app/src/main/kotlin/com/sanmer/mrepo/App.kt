@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.sanmer.mrepo.app.event.isFailed
-import com.sanmer.mrepo.app.event.isNon
-import com.sanmer.mrepo.app.event.isSucceeded
+import com.sanmer.mrepo.app.isFailed
+import com.sanmer.mrepo.app.isNon
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.di.MainScope
 import com.sanmer.mrepo.provider.SuProviderImpl

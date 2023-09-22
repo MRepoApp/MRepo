@@ -39,10 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.event.Event
-import com.sanmer.mrepo.app.event.isFinished
-import com.sanmer.mrepo.app.event.isLoading
-import com.sanmer.mrepo.app.event.isSucceeded
+import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.app.isFinished
+import com.sanmer.mrepo.app.isLoading
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.utils.ModuleUtils

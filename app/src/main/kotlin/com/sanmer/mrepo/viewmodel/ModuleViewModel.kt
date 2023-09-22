@@ -18,7 +18,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule

@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.utils.HttpUtils
 import timber.log.Timber
 

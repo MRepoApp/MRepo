@@ -1,7 +1,7 @@
 package com.sanmer.mrepo.repository
 
 import com.sanmer.mrepo.api.local.LocalApi
-import com.sanmer.mrepo.app.event.Event
+import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.provider.SuProvider
 import com.topjohnwu.superuser.nio.FileSystemManager

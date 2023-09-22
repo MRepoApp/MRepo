@@ -41,9 +41,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.event.isFailed
-import com.sanmer.mrepo.app.event.isLoading
-import com.sanmer.mrepo.app.event.isSucceeded
+import com.sanmer.mrepo.app.isFailed
+import com.sanmer.mrepo.app.isLoading
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.model.json.License
 import com.sanmer.mrepo.ui.utils.jsonRequest
 import timber.log.Timber
