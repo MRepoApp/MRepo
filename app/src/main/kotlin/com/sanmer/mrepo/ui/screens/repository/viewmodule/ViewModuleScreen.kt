@@ -10,15 +10,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.OverviewPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.VersionsPage
+import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
+import com.sanmer.mrepo.viewmodel.InstallViewModel
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
@@ -26,6 +30,7 @@ fun ViewModuleScreen(
     navController: NavController,
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val userPreferences = LocalUserPreferences.current
     val suState = LocalSuState.current
 
@@ -33,6 +38,17 @@ fun ViewModuleScreen(
 
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { pages.size }
+
+    val download: (VersionItem, Boolean) -> Unit = { item, install ->
+        viewModel.downloader(context, item) {
+            if (install) {
+                val path = userPreferences.downloadPath.resolve(it)
+                navController.navigateSingleTopTo(
+                    InstallViewModel.createRoute(path)
+                )
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -64,14 +80,14 @@ fun ViewModuleScreen(
                         item = viewModel.versions.firstOrNull()?.second,
                         local = viewModel.local,
                         localState = localState,
-                        downloader = viewModel::downloader
+                        onInstall = { download(it, true) }
                     )
                     1 -> VersionsPage(
                         versions = viewModel.versions,
                         localVersionCode = viewModel.localVersionCode,
                         isRoot = userPreferences.isRoot,
                         getProgress = { viewModel.rememberProgress(it) },
-                        downloader = viewModel::downloader
+                        onDownload = download
                     )
                     2 -> AboutPage(
                         online = viewModel.online,

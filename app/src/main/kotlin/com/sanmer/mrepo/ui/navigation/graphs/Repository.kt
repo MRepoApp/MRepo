@@ -9,7 +9,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.ui.navigation.MainScreen
 import com.sanmer.mrepo.ui.screens.repository.RepositoryScreen
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.ViewModuleScreen
@@ -18,8 +17,6 @@ enum class RepositoryScreen(val route: String) {
     Home("Repository"),
     View("View/{moduleId}")
 }
-
-fun createViewRoute(module: OnlineModule) = "View/${module.id}"
 
 fun NavGraphBuilder.repositoryScreen(
     navController: NavController

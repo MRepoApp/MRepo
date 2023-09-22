@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.repository.viewmodule.pages
 
-import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -49,7 +48,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
@@ -63,12 +61,10 @@ import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.LabelItem
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
-import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.stringRequest
 import com.sanmer.mrepo.utils.extensions.toDate
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
 fun VersionsPage(
@@ -76,7 +72,7 @@ fun VersionsPage(
     localVersionCode: Int,
     isRoot: Boolean,
     getProgress: @Composable (VersionItem) -> Float,
-    downloader: (Context, File, VersionItem, Boolean) -> Unit
+    onDownload: (VersionItem, Boolean) -> Unit
 ) = LazyColumn(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -89,7 +85,7 @@ fun VersionsPage(
             repo = repo,
             localVersionCode = localVersionCode,
             isRoot = isRoot,
-            downloader = downloader
+            onDownload = onDownload
         )
 
         val progress = getProgress(item)
@@ -113,7 +109,7 @@ private fun VersionItem(
     repo: Repo,
     localVersionCode: Int,
     isRoot: Boolean,
-    downloader: (Context, File, VersionItem, Boolean) -> Unit
+    onDownload: (VersionItem, Boolean) -> Unit
 ) {
     var open by remember { mutableStateOf(false) }
     if (open) VersionItemBottomSheet(
@@ -121,7 +117,7 @@ private fun VersionItem(
         isRoot = isRoot,
         hasChangelog = item.changelog.isNotBlank(),
         onClose = { open = false },
-        downloader = downloader
+        onDownload = onDownload
     )
 
     Row(
@@ -175,7 +171,7 @@ private fun VersionItemBottomSheet(
     isRoot: Boolean,
     hasChangelog: Boolean = true,
     state: SheetState = rememberModalBottomSheetState(),
-    downloader: (Context, File, VersionItem, Boolean) -> Unit,
+    onDownload: (VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
@@ -202,7 +198,7 @@ private fun VersionItemBottomSheet(
             item = item,
             isRoot = isRoot,
             state = state,
-            downloader = downloader,
+            onDownload = onDownload,
             onClose = onClose
         )
         ChangelogItem(url = item.changelog)
@@ -211,7 +207,7 @@ private fun VersionItemBottomSheet(
             item = item,
             isRoot = isRoot,
             state = state,
-            downloader = downloader,
+            downloader = onDownload,
             onClose = onClose
         )
     }
@@ -222,7 +218,7 @@ private fun ColumnScope.ButtonRow(
     item: VersionItem,
     isRoot: Boolean,
     state: SheetState,
-    downloader: (Context, File, VersionItem, Boolean) -> Unit,
+    onDownload: (VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
 ) = Row(
     modifier = Modifier
@@ -232,13 +228,11 @@ private fun ColumnScope.ButtonRow(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.spacedBy(10.dp)
 ) {
-    val userPreferences = LocalUserPreferences.current
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     OutlinedButton(
         onClick = {
-            downloader(context, userPreferences.downloadPath, item, true)
+            onDownload(item, true)
             scope.launch {
                 onClose()
                 state.hide()
@@ -257,7 +251,7 @@ private fun ColumnScope.ButtonRow(
 
     OutlinedButton(
         onClick = {
-            downloader(context, userPreferences.downloadPath, item, false)
+            onDownload(item, false)
             scope.launch {
                 onClose()
                 state.hide()
@@ -316,7 +310,7 @@ private fun ColumnScope.ButtonColumn(
     item: VersionItem,
     isRoot: Boolean,
     state: SheetState,
-    downloader: (Context, File, VersionItem, Boolean) -> Unit,
+    downloader: (VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
 ) = Column(
     modifier = Modifier
@@ -324,13 +318,11 @@ private fun ColumnScope.ButtonColumn(
         .align(Alignment.CenterHorizontally),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
-    val userPreferences = LocalUserPreferences.current
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     ButtonItem(
         onClick = {
-            downloader(context, userPreferences.downloadPath, item, true)
+            downloader(item, true)
             scope.launch {
                 onClose()
                 state.hide()
@@ -343,7 +335,7 @@ private fun ColumnScope.ButtonColumn(
 
     ButtonItem(
         onClick = {
-            downloader(context, userPreferences.downloadPath, item, false)
+            downloader(item, false)
             scope.launch {
                 onClose()
                 state.hide()

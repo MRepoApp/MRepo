@@ -14,8 +14,8 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.state.OnlineState
 import com.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
-import com.sanmer.mrepo.ui.navigation.graphs.createViewRoute
 import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
+import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
 fun ModulesList(
@@ -37,7 +37,9 @@ fun ModulesList(
             ModuleItem(
                 module = module,
                 state = state,
-                onClick = { navController.navigateSingleTopTo(createViewRoute(module)) }
+                onClick = {
+                    navController.navigateSingleTopTo(ModuleViewModel.createRoute(module))
+                }
             )
         }
     }

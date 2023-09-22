@@ -4,13 +4,20 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.sanmer.mrepo.app.event.Event
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.model.local.LocalModule
@@ -21,13 +28,17 @@ import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.model.state.LocalState.Companion.createState
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
-import com.sanmer.mrepo.service.DownloadService
+import com.sanmer.mrepo.ui.navigation.graphs.RepositoryScreen
+import com.sanmer.mrepo.works.DownloadWork
+import com.sanmer.mrepo.works.DownloadWork.Companion.progressOrZero
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,9 +74,10 @@ class ModuleViewModel @Inject constructor(
     var updatableSize by mutableIntStateOf(0)
         private set
 
+    private val progressFlow = MutableStateFlow("url" to 0f)
+
     init {
         Timber.d("ModuleViewModel init: $moduleId")
-
         getModule()
         getVersionsAndTracks()
     }
@@ -99,35 +111,54 @@ class ModuleViewModel @Inject constructor(
         }
     }
 
+    private fun VersionItem.filename() = "${online.name}_${versionDisplay}.zip"
+        .replace("/", "_")
+
     fun downloader(
         context: Context,
-        downloadPath: File,
         item: VersionItem,
-        install: Boolean
+        onSuccess: (String) -> Unit
     ) {
-        val path = downloadPath.resolve(
-            "${online.name}_${item.versionDisplay}.zip"
-                .replace("[\\s+|/]".toRegex(), "_")
-                .replace("[^a-zA-Z0-9\\-._]".toRegex(), "")
+        val workManager = WorkManager.getInstance(context)
+
+        workManager.enqueueUniqueWork(
+            item.zipUrl,
+            ExistingWorkPolicy.KEEP,
+            DownloadWork.start(url = item.zipUrl, filename = item.filename()),
         )
 
-        DownloadService.start(
-            context = context,
-            name = online.name,
-            path = path.absolutePath,
-            url = item.zipUrl,
-            install = install
-        )
+        workManager.getWorkInfosForUniqueWorkLiveData(item.zipUrl)
+            .asFlow()
+            .onEach { list ->
+                if (list.isEmpty()) return@onEach
+
+                val progress = list.first().progress.progressOrZero
+                progressFlow.value = item.zipUrl to progress
+
+                if (list.first().state == WorkInfo.State.SUCCEEDED) {
+                    onSuccess(item.filename())
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     @Composable
-    fun rememberProgress(item: VersionItem) =
-        DownloadService.rememberProgress { it.url == item.zipUrl }
+    fun rememberProgress(item: VersionItem): Float {
+        val progress by progressFlow.collectAsStateWithLifecycle()
+        var value by remember { mutableFloatStateOf(0f) }
+
+        LaunchedEffect(progress) {
+            if (progress.first == item.zipUrl) {
+                value = progress.second
+            }
+        }
+
+        return value
+    }
 
     @Composable
-    fun rememberLocalState(
-        suState: Event
-    ): LocalState? {
+    fun rememberLocalState(suState: Event): LocalState? {
+
         LaunchedEffect(key1 = suState, key2 = local) {
             launch(Dispatchers.Default) {
                 if (installed && localState == null) {
@@ -137,5 +168,10 @@ class ModuleViewModel @Inject constructor(
         }
 
         return localState
+    }
+
+    companion object {
+        fun createRoute(module: OnlineModule) =
+            RepositoryScreen.View.route.replace("{moduleId}", module.id)
     }
 }

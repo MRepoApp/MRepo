@@ -12,11 +12,13 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
+import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
 import com.sanmer.mrepo.utils.extensions.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,9 +79,17 @@ class InstallViewModel @Inject constructor(
     }
 
     companion object {
-        fun createRoute(uri: Uri) = "Install/${
-            uri.absolutePath.replace("/", "@")
-        }"
+        fun createRoute(uri: Uri) =
+            ModulesScreen.Install.route.replace(
+                "{path}",
+                uri.absolutePath.replace("/", "@")
+            )
+
+        fun createRoute(path: File) =
+            ModulesScreen.Install.route.replace(
+                "{path}",
+                path.absolutePath.replace("/", "@")
+            )
 
         fun getPath(path: String) = path.replace("@", "/")
     }
