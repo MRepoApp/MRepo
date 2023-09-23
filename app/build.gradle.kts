@@ -1,5 +1,4 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
-import java.time.Instant
 
 plugins {
     id("mrepo.android.application")
@@ -56,10 +55,8 @@ android {
         }
 
         all {
-            multiDexEnabled = true
             signingConfig = releaseSigning
             buildConfigField("Boolean", "IS_DEV_VERSION", isDevVersion.toString())
-            buildConfigField("String", "BUILD_TIME", "\"${Instant.now()}\"")
         }
     }
 
@@ -80,8 +77,8 @@ android {
 
     applicationVariants.configureEach {
         outputs.configureEach {
-            this as ApkVariantOutputImpl
-            outputFileName = "MRepo-${versionName}-${versionCode}-${name}.apk"
+            (this as? ApkVariantOutputImpl)?.outputFileName =
+                "MRepo-${versionName}-${versionCode}-${name}.apk"
         }
     }
 }
