@@ -90,14 +90,14 @@ class RepositoryViewModel @Inject constructor(
         descending: Boolean
     ): Comparator<Pair<OnlineState, OnlineModule>> = if (descending) {
         when (option) {
-            Option.NAME -> compareByDescending { it.second.name }
+            Option.NAME -> compareByDescending { it.second.name.lowercase() }
             Option.UPDATED_TIME -> compareBy { it.first.lastUpdated }
             else -> compareByDescending { null }
         }
 
     } else {
         when (option) {
-            Option.NAME -> compareBy { it.second.name }
+            Option.NAME -> compareBy { it.second.name.lowercase() }
             Option.UPDATED_TIME -> compareByDescending { it.first.lastUpdated }
             else -> compareByDescending { null }
         }

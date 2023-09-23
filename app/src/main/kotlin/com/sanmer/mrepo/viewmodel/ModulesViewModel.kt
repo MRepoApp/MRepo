@@ -99,14 +99,14 @@ class ModulesViewModel @Inject constructor(
         descending: Boolean
     ): Comparator<Pair<LocalState, LocalModule>> = if (descending) {
         when (option) {
-            Option.NAME -> compareByDescending { it.second.name }
+            Option.NAME -> compareByDescending { it.second.name.lowercase() }
             Option.UPDATED_TIME -> compareBy { it.first.lastModified }
             else -> compareByDescending { null }
         }
 
     } else {
         when (option) {
-            Option.NAME -> compareBy { it.second.name }
+            Option.NAME -> compareBy { it.second.name.lowercase() }
             Option.UPDATED_TIME -> compareByDescending { it.first.lastModified }
             else -> compareByDescending { null }
         }
