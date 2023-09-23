@@ -22,23 +22,10 @@ android {
         applicationId = namespace
         versionName = "${baseVersionName}${verNameSuffix}.${commitId}"
         versionCode = commitCount
+    }
 
-        resourceConfigurations += arrayOf(
-            "en",
-            "ar",
-            "de",
-            "es",
-            "fr",
-            "in",
-            "ja",
-            "pl",
-            "pt",
-            "ro",
-            "ru",
-            "tr",
-            "zh-rCN",
-            "zh-rTW"
-        )
+    androidResources {
+        generateLocaleConfig = true
     }
 
     val releaseSigning = if (project.hasReleaseKeyStore) {
