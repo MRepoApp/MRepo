@@ -5,10 +5,10 @@
     <string name="setup_root_desc2">Volle Funktionalität</string>
     <string name="setup_non_root_title">Non-Root</string>
     <string name="setup_non_root_desc2">Nur Module herunterladen</string>
-    <string name="install_flashing">Flashing</string>
+    <string name="install_flashing">Installiet</string>
     <string name="install_failure">Fehlgeschlagen</string>
     <string name="license_title">Lizenz anschauen</string>
-    <string name="license_osi_approved">OSI Approved</string>
+    <string name="license_osi_approved">OSI Zugelassen</string>
     <string name="license_fsf_libre">FSF Libre</string>
     <string name="install_done">Fertig</string>
     <string name="page_settings">Einstellungen</string>
