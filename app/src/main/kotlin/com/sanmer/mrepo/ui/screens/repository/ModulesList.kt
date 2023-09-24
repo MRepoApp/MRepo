@@ -38,7 +38,9 @@ fun ModulesList(
                 module = module,
                 state = state,
                 onClick = {
-                    navController.navigateSingleTopTo(ModuleViewModel.createRoute(module))
+                    navController.navigateSingleTopTo(
+                        ModuleViewModel.putModuleId(module)
+                    )
                 }
             )
         }

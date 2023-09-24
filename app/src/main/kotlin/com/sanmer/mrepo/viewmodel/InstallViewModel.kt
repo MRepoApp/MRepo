@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.viewmodel
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,10 +27,9 @@ class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val suRepository: SuRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val path: String = checkNotNull(savedStateHandle["path"])
-    private val zipFile = getPath(path).toFile()
+    private val zipFile = getPath(savedStateHandle)
 
     val console = mutableStateListOf<String>()
     var event by mutableStateOf(Event.LOADING)
@@ -75,12 +75,14 @@ class InstallViewModel @Inject constructor(
     }
 
     companion object {
-        fun createRoute(path: File) =
+        fun putPath(path: File) =
             ModulesScreen.Install.route.replace(
-                "{path}",
-                path.absolutePath.replace("/", "@")
+                "{path}", Uri.encode(path.absolutePath)
             )
 
-        fun getPath(path: String) = path.replace("@", "/")
+        fun getPath(savedStateHandle: SavedStateHandle) =
+            Uri.decode(
+                checkNotNull(savedStateHandle["path"])
+            ).toFile()
     }
 }

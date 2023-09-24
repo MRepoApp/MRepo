@@ -53,7 +53,7 @@ class ModuleViewModel @Inject constructor(
         FileSystemManager.getLocal()
     }
 
-    private val moduleId: String = checkNotNull(savedStateHandle["moduleId"])
+    private val moduleId = getModuleId(savedStateHandle)
     var online: OnlineModule by mutableStateOf(OnlineModule.example())
         private set
 
@@ -171,7 +171,12 @@ class ModuleViewModel @Inject constructor(
     }
 
     companion object {
-        fun createRoute(module: OnlineModule) =
-            RepositoryScreen.View.route.replace("{moduleId}", module.id)
+        fun putModuleId(module: OnlineModule) =
+            RepositoryScreen.View.route.replace(
+                "{moduleId}", module.id
+            )
+
+        fun getModuleId(savedStateHandle: SavedStateHandle): String =
+            checkNotNull(savedStateHandle["moduleId"])
     }
 }

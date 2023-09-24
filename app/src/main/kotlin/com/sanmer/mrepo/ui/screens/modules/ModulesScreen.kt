@@ -198,7 +198,7 @@ private fun FloatingButton(
         if (uri == null) return@rememberLauncherForActivityResult
 
         val path = copyToTmp(context, uri)
-        navController.navigateSingleTopTo(InstallViewModel.createRoute(path))
+        navController.navigateSingleTopTo(InstallViewModel.putPath(path))
     }
 
     LaunchedEffect(interactionSource) {

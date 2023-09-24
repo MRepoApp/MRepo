@@ -44,7 +44,7 @@ fun ViewModuleScreen(
             if (install) {
                 val path = userPreferences.downloadPath.resolve(it)
                 navController.navigateSingleTopTo(
-                    InstallViewModel.createRoute(path)
+                    InstallViewModel.putPath(path)
                 )
             }
         }
