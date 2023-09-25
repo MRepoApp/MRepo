@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_app_theme_desc">Cambiar modo noche y colores del fondo</string>
+    <string name="settings_app_theme_desc">Cambia la combinación de colores y el modo nocturno</string>
     <string name="settings_menu_reboot_bootloader">Reiniciar a Bootloader</string>
     <string name="settings_menu_reboot_edl">Reiniciar a EDL</string>
     <string name="module_version_author">%1$s por %2$s</string>
@@ -60,7 +60,7 @@
     <string name="dialog_ok">OK</string>
     <string name="message_download_success">Descarga con éxito</string>
     <string name="message_loading">Cargando…</string>
-    <string name="notification_name_download">Servicio de descarga</string>
+    <string name="notification_name_download">La descarga funciona</string>
     <string name="unknown_error">Error desconocido</string>
     <string name="view_module_last_updated">Última actualización</string>
     <string name="view_module_local">Local</string>
@@ -101,5 +101,6 @@
     <string name="menu_sort_mode">Modo de sorteo</string>
     <string name="menu_sort_option_name">Nombre</string>
     <string name="menu_sort_option_updated">Tiempo de actualización</string>
-    <string name="page_repository">Repositorio</string>
+    <string name="page_repository">Repositorios</string>
+    <string name="repo_details">Detalles</string>
 </resources>
