@@ -25,7 +25,7 @@ MRepo is written with [Jetpack Compose](https://developer.android.com/jetpack/co
  - [ya0211/magisk-modules-alt-repo](https://github.com/ya0211/magisk-modules-alt-repo): a mirror of Magisk-Modules-Alt-Repo
 
 ## Credits
-- [Iconsax](https://iconsax.io): the icons of the Vuesax framework
+ - [tabler/tabler-icons](https://github.com/tabler/tabler-icons.git)
 
 ## License
 
