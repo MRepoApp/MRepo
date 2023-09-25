@@ -50,7 +50,7 @@
     <string name="app_theme_dark_theme_light">Claro</string>
     <string name="app_theme_dark_theme_dark">Oscuro</string>
     <string name="repo_modules">%1$d módulos</string>
-    <string name="repo_options_update">Actualización</string>
+    <string name="repo_options_update">Actualizar</string>
     <string name="repo_options_delete">Eliminar</string>
     <string name="repo_delete_dialog_desc">¿Estás seguro de eliminarlo %1$s\?</string>
     <string name="repo_add_dialog_title">Agregar repositorio</string>
@@ -95,7 +95,7 @@
     <string name="view_module_version">Versión</string>
     <string name="settings_delete_zip">Eliminar archivo Zip</string>
     <string name="settings_delete_zip_desc">Eliminar archivo comprimido del módulo tras instalación exitosa - ejecutado por Root</string>
-    <string name="repo_update_at">Actualizdo: %1$s</string>
+    <string name="repo_update_at">Actualizado: %1$s</string>
     <string name="about_desc1">Agregar y administrar repositorios de módulos de Magisk y KernelSU.</string>
     <string name="menu_advanced_menu">Opciones avanzadas</string>
     <string name="menu_sort_mode">Modo de sorteo</string>
