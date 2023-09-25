@@ -102,5 +102,4 @@
     <string name="menu_sort_option_name">Nombre</string>
     <string name="menu_sort_option_updated">Tiempo de actualización</string>
     <string name="page_repository">Repositorios</string>
-    <string name="repo_details">Detalles</string>
 </resources>
