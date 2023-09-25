@@ -41,19 +41,19 @@ private enum class DarkModeItem(
 ) {
     Auto(
         value = DarkMode.FOLLOW_SYSTEM,
-        icon = R.drawable.auto_brightness_outline,
+        icon = R.drawable.brightness_2,
         text = R.string.app_theme_dark_theme_auto
     ),
 
     Light(
         value = DarkMode.ALWAYS_OFF,
-        icon = R.drawable.sun_outline,
+        icon = R.drawable.sun,
         text = R.string.app_theme_dark_theme_light
     ),
 
     Dark(
         value = DarkMode.ALWAYS_ON,
-        icon = R.drawable.moon_outline,
+        icon = R.drawable.moon_stars,
         text = R.string.app_theme_dark_theme_dark
     )
 }

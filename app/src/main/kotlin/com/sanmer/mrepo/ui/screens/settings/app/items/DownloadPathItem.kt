@@ -44,7 +44,7 @@ fun DownloadPathItem(
     )
 
     SettingNormalItem(
-        icon = R.drawable.cube_scan_outline,
+        icon = R.drawable.files,
         text = stringResource(id = R.string.settings_download_path),
         subText = downloadPath.absolutePath,
         onClick = { edit = true }

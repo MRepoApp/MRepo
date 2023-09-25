@@ -37,7 +37,7 @@ fun ViewModuleScreen(
     val localState = viewModel.rememberLocalState(suState = suState)
 
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
-    val pagerState = rememberPagerState { pages.size }
+    val pagerState = rememberPagerState { if (viewModel.isEmptyAbout) 2 else 3 }
 
     val download: (VersionItem, Boolean) -> Unit = { item, install ->
         viewModel.downloader(context, item) {
@@ -67,7 +67,8 @@ fun ViewModuleScreen(
         ) {
             ViewModuleTab(
                 state = pagerState,
-                updatableSize = viewModel.updatableSize
+                updatableSize = viewModel.updatableSize,
+                hasAbout = !viewModel.isEmptyAbout
             )
 
             HorizontalPager(
@@ -85,13 +86,11 @@ fun ViewModuleScreen(
                     1 -> VersionsPage(
                         versions = viewModel.versions,
                         localVersionCode = viewModel.localVersionCode,
-                        isRoot = userPreferences.isRoot,
                         getProgress = { viewModel.rememberProgress(it) },
                         onDownload = download
                     )
                     2 -> AboutPage(
-                        online = viewModel.online,
-                        isEmpty = viewModel.isEmptyAbout
+                        online = viewModel.online
                     )
                 }
             }

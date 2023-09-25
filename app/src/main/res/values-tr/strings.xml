@@ -94,7 +94,6 @@
     <string name="menu_show_license">Lisansı göster</string>
     <string name="repo_update_at">%1$s tarihinde güncellendi</string>
     <string name="repo_incompatible">Uyumlu değil</string>
-    <string name="repo_details">Detaylar</string>
     <string name="menu_advanced_menu">Gelişmiş menü</string>
     <string name="menu_sort_mode">Sıralama şekli</string>
     <string name="menu_descending">Azalan</string>

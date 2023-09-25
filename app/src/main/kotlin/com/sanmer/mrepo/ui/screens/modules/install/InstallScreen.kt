@@ -15,7 +15,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -159,7 +159,7 @@ private fun TopBar(
                 enabled = false
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.send_outline),
+                    painter = painterResource(id = R.drawable.device_floppy),
                     contentDescription = null
                 )
             }
@@ -169,13 +169,11 @@ private fun TopBar(
 )
 
 @Composable
-private fun FloatingButton() = ExtendedFloatingActionButton(
-    onClick = { ModuleUtils.reboot() },
-    text = { Text(text = stringResource(id = R.string.settings_menu_reboot)) },
-    icon = {
-        Icon(
-            painter = painterResource(id = R.drawable.refresh_outline),
-            contentDescription = null
-        )
-    }
-)
+private fun FloatingButton() = FloatingActionButton(
+    onClick = { ModuleUtils.reboot() }
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.reload),
+        contentDescription = null
+    )
+}

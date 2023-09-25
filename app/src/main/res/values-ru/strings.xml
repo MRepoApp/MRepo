@@ -85,7 +85,6 @@
     <string name="view_module_homepage">Домашняя страница</string>
     <string name="view_module_source">Исходный код</string>
     <string name="view_module_support">Поддержка</string>
-    <string name="repo_details">Детали</string>
     <string name="module_new">Новый</string>
     <string name="menu_pin_installed">Пин-код установлен</string>
     <string name="menu_pin_updatable">Пин-код обновлён</string>

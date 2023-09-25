@@ -47,7 +47,7 @@ fun ModulesMenu(
         onClick = { open = true }
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.menu_outline),
+            painter = painterResource(id = R.drawable.menu_2),
             contentDescription = null
         )
 

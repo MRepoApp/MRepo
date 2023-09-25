@@ -55,7 +55,7 @@ fun SearchTopBar(
                 onClick = onClose
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.arrow_left_outline),
+                    painter = painterResource(id = R.drawable.arrow_left),
                     contentDescription = null
                 )
             }
@@ -89,7 +89,7 @@ fun SearchTopBar(
                 ),
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.search_normal_outline),
+                        painter = painterResource(id = R.drawable.search),
                         contentDescription = null
                     )
                 },

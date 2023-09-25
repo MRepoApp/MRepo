@@ -45,7 +45,7 @@ fun TrackItem(
     var open by rememberSaveable { mutableStateOf(false) }
 
     TagItem(
-        icon = R.drawable.tag_outline,
+        icon = R.drawable.tag,
         onClick = { open = true }
     )
 
@@ -96,7 +96,7 @@ private fun ValueItem(
     ) {
         Icon(
             modifier = Modifier.size(30.dp),
-            painter = painterResource(id = R.drawable.note_outline),
+            painter = painterResource(id = R.drawable.code_asterix),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )

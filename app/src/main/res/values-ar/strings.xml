@@ -80,7 +80,6 @@
     <string name="settings_app_desc">اعدادات حول تطبيق MRepo نفسه</string>
     <string name="settings_about">حول</string>
     <string name="about_app_version">الإصدار %1$s (%2$s)</string>
-    <string name="repo_details">التفاصيل</string>
     <string name="menu_show_updated">عرض وقت الحديث</string>
     <string name="module_new">جديد</string>
     <string name="menu_pin_updatable">تدبيس القابلة لتحديث</string>

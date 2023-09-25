@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -23,10 +24,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.model.state.LocalState
+import com.sanmer.mrepo.ui.providable.LocalSuState
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.formatSize
 import com.sanmer.mrepo.utils.extensions.toDateTime
 
@@ -89,6 +93,9 @@ private fun CloudItem(
         .fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp)
 ) {
+    val userPreferences = LocalUserPreferences.current
+    val suState = LocalSuState.current
+
     Text(
         text = stringResource(id = R.string.view_module_cloud),
         style = MaterialTheme.typography.titleSmall,
@@ -107,13 +114,14 @@ private fun CloudItem(
         )
 
         ElevatedAssistChip(
+            enabled = userPreferences.isRoot && suState.isSucceeded,
             onClick = { onInstall(item) },
             label = { Text(text = stringResource(id = R.string.module_install)) },
             leadingIcon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.import_outline),
+                    painter = painterResource(id = R.drawable.device_mobile_down),
                     contentDescription = null,
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(AssistChipDefaults.IconSize)
                 )
             }
         )

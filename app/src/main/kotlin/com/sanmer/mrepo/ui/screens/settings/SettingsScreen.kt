@@ -71,7 +71,7 @@ fun SettingsScreen(
             }
 
             SettingNormalItem(
-                icon = R.drawable.layer_outline,
+                icon = R.drawable.launcher_outline,
                 text = stringResource(id = R.string.settings_app),
                 subText = stringResource(id = R.string.settings_app_desc),
                 onClick = {
@@ -80,7 +80,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                icon = R.drawable.hierarchy_outline,
+                icon = R.drawable.git_pull_request,
                 text = stringResource(id = R.string.settings_repo),
                 subText = stringResource(id = R.string.settings_repo_desc),
                 onClick = {
@@ -89,7 +89,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                icon = R.drawable.main_component_outline,
+                icon = R.drawable.components,
                 text = stringResource(id = R.string.settings_mode),
                 subText = if (userPreferences.isRoot) {
                     stringResource(id = R.string.settings_mode_root)
@@ -102,7 +102,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                icon = R.drawable.launcher_outline,
+                icon = R.drawable.award,
                 text = stringResource(id = R.string.settings_about),
                 subText = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                 onClick = {
@@ -129,7 +129,7 @@ private fun TopBar(
             enabled = isRoot
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.refresh_outline),
+                painter = painterResource(id = R.drawable.reload),
                 contentDescription = null
             )
 

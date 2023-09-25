@@ -122,7 +122,7 @@ private fun ThemeColorItem(
             if (selected) {
                 Icon(
                     modifier = Modifier.size(36.dp),
-                    painter = painterResource(id = R.drawable.tick_circle_bold),
+                    painter = painterResource(id = R.drawable.circle_check_filled),
                     contentDescription = null,
                     tint = colorScheme.primary
                 )

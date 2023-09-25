@@ -19,7 +19,6 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -83,14 +82,14 @@ fun RepositoryItem(
                 if (it) {
                     Icon(
                         modifier = Modifier.size(32.dp),
-                        painter = painterResource(id = R.drawable.tick_circle_bold),
+                        painter = painterResource(id = R.drawable.circle_check_filled),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.secondary
                     )
                 } else {
                     Icon(
                         modifier = Modifier.size(32.dp),
-                        painter = painterResource(id = R.drawable.close_circle_bold),
+                        painter = painterResource(id = R.drawable.circle_x_filled),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.secondary
                     )
@@ -154,12 +153,12 @@ fun RepositoryItem(
             }
 
             ButtonItem(
-                icon = R.drawable.tag_outline,
+                icon = R.drawable.at,
                 onClick = { open = true }
             )
 
             ButtonItem(
-                icon = R.drawable.import_outline,
+                icon = R.drawable.cloud_download,
                 label = R.string.repo_options_update,
                 onClick = update
             )
@@ -180,14 +179,10 @@ private fun BottomSheet(
 ) {
     val context = LocalContext.current
 
-    Text(
-        text = stringResource(id = R.string.repo_details),
-        style = MaterialTheme.typography.headlineSmall,
-        modifier = Modifier.align(Alignment.CenterHorizontally)
-    )
-
     Column(
-        modifier = Modifier.padding(all = 18.dp),
+        modifier = Modifier
+            .padding(bottom = 18.dp)
+            .padding(horizontal = 18.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         Row(
@@ -220,31 +215,28 @@ private fun BottomSheet(
         }
 
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             textStyle = MaterialTheme.typography.bodyMedium,
             shape = RoundedCornerShape(15.dp),
             value = repo.url,
             onValueChange = {},
             readOnly = true,
-            singleLine = true,
-            trailingIcon = {
-                IconButton(
-                    onClick = { context.shareText(repo.url) }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.send_outline),
-                        contentDescription = null
-                    )
-                }
-            }
+            singleLine = true
         )
 
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
             ButtonItem(
-                icon = R.drawable.trash_outline,
+                icon = R.drawable.share,
+                onClick = { context.shareText(repo.url) }
+            )
+
+            ButtonItem(
+                icon = R.drawable.trash,
                 label = R.string.repo_options_delete,
                 onClick = onDelete
             )

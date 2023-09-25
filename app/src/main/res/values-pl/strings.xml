@@ -88,7 +88,6 @@
     <string name="view_module_view_track">Zobacz ścieżkę</string>
     <string name="view_module_type">Typ: %1$s</string>
     <string name="view_module_added">Dodano w: %1$s</string>
-    <string name="repo_details">Szczegóły</string>
     <string name="menu_show_updated">Pokaż czas aktualizacji</string>
     <string name="menu_sort_option_name">Nazwa</string>
     <string name="menu_sort_option_updated">Czas aktualizacji</string>

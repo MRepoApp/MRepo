@@ -49,8 +49,8 @@ fun MainScreen() {
         bottomBar = {
             AnimatedVisibility(
                 visible = showNav,
-                enter = slideInBottomToTop(tween(350)),
-                exit = slideOutTopToBottom(tween(350))
+                enter = slideInBottomToTop(tween(100)),
+                exit = slideOutTopToBottom(tween(100))
             ) {
                 BottomNav(
                     navController = navController,
@@ -105,7 +105,7 @@ private fun BottomNav(
                 icon = {
                     Icon(
                         painter = painterResource(id = if (selected) {
-                            screen.iconSelected
+                            screen.iconFilled
                         } else {
                             screen.icon
                         }),

@@ -28,7 +28,7 @@ fun LicenseItem(
     var open by rememberSaveable { mutableStateOf(false) }
 
     TagItem(
-        icon = R.drawable.receipt_search_outline,
+        icon = R.drawable.file_certificate,
         onClick = { open = true }
     )
 

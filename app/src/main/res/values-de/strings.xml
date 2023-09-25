@@ -82,7 +82,6 @@
     <string name="menu_descending">Absteigend</string>
     <string name="menu_pin_enabled">Aktivierte anheften</string>
     <string name="menu_show_updated">Zuletzt aktualisiert anzeigen</string>
-    <string name="repo_details">Details</string>
     <string name="repo_options_update">Update</string>
     <string name="about_desc2">Made with ❤️ von %1$s</string>
     <string name="dialog_ok">OK</string>

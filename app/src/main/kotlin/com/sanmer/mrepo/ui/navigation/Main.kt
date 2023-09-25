@@ -8,26 +8,26 @@ enum class MainScreen(
     val route: String,
     @StringRes val label: Int,
     @DrawableRes val icon: Int,
-    @DrawableRes val iconSelected: Int
+    @DrawableRes val iconFilled: Int
 ) {
     Repository(
         route = "RepositoryScreen",
         label = R.string.page_repository,
-        icon = R.drawable.box_outline,
-        iconSelected = R.drawable.box_bold
+        icon = R.drawable.cloud,
+        iconFilled = R.drawable.cloud_filled
     ),
 
     Modules(
         route = "ModulesScreen",
         label = R.string.page_modules,
-        icon = R.drawable.command_outline,
-        iconSelected = R.drawable.command_bold
+        icon = R.drawable.keyframes,
+        iconFilled = R.drawable.keyframes_filled
     ),
 
     Settings(
         route = "SettingsScreen",
         label = R.string.page_settings,
-        icon = R.drawable.setting_outline,
-        iconSelected = R.drawable.setting_bold
+        icon = R.drawable.settings,
+        iconFilled = R.drawable.settings_filled
     )
 }

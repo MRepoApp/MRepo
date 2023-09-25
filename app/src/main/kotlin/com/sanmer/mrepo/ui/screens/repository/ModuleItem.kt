@@ -54,7 +54,7 @@ fun ModuleItem(
     ) {
         if (menu.showIcon) {
             Logo(
-                icon = R.drawable.box_outline,
+                icon = R.drawable.box,
                 modifier = Modifier.size(40.dp),
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 containerColor = MaterialTheme.colorScheme.secondaryContainer

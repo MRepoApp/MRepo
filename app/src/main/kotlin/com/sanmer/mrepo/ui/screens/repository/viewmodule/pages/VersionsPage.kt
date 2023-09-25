@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -40,6 +41,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +49,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,6 +64,8 @@ import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.LabelItem
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.MarkdownText
+import com.sanmer.mrepo.ui.providable.LocalSuState
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.ui.utils.stringRequest
 import com.sanmer.mrepo.utils.extensions.toDate
@@ -70,7 +75,6 @@ import kotlinx.coroutines.launch
 fun VersionsPage(
     versions: List<Pair<Repo, VersionItem>>,
     localVersionCode: Int,
-    isRoot: Boolean,
     getProgress: @Composable (VersionItem) -> Float,
     onDownload: (VersionItem, Boolean) -> Unit
 ) = LazyColumn(
@@ -84,7 +88,6 @@ fun VersionsPage(
             item = item,
             repo = repo,
             localVersionCode = localVersionCode,
-            isRoot = isRoot,
             onDownload = onDownload
         )
 
@@ -108,13 +111,11 @@ private fun VersionItem(
     item: VersionItem,
     repo: Repo,
     localVersionCode: Int,
-    isRoot: Boolean,
     onDownload: (VersionItem, Boolean) -> Unit
 ) {
     var open by remember { mutableStateOf(false) }
     if (open) VersionItemBottomSheet(
         item = item,
-        isRoot = isRoot,
         hasChangelog = item.changelog.isNotBlank(),
         onClose = { open = false },
         onDownload = onDownload
@@ -168,7 +169,6 @@ private fun VersionItem(
 @Composable
 private fun VersionItemBottomSheet(
     item: VersionItem,
-    isRoot: Boolean,
     hasChangelog: Boolean = true,
     state: SheetState = rememberModalBottomSheetState(),
     onDownload: (VersionItem, Boolean) -> Unit,
@@ -193,10 +193,18 @@ private fun VersionItemBottomSheet(
         }
     }
 ) {
+    val userPreferences = LocalUserPreferences.current
+    val suState = LocalSuState.current
+    val enableInstall by remember {
+        derivedStateOf {
+            userPreferences.isRoot && suState.isSucceeded
+        }
+    }
+
     if (hasChangelog) {
         ButtonRow(
             item = item,
-            isRoot = isRoot,
+            enableInstall = enableInstall,
             state = state,
             onDownload = onDownload,
             onClose = onClose
@@ -205,7 +213,7 @@ private fun VersionItemBottomSheet(
     } else {
         ButtonColumn(
             item = item,
-            isRoot = isRoot,
+            enableInstall = enableInstall,
             state = state,
             downloader = onDownload,
             onClose = onClose
@@ -216,7 +224,7 @@ private fun VersionItemBottomSheet(
 @Composable
 private fun ColumnScope.ButtonRow(
     item: VersionItem,
-    isRoot: Boolean,
+    enableInstall: Boolean,
     state: SheetState,
     onDownload: (VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
@@ -231,6 +239,7 @@ private fun ColumnScope.ButtonRow(
     val scope = rememberCoroutineScope()
 
     OutlinedButton(
+        enabled = enableInstall,
         onClick = {
             onDownload(item, true)
             scope.launch {
@@ -238,11 +247,11 @@ private fun ColumnScope.ButtonRow(
                 state.hide()
             }
         },
-        enabled = isRoot,
         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.import_outline),
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.device_mobile_down),
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
@@ -260,7 +269,8 @@ private fun ColumnScope.ButtonRow(
         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.link_outline),
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.file_download),
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
@@ -308,7 +318,7 @@ private fun ChangelogItem(
 @Composable
 private fun ColumnScope.ButtonColumn(
     item: VersionItem,
-    isRoot: Boolean,
+    enableInstall: Boolean,
     state: SheetState,
     downloader: (VersionItem, Boolean) -> Unit,
     onClose: () -> Unit
@@ -321,6 +331,7 @@ private fun ColumnScope.ButtonColumn(
     val scope = rememberCoroutineScope()
 
     ButtonItem(
+        enabled = enableInstall,
         onClick = {
             downloader(item, true)
             scope.launch {
@@ -328,8 +339,7 @@ private fun ColumnScope.ButtonColumn(
                 state.hide()
             }
         },
-        enabled = isRoot,
-        icon = R.drawable.import_outline,
+        icon = R.drawable.device_mobile_down,
         text = stringResource(id = R.string.module_install)
     )
 
@@ -341,7 +351,7 @@ private fun ColumnScope.ButtonColumn(
                 state.hide()
             }
         },
-        icon = R.drawable.link_outline,
+        icon = R.drawable.file_download,
         text = stringResource(id = R.string.module_download)
     )
 }
@@ -355,7 +365,9 @@ private fun ButtonItem(
 ) = Surface(
     onClick = onClick,
     enabled = enabled,
-    modifier = Modifier.fillMaxWidth()
+    modifier = Modifier
+        .alpha(if (enabled) 1f else 0.5f)
+        .fillMaxWidth()
 ) {
     Row(
         modifier = Modifier.padding(vertical = 16.dp, horizontal = 18.dp),
@@ -363,6 +375,7 @@ private fun ButtonItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
+            modifier = Modifier.size(20.dp),
             painter = painterResource(id = icon),
             contentDescription = null
         )

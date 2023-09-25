@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -116,7 +115,7 @@ fun RepositoriesScreen(
         ) {
             if (list.isEmpty()) {
                 PageIndicator(
-                    icon = R.drawable.hierarchy_outline,
+                    icon = R.drawable.git_pull_request,
                     text = R.string.repo_empty
                 )
             }
@@ -208,7 +207,7 @@ private fun TopBar(
             onClick = onRefresh
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.refresh_2_outline),
+                painter = painterResource(id = R.drawable.refresh),
                 contentDescription = null
             )
         }
@@ -226,8 +225,7 @@ private fun FloatingButton(
     containerColor = MaterialTheme.colorScheme.primary
 ) {
     Icon(
-        modifier = Modifier.size(30.dp),
-        painter = painterResource(id = R.drawable.add_outline),
+        painter = painterResource(id = R.drawable.pencil_plus),
         contentDescription = null
     )
 }

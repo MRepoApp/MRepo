@@ -128,7 +128,7 @@ fun NavigateUpTopBar(
             onClick = { if (enable) onBack() }
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.arrow_left_outline),
+                painter = painterResource(id = R.drawable.arrow_left),
                 contentDescription = null
             )
         }

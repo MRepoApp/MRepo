@@ -85,11 +85,11 @@ fun ModuleItem(
             )
         },
         indicator = when (module.state) {
-            State.REMOVE -> stateIndicator(R.drawable.trash_outline)
-            State.UPDATE -> stateIndicator(R.drawable.import_outline)
+            State.REMOVE -> stateIndicator(R.drawable.trash)
+            State.UPDATE -> stateIndicator(R.drawable.device_mobile_down)
             State.ZYGISK_UNLOADED,
             State.RIRU_DISABLE,
-            State.ZYGISK_DISABLE -> stateIndicator(R.drawable.danger_outline)
+            State.ZYGISK_DISABLE -> stateIndicator(R.drawable.alert_triangle)
             else -> null
         },
         trailingButton = {
@@ -115,9 +115,9 @@ private fun RemoveOrRestore(
     Icon(
         modifier = Modifier.size(20.dp),
         painter = painterResource(id = if (module.state == State.REMOVE) {
-            R.drawable.refresh_outline
+            R.drawable.rotate
         } else {
-            R.drawable.trash_outline
+            R.drawable.trash
         }),
         contentDescription = null
     )

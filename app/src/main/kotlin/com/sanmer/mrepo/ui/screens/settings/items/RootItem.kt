@@ -41,9 +41,9 @@ fun RootItem(
         Icon(
             modifier = Modifier.size(30.dp),
             painter = painterResource(id = if (suState.isSucceeded) {
-                R.drawable.verify_bold
+                R.drawable.circle_check_filled
             } else {
-                R.drawable.information_bold
+                R.drawable.alert_circle_filled
             }),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary

@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material.Badge
+import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -34,19 +34,27 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.component.Tab
 import kotlinx.coroutines.launch
 
-val pages = listOf(
-    R.string.view_module_page_overview,
-    R.string.view_module_page_versions,
-    R.string.view_module_page_about
-)
-
 @Composable
 fun ViewModuleTab(
     state: PagerState,
     updatableSize: Int,
+    hasAbout: Boolean,
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
+
+    val pages = if (hasAbout) {
+        listOf(
+            R.string.view_module_page_overview,
+            R.string.view_module_page_versions,
+            R.string.view_module_page_about
+        )
+    } else {
+        listOf(
+            R.string.view_module_page_overview,
+            R.string.view_module_page_versions
+        )
+    }
 
     TabRow(
         modifier = modifier,
@@ -80,7 +88,7 @@ fun ViewModuleTab(
                     badge = {
                         if (index == 1 && updatableSize != 0) {
                             Badge(
-                                backgroundColor = MaterialTheme.colorScheme.error
+                                containerColor = MaterialTheme.colorScheme.error
                             ) {
                                 Text(
                                     text = updatableSize.toString(),

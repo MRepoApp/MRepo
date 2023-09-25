@@ -72,7 +72,7 @@ fun WorkingModeItem(
                 .align(Alignment.TopEnd)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.tick_circle_bold),
+                painter = painterResource(id = R.drawable.circle_check_filled),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(30.dp)

@@ -159,14 +159,14 @@ private fun LabelsItem(
 
     if (license.isFsfLibre) {
         LabelItem(
-            painter = painterResource(id = R.drawable.people_bold),
+            painter = painterResource(id = R.drawable.users),
             text = stringResource(id = R.string.license_fsf_libre)
         )
     }
 
     if (license.isOsiApproved) {
         LabelItem(
-            painter = painterResource(id = R.drawable.osi),
+            painter = painterResource(id = R.drawable.brand_open_source),
             text = stringResource(id = R.string.license_osi_approved)
         )
     }
@@ -191,11 +191,10 @@ private fun LabelItem(
         Icon(
             painter = painter,
             contentDescription = null,
-            modifier = Modifier.size(ButtonDefaults.IconSize),
-            tint = MaterialTheme.colorScheme.primary
+            modifier = Modifier.size(ButtonDefaults.IconSize)
         )
 
-        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+        Spacer(modifier = Modifier.width(6.dp))
 
         Text(
             text = text,

@@ -100,7 +100,6 @@
     <string name="menu_pin_installed">Pin Yang Terpasang</string>
     <string name="menu_show_license">Tampilkan Lisensi</string>
     <string name="repo_incompatible">Tidak kompatibel</string>
-    <string name="repo_details">Detail</string>
     <string name="menu_sort_option_updated">Waktu Terbaru</string>
     <string name="menu_show_updated">Tampilkan Waktu Pembaruan</string>
 </resources>

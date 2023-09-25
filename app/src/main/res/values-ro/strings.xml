@@ -80,7 +80,6 @@
     <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
     <string name="about_desc2">Făcut cu ❤️ de %1$s</string>
     <string name="view_module_dir_size">Dimensiunea dosarului</string>
-    <string name="repo_details">Detalii</string>
     <string name="view_module_added">Adăugat la: %1$s</string>
     <string name="menu_pin_installed">Fixare instalate</string>
     <string name="menu_show_icon">Afișare pictogramă</string>

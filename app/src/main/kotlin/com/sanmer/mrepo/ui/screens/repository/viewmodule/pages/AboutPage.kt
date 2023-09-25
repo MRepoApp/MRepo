@@ -3,7 +3,6 @@ package com.sanmer.mrepo.ui.screens.repository.viewmodule.pages
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,49 +25,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
 fun AboutPage(
-    online: OnlineModule,
-    isEmpty: Boolean
-) = Box(
+    online: OnlineModule
+) = Column(
     modifier = Modifier
         .fillMaxSize()
         .verticalScroll(rememberScrollState())
 ) {
-    if (isEmpty) {
-        Text(
-            text = Const.EMOTICON_SHRUG,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier
-                .align(Alignment.Center)
-        )
-    }
+    ValueItem(
+        key = stringResource(id = R.string.view_module_homepage),
+        value = online.track.homepage,
+        icon = R.drawable.world_www
+    )
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        ValueItem(
-            key = stringResource(id = R.string.view_module_homepage),
-            value = online.track.homepage,
-            icon = R.drawable.global_outline
-        )
+    ValueItem(
+        key = stringResource(id = R.string.view_module_source),
+        value = online.track.source,
+        icon = R.drawable.brand_git
+    )
 
-        ValueItem(
-            key = stringResource(id = R.string.view_module_source),
-            value = online.track.source,
-            icon = R.drawable.document_code_outline
-        )
-
-        ValueItem(
-            key = stringResource(id = R.string.view_module_support),
-            value = online.track.support,
-            icon = R.drawable.messages_outline
-        )
-    }
+    ValueItem(
+        key = stringResource(id = R.string.view_module_support),
+        value = online.track.support,
+        icon = R.drawable.heart_handshake
+    )
 }
 
 @Composable
@@ -101,7 +86,7 @@ private fun ValueItem(
                 Icon(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(AssistChipDefaults.IconSize)
                 )
             }
         )

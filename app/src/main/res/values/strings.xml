@@ -99,7 +99,6 @@
     <string name="repo_modules">%1$d modules</string>
     <string name="repo_update_at">Updated at: %1$s</string>
     <string name="repo_incompatible">Incompatible</string>
-    <string name="repo_details">Details</string>
     <string name="repo_options_update">Update</string>
     <string name="repo_options_delete">Delete</string>
     <string name="repo_delete_dialog_desc">Are you sure to delete %1$s?</string>

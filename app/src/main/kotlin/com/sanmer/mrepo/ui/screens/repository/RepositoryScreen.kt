@@ -85,7 +85,7 @@ fun RepositoryScreen(
         ) {
             if (list.isEmpty()) {
                 PageIndicator(
-                    icon = R.drawable.box_outline,
+                    icon = R.drawable.cloud,
                     text = if (viewModel.isSearch) R.string.search_empty else R.string.repository_empty,
                 )
             }
@@ -130,7 +130,7 @@ private fun TopBar(
                 onClick = onOpenSearch
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.search_normal_outline),
+                    painter = painterResource(id = R.drawable.search),
                     contentDescription = null
                 )
             }

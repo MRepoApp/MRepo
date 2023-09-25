@@ -124,7 +124,7 @@ fun Failed(
     message: String?,
     minHeight: Dp? = null
 ) = PageIndicator(
-    icon = R.drawable.danger_outline,
+    icon = R.drawable.alert_triangle,
     text = message ?: stringResource(id = R.string.unknown_error),
     minHeight = minHeight
 )

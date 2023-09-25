@@ -16,12 +16,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
@@ -41,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.app.utils.MediaStoreUtils.copyToTmp
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.ui.component.PageIndicator
@@ -69,9 +69,9 @@ fun ModulesScreen(
     val listState = rememberLazyListState()
 
     val isScrollingUp = listState.isScrollingUp()
-    val showFab by remember(isScrollingUp) {
+    val showFab by remember(isScrollingUp, suState) {
         derivedStateOf {
-            isScrollingUp && !viewModel.isSearch
+            isScrollingUp && !viewModel.isSearch && suState.isSucceeded
         }
     }
 
@@ -130,7 +130,7 @@ fun ModulesScreen(
         ) {
             if (list.isEmpty()) {
                 PageIndicator(
-                    icon = R.drawable.command_outline,
+                    icon = R.drawable.keyframes,
                     text = if (viewModel.isSearch) R.string.search_empty else R.string.modules_empty,
                 )
             }
@@ -176,7 +176,7 @@ private fun TopBar(
                 onClick = onOpenSearch
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.search_normal_outline),
+                    painter = painterResource(id = R.drawable.search),
                     contentDescription = null
                 )
             }
@@ -209,19 +209,15 @@ private fun FloatingButton(
         }
     }
 
-    ExtendedFloatingActionButton(
+    FloatingActionButton(
         interactionSource = interactionSource,
         onClick = {},
         contentColor = MaterialTheme.colorScheme.onPrimary,
-        containerColor = MaterialTheme.colorScheme.primary,
-        icon = {
-            Icon(
-                painter = painterResource(id = R.drawable.import_outline),
-                contentDescription = null
-            )
-        },
-        text = {
-            Text(text = stringResource(id = R.string.module_install))
-        }
-    )
+        containerColor = MaterialTheme.colorScheme.primary
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.package_import),
+            contentDescription = null
+        )
+    }
 }

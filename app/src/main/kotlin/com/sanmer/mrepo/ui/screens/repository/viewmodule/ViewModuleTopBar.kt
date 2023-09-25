@@ -60,7 +60,7 @@ fun ViewModuleTopBar(
             onClick = { navController.popBackStack() }
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.arrow_left_outline),
+                painter = painterResource(id = R.drawable.arrow_left),
                 contentDescription = null
             )
         }
@@ -89,7 +89,7 @@ private fun topBarContent(
     ) {
         if (repositoryMenu.showIcon) {
             Logo(
-                icon = R.drawable.box_outline,
+                icon = R.drawable.box,
                 modifier = Modifier.size(55.dp),
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 containerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -149,7 +149,7 @@ private fun topBarContent(
 
         if (hasDonate) {
             TagItem(
-                icon = R.drawable.coin_outline,
+                icon = R.drawable.currency_dollar,
                 onClick = { context.openUrl(module.track.donate) }
             )
         }
