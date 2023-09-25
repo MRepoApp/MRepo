@@ -64,4 +64,24 @@
     <string name="unknown_error">Erreur inconnue</string>
     <string name="settings_delete_zip">Supprimer le fichier zip</string>
     <string name="settings_delete_zip_desc">Supprimer le fichier zip une fois l\'installation réussie, notez que cela peut ne pas fonctionner si l\'application n\'a pas l\'autorisation de supprimer</string>
+    <string name="module_new">Nouveau</string>
+    <string name="view_module_version">Version</string>
+    <string name="view_module_local">Local</string>
+    <string name="view_module_module_directory">Dossier des modules</string>
+    <string name="view_module_dir_size">Taille du dossier</string>
+    <string name="settings_app_desc">Paramètres de MRepo</string>
+    <string name="page_repository">Dépôt</string>
+    <string name="module_installed">Installé</string>
+    <string name="menu_pin_installed">Épingler installé</string>
+    <string name="menu_show_icon">Afficher icône</string>
+    <string name="menu_show_license">Afficher licence</string>
+    <string name="view_module_page_overview">Aperçu</string>
+    <string name="view_module_page_about">À propos</string>
+    <string name="view_module_description">Description</string>
+    <string name="view_module_version_dialog_desc">Voulez-vous télécharger ou installer cette version du module \?</string>
+    <string name="view_module_cloud">Cloud</string>
+    <string name="view_module_homepage">Page d\'accueil</string>
+    <string name="view_module_source">Code source</string>
+    <string name="view_module_support">Support</string>
+    <string name="view_module_added">Ajouté à : %1$s</string>
 </resources>
