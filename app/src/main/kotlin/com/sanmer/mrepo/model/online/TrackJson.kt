@@ -14,6 +14,8 @@ data class TrackJson(
     val donate: String = ""
 ) {
     val type = TrackType.valueOf(typeName)
+    val hasLicense get() = license.isNotBlank()
+            && license.uppercase() != "UNKNOWN"
 }
 
 enum class TrackType {

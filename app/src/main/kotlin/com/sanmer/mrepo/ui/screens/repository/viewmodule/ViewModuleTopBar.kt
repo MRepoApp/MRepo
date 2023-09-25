@@ -80,7 +80,7 @@ private fun topBarContent(
     val repositoryMenu = userPreferences.repositoryMenu
 
     val context = LocalContext.current
-    val hasLicense = module.track.license.isNotBlank()
+    val hasLicense = module.track.hasLicense
     val hasDonate = module.track.donate.isNotBlank()
 
     Row(

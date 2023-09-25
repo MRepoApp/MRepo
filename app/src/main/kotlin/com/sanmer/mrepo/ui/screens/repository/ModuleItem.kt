@@ -105,7 +105,7 @@ fun ModuleItem(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
-                    if (menu.showLicense) {
+                    if (menu.showLicense && module.track.hasLicense) {
                         LabelItem(
                             text = module.track.license.toUpperCase(Locale.current)
                         )
