@@ -141,13 +141,13 @@ fun ModuleItem(
 @Composable
 fun stateIndicator(
     @DrawableRes icon: Int,
-    color: Color = MaterialTheme.colorScheme.onSurfaceVariant
+    color: Color = MaterialTheme.colorScheme.outline
 ): @Composable BoxScope.() -> Unit = {
     Image(
         modifier = Modifier.fillMaxSize(),
         painter = painterResource(id = icon),
         contentDescription = null,
-        alpha = 0.05f,
+        alpha = 0.1f,
         colorFilter = ColorFilter.tint(color)
     )
 }

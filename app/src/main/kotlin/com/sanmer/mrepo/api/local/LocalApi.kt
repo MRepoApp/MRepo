@@ -37,7 +37,7 @@ interface LocalApi {
             fs: FileSystemManager
         ): LocalApi = when (platform) {
             Platform.MAGISK -> MagiskApi(context = context, fs = fs).build(listener)
-            Platform.KERNELSU -> KernelSuApi(context = context).build(listener)
+            Platform.KERNELSU -> KernelSuApi(context = context, fs = fs).build(listener)
         }
 
         fun build(

@@ -8,12 +8,16 @@ import com.sanmer.mrepo.utils.ModuleUtils
 import com.sanmer.mrepo.utils.extensions.output
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
+import com.topjohnwu.superuser.nio.FileSystemManager
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 
-class KernelSuApi(private val context: Context) {
+class KernelSuApi(
+    private val context: Context,
+    private val fs: FileSystemManager
+) {
     private var version = "kernelsu"
     private val ksud = "/data/adb/ksud"
 
@@ -122,6 +126,7 @@ class KernelSuApi(private val context: Context) {
         zipFile: File
     ) = ModuleUtils.install(
         context = context,
+        fs = fs,
         console = console,
         onSuccess = onSuccess,
         onFailure = onFailure,

@@ -7,12 +7,14 @@ import com.sanmer.mrepo.utils.extensions.tmpDir
 import com.sanmer.mrepo.utils.extensions.unzip
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
+import com.topjohnwu.superuser.nio.FileSystemManager
 import timber.log.Timber
 import java.io.File
 
 object ModuleUtils {
     fun install(
         context: Context,
+        fs: FileSystemManager,
         console: (console: String) -> Unit = {},
         onSuccess: (LocalModule) -> Unit = {},
         onFailure: () -> Unit = {},
@@ -32,15 +34,21 @@ object ModuleUtils {
                     if (!exists()) mkdirs()
                 }
 
-                zipFile.unzip(tmp, "module.prop", true)
+                runCatching {
+                    fs.getFile(zipFile.absolutePath)
+                        .newInputStream().use {
+                            it.unzip(tmp, "module.prop", true)
+                        }
+                }.onFailure {
+                    Timber.e(it)
+                    return@submit
+                }
 
                 getModule(
                     prop = tmp.resolve("module.prop")
                 ).onSuccess { value ->
                     value.state = State.UPDATE
                     onSuccess(value)
-                }.onFailure {
-                    onFailure()
                 }
 
                 Shell.cmd("rm -rf ${tmp.absolutePath}").submit()

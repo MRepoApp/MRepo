@@ -159,6 +159,7 @@ class MagiskApi(
         zipFile: File
     ) = ModuleUtils.install(
         context = context,
+        fs = fs,
         console = console,
         onSuccess = onSuccess,
         onFailure = onFailure,
