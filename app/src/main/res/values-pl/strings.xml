@@ -38,7 +38,7 @@
     <string name="module_version_author">%1$s autorstwa %2$s</string>
     <string name="module_remove">Usuń</string>
     <string name="module_restore">Przywróć</string>
-    <string name="module_install">Instaluj</string>
+    <string name="module_install">Instalacja</string>
     <string name="module_download">Pobierz</string>
     <string name="settings_repo">Repozytoria</string>
     <string name="settings_repo_desc">Zarządzaj repozytoriami modułów Magisk</string>
@@ -102,4 +102,6 @@
     <string name="menu_advanced_menu">Menu zaawansowane</string>
     <string name="menu_sort_mode">Tryb sortowania</string>
     <string name="module_new">Nowy</string>
+    <string name="install_logs_saved">Zapisano logi</string>
+    <string name="install_logs_save_failed">Zapis nie powiódł się: %s</string>
 </resources>
