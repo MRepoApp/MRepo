@@ -102,4 +102,6 @@
     <string name="module_new">Yeni</string>
     <string name="menu_sort_option_name">İsim</string>
     <string name="menu_sort_option_updated">Güncelleme tarihi</string>
+    <string name="install_logs_saved">Kayıtlar kaydedildi</string>
+    <string name="install_logs_save_failed">%s kaydedilmedi</string>
 </resources>
