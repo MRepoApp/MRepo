@@ -6,8 +6,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,8 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
@@ -37,7 +33,7 @@ fun DownloadPathItem(
     onChange: (File) -> Unit
 ) {
     var edit by remember { mutableStateOf(false) }
-    if (edit) EditDialog(
+    if (edit) OpenDocumentTreeDialog(
         path = downloadPath,
         onClose = { edit = false },
         onConfirm = { if (it != downloadPath) onChange(it) }
@@ -52,24 +48,20 @@ fun DownloadPathItem(
 }
 
 @Composable
-private fun EditDialog(
+private fun OpenDocumentTreeDialog(
     path : File,
     onClose: () -> Unit,
     onConfirm: (File) -> Unit
 ) {
     val context = LocalContext.current
-    val hasDocumentTree = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).let {
-        return@let it.resolveActivity(context.packageManager) != null
-    }
-
     var newPath by remember { mutableStateOf(path) }
-    var parent by remember { mutableStateOf(
-        Const.DIR_PUBLIC_DOWNLOADS.absolutePath
-    ) }
 
-    var name by remember { mutableStateOf(
-        newPath.toRelativeString(parent.toFile())
-    ) }
+    var parent by remember {
+        mutableStateOf(Const.DIR_PUBLIC_DOWNLOADS.absolutePath)
+    }
+    var name by remember {
+        mutableStateOf(newPath.toRelativeString(parent.toFile()))
+    }
 
     val interactionSource = remember { MutableInteractionSource() }
     val launcher = rememberLauncherForActivityResult(
@@ -119,27 +111,12 @@ private fun EditDialog(
         OutlinedTextField(
             textStyle = MaterialTheme.typography.bodyLarge,
             value = name,
-            onValueChange = {
-                newPath = "$parent/${it.trim()}".toFile()
-                name = it
-            },
+            onValueChange = {},
             shape = RoundedCornerShape(15.dp),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions {
-                onConfirm(newPath)
-                onClose()
-            },
             label = { Text(text = "$parent/") },
             singleLine = true,
-            readOnly = hasDocumentTree,
-            interactionSource = if (hasDocumentTree) {
-                interactionSource
-            } else {
-                remember { MutableInteractionSource() }
-            }
+            readOnly = true,
+            interactionSource = interactionSource
         )
     }
 }
