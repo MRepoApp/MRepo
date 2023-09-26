@@ -76,7 +76,7 @@
     <string name="dialog_ok">Oke</string>
     <string name="message_download_success">Download berhasil</string>
     <string name="message_loading">Memuat…</string>
-    <string name="notification_name_download">Layanan Download</string>
+    <string name="notification_name_download">Download Bekerja</string>
     <string name="search_empty">Daftar kosong</string>
     <string name="search_placeholder">Cari…</string>
     <string name="unknown_error">Kesalahan tidak diketahui</string>
@@ -102,4 +102,6 @@
     <string name="repo_incompatible">Tidak kompatibel</string>
     <string name="menu_sort_option_updated">Waktu Terbaru</string>
     <string name="menu_show_updated">Tampilkan Waktu Pembaruan</string>
+    <string name="install_logs_saved">Log tersimpan</string>
+    <string name="install_logs_save_failed">Gagal untuk menyimpan: %s</string>
 </resources>
