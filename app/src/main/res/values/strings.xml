@@ -13,6 +13,8 @@
     <string name="install_flashing">Flashing</string>
     <string name="install_done">Done</string>
     <string name="install_failure">Failed</string>
+    <string name="install_logs_saved">Logs saved</string>
+    <string name="install_logs_save_failed">Failed to save: %s</string>
 
     <!-- License -->
     <string name="license_title">View License</string>

@@ -13,6 +13,8 @@
     <string name="install_flashing">正在刷入</string>
     <string name="install_done">完成</string>
     <string name="install_failure">失败</string>
+    <string name="install_logs_saved">日志已保存</string>
+    <string name="install_logs_save_failed">保存失败：%s</string>
 
     <!-- License -->
     <string name="license_title">查看许可证</string>

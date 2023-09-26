@@ -2,12 +2,16 @@ package com.sanmer.mrepo.ui.screens.modules.install
 
 import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +24,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -28,11 +35,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,13 +56,17 @@ import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.utils.ModuleUtils
 import com.sanmer.mrepo.viewmodel.InstallViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun InstallScreen(
     navController: NavController,
     viewModel: InstallViewModel = hiltViewModel()
 ) {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     val focusRequester = remember { FocusRequester() }
     val listState = rememberLazyListState()
     val isScrollingUp = listState.isScrollingUp()
@@ -72,12 +85,51 @@ fun InstallScreen(
         onBack = {}
     )
 
+    val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("text/plain")
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+
+        viewModel.saveLog(context, uri)
+            .onSuccess {
+                scope.launch {
+                    val message = context.getString(R.string.install_logs_saved)
+                    snackbarHostState.showSnackbar(
+                        message = message,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }.onFailure {
+                scope.launch {
+                    val message = context.getString(
+                        R.string.install_logs_save_failed,
+                        it.message ?: context.getString(R.string.unknown_error)
+                    )
+                    snackbarHostState.showSnackbar(
+                        message = message,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+    }
+
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            if (interaction is PressInteraction.Release) {
+                launcher.launch(viewModel.logfile)
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .onKeyEvent {
                 when (it.nativeKeyEvent.keyCode) {
                     KeyEvent.KEYCODE_VOLUME_UP,
                     KeyEvent.KEYCODE_VOLUME_DOWN -> viewModel.event.isLoading
+
                     else -> false
                 }
             }
@@ -88,6 +140,7 @@ fun InstallScreen(
             TopBar(
                 event = viewModel.event,
                 navController = navController,
+                interactionSource = interactionSource,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -105,7 +158,8 @@ fun InstallScreen(
             ) {
                 FloatingButton()
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         Console(
             list = viewModel.console.asReversed(),
@@ -141,6 +195,7 @@ private fun Console(
 @Composable
 private fun TopBar(
     event: Event,
+    interactionSource: MutableInteractionSource,
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
@@ -155,8 +210,8 @@ private fun TopBar(
     actions = {
         if (event.isFinished) {
             IconButton(
-                onClick = {},
-                enabled = false
+                interactionSource = interactionSource,
+                onClick = {}
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.device_floppy),

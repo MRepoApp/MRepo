@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.viewmodel
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -14,10 +15,12 @@ import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
+import com.sanmer.mrepo.utils.extensions.now
 import com.sanmer.mrepo.utils.extensions.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -34,6 +37,8 @@ class InstallViewModel @Inject constructor(
     val console = mutableStateListOf<String>()
     var event by mutableStateOf(Event.LOADING)
         private set
+
+    val logfile get() = "module_install_log_${LocalDateTime.now()}.log"
 
     init {
         Timber.d("InstallViewModel init")
@@ -72,6 +77,15 @@ class InstallViewModel @Inject constructor(
         suRepository.fs.getFile(zipFile.absolutePath).delete()
     }.onFailure {
         Timber.e(it)
+    }
+
+    fun saveLog(context: Context, uri: Uri) = runCatching {
+        val cr = context.contentResolver
+        cr.openOutputStream(uri)?.use {
+            it.write(console.joinToString(separator = "\n").toByteArray())
+        }
+    }.onFailure {
+        Timber.d(it)
     }
 
     companion object {
