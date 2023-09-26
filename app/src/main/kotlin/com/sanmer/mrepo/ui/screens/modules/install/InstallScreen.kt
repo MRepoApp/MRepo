@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.screens.modules.install
 
-import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,11 +38,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -126,9 +128,9 @@ fun InstallScreen(
     Scaffold(
         modifier = Modifier
             .onKeyEvent {
-                when (it.nativeKeyEvent.keyCode) {
-                    KeyEvent.KEYCODE_VOLUME_UP,
-                    KeyEvent.KEYCODE_VOLUME_DOWN -> viewModel.event.isLoading
+                when (it.key) {
+                    Key.VolumeUp,
+                    Key.VolumeDown-> viewModel.event.isLoading
 
                     else -> false
                 }
@@ -185,9 +187,11 @@ private fun Console(
     items(list) {
         Text(
             text = it,
-            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 5.dp)
+            modifier = Modifier.padding(horizontal = 8.dp),
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontFamily = FontFamily.Monospace
+            )
         )
     }
 }
