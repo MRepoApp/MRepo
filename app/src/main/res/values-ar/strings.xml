@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings_root_access">تصريح الروت: %1$s</string>
+    <string name="settings_root_access">تصريح الروت: %s</string>
     <string name="setup_root_title">روت</string>
     <string name="setup_root_desc2">متاح : الوصول الكامل للوظائف</string>
     <string name="setup_non_root_title">بدون روت</string>
@@ -12,7 +12,7 @@
     <string name="license_title">عرض الترخيص</string>
     <string name="license_osi_approved">تراخيص معتمدة</string>
     <string name="page_modules">الوحدات</string>
-    <string name="settings_root_provider">المزود%1$s</string>
+    <string name="settings_root_provider">المزود%s</string>
     <string name="settings_root_none">غير متوفر</string>
     <string name="settings_non_root_desc">الوظائف محدودة</string>
     <string name="setup_mode">نمط العمل</string>
@@ -36,7 +36,7 @@
     <string name="repository_empty">المستودعات فارغة</string>
     <string name="search_placeholder">بحث…</string>
     <string name="view_module_page_versions">الإصدارات</string>
-    <string name="view_module_provided">مقدم بواسطة%1$s</string>
+    <string name="view_module_provided">مقدم بواسطة%s</string>
     <string name="settings_app_theme">سمة التطبيق</string>
     <string name="settings_app">تطبيق</string>
     <string name="search_empty">قائمة فارغة</string>
@@ -49,7 +49,7 @@
     <string name="app_theme_dark_theme_dark">داكن</string>
     <string name="repo_options_update">تحديث</string>
     <string name="repo_options_delete">حذف</string>
-    <string name="repo_modules">%1$d وحدات</string>
+    <string name="repo_modules">%d وحدات</string>
     <string name="repo_add_dialog_title">اضافة مستودع</string>
     <string name="repo_add_dialog_add">اضافة</string>
     <string name="dialog_attention">ملاحظة</string>
@@ -61,9 +61,9 @@
     <string name="unknown_error">خطاء غير معروف</string>
     <string name="settings_app_theme_desc">تغيير الوضع الليلي ولوحة الألوان</string>
     <string name="settings_repo_desc">إدارة مستودعات و وحدات ماجيسك</string>
-    <string name="repo_delete_dialog_desc">هل انت متأكد من حذف %1$s؟</string>
+    <string name="repo_delete_dialog_desc">هل انت متأكد من حذف %s؟</string>
     <string name="module_installed">مثبته</string>
-    <string name="about_desc2">صنع ❤️ بواسطة %1$s</string>
+    <string name="about_desc2">صنع ❤️ بواسطة %s</string>
     <string name="view_module_page_overview">وصف مختصر</string>
     <string name="view_module_page_about">حول</string>
     <string name="view_module_description">الوصف</string>
@@ -91,10 +91,10 @@
     <string name="view_module_source">الرمز المصدري</string>
     <string name="view_module_support">الدعم</string>
     <string name="view_module_view_track">عرض المسار</string>
-    <string name="view_module_type">النوع: %1$s</string>
-    <string name="view_module_added">مضاف في : %1$s</string>
+    <string name="view_module_type">النوع: %s</string>
+    <string name="view_module_added">مضاف في : %s</string>
     <string name="view_module_last_updated">المحدثه مؤخرا</string>
-    <string name="repo_update_at">محدث في: %1$s</string>
+    <string name="repo_update_at">محدث في: %s</string>
     <string name="repo_incompatible">غير متوافق</string>
     <string name="menu_advanced_menu">القائمة المتقدمة</string>
     <string name="menu_sort_mode">وضع الفرز</string>

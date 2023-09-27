@@ -17,7 +17,7 @@
     <string name="license_fsf_libre">Livre FSF</string>
     <string name="page_modules">Módulos</string>
     <string name="page_settings">Opções</string>
-    <string name="settings_root_provider">Provedor: %1$s</string>
+    <string name="settings_root_provider">Provedor: %s</string>
     <string name="settings_root_granted">Concedido</string>
     <string name="settings_root_not_available">Indisponível</string>
     <string name="settings_root_none">Nenhum</string>
@@ -36,7 +36,7 @@
     <string name="search_empty">Vazio</string>
     <string name="search_placeholder">Buscar…</string>
     <string name="view_module_page_versions">Versões</string>
-    <string name="view_module_provided">Disponibilizado por %1$s</string>
+    <string name="view_module_provided">Disponibilizado por %s</string>
     <string name="settings_app_theme">Tema do Aplicativo</string>
     <string name="settings_app_theme_desc">Mudar paleta de cores e modo escuro</string>
     <string name="settings_app">Aplicativo</string>
@@ -48,10 +48,10 @@
     <string name="app_theme_dark_theme_auto">Automático</string>
     <string name="app_theme_dark_theme_light">Claro</string>
     <string name="app_theme_dark_theme_dark">Escuro</string>
-    <string name="repo_modules">Módulos de %1$d</string>
+    <string name="repo_modules">Módulos de %d</string>
     <string name="repo_options_update">Atualizar</string>
     <string name="repo_options_delete">Apagar</string>
-    <string name="repo_delete_dialog_desc">Você tem certeza de que gostaria de apagar %1$s\?</string>
+    <string name="repo_delete_dialog_desc">Você tem certeza de que gostaria de apagar %s\?</string>
     <string name="repo_add_dialog_title">Adicionar repositório</string>
     <string name="repo_add_dialog_add">Adicionar</string>
     <string name="dialog_attention">Atenção</string>
@@ -61,7 +61,7 @@
     <string name="message_loading">Carregando…</string>
     <string name="notification_name_download">Serviço de Downloads</string>
     <string name="unknown_error">Erro desconhecido</string>
-    <string name="settings_root_access">Acesso Enraizado: %1$s</string>
+    <string name="settings_root_access">Acesso Enraizado: %s</string>
     <string name="view_module_page_about">Sobre</string>
     <string name="view_module_dir_size">Tamanho do Diretório</string>
     <string name="settings_app_desc">Configurações do aplicativo MRepo</string>
@@ -79,5 +79,5 @@
     <string name="settings_about">Sobre</string>
     <string name="about_app_version">Versão %1$s (%2$s)</string>
     <string name="about_desc1">Disponibiliza repositórios de módulos e gerencia módulos do Magisk e KernelSU.</string>
-    <string name="about_desc2">Feito com ❤️ por %1$s</string>
+    <string name="about_desc2">Feito com ❤️ por %s</string>
 </resources>

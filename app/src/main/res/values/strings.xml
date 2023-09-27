@@ -10,6 +10,7 @@
     <string name="setup_non_root_desc2">Available: download module</string>
 
     <!-- Install -->
+    <string name="install_screen_title">Installation</string>
     <string name="install_flashing">Flashing</string>
     <string name="install_done">Done</string>
     <string name="install_failure">Failed</string>
@@ -47,14 +48,14 @@
     <string name="view_module_module_directory">Module Directory</string>
     <string name="view_module_last_modified">Last Modified</string>
     <string name="view_module_dir_size">Directory Size</string>
-    <string name="view_module_provided">Provided by %1$s</string>
+    <string name="view_module_provided">Provided by %s</string>
     <string name="view_module_version_dialog_desc">Do you want to install or download this version of the module?</string>
     <string name="view_module_homepage">Homepage</string>
     <string name="view_module_source">Source Code</string>
     <string name="view_module_support">Support</string>
     <string name="view_module_view_track">View Track</string>
-    <string name="view_module_type">Type: %1$s</string>
-    <string name="view_module_added">Added at: %1$s</string>
+    <string name="view_module_type">Type: %s</string>
+    <string name="view_module_added">Added at: %s</string>
 
     <!-- Modules -->
     <string name="modules_empty">No modules found</string>
@@ -71,8 +72,8 @@
     <string name="settings_repo_desc">Manage Magisk modules repositories</string>
     <string name="settings_about">About</string>
     <!-- Root Item -->
-    <string name="settings_root_access">Root Access: %1$s</string>
-    <string name="settings_root_provider">Provider: %1$s</string>
+    <string name="settings_root_access">Root Access: %s</string>
+    <string name="settings_root_provider">Provider: %s</string>
     <string name="settings_root_granted">Granted</string>
     <string name="settings_root_not_available">Not available</string>
     <string name="settings_root_none">None</string>
@@ -98,18 +99,18 @@
     <string name="app_theme_dark_theme_light">Light</string>
     <string name="app_theme_dark_theme_dark">Dark</string>
     <!-- Repo -->
-    <string name="repo_modules">%1$d modules</string>
-    <string name="repo_update_at">Updated at: %1$s</string>
+    <string name="repo_modules">%d modules</string>
+    <string name="repo_update_at">Updated at: %s</string>
     <string name="repo_incompatible">Incompatible</string>
     <string name="repo_options_update">Update</string>
     <string name="repo_options_delete">Delete</string>
-    <string name="repo_delete_dialog_desc">Are you sure to delete %1$s?</string>
+    <string name="repo_delete_dialog_desc">Are you sure to delete %s?</string>
     <string name="repo_add_dialog_title">Add repository</string>
     <string name="repo_add_dialog_add">Add</string>
     <!-- About -->
     <string name="about_app_version">Version %1$s (%2$s)</string>
     <string name="about_desc1">Provide modules repositories and Manage modules for Magisk and KernelSU.</string>
-    <string name="about_desc2">Made with ❤️ by %1$s</string>
+    <string name="about_desc2">Made with ❤️ by %s</string>
 
     <!-- Dialog -->
     <string name="dialog_attention">Attention</string>

@@ -12,7 +12,7 @@
     <string name="search_empty">Lista vacía</string>
     <string name="search_placeholder">Buscar…</string>
     <string name="view_module_page_versions">Versiones</string>
-    <string name="view_module_provided">Proporcionado por %1$s</string>
+    <string name="view_module_provided">Proporcionado por %s</string>
     <string name="settings_app_theme">Temas de la App</string>
     <string name="settings_menu_reboot_download">Reiniciar a Download</string>
     <string name="settings_app">App</string>
@@ -36,8 +36,8 @@
     <string name="license_fsf_libre">FSF Libre</string>
     <string name="page_modules">Módulos</string>
     <string name="page_settings">Configuración</string>
-    <string name="settings_root_access">Acceso Root: %1$s</string>
-    <string name="settings_root_provider">Proveedor: %1$s</string>
+    <string name="settings_root_access">Acceso Root: %s</string>
+    <string name="settings_root_provider">Proveedor: %s</string>
     <string name="settings_root_granted">Concedido</string>
     <string name="settings_root_not_available">No disponible</string>
     <string name="settings_root_none">Ninguno</string>
@@ -49,10 +49,10 @@
     <string name="app_theme_dark_theme_auto">Automático</string>
     <string name="app_theme_dark_theme_light">Claro</string>
     <string name="app_theme_dark_theme_dark">Oscuro</string>
-    <string name="repo_modules">%1$d módulos</string>
+    <string name="repo_modules">%d módulos</string>
     <string name="repo_options_update">Actualizar</string>
     <string name="repo_options_delete">Eliminar</string>
-    <string name="repo_delete_dialog_desc">¿Estás seguro de eliminarlo %1$s\?</string>
+    <string name="repo_delete_dialog_desc">¿Estás seguro de eliminarlo %s\?</string>
     <string name="repo_add_dialog_title">Agregar repositorio</string>
     <string name="repo_add_dialog_add">Agregar</string>
     <string name="dialog_attention">Atención</string>
@@ -72,10 +72,10 @@
     <string name="view_module_source">Código fuente</string>
     <string name="view_module_support">Soporte</string>
     <string name="view_module_view_track">Ver origen</string>
-    <string name="view_module_type">Tipo: %1$s</string>
-    <string name="view_module_added">Añadido: %1$s</string>
+    <string name="view_module_type">Tipo: %s</string>
+    <string name="view_module_added">Añadido: %s</string>
     <string name="settings_about">Acerca de…</string>
-    <string name="about_desc2">Hecho con ❤️ por %1$s</string>
+    <string name="about_desc2">Hecho con ❤️ por %s</string>
     <string name="menu_descending">Descendente</string>
     <string name="menu_pin_enabled">Encabezar activados</string>
     <string name="menu_show_updated">Mostrar tiempo de actualización</string>
@@ -95,7 +95,7 @@
     <string name="view_module_version">Versión</string>
     <string name="settings_delete_zip">Eliminar archivo Zip</string>
     <string name="settings_delete_zip_desc">Eliminar archivo comprimido del módulo tras instalación exitosa - ejecutado por Root</string>
-    <string name="repo_update_at">Actualizado: %1$s</string>
+    <string name="repo_update_at">Actualizado: %s</string>
     <string name="about_desc1">Agregar y administrar repositorios de módulos de Magisk y KernelSU.</string>
     <string name="menu_advanced_menu">Opciones avanzadas</string>
     <string name="menu_sort_mode">Modo de sorteo</string>

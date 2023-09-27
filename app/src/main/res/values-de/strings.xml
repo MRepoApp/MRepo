@@ -25,7 +25,7 @@
     <string name="view_module_last_updated">Letztes Update</string>
     <string name="view_module_last_modified">Letzte Änderung</string>
     <string name="view_module_dir_size">Größe</string>
-    <string name="view_module_provided">Bereitgestellt von %1$s</string>
+    <string name="view_module_provided">Bereitgestellt von %s</string>
     <string name="page_repository">Repository</string>
     <string name="view_module_cloud">Online</string>
     <string name="view_module_version">Version</string>
@@ -37,14 +37,14 @@
     <string name="module_install">Installieren</string>
     <string name="view_module_homepage">Webseite</string>
     <string name="view_module_support">Unterstützung</string>
-    <string name="view_module_type">Typ: %1$s</string>
-    <string name="view_module_added">Hinzugefügt am: %1$s</string>
+    <string name="view_module_type">Typ: %s</string>
+    <string name="view_module_added">Hinzugefügt am: %s</string>
     <string name="module_version_author">%1$s von %2$s</string>
     <string name="view_module_view_track">Track ansehen</string>
     <string name="settings_app_desc">Einstellungen der MRepo App selbst</string>
     <string name="settings_repo_desc">Magisk Modul Repositories anpassen</string>
     <string name="settings_about">Über</string>
-    <string name="settings_root_access">Root Zugriff: %1$s</string>
+    <string name="settings_root_access">Root Zugriff: %s</string>
     <string name="settings_root_granted">Gewährt</string>
     <string name="settings_root_not_available">Nicht verfügbar</string>
     <string name="settings_root_none">Keiner</string>
@@ -62,14 +62,14 @@
     <string name="module_download">Herunterladen</string>
     <string name="settings_app">App</string>
     <string name="settings_repo">Repositories</string>
-    <string name="settings_root_provider">Anbieter: %1$s</string>
+    <string name="settings_root_provider">Anbieter: %s</string>
     <string name="app_theme_palette">Farbpaletten</string>
     <string name="app_theme_dark_theme">Nachtmodus</string>
     <string name="app_theme_dark_theme_auto">Automatisch</string>
     <string name="app_theme_dark_theme_light">Hell</string>
     <string name="app_theme_dark_theme_dark">Dunkel</string>
-    <string name="repo_modules">%1$d Module</string>
-    <string name="repo_update_at">Aktualisiert am: %1$s</string>
+    <string name="repo_modules">%d Module</string>
+    <string name="repo_update_at">Aktualisiert am: %s</string>
     <string name="repo_incompatible">Inkompatibel</string>
     <string name="repo_options_delete">Löschen</string>
     <string name="repo_add_dialog_title">Repository hinzufügen</string>
@@ -83,7 +83,7 @@
     <string name="menu_pin_enabled">Aktivierte anheften</string>
     <string name="menu_show_updated">Zuletzt aktualisiert anzeigen</string>
     <string name="repo_options_update">Update</string>
-    <string name="about_desc2">Made with ❤️ von %1$s</string>
+    <string name="about_desc2">Made with ❤️ von %s</string>
     <string name="dialog_ok">OK</string>
     <string name="menu_sort_option_name">Name</string>
     <string name="message_download_success">Herunterladen erfolgreich</string>
@@ -99,7 +99,7 @@
     <string name="view_module_module_directory">Speicherort</string>
     <string name="view_module_version_dialog_desc">Möchtest du diese Version installieren oder herunterladen\?</string>
     <string name="settings_delete_zip_desc">Löscht Zip Dateien nach der erfolgreichen Installation</string>
-    <string name="repo_delete_dialog_desc">Willst du wirklich %1$s löschen\?</string>
+    <string name="repo_delete_dialog_desc">Willst du wirklich %s löschen\?</string>
     <string name="menu_sort_mode">Sortier Reihenfolge</string>
     <string name="about_app_version">Version %1$s (%2$s)</string>
 </resources>

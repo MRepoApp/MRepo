@@ -10,6 +10,7 @@
     <string name="setup_non_root_desc2">可用：下载模块</string>
 
     <!-- Install -->
+    <string name="install_screen_title">安装</string>
     <string name="install_flashing">正在刷入</string>
     <string name="install_done">完成</string>
     <string name="install_failure">失败</string>
@@ -47,14 +48,14 @@
     <string name="view_module_module_directory">模块目录</string>
     <string name="view_module_last_modified">最后修改</string>
     <string name="view_module_dir_size">目录大小</string>
-    <string name="view_module_provided">由 %1$s 提供</string>
+    <string name="view_module_provided">由 %s 提供</string>
     <string name="view_module_version_dialog_desc">是否安装或下载该版本的模块？</string>
     <string name="view_module_homepage">主页</string>
     <string name="view_module_source">源码</string>
     <string name="view_module_support">支持</string>
     <string name="view_module_view_track">追踪信息</string>
-    <string name="view_module_type">类型：%1$s</string>
-    <string name="view_module_added">添加于：%1$s</string>
+    <string name="view_module_type">类型：%s</string>
+    <string name="view_module_added">添加于：%s</string>
 
     <!-- Modules -->
     <string name="modules_empty">没找到任何模块</string>
@@ -71,8 +72,8 @@
     <string name="settings_repo_desc">管理 Magisk 模块存储库</string>
     <string name="settings_about">关于</string>
     <!-- Root Item -->
-    <string name="settings_root_access">Root 权限：%1$s</string>
-    <string name="settings_root_provider">授权应用：%1$s</string>
+    <string name="settings_root_access">Root 权限：%s</string>
+    <string name="settings_root_provider">授权应用：%s</string>
     <string name="settings_root_granted">已授权</string>
     <string name="settings_root_not_available">不可用</string>
     <string name="settings_root_none">无</string>
@@ -98,18 +99,18 @@
     <string name="app_theme_dark_theme_light">浅色</string>
     <string name="app_theme_dark_theme_dark">深色</string>
     <!-- Repo -->
-    <string name="repo_modules">%1$d 个模块</string>
-    <string name="repo_update_at">更新于：%1$s</string>
+    <string name="repo_modules">%d 个模块</string>
+    <string name="repo_update_at">更新于：%s</string>
     <string name="repo_incompatible">不兼容</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_delete">删除</string>
-    <string name="repo_delete_dialog_desc">你确定要删除 %1$s？</string>
+    <string name="repo_delete_dialog_desc">你确定要删除 %s？</string>
     <string name="repo_add_dialog_title">添加存储库</string>
     <string name="repo_add_dialog_add">添加</string>
     <!-- About -->
     <string name="about_app_version">版本 %1$s (%2$s)</string>
     <string name="about_desc1">为 Magisk 和 KernelSU 提供模块存储库以及模块管理。</string>
-    <string name="about_desc2">由 %1$s 用 ❤️ 制作</string>
+    <string name="about_desc2">由 %s 用 ❤️ 制作</string>
 
     <!-- Dialog-->
     <string name="dialog_attention">注意</string>

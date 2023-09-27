@@ -34,8 +34,8 @@
     <string name="settings_app">Приложение</string>
     <string name="settings_app_desc">Настройки приложения MRepo</string>
     <string name="settings_about">О приложении</string>
-    <string name="settings_root_access">Рут доступ: %1$s</string>
-    <string name="settings_root_provider">Предоставитель: %1$s</string>
+    <string name="settings_root_access">Рут доступ: %s</string>
+    <string name="settings_root_provider">Предоставитель: %s</string>
     <string name="settings_root_granted">предоставлен</string>
     <string name="settings_root_not_available">Недоступно</string>
     <string name="settings_root_none">Нету</string>
@@ -52,7 +52,7 @@
     <string name="app_theme_dark_theme_auto">Авто</string>
     <string name="app_theme_dark_theme_light">Светлая</string>
     <string name="app_theme_dark_theme_dark">Темная</string>
-    <string name="repo_modules">%1$d модулей</string>
+    <string name="repo_modules">%d модулей</string>
     <string name="dialog_ok">ОК</string>
     <string name="message_download_success">Успешно загружено</string>
     <string name="message_loading">Загрузка…</string>
@@ -63,7 +63,7 @@
     <string name="page_settings">Настройки</string>
     <string name="view_module_description">Описание</string>
     <string name="view_module_version">Версия</string>
-    <string name="view_module_provided">Предоставлено %1$s</string>
+    <string name="view_module_provided">Предоставлено %s</string>
     <string name="view_module_version_dialog_desc">Вы хотите установить или загрузить эту версию модуля\?</string>
     <string name="settings_repo_desc">Управление репозиториями модулей Magisk</string>
     <string name="license_osi_approved">Одобрено OSI</string>
@@ -71,12 +71,12 @@
     <string name="settings_menu_reboot_download">Перезагрузка в режим загрузки</string>
     <string name="repo_options_update">Обновить</string>
     <string name="repo_options_delete">Удалить</string>
-    <string name="repo_delete_dialog_desc">Вы уверены что хотите удалить %1$s\?</string>
+    <string name="repo_delete_dialog_desc">Вы уверены что хотите удалить %s\?</string>
     <string name="repo_add_dialog_title">Добавить репозиторий</string>
     <string name="repo_add_dialog_add">Добавить</string>
     <string name="about_app_version">Версия %1$s (%2$s)</string>
     <string name="about_desc1">Предоставление репозиториев модулей и управление модулями для Magisk и KernelSU.</string>
-    <string name="about_desc2">Сделано с ❤️ %1$s</string>
+    <string name="about_desc2">Сделано с ❤️ %s</string>
     <string name="dialog_attention">Внимание</string>
     <string name="dialog_cancel">Отменить</string>
     <string name="search_placeholder">Поиск…</string>
@@ -91,9 +91,9 @@
     <string name="menu_show_icon">Показать иконку</string>
     <string name="menu_show_license">Показать лицензию</string>
     <string name="view_module_view_track">Просмотр трека</string>
-    <string name="view_module_type">Тип: %1$s</string>
-    <string name="view_module_added">Добавлено: %1$s</string>
-    <string name="repo_update_at">Обновлено: %1$s</string>
+    <string name="view_module_type">Тип: %s</string>
+    <string name="view_module_added">Добавлено: %s</string>
+    <string name="repo_update_at">Обновлено: %s</string>
     <string name="repo_incompatible">Несовместимо</string>
     <string name="menu_advanced_menu">Расширенное меню</string>
     <string name="menu_sort_mode">Режим сортировки</string>

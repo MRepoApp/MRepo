@@ -56,8 +56,8 @@
     <string name="settings_app">アプリ</string>
     <string name="settings_app_desc">MRepo アプリの設定</string>
     <string name="page_repository">リポジトリ</string>
-    <string name="settings_root_access">Root 権限: %1$s</string>
-    <string name="settings_root_provider">プロバイダー: %1$s</string>
+    <string name="settings_root_access">Root 権限: %s</string>
+    <string name="settings_root_provider">プロバイダー: %s</string>
     <string name="module_installed">インストール済</string>
     <string name="view_module_page_overview">概要</string>
     <string name="view_module_description">説明</string>

@@ -203,7 +203,7 @@ private fun TopBar(
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
-    title = stringResource(id = R.string.module_install),
+    title = stringResource(id = R.string.install_screen_title),
     subtitle = stringResource(id = when (event) {
         Event.LOADING -> R.string.install_flashing
         Event.FAILED -> R.string.install_failure

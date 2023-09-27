@@ -15,8 +15,8 @@
     <string name="license_fsf_libre">FSF Libre</string>
     <string name="page_modules">Modules</string>
     <string name="page_settings">Réglages</string>
-    <string name="settings_root_access">Accès Administrateur : %1$s</string>
-    <string name="settings_root_provider">Fournisseur : %1$s</string>
+    <string name="settings_root_access">Accès Administrateur : %s</string>
+    <string name="settings_root_provider">Fournisseur : %s</string>
     <string name="settings_root_granted">Permis</string>
     <string name="settings_root_not_available">Non disponible</string>
     <string name="settings_root_none">Aucun</string>
@@ -37,7 +37,7 @@
     <string name="search_empty">Liste vide</string>
     <string name="search_placeholder">Recherche…</string>
     <string name="view_module_page_versions">Versions</string>
-    <string name="view_module_provided">Fournis par %1$s</string>
+    <string name="view_module_provided">Fournis par %s</string>
     <string name="settings_app_theme">Thème de l\’application</string>
     <string name="settings_app_theme_desc">Changer le mode nuit et le thème platte</string>
     <string name="settings_app">Application</string>
@@ -49,10 +49,10 @@
     <string name="app_theme_dark_theme_auto">Automatique</string>
     <string name="app_theme_dark_theme_light">Clair</string>
     <string name="app_theme_dark_theme_dark">Noir</string>
-    <string name="repo_modules">%1$d modules</string>
+    <string name="repo_modules">%d modules</string>
     <string name="repo_options_update">Mise à jour</string>
     <string name="repo_options_delete">Supprimer</string>
-    <string name="repo_delete_dialog_desc">Êtes-vous sûr de supprimer %1$s \?</string>
+    <string name="repo_delete_dialog_desc">Êtes-vous sûr de supprimer %s \?</string>
     <string name="repo_add_dialog_title">ajouter dépôt</string>
     <string name="repo_add_dialog_add">Ajouter</string>
     <string name="dialog_attention">Attention</string>
@@ -83,5 +83,5 @@
     <string name="view_module_homepage">Page d\'accueil</string>
     <string name="view_module_source">Code source</string>
     <string name="view_module_support">Support</string>
-    <string name="view_module_added">Ajouté à : %1$s</string>
+    <string name="view_module_added">Ajouté à : %s</string>
 </resources>

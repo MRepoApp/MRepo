@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="page_settings">Setări</string>
-    <string name="settings_root_access">Acces root: %1$s</string>
-    <string name="settings_root_provider">Furnizor: %1$s</string>
+    <string name="settings_root_access">Acces root: %s</string>
+    <string name="settings_root_provider">Furnizor: %s</string>
     <string name="settings_root_granted">Acordat</string>
     <string name="settings_root_not_available">Indisponibil</string>
     <string name="settings_root_none">Nimic</string>
@@ -17,7 +17,7 @@
     <string name="repository_empty">Depozitul este gol</string>
     <string name="modules_empty">Nu s-au găsit module</string>
     <string name="search_empty">Listă goală</string>
-    <string name="view_module_provided">Furnizat de %1$s</string>
+    <string name="view_module_provided">Furnizat de %s</string>
     <string name="settings_app_theme">Tema aplicației</string>
     <string name="settings_app">Aplicație</string>
     <string name="settings_download_path">Calea de descărcare</string>
@@ -50,9 +50,9 @@
     <string name="settings_repo_desc">Gestionează depozitele de module Magisk</string>
     <string name="app_theme_dark_theme">Tema întunecată</string>
     <string name="app_theme_dark_theme_dark">Întunecată</string>
-    <string name="repo_modules">%1$d module</string>
+    <string name="repo_modules">%d module</string>
     <string name="repo_options_delete">Șterge</string>
-    <string name="repo_delete_dialog_desc">Sigur ștergi %1$s\?</string>
+    <string name="repo_delete_dialog_desc">Sigur ștergi %s\?</string>
     <string name="repo_add_dialog_title">Adaugă un depozit</string>
     <string name="repo_add_dialog_add">Adaugă</string>
     <string name="dialog_attention">Atenție</string>
@@ -78,15 +78,15 @@
     <string name="view_module_last_modified">Ultima modificare</string>
     <string name="about_app_version">Versiunea %1$s (%2$s)</string>
     <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
-    <string name="about_desc2">Făcut cu ❤️ de %1$s</string>
+    <string name="about_desc2">Făcut cu ❤️ de %s</string>
     <string name="view_module_dir_size">Dimensiunea dosarului</string>
-    <string name="view_module_added">Adăugat la: %1$s</string>
+    <string name="view_module_added">Adăugat la: %s</string>
     <string name="menu_pin_installed">Fixare instalate</string>
     <string name="menu_show_icon">Afișare pictogramă</string>
     <string name="menu_show_license">Afișare licență</string>
     <string name="module_new">Nou</string>
     <string name="menu_pin_updatable">Fixare actualizabile</string>
-    <string name="repo_update_at">Actualizat la: %1$s</string>
+    <string name="repo_update_at">Actualizat la: %s</string>
     <string name="repo_incompatible">Incompatibil</string>
     <string name="menu_advanced_menu">Meniu avansat</string>
     <string name="menu_sort_mode">Mod de sortare</string>
@@ -100,6 +100,6 @@
     <string name="view_module_homepage">Pagina web</string>
     <string name="view_module_support">Suport</string>
     <string name="view_module_view_track">Vizualizare cale</string>
-    <string name="view_module_type">Tip: %1$s</string>
+    <string name="view_module_type">Tip: %s</string>
     <string name="menu_sort_option_updated">Data actualizării</string>
 </resources>
