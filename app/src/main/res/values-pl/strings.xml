@@ -17,8 +17,8 @@
     <string name="setup_non_root_desc2">Dostępne: pobieranie modułów</string>
     <string name="setup_root_desc2">Dostępne: pełna funkcjonalność</string>
     <string name="install_flashing">Wgrywanie</string>
-    <string name="install_done">Ukończono</string>
-    <string name="install_failure">Niepowodzenie</string>
+    <string name="install_done">Ukończona</string>
+    <string name="install_failure">Nieudana</string>
     <string name="license_title">Zobacz licencję</string>
     <string name="license_osi_approved">Zatwierdzone przez OSI</string>
     <string name="license_fsf_libre">FSF Libre</string>
@@ -38,7 +38,7 @@
     <string name="module_version_author">%1$s autorstwa %2$s</string>
     <string name="module_remove">Usuń</string>
     <string name="module_restore">Przywróć</string>
-    <string name="module_install">Instalacja</string>
+    <string name="module_install">Instaluj</string>
     <string name="module_download">Pobierz</string>
     <string name="settings_repo">Repozytoria</string>
     <string name="settings_repo_desc">Zarządzaj repozytoriami modułów Magisk</string>
@@ -104,4 +104,5 @@
     <string name="module_new">Nowy</string>
     <string name="install_logs_saved">Zapisano logi</string>
     <string name="install_logs_save_failed">Zapis nie powiódł się: %s</string>
+    <string name="install_screen_title">Instalacja</string>
 </resources>
