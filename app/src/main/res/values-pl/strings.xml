@@ -3,7 +3,7 @@
     <string name="setup_mode">Tryb pracy</string>
     <string name="setup_root_desc1">Wymaga dostępu do roota z Magisk lub KernelSU</string>
     <string name="repository_empty">Repozytorium jest puste</string>
-    <string name="view_module_local">Lokalne</string>
+    <string name="view_module_local">Lokalnie</string>
     <string name="view_module_version">Wersja</string>
     <string name="view_module_version_dialog_desc">Chcesz zainstalować czy pobrać tę wersję modułu\?</string>
     <string name="settings_app_desc">Ustawienia aplikacji MRepo</string>
