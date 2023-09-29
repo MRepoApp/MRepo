@@ -21,11 +21,8 @@ updates:
           - "com.google.devtools.ksp"
           - "com.google.devtools.ksp.gradle.plugin"
           - "androidx.compose.compiler:compiler"
-
 registries:
   maven-google:
-    type: maven-repository
-    url: "https://dl.google.com/dl/android/maven2/"
-  gradle-plugin:
-    type: maven-repository
-    url: "https://plugins.gradle.org/m2/"
+    type: "maven-repository"
+    url: "https://maven.google.com"
+    replaces-base: true
