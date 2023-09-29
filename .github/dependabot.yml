@@ -5,19 +5,22 @@ updates:
     schedule:
       interval: "daily"
       time: "21:00"
-    open-pull-requests-limit: 10
     labels: [ "github_actions" ]
   - package-ecosystem: gradle
     directory: "/"
     schedule:
       interval: daily
       time: "21:00"
-    open-pull-requests-limit: 10
     labels: [ "dependencies" ]
-    target-branch: main
-    registries:
-      - maven-google
-      - gradle-plugin
+    registries: "*"
+    groups:
+      kotlin-ksp-compose:
+        patterns:
+          - "org.jetbrains.kotlin:*"
+          - "org.jetbrains.kotlin.jvm"
+          - "com.google.devtools.ksp"
+          - "com.google.devtools.ksp.gradle.plugin"
+          - "androidx.compose.compiler:compiler"
 
 registries:
   maven-google:
