@@ -36,7 +36,7 @@
     <string name="module_restore">Wiederherstellen</string>
     <string name="module_install">Installieren</string>
     <string name="view_module_homepage">Webseite</string>
-    <string name="view_module_support">Unterstützung</string>
+    <string name="view_module_support">Unterstützen</string>
     <string name="view_module_type">Typ: %s</string>
     <string name="view_module_added">Hinzugefügt am: %s</string>
     <string name="module_version_author">%1$s von %2$s</string>
@@ -83,7 +83,7 @@
     <string name="menu_pin_enabled">Aktivierte anheften</string>
     <string name="menu_show_updated">Zuletzt aktualisiert anzeigen</string>
     <string name="repo_options_update">Update</string>
-    <string name="about_desc2">Made with ❤️ von %s</string>
+    <string name="about_desc2">Made with ❤️ by %s</string>
     <string name="dialog_ok">OK</string>
     <string name="menu_sort_option_name">Name</string>
     <string name="message_download_success">Herunterladen erfolgreich</string>
@@ -100,6 +100,9 @@
     <string name="view_module_version_dialog_desc">Möchtest du diese Version installieren oder herunterladen\?</string>
     <string name="settings_delete_zip_desc">Löscht Zip Dateien nach der erfolgreichen Installation</string>
     <string name="repo_delete_dialog_desc">Willst du wirklich %s löschen\?</string>
-    <string name="menu_sort_mode">Sortier Reihenfolge</string>
+    <string name="menu_sort_mode">Sortierreihenfolge</string>
     <string name="about_app_version">Version %1$s (%2$s)</string>
+    <string name="install_screen_title">Installation</string>
+    <string name="install_logs_saved">Logs gespeichert</string>
+    <string name="install_logs_save_failed">Fehler beim Speichern: %s</string>
 </resources>
