@@ -1,2 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="setup_root_desc2">उपलब्ध: पूर्ण कार्यक्षमता</string>
+    <string name="install_done">हो गया</string>
+    <string name="dialog_attention">ध्यान दें</string>
+    <string name="dialog_ok">ठीक है</string>
+    <string name="install_logs_saved">लॉग सहेजा गया</string>
+    <string name="module_new">नया</string>
+    <string name="license_osi_approved">ओएसआई स्वीकृत</string>
+    <string name="app_theme_dark_theme_light">लाइट</string>
+    <string name="view_module_last_updated">पिछला अपडेट</string>
+    <string name="menu_sort_mode">सॉर्ट मोड</string>
+    <string name="view_module_page_about">बारे में</string>
+    <string name="menu_descending">अवरोही</string>
+    <string name="install_screen_title">इंस्टालेशन</string>
+    <string name="app_theme_dark_theme_dark">डार्क</string>
+    <string name="setup_mode">काम प्रणाली</string>
+    <string name="settings_about">हमारे बारे में</string>
+    <string name="setup_non_root_desc2">उपलब्ध: डाउनलोड मॉड्यूल</string>
+    <string name="setup_root_desc1">मैजिक या कर्नेल एसयू से रूट एक्सेस की आवश्यकता है</string>
+    <string name="menu_show_updated">अद्यतन समय दिखाएँ</string>
+    <string name="setup_root_title">रुट</string>
+    <string name="page_modules">मॉड्यूल्स</string>
+    <string name="view_module_last_modified">पिछला संशोधित</string>
+    <string name="menu_advanced_menu">उन्नत मेनू</string>
+    <string name="module_install">इंस्टाल करें</string>
+    <string name="repo_modules">%d मॉड्यूल्स</string>
+    <string name="repo_update_at">यहां अपडेट किया गया: %s</string>
+    <string name="menu_sort_option_updated">अद्यतन समय</string>
+    <string name="setup_non_root_desc1">रूट एक्सेस की आवश्यकता नहीं है</string>
+    <string name="about_app_version">वर्जन %1$s (%2$s)</string>
+    <string name="module_download">डाउनलोड करना</string>
+    <string name="app_theme_dark_theme_auto">ऑटो</string>
+    <string name="menu_show_icon">आइकन दिखाएं</string>
+    <string name="license_fsf_libre">एफएसएफ लिब्रे</string>
+    <string name="license_title">लाइसेंस देखें</string>
+    <string name="view_module_description">विवरण</string>
+    <string name="message_download_success">डाउनलोड सफल</string>
+    <string name="about_desc1">मॉड्यूल रिपॉजिटरी प्रदान करें और मैजिक और कर्नेलएसयू के लिए मॉड्यूल प्रबंधित करें।</string>
+    <string name="menu_sort_option_name">नाम</string>
+    <string name="view_module_version">वर्जन</string>
+    <string name="install_failure">असफल</string>
+    <string name="message_loading">लोड हो रहा है…</string>
+    <string name="view_module_local">लोकल</string>
+    <string name="menu_show_license">लाइसेंस दिखाओ</string>
+    <string name="app_theme_dark_theme">डार्क थीम</string>
+    <string name="install_logs_save_failed">सहेजने में विफल: %s</string>
+</resources>
