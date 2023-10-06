@@ -15,8 +15,8 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.TabPosition
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,7 +56,7 @@ fun ViewModuleTab(
         )
     }
 
-    TabRow(
+    PrimaryTabRow(
         modifier = modifier,
         selectedTabIndex = state.currentPage,
         indicator = { tabPositions: List<TabPosition> ->
