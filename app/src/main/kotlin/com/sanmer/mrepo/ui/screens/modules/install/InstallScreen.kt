@@ -11,6 +11,7 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -56,6 +57,7 @@ import com.sanmer.mrepo.app.isLoading
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
+import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.utils.ModuleUtils
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import kotlinx.coroutines.launch
@@ -161,7 +163,8 @@ fun InstallScreen(
                 FloatingButton()
             }
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        contentWindowInsets = WindowInsets.none
     ) {
         Console(
             list = viewModel.console.asReversed(),

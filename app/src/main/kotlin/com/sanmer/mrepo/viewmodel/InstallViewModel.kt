@@ -38,7 +38,7 @@ class InstallViewModel @Inject constructor(
     var event by mutableStateOf(Event.LOADING)
         private set
 
-    val logfile get() = "module_install_log_${LocalDateTime.now()}.log"
+    val logfile get() = "module_install_log_${LocalDateTime.now()}"
 
     init {
         Timber.d("InstallViewModel init")
@@ -74,7 +74,7 @@ class InstallViewModel @Inject constructor(
     }
 
     private fun deleteBySu() = runCatching {
-        suRepository.fs.getFile(zipFile.absolutePath).delete()
+        suRepository.fs.getFile(zipFile.absolutePath).deleteOnExit()
     }.onFailure {
         Timber.e(it)
     }
