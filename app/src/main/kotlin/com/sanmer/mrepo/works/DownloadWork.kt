@@ -1,6 +1,8 @@
 package com.sanmer.mrepo.works
 
 import android.content.Context
+import android.content.pm.ServiceInfo
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import androidx.hilt.work.HiltWorker
@@ -132,7 +134,15 @@ class DownloadWork @AssistedInject constructor(
             .apply { title?.let { setContentTitle(it) } }
             .build()
 
-        return ForegroundInfo(id.version(), notification)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(
+                id.version(),
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            ForegroundInfo(id.version(), notification)
+        }
     }
 
     private fun notifyFinish(title: String, message: String, silent: Boolean): ForegroundInfo {
@@ -144,7 +154,15 @@ class DownloadWork @AssistedInject constructor(
             .setSilent(silent)
             .build()
 
-        return ForegroundInfo(id.version() + 1, notification)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(
+                id.version(),
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            ForegroundInfo(id.version(), notification)
+        }
     }
 
     @Suppress("unused")
