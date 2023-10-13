@@ -1,13 +1,14 @@
 package com.sanmer.mrepo.viewmodel
 
+import android.app.Application
 import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.model.local.LocalModule
@@ -18,8 +19,10 @@ import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
 import com.sanmer.mrepo.utils.extensions.now
 import com.sanmer.mrepo.utils.extensions.toFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
 import java.io.File
@@ -30,8 +33,10 @@ class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val suRepository: SuRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
+    application: Application,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : AndroidViewModel(application) {
+    private val context: Context by lazy { getApplication() }
     private val zipFile = getPath(savedStateHandle)
 
     val console = mutableStateListOf<String>()
@@ -65,7 +70,9 @@ class InstallViewModel @Inject constructor(
             console = { console.add(it) },
             onSuccess = {
                 onSucceeded(it)
-                if (deleteZipFile) deleteBySu()
+                if (deleteZipFile || zipFile.startsWith(context.cacheDir)) {
+                    deleteBySu()
+                }
             },
             onFailure = {
                 event = Event.FAILED
@@ -74,18 +81,22 @@ class InstallViewModel @Inject constructor(
     }
 
     private fun deleteBySu() = runCatching {
-        suRepository.fs.getFile(zipFile.absolutePath).deleteOnExit()
+        suRepository.fs.getFile(zipFile.absolutePath).apply {
+            if (exists()) delete()
+        }
     }.onFailure {
         Timber.e(it)
     }
 
-    fun saveLog(context: Context, uri: Uri) = runCatching {
-        val cr = context.contentResolver
-        cr.openOutputStream(uri)?.use {
-            it.write(console.joinToString(separator = "\n").toByteArray())
+    suspend fun saveLog(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
+        runCatching {
+            val cr = context.contentResolver
+            cr.openOutputStream(uri)?.use {
+                it.write(console.joinToString(separator = "\n").toByteArray())
+            }
+        }.onFailure {
+            Timber.d(it)
         }
-    }.onFailure {
-        Timber.d(it)
     }
 
     companion object {

@@ -57,7 +57,6 @@
     <string name="settings_menu_reboot_edl">Restartuj do trybu EDL</string>
     <string name="settings_app_theme">Motyw aplikacji</string>
     <string name="settings_app_theme_desc">Zmień paletę barw i kolor tła motywu</string>
-    <string name="settings_download_path">Ścieżka pobierania</string>
     <string name="app_theme_dark_theme">Tło aplikacji</string>
     <string name="app_theme_dark_theme_auto">Automatyczne</string>
     <string name="app_theme_dark_theme_light">Jasne</string>

@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.datastore.UserPreferencesExt
@@ -54,7 +53,6 @@ class MainActivity : ComponentActivity() {
             if (OsUtils.atLeastT) {
                 NotificationUtils.PermissionState()
             }
-            MediaStoreUtils.PermissionState()
 
             CompositionLocalProvider(
                 LocalUserPreferences provides userPreferences,

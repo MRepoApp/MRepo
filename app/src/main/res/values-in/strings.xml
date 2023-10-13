@@ -53,7 +53,6 @@
     <string name="settings_menu_reboot_edl">Reboot ke EDL</string>
     <string name="settings_app_theme">Tema Aplikasi</string>
     <string name="settings_app_theme_desc">Mengubah skema warna dan mode malam</string>
-    <string name="settings_download_path">Jalur Download</string>
     <string name="settings_delete_zip">Hapus File Zip</string>
     <string name="settings_delete_zip_desc">Hapus modul zip setelah pemasangan berhasil, ini akan dieksekusi dengan Superuser</string>
     <string name="app_theme_dark_theme">Tema Gelap</string>

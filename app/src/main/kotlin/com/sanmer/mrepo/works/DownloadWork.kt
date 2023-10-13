@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.core.net.toUri
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.Data
@@ -16,14 +15,12 @@ import androidx.work.workDataOf
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.di.ApplicationScope
-import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.HttpUtils
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -35,8 +32,7 @@ import timber.log.Timber
 class DownloadWork @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    @ApplicationScope private val applicationScope: CoroutineScope,
-    private val userPreferencesRepository: UserPreferencesRepository
+    @ApplicationScope private val applicationScope: CoroutineScope
 ) : CoroutineWorker(
     context,
     workerParams
@@ -74,21 +70,11 @@ class DownloadWork @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val url = inputData.url
         val filename = inputData.filename
-        val cr = context.contentResolver
-
-        val downloadPath = userPreferencesRepository.data.first().downloadPath
-        val path = downloadPath.resolve(filename)
-
-        val output = try {
-            downloadPath.apply { if (!exists()) mkdirs() }
-            checkNotNull(cr.openOutputStream(path.toUri()))
-        } catch (e: Exception) {
-            return@withContext onFailure(e)
-        }
+        val path = context.cacheDir.resolve(filename)
 
         val result = HttpUtils.downloader(
             url = url,
-            output = output,
+            output = path.outputStream(),
             onProgress = { progressFlow.value = it to inputData }
         )
 
@@ -141,7 +127,10 @@ class DownloadWork @AssistedInject constructor(
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
             )
         } else {
-            ForegroundInfo(id.version(), notification)
+            ForegroundInfo(
+                id.version(),
+                notification
+            )
         }
     }
 
@@ -161,19 +150,21 @@ class DownloadWork @AssistedInject constructor(
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
             )
         } else {
-            ForegroundInfo(id.version(), notification)
+            ForegroundInfo(
+                id.version(),
+                notification
+            )
         }
     }
 
-    @Suppress("unused")
     companion object {
         private const val PARAM_URL = "url"
         private const val PARAM_FILENAME = "filename"
         private const val PARAM_PROGRESS = "progress"
         private val Data.urlOrNull get() = getString(PARAM_URL)
-        private val Data.url get() = checkNotNull(getString(PARAM_URL))
+        private val Data.url get() = checkNotNull(urlOrNull)
         private val Data.filenameOrNull get() = getString(PARAM_FILENAME)
-        private val Data.filename get() = checkNotNull(getString(PARAM_FILENAME))
+        private val Data.filename get() = checkNotNull(filenameOrNull)
         val Data.progressOrZero get() = getFloat(PARAM_PROGRESS, 0f)
 
         fun start(

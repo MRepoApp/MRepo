@@ -54,7 +54,6 @@
     <string name="settings_app_theme">主題</string>
     <string name="settings_app_theme_desc">更改深色模式和主題調色盤</string>
     <string name="settings_app">應用程式</string>
-    <string name="settings_download_path">下載路徑</string>
     <string name="settings_repo">儲存庫</string>
     <string name="settings_repo_desc">管理 Magisk 模組儲存庫</string>
     <string name="settings_delete_zip">刪除壓縮包</string>

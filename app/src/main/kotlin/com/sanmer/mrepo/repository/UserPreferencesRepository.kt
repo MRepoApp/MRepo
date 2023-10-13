@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,10 +43,6 @@ class UserPreferencesRepository @Inject constructor(
 
     fun setThemeColor(value: Int) = applicationScope.launch {
         userPreferencesDataSource.setThemeColor(value)
-    }
-
-    fun setDownloadPath(value: File) = applicationScope.launch {
-        userPreferencesDataSource.setDownloadPath(value.absolutePath)
     }
 
     fun setDeleteZipFile(value: Boolean) = applicationScope.launch {

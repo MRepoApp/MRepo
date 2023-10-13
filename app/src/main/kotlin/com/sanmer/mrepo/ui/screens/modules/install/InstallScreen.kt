@@ -96,17 +96,15 @@ fun InstallScreen(
     ) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
 
-        viewModel.saveLog(context, uri)
-            .onSuccess {
-                scope.launch {
+        scope.launch {
+            viewModel.saveLog(context, uri)
+                .onSuccess {
                     val message = context.getString(R.string.install_logs_saved)
                     snackbarHostState.showSnackbar(
                         message = message,
                         duration = SnackbarDuration.Short
                     )
-                }
-            }.onFailure {
-                scope.launch {
+                }.onFailure {
                     val message = context.getString(
                         R.string.install_logs_save_failed,
                         it.message ?: context.getString(R.string.unknown_error)
@@ -116,7 +114,7 @@ fun InstallScreen(
                         duration = SnackbarDuration.Short
                     )
                 }
-            }
+        }
     }
 
     LaunchedEffect(interactionSource) {

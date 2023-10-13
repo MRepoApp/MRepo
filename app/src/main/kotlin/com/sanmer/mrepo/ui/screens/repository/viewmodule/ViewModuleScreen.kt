@@ -1,5 +1,7 @@
 package com.sanmer.mrepo.ui.screens.repository.viewmodule
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +10,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -16,7 +19,6 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.providable.LocalSuState
-import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.OverviewPage
 import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.VersionsPage
@@ -24,6 +26,8 @@ import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun ViewModuleScreen(
@@ -31,21 +35,41 @@ fun ViewModuleScreen(
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val userPreferences = LocalUserPreferences.current
     val suState = LocalSuState.current
+    val scope = rememberCoroutineScope()
 
     val localState = viewModel.rememberLocalState(suState = suState)
 
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { if (viewModel.isEmptyAbout) 2 else 3 }
 
+    var zipFile = context.cacheDir
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/zip")
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+
+        scope.launch(Dispatchers.IO) {
+            val cr = context.contentResolver
+            cr.openOutputStream(uri)?.use { output ->
+                zipFile.inputStream().use { input ->
+                    input.copyTo(output)
+                }
+            }
+
+            zipFile.delete()
+        }
+    }
+
     val download: (VersionItem, Boolean) -> Unit = { item, install ->
         viewModel.downloader(context, item) {
+            zipFile = context.cacheDir.resolve(it)
             if (install) {
-                val path = userPreferences.downloadPath.resolve(it)
                 navController.navigateSingleTopTo(
-                    InstallViewModel.putPath(path)
+                    InstallViewModel.putPath(zipFile)
                 )
+            } else {
+                launcher.launch(zipFile.nameWithoutExtension)
             }
         }
     }

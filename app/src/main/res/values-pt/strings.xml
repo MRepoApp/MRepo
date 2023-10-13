@@ -40,7 +40,6 @@
     <string name="settings_app_theme">Tema do Aplicativo</string>
     <string name="settings_app_theme_desc">Mudar paleta de cores e modo escuro</string>
     <string name="settings_app">Aplicativo</string>
-    <string name="settings_download_path">Caminho dos Downloads</string>
     <string name="settings_repo">Repositório</string>
     <string name="settings_repo_desc">Gerenciar repositórios de módulos do Magisk</string>
     <string name="app_theme_palette">Paleta de Cores</string>

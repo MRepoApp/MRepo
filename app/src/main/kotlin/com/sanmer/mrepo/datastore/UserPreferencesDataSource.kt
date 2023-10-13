@@ -39,14 +39,6 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setDownloadPath(value: String) = withContext(Dispatchers.IO) {
-        userPreferences.updateData {
-            it.new {
-                downloadPath = value
-            }
-        }
-    }
-
     suspend fun setDeleteZipFile(value: Boolean) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
             it.new {

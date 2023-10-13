@@ -198,9 +198,7 @@ private fun FloatingButton(
         if (uri == null) return@rememberLauncherForActivityResult
 
         var path = MediaStoreUtils.getAbsoluteFileForUri(context, uri)
-
-        // mounted virtual file
-        if (path.absolutePath.startsWith("/mnt")) {
+        if (path.startsWith("/mnt/appfuse")) {
             path = MediaStoreUtils.copyToTmp(context, uri)
         }
 

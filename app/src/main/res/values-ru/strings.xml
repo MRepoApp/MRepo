@@ -45,7 +45,6 @@
     <string name="settings_menu_reboot_bootloader">Перезагрузка в бутлоадер</string>
     <string name="settings_menu_reboot_edl">Перезагрузка в EDL</string>
     <string name="settings_app_theme">Тема приложения</string>
-    <string name="settings_download_path">Путь для загрузки</string>
     <string name="settings_delete_zip">Удалить zip файл</string>
     <string name="app_theme_palette">Цветовая схема</string>
     <string name="app_theme_dark_theme">Темная тема</string>

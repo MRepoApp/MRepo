@@ -12,9 +12,8 @@ message UserPreferences {
   WorkingMode workingMode = 1;
   DarkMode darkMode = 2;
   int32 themeColor = 3;
-  string downloadPath = 4;
-  bool deleteZipFile = 5;
+  bool deleteZipFile = 4;
 
-  RepositoryMenu repositoryMenu = 6;
-  ModulesMenu modulesMenu = 7;
+  RepositoryMenu repositoryMenu = 5;
+  ModulesMenu modulesMenu = 6;
 }

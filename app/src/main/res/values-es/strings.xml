@@ -16,7 +16,6 @@
     <string name="settings_app_theme">Temas de la App</string>
     <string name="settings_menu_reboot_download">Reiniciar a Download</string>
     <string name="settings_app">App</string>
-    <string name="settings_download_path">Ruta de descarga</string>
     <string name="settings_repo">Repositorio</string>
     <string name="settings_repo_desc">Gestionar los repositorios de módulos Magisk</string>
     <string name="settings_menu_reboot">Reiniciar</string>

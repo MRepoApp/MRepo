@@ -7,7 +7,6 @@ import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,9 +32,6 @@ class SettingsViewModel @Inject constructor(
 
     fun setThemeColor(value: Int) =
         userPreferencesRepository.setThemeColor(value)
-
-    fun setDownloadPath(value: File) =
-        userPreferencesRepository.setDownloadPath(value)
 
     fun setDeleteZipFile(value: Boolean) =
         userPreferencesRepository.setDeleteZipFile(value)

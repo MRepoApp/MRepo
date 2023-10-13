@@ -57,7 +57,6 @@
     <string name="settings_menu_reboot_edl">Neustart in den EDL-Modus</string>
     <string name="settings_app_theme">App Design</string>
     <string name="settings_app_theme_desc">Farben und Nacht-Modus ändern</string>
-    <string name="settings_download_path">Download Pfad</string>
     <string name="settings_delete_zip">Zip Datei löschen</string>
     <string name="module_download">Herunterladen</string>
     <string name="settings_app">App</string>
