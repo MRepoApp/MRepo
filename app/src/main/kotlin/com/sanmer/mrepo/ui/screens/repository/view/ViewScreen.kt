@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.repository.viewmodule
+package com.sanmer.mrepo.ui.screens.repository.view
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,18 +19,17 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.providable.LocalSuState
-import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.AboutPage
-import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.OverviewPage
-import com.sanmer.mrepo.ui.screens.repository.viewmodule.pages.VersionsPage
+import com.sanmer.mrepo.ui.screens.repository.view.pages.AboutPage
+import com.sanmer.mrepo.ui.screens.repository.view.pages.OverviewPage
+import com.sanmer.mrepo.ui.screens.repository.view.pages.VersionsPage
 import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun ViewModuleScreen(
+fun ViewScreen(
     navController: NavController,
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
@@ -49,15 +48,8 @@ fun ViewModuleScreen(
     ) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
 
-        scope.launch(Dispatchers.IO) {
-            val cr = context.contentResolver
-            cr.openOutputStream(uri)?.use { output ->
-                zipFile.inputStream().use { input ->
-                    input.copyTo(output)
-                }
-            }
-
-            zipFile.delete()
+        scope.launch {
+            viewModel.saveZipFile(context, zipFile, uri)
         }
     }
 
@@ -77,7 +69,7 @@ fun ViewModuleScreen(
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            ViewModuleTopBar(
+            ViewTopBar(
                 online = viewModel.online,
                 tracks = viewModel.tracks,
                 scrollBehavior = scrollBehavior,
@@ -89,7 +81,7 @@ fun ViewModuleScreen(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            ViewModuleTab(
+            ViewTab(
                 state = pagerState,
                 updatableSize = viewModel.updatableSize,
                 hasAbout = !viewModel.isEmptyAbout

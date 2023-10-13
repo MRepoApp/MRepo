@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +39,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -140,6 +143,25 @@ class ModuleViewModel @Inject constructor(
                 }
             }
             .launchIn(viewModelScope)
+    }
+
+    suspend fun saveZipFile(
+        context: Context,
+        zip: File,
+        uri: Uri
+    ) = withContext(Dispatchers.IO) {
+        runCatching {
+            val cr = context.contentResolver
+            cr.openOutputStream(uri)?.use { output ->
+                zip.inputStream().use { input ->
+                    input.copyTo(output)
+                }
+            }
+        }.onSuccess {
+            zip.delete()
+        }.onFailure {
+            Timber.d(it)
+        }
     }
 
     @Composable

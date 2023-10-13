@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.repository.viewmodule.items
+package com.sanmer.mrepo.ui.screens.repository.view.items
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets

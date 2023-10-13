@@ -11,7 +11,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.sanmer.mrepo.ui.navigation.MainScreen
 import com.sanmer.mrepo.ui.screens.repository.RepositoryScreen
-import com.sanmer.mrepo.ui.screens.repository.viewmodule.ViewModuleScreen
+import com.sanmer.mrepo.ui.screens.repository.view.ViewScreen
 
 enum class RepositoryScreen(val route: String) {
     Home("Repository"),
@@ -40,7 +40,7 @@ fun NavGraphBuilder.repositoryScreen(
         enterTransition = { scaleIn() + fadeIn() },
         exitTransition = { fadeOut() }
     ) {
-        ViewModuleScreen(
+        ViewScreen(
             navController = navController
         )
     }

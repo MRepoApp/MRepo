@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.repository.viewmodule.pages
+package com.sanmer.mrepo.ui.screens.repository.view.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

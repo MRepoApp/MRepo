@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.repository.viewmodule
+package com.sanmer.mrepo.ui.screens.repository.view
 
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.spring
@@ -35,7 +35,7 @@ import com.sanmer.mrepo.ui.component.Tab
 import kotlinx.coroutines.launch
 
 @Composable
-fun ViewModuleTab(
+fun ViewTab(
     state: PagerState,
     updatableSize: Int,
     hasAbout: Boolean,

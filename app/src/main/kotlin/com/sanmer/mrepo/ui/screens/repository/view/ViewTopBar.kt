@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.repository.viewmodule
+package com.sanmer.mrepo.ui.screens.repository.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,13 +31,13 @@ import com.sanmer.mrepo.ui.component.CollapsingTopAppBar
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.component.Logo
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
-import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.LicenseItem
-import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.TagItem
-import com.sanmer.mrepo.ui.screens.repository.viewmodule.items.TrackItem
+import com.sanmer.mrepo.ui.screens.repository.view.items.LicenseItem
+import com.sanmer.mrepo.ui.screens.repository.view.items.TagItem
+import com.sanmer.mrepo.ui.screens.repository.view.items.TrackItem
 import com.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
-fun ViewModuleTopBar(
+fun ViewTopBar(
     online: OnlineModule,
     tracks: List<Pair<Repo, TrackJson>>,
     scrollBehavior: TopAppBarScrollBehavior,
