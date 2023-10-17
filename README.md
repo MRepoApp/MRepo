@@ -16,7 +16,7 @@ MRepo is written with [Jetpack Compose](https://developer.android.com/jetpack/co
  - Support multiple repositories
 
 ## Supported Versions
-- Android 8.0 ~ 13
+- Android 8.0 ~ 14
 - Magisk 24.0 ~ latest
 - KernelSU 0.5.0 ~ latest
 
