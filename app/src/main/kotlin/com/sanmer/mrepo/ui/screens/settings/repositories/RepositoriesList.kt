@@ -3,10 +3,13 @@ package com.sanmer.mrepo.ui.screens.settings.repositories
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -17,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.database.entity.Repo
@@ -65,13 +67,13 @@ private fun RepositoryItem(
     )
 
     var failure by remember { mutableStateOf(false) }
-    var message: String? by remember { mutableStateOf(null) }
+    var message: String by remember { mutableStateOf("") }
     if (failure) FailureDialog(
         repo = repo,
         message = message,
         onClose = {
             failure = false
-            message = null
+            message = ""
         }
     )
 
@@ -83,7 +85,7 @@ private fun RepositoryItem(
         update = {
             onUpdate(repo) {
                 failure = true
-                message = it.message
+                message = it.stackTraceToString()
             }
         },
         delete = { delete = true }
@@ -124,7 +126,7 @@ private fun DeleteDialog(
 @Composable
 fun FailureDialog(
     repo: Repo,
-    message: String?,
+    message: String,
     onClose: () -> Unit
 ) = AlertDialog(
     shape = RoundedCornerShape(20.dp),
@@ -132,9 +134,10 @@ fun FailureDialog(
     title = { Text(text = repo.name) },
     text = {
         Text(
-            text = message.toString(),
-            maxLines = 5,
-            overflow = TextOverflow.Ellipsis
+            text = message,
+            modifier = Modifier
+                .requiredHeightIn(max = 280.dp)
+                .verticalScroll(rememberScrollState())
         )
     },
     confirmButton = {

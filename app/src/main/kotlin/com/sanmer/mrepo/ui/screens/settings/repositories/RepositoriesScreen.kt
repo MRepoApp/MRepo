@@ -63,13 +63,16 @@ fun RepositoriesScreen(
     val showFab = listSate.isScrollingUp()
 
     var value by remember { mutableStateOf("https://your-repo.com/".toRepo()) }
-    var message: String? by remember { mutableStateOf(null) }
+    var message: String by remember { mutableStateOf("") }
 
     var failure by remember { mutableStateOf(false) }
     if (failure) FailureDialog(
         repo = value,
         message = message,
-        onClose = { failure = false }
+        onClose = {
+            failure = false
+            message = ""
+        }
     )
 
     var add by remember { mutableStateOf(false) }
@@ -79,7 +82,7 @@ fun RepositoriesScreen(
             value = it.toRepo()
             viewModel.insert(value) { e ->
                 failure = true
-                message = e.message
+                message = e.stackTraceToString()
             }
         }
     )
