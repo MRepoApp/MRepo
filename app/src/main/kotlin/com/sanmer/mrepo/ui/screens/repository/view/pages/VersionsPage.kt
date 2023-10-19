@@ -94,7 +94,7 @@ fun VersionsPage(
         val progress = getProgress(item)
         if (progress != 0f) {
             LinearProgressIndicator(
-                progress = progress,
+                progress = { progress },
                 strokeCap = StrokeCap.Round,
                 modifier = Modifier
                     .height(2.dp)
