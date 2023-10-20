@@ -55,7 +55,7 @@
     <string name="dialog_ok">ОК</string>
     <string name="message_download_success">Успешно загружено</string>
     <string name="message_loading">Загрузка…</string>
-    <string name="notification_name_download">Служба загрузки</string>
+    <string name="notification_name_download">Работа загрузки</string>
     <string name="search_empty">Список пустой</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="setup_non_root_desc2">Доступно: загрузка модулей</string>
@@ -69,7 +69,7 @@
     <string name="settings_non_root_desc">Функциональность ограничена</string>
     <string name="settings_menu_reboot_download">Перезагрузка в режим загрузки</string>
     <string name="repo_options_update">Обновить</string>
-    <string name="repo_options_delete">Удалить</string>
+    <string name="repo_options_delete">Убрать</string>
     <string name="repo_delete_dialog_desc">Вы уверены что хотите удалить %s\?</string>
     <string name="repo_add_dialog_title">Добавить репозиторий</string>
     <string name="repo_add_dialog_add">Добавить</string>
@@ -101,4 +101,7 @@
     <string name="menu_descending">По убыванию</string>
     <string name="menu_pin_enabled">Пин-код включен</string>
     <string name="menu_show_updated">Показать обновленное время</string>
+    <string name="install_screen_title">Установка</string>
+    <string name="install_logs_saved">Логи сохранены</string>
+    <string name="install_logs_save_failed">Ошибка сохранения: %s</string>
 </resources>
