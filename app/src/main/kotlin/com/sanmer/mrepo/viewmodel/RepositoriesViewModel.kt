@@ -11,9 +11,10 @@ import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -23,15 +24,9 @@ class RepositoriesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
-    val list = localRepository.getRepoAllAsFlow()
-        .map { list ->
-            list.sortedBy { it.name }
-                .toMutableStateList()
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = mutableStateListOf()
-        )
+    private var values = mutableStateListOf<Repo>()
+    private val valuesFlow = MutableStateFlow(values)
+    val list get() = valuesFlow.asStateFlow()
 
     var progress by mutableStateOf(false)
         private set
@@ -44,6 +39,18 @@ class RepositoriesViewModel @Inject constructor(
 
     init {
         Timber.d("RepositoriesViewModel init")
+        dataObserver()
+    }
+
+    private fun dataObserver() {
+        localRepository.getRepoAllAsFlow()
+            .onEach { list ->
+                values = list.sortedBy { it.name }
+                    .toMutableStateList()
+
+                valuesFlow.value = values
+
+            }.launchIn(viewModelScope)
     }
 
     fun insert(

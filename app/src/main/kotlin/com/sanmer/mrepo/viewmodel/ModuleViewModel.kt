@@ -81,22 +81,15 @@ class ModuleViewModel @Inject constructor(
 
     init {
         Timber.d("ModuleViewModel init: $moduleId")
-        getModule()
-        getVersionsAndTracks()
+        loadData()
     }
 
-    private fun getModule() {
-        localRepository.online.first { it.id == moduleId }.apply {
-            online = this
-        }
+    private fun loadData() = viewModelScope.launch {
+        online = localRepository.getOnlineAllById(moduleId).first()
 
-        localRepository.local.find { it.id == moduleId }?.let {
-            local = it
-        }
-    }
+        localRepository.getLocalByIdOrNull(moduleId)?.let { local = it }
 
-    private fun getVersionsAndTracks() = viewModelScope.launch {
-        online.versions.forEach {
+        localRepository.getVersionById(moduleId).forEach {
             val repo = localRepository.getRepoByUrl(it.repoUrl)
 
             val item = repo to it

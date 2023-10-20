@@ -8,6 +8,9 @@ import com.sanmer.mrepo.database.entity.OnlineModuleEntity
 
 @Dao
 interface OnlineDao {
+    @Query("SELECT * FROM onlineModules WHERE id = :id")
+    suspend fun getAllById(id: String): List<OnlineModuleEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(list: List<OnlineModuleEntity>)
 

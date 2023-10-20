@@ -1,11 +1,10 @@
 package com.sanmer.mrepo.viewmodel
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.datastore.repository.Option
@@ -17,6 +16,11 @@ import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,23 +32,11 @@ class RepositoryViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
     var isSearch by mutableStateOf(false)
-    var key by mutableStateOf("")
+    private val keyFlow = MutableStateFlow("")
 
-    private val online get() = localRepository.online
-        .map { online ->
-            online.createState(
-                local = localRepository.local.find { it.id == online.id }
-            ) to online
-        }
-
-    private val _online by derivedStateOf {
-        online.filter { (_, module) ->
-            if (key.isBlank()) return@filter true
-            key.uppercase() in "${module.name}${module.author}".uppercase()
-        }
-    }
-
-    private val values get() = (if (isSearch) _online else online)
+    private var values = mutableStateListOf<Pair<OnlineState, OnlineModule>>()
+    private val valuesFlow = MutableStateFlow(values)
+    val online get() = valuesFlow.asStateFlow()
 
     var isRefreshing by mutableStateOf(false)
         private set
@@ -56,15 +48,21 @@ class RepositoryViewModel @Inject constructor(
 
     init {
         Timber.d("RepositoryViewModel init")
+        dataObserver()
     }
 
-    @Composable
-    fun getOnlineSortedBy(
-        menu: RepositoryMenuExt
-    ): List<Pair<OnlineState, OnlineModule>> {
-        val list = remember(menu) {
-            derivedStateOf {
-                values.sortedWith(
+    private fun dataObserver() {
+        localRepository.getOnlineAllAsFlow()
+            .combine(keyFlow) { list, key ->
+                Timber.d("online list, size = ${list.size}")
+                val menu = userPreferencesRepository.data.first()
+                    .repositoryMenu
+
+                values = list.map {
+                    it.createState(
+                        local = localRepository.getLocalByIdOrNull(it.id)
+                    ) to it
+                }.sortedWith(
                     comparator(menu.option, menu.descending)
                 ).let { v ->
                     val a = if (menu.pinInstalled) {
@@ -78,11 +76,15 @@ class RepositoryViewModel @Inject constructor(
                     } else {
                         a
                     }
-                }
-            }
-        }
+                }.filter { (_, m) ->
+                    if (key.isBlank()) return@filter true
+                    key.lowercase() in "${m.name},${m.author},${m.description}".lowercase()
 
-        return list.value
+                }.toMutableStateList()
+
+                valuesFlow.value = values
+
+            }.launchIn(viewModelScope)
     }
 
     private fun comparator(
@@ -103,9 +105,13 @@ class RepositoryViewModel @Inject constructor(
         }
     }
 
+    fun search(key: String) {
+        keyFlow.value = key
+    }
+
     fun closeSearch() {
         isSearch = false
-        key = ""
+        keyFlow.value = ""
     }
 
     fun getOnlineAll() = viewModelScope.launch {

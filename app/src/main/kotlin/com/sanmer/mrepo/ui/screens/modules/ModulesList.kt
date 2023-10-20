@@ -27,14 +27,14 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
-import com.sanmer.mrepo.viewmodel.ModulesViewModel
+import com.sanmer.mrepo.viewmodel.ModulesViewModel.Companion.LocalUiState
 
 @Composable
 fun ModulesList(
     list: List<Pair<LocalState, LocalModule>>,
     state: LazyListState,
     suState: Event,
-    getUiState: @Composable (LocalModule) -> ModulesViewModel.UiState
+    getUiState: @Composable (LocalModule) -> LocalUiState
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -68,7 +68,7 @@ fun ModuleItem(
     module: LocalModule,
     state: LocalState,
     suState: Event,
-    getUiState: @Composable (LocalModule) -> ModulesViewModel.UiState
+    getUiState: @Composable (LocalModule) -> LocalUiState
 ) {
     val uiState = getUiState(module)
 

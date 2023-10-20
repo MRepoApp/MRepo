@@ -2,11 +2,12 @@ package com.sanmer.mrepo.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,11 @@ import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,26 +46,11 @@ class ModulesViewModel @Inject constructor(
     }
 
     var isSearch by mutableStateOf(false)
-    var key by mutableStateOf("")
+    private val keyFlow = MutableStateFlow("")
 
-    private val local get() = localRepository.local
-        .map { local ->
-            local.createState(
-                fs = fs,
-                skipSize = true
-            ) to local
-        }.sortedBy { (_, module) ->
-            module.name
-        }
-
-    private val _local by derivedStateOf {
-        local.filter { (_, module) ->
-            if (key.isBlank()) return@filter true
-            key.uppercase() in "${module.name}${module.author}".uppercase()
-        }
-    }
-
-    private val values get() = (if (isSearch) _local else local)
+    private var values = mutableStateListOf<Pair<LocalState, LocalModule>>()
+    private val valuesFlow = MutableStateFlow(values)
+    val local get() = valuesFlow.asStateFlow()
 
     var isRefreshing by mutableStateOf(false)
         private set
@@ -71,15 +62,22 @@ class ModulesViewModel @Inject constructor(
 
     init {
         Timber.d("ModulesViewModel init")
+        dataObserver()
     }
 
-    @Composable
-    fun getLocalSortedBy(
-        menu: ModulesMenuExt
-    ): List<Pair<LocalState, LocalModule>> {
-        val list = remember(menu) {
-            derivedStateOf {
-                values.sortedWith(
+    private fun dataObserver() {
+        localRepository.getLocalAllAsFlow()
+            .combine(keyFlow) { list, key ->
+                Timber.d("local list, size = ${list.size}")
+                val menu = userPreferencesRepository.data.first()
+                    .modulesMenu
+
+                values = list.map {
+                    it.createState(
+                        fs = fs,
+                        skipSize = true
+                    ) to it
+                }.sortedWith(
                     comparator(menu.option, menu.descending)
                 ).let { v ->
                     if (menu.pinEnabled) {
@@ -87,11 +85,15 @@ class ModulesViewModel @Inject constructor(
                     } else {
                         v
                     }
-                }
-            }
-        }
+                }.filter { (_, m) ->
+                    if (key.isBlank()) return@filter true
+                    key.lowercase() in "${m.name},${m.author},${m.description}".lowercase()
 
-        return list.value
+                }.toMutableStateList()
+
+                valuesFlow.value = values
+
+            }.launchIn(viewModelScope)
     }
 
     private fun comparator(
@@ -112,9 +114,13 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
+    fun search(key: String) {
+        keyFlow.value = key
+    }
+
     fun closeSearch() {
         isSearch = false
-        key = ""
+        keyFlow.value = ""
     }
 
     fun getLocalAll() = viewModelScope.launch {
@@ -126,47 +132,49 @@ class ModulesViewModel @Inject constructor(
     fun setModulesMenu(value: ModulesMenuExt) =
         userPreferencesRepository.setModulesMenu(value)
 
-    @Stable
-    data class UiState(
-        val alpha: Float = 1f,
-        val decoration: TextDecoration = TextDecoration.None,
-        val toggle: (Boolean) -> Unit = {},
-        val change: () -> Unit = {}
-    )
-
     private fun createUiState(
         module: LocalModule
-    ): UiState = when (module.state) {
-        State.ENABLE -> UiState(
+    ): LocalUiState = when (module.state) {
+        State.ENABLE -> LocalUiState(
             alpha = 1f,
             decoration = TextDecoration.None,
             toggle = { suRepository.disable(module) },
             change = { suRepository.remove(module) }
         )
 
-        State.DISABLE -> UiState(
+        State.DISABLE -> LocalUiState(
             alpha = 0.5f,
             toggle = { suRepository.enable(module) },
             change = { suRepository.remove(module) }
         )
 
-        State.REMOVE -> UiState(
+        State.REMOVE -> LocalUiState(
             alpha = 0.5f,
             decoration = TextDecoration.LineThrough,
             change = { suRepository.enable(module) }
         )
         State.ZYGISK_UNLOADED,
         State.RIRU_DISABLE,
-        State.ZYGISK_DISABLE -> UiState(
+        State.ZYGISK_DISABLE -> LocalUiState(
             alpha = 0.5f
         )
-        State.UPDATE -> UiState()
+        State.UPDATE -> LocalUiState()
     }
 
     @Composable
-    fun rememberUiState(module: LocalModule): UiState {
+    fun rememberUiState(module: LocalModule): LocalUiState {
         return remember(key1 = module.state, key2 = isRefreshing) {
             createUiState(module)
         }
+    }
+
+    companion object {
+        @Stable
+        data class LocalUiState(
+            val alpha: Float = 1f,
+            val decoration: TextDecoration = TextDecoration.None,
+            val toggle: (Boolean) -> Unit = {},
+            val change: () -> Unit = {}
+        )
     }
 }

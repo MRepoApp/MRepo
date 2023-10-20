@@ -29,7 +29,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -38,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.isSucceeded
@@ -47,7 +51,6 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.providable.LocalSuState
-import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
@@ -60,10 +63,7 @@ fun ModulesScreen(
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
     val suState = LocalSuState.current
-    val userPreferences = LocalUserPreferences.current
-    val modulesMenu = userPreferences.modulesMenu
-
-    val list = viewModel.getLocalSortedBy(menu = modulesMenu)
+    val list by viewModel.local.collectAsStateWithLifecycle()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
@@ -94,8 +94,7 @@ fun ModulesScreen(
         topBar = {
             TopBar(
                 isSearch = viewModel.isSearch,
-                query = viewModel.key,
-                onQueryChange = { viewModel.key = it },
+                onQueryChange = { viewModel.search(it) },
                 onOpenSearch = { viewModel.isSearch = true },
                 onCloseSearch = viewModel::closeSearch,
                 setMenu = viewModel::setModulesMenu,
@@ -157,36 +156,45 @@ fun ModulesScreen(
 @Composable
 private fun TopBar(
     isSearch: Boolean,
-    query: String,
     onQueryChange: (String) -> Unit,
     onOpenSearch: () -> Unit,
     onCloseSearch: () -> Unit,
     setMenu: (ModulesMenuExt) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
-) = SearchTopBar(
-    isSearch = isSearch,
-    query = query,
-    onQueryChange = onQueryChange,
-    onClose = onCloseSearch,
-    title = { TopAppBarTitle(text = stringResource(id = R.string.page_modules)) },
-    scrollBehavior = scrollBehavior,
-    actions = {
-        if (!isSearch) {
-            IconButton(
-                onClick = onOpenSearch
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.search),
-                    contentDescription = null
-                )
-            }
-        }
+) {
+    var query by rememberSaveable { mutableStateOf("") }
 
-        ModulesMenu(
-            setMenu = setMenu
-        )
-    }
-)
+    SearchTopBar(
+        isSearch = isSearch,
+        query = query,
+        onQueryChange = {
+            onQueryChange(it)
+            query = it
+        },
+        onClose = {
+            onCloseSearch()
+            query = ""
+        },
+        title = { TopAppBarTitle(text = stringResource(id = R.string.page_modules)) },
+        scrollBehavior = scrollBehavior,
+        actions = {
+            if (!isSearch) {
+                IconButton(
+                    onClick = onOpenSearch
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.search),
+                        contentDescription = null
+                    )
+                }
+            }
+
+            ModulesMenu(
+                setMenu = setMenu
+            )
+        }
+    )
+}
 
 @Composable
 private fun FloatingButton(

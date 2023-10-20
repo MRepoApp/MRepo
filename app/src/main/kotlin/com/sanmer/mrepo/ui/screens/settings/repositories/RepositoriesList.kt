@@ -41,10 +41,8 @@ fun RepositoriesList(
         items = list,
         key = { it.url }
     ) { repo ->
-        val value by remember(list) { mutableStateOf(repo) }
-
         RepositoryItem(
-            repo = value,
+            repo = repo,
             toggle = { update(it) },
             onUpdate = getUpdate,
             onDelete = delete,
