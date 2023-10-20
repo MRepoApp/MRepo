@@ -44,6 +44,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.ui.animate.slideInTopToBottom
 import com.sanmer.mrepo.ui.animate.slideOutBottomToTop
+import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.TextFieldDialog
@@ -56,7 +57,7 @@ fun RepositoriesScreen(
     navController: NavController,
     viewModel: RepositoriesViewModel = hiltViewModel()
 ) {
-    val list by viewModel.list.collectAsStateWithLifecycle()
+    val list by viewModel.repos.collectAsStateWithLifecycle()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listSate = rememberLazyListState()
@@ -116,7 +117,11 @@ fun RepositoriesScreen(
         Box(
             modifier = Modifier.padding(innerPadding)
         ) {
-            if (list.isEmpty()) {
+            if (viewModel.isLoading) {
+                Loading()
+            }
+
+            if (list.isEmpty() && !viewModel.isLoading) {
                 PageIndicator(
                     icon = R.drawable.git_pull_request,
                     text = R.string.repo_empty

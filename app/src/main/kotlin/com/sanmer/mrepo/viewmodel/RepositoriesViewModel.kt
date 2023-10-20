@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -24,13 +25,15 @@ class RepositoriesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
-    private var values = mutableStateListOf<Repo>()
-    private val valuesFlow = MutableStateFlow(values)
-    val list get() = valuesFlow.asStateFlow()
+    private val valuesFlow = MutableStateFlow(
+        mutableStateListOf<Repo>()
+    )
+    val repos get() = valuesFlow.asStateFlow()
 
+    var isLoading by mutableStateOf(true)
+        private set
     var progress by mutableStateOf(false)
         private set
-
     private inline fun <T> T.refreshing(callback: T.() -> Unit) {
         progress  = true
         callback()
@@ -44,11 +47,12 @@ class RepositoriesViewModel @Inject constructor(
 
     private fun dataObserver() {
         localRepository.getRepoAllAsFlow()
+            .onStart { isLoading = true }
             .onEach { list ->
-                values = list.sortedBy { it.name }
+                valuesFlow.value = list.sortedBy { it.name }
                     .toMutableStateList()
 
-                valuesFlow.value = values
+                if (isLoading) isLoading = false
 
             }.launchIn(viewModelScope)
     }

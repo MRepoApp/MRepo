@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
+import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
@@ -83,7 +84,11 @@ fun RepositoryScreen(
                 enabled = !viewModel.isSearch
             )
         ) {
-            if (list.isEmpty()) {
+            if (viewModel.isLoading) {
+                Loading()
+            }
+
+            if (list.isEmpty() && !viewModel.isLoading) {
                 PageIndicator(
                     icon = R.drawable.cloud,
                     text = if (viewModel.isSearch) R.string.search_empty else R.string.repository_empty,

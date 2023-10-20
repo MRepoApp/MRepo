@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -47,10 +48,13 @@ class ModulesViewModel @Inject constructor(
     var isSearch by mutableStateOf(false)
     private val keyFlow = MutableStateFlow("")
 
-    private var values = mutableStateListOf<Pair<LocalState, LocalModule>>()
-    private val valuesFlow = MutableStateFlow(values)
+    private val valuesFlow = MutableStateFlow(
+        mutableStateListOf<Pair<LocalState, LocalModule>>()
+    )
     val local get() = valuesFlow.asStateFlow()
 
+    var isLoading by mutableStateOf(false)
+        private set
     var isRefreshing by mutableStateOf(false)
         private set
     private inline fun <T> T.refreshing(callback: T.() -> Unit) {
@@ -66,12 +70,13 @@ class ModulesViewModel @Inject constructor(
 
     private fun dataObserver() {
         localRepository.getLocalAllAsFlow()
+            .onStart { isLoading = true }
             .combine(keyFlow) { list, key ->
                 Timber.d("local list, size = ${list.size}")
                 val menu = userPreferencesRepository.data.first()
                     .modulesMenu
 
-                values = list.map {
+                valuesFlow.value  = list.map {
                     it.createState(
                         fs = fs,
                         skipSize = true
@@ -90,7 +95,7 @@ class ModulesViewModel @Inject constructor(
 
                 }.toMutableStateList()
 
-                valuesFlow.value = values
+                if (isLoading) isLoading = false
 
             }.launchIn(viewModelScope)
     }

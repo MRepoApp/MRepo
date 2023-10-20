@@ -47,6 +47,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
+import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
@@ -127,7 +128,11 @@ fun ModulesScreen(
                 enabled = !viewModel.isSearch
             )
         ) {
-            if (list.isEmpty()) {
+            if (viewModel.isLoading) {
+                Loading()
+            }
+
+            if (list.isEmpty() && !viewModel.isLoading) {
                 PageIndicator(
                     icon = R.drawable.keyframes,
                     text = if (viewModel.isSearch) R.string.search_empty else R.string.modules_empty,
