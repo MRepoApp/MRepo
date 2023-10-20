@@ -39,10 +39,9 @@ class ModulesViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
-    private val fs get() = try {
-        suRepository.fs
-    } catch (e: Exception) {
-        FileSystemManager.getLocal()
+    private val fs get() = when {
+        suRepository.isInitialized -> suRepository.fs
+        else -> FileSystemManager.getLocal()
     }
 
     var isSearch by mutableStateOf(false)

@@ -14,10 +14,9 @@ class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository
 ) : ViewModel() {
-    val apiVersion get() = try {
-        suRepository.version
-    } catch (e: Exception) {
-        "unknown"
+    val apiVersion get() = when {
+        suRepository.isInitialized -> suRepository.version
+        else -> "unknown"
     }
 
     init {

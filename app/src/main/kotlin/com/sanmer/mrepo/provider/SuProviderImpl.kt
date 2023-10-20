@@ -40,6 +40,8 @@ class SuProviderImpl @Inject constructor(
 
     private lateinit var mProvider: ISuProvider
     private lateinit var mApi: LocalApi
+    override val isInitialized get() =
+        ::mProvider.isInitialized && ::mApi.isInitialized
 
     init {
         Shell.enableVerboseLogging = BuildConfig.DEBUG
