@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.TabPosition
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,7 +56,7 @@ fun ViewTab(
         )
     }
 
-    PrimaryTabRow(
+    TabRow(
         modifier = modifier,
         selectedTabIndex = state.currentPage,
         indicator = { tabPositions: List<TabPosition> ->
@@ -66,7 +66,7 @@ fun ViewTab(
             )
         },
         divider = {
-            HorizontalDivider(
+            Divider(
                 thickness = 0.3.dp,
                 modifier = Modifier.shadow(6.dp)
             )

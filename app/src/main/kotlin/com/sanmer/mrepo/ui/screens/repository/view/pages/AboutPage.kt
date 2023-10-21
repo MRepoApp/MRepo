@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedAssistChip
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -92,5 +92,5 @@ private fun ValueItem(
         )
     }
 
-    HorizontalDivider(thickness = 0.9.dp)
+    Divider(thickness = 0.9.dp)
 }

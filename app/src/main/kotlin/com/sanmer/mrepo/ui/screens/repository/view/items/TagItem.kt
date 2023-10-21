@@ -18,7 +18,7 @@ fun TagItem(
 ) = FilledTonalIconButton(
     onClick = onClick,
     colors = IconButtonDefaults.filledTonalIconButtonColors(
-        containerColor = MaterialTheme.colorScheme.surfaceContainer
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
     ),
     modifier = Modifier.size(35.dp),
 ) {

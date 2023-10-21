@@ -30,7 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -94,14 +94,14 @@ fun VersionsPage(
         val progress = getProgress(item)
         if (progress != 0f) {
             LinearProgressIndicator(
-                progress = { progress },
+                progress = progress,
                 strokeCap = StrokeCap.Round,
                 modifier = Modifier
                     .height(2.dp)
                     .fillMaxWidth()
             )
         } else {
-            HorizontalDivider(thickness = 0.9.dp)
+            Divider(thickness = 0.9.dp)
         }
     }
 }
