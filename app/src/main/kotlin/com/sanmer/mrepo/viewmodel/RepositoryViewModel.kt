@@ -19,8 +19,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -32,6 +32,9 @@ class RepositoryViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
+    private val repositoryMenu get() = userPreferencesRepository.data
+        .map { it.repositoryMenu }
+
     var isSearch by mutableStateOf(false)
     private val keyFlow = MutableStateFlow("")
 
@@ -56,40 +59,41 @@ class RepositoryViewModel @Inject constructor(
     }
 
     private fun dataObserver() {
-        localRepository.getOnlineAllAsFlow()
-            .onStart { isLoading = true }
-            .combine(keyFlow) { list, key ->
-                Timber.d("online list, size = ${list.size}")
-                val menu = userPreferencesRepository.data.first()
-                    .repositoryMenu
+        combine(
+            localRepository.getOnlineAllAsFlow().onStart { isLoading = true },
+            repositoryMenu,
+            keyFlow,
+        ) { list, menu, key ->
 
-                valuesFlow.value = list.map {
-                    it.createState(
-                        local = localRepository.getLocalByIdOrNull(it.id)
-                    ) to it
-                }.sortedWith(
-                    comparator(menu.option, menu.descending)
-                ).let { v ->
-                    val a = if (menu.pinInstalled) {
-                        v.sortedByDescending { it.first.installed }
-                    } else {
-                        v
-                    }
+            Timber.d("online list, size = ${list.size}")
 
-                    if (menu.pinUpdatable) {
-                        a.sortedByDescending { it.first.updatable }
-                    } else {
-                        a
-                    }
-                }.filter { (_, m) ->
-                    if (key.isBlank()) return@filter true
-                    key.lowercase() in "${m.name},${m.author},${m.description}".lowercase()
+            valuesFlow.value = list.map {
+                it.createState(
+                    local = localRepository.getLocalByIdOrNull(it.id)
+                ) to it
+            }.sortedWith(
+                comparator(menu.option, menu.descending)
+            ).let { v ->
+                val a = if (menu.pinInstalled) {
+                    v.sortedByDescending { it.first.installed }
+                } else {
+                    v
+                }
 
-                }.toMutableStateList()
+                if (menu.pinUpdatable) {
+                    a.sortedByDescending { it.first.updatable }
+                } else {
+                    a
+                }
+            }.filter { (_, m) ->
+                if (key.isBlank()) return@filter true
+                key.lowercase() in "${m.name},${m.author},${m.description}".lowercase()
 
-                if (isLoading) isLoading = false
+            }.toMutableStateList()
 
-            }.launchIn(viewModelScope)
+            if (isLoading) isLoading = false
+
+        }.launchIn(viewModelScope)
     }
 
     private fun comparator(
