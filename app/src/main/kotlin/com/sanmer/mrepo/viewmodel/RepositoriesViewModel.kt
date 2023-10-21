@@ -1,7 +1,6 @@
 package com.sanmer.mrepo.viewmodel
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
@@ -27,7 +26,7 @@ class RepositoriesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
     private val valuesFlow = MutableStateFlow(
-        mutableStateListOf<RepoState>()
+        listOf<RepoState>()
     )
     val repos get() = valuesFlow.asStateFlow()
 
