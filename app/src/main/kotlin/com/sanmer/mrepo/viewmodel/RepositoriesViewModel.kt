@@ -7,7 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.database.entity.toRepo
+import com.sanmer.mrepo.model.state.RepoState
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +27,7 @@ class RepositoriesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
     private val valuesFlow = MutableStateFlow(
-        mutableStateListOf<Repo>()
+        mutableStateListOf<RepoState>()
     )
     val repos get() = valuesFlow.asStateFlow()
 
@@ -49,7 +50,8 @@ class RepositoriesViewModel @Inject constructor(
         localRepository.getRepoAllAsFlow()
             .onStart { isLoading = true }
             .onEach { list ->
-                valuesFlow.value = list.sortedBy { it.name }
+                valuesFlow.value = list.map { RepoState(it) }
+                    .sortedBy { it.name }
                     .toMutableStateList()
 
                 if (isLoading) isLoading = false
@@ -58,30 +60,30 @@ class RepositoriesViewModel @Inject constructor(
     }
 
     fun insert(
-        repo: Repo,
+        url: String,
         onFailure: (Throwable) -> Unit
     ) = viewModelScope.launch {
         refreshing {
-            modulesRepository.getRepo(repo)
+            modulesRepository.getRepo(url.toRepo())
                 .onFailure(onFailure)
         }
     }
 
-    fun update(repo: Repo) = viewModelScope.launch {
-        localRepository.insertRepo(repo)
+    fun update(repo: RepoState) = viewModelScope.launch {
+        localRepository.insertRepo(repo.toRepo())
     }
 
-    fun delete(repo: Repo) = viewModelScope.launch {
-        localRepository.deleteRepo(repo)
+    fun delete(repo: RepoState) = viewModelScope.launch {
+        localRepository.deleteRepo(repo.toRepo())
         localRepository.deleteOnlineByUrl(repo.url)
     }
 
     fun getUpdate(
-        repo: Repo,
+        repo: RepoState,
         onFailure: (Throwable) -> Unit
     ) = viewModelScope.launch {
         refreshing {
-            modulesRepository.getRepo(repo)
+            modulesRepository.getRepo(repo.toRepo())
                 .onFailure(onFailure)
         }
     }

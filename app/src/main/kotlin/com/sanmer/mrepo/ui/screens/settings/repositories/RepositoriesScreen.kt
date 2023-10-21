@@ -41,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.ui.animate.slideInTopToBottom
 import com.sanmer.mrepo.ui.animate.slideOutBottomToTop
 import com.sanmer.mrepo.ui.component.Loading
@@ -63,12 +62,12 @@ fun RepositoriesScreen(
     val listSate = rememberLazyListState()
     val showFab = listSate.isScrollingUp()
 
-    var value by remember { mutableStateOf("https://your-repo.com/".toRepo()) }
+    var repoUrl by remember { mutableStateOf("") }
     var message: String by remember { mutableStateOf("") }
 
     var failure by remember { mutableStateOf(false) }
     if (failure) FailureDialog(
-        repo = value,
+        name = repoUrl,
         message = message,
         onClose = {
             failure = false
@@ -80,8 +79,8 @@ fun RepositoriesScreen(
     if (add) AddDialog(
         onClose = { add = false },
         onAdd = {
-            value = it.toRepo()
-            viewModel.insert(value) { e ->
+            repoUrl = it
+            viewModel.insert(it) { e ->
                 failure = true
                 message = e.stackTraceToString()
             }

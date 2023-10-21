@@ -43,7 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.model.state.RepoState
 import com.sanmer.mrepo.ui.component.LabelItem
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.utils.extensions.shareText
@@ -51,7 +51,7 @@ import com.sanmer.mrepo.utils.extensions.toDateTime
 
 @Composable
 fun RepositoryItem(
-    repo: Repo,
+    repo: RepoState,
     toggle: (Boolean) -> Unit,
     update: () -> Unit,
     delete: () -> Unit,
@@ -62,7 +62,7 @@ fun RepositoryItem(
     onClick = { toggle(!repo.enable) },
 ) {
     val (alpha, textDecoration) = when {
-        !repo.isCompatible -> 0.5f to TextDecoration.LineThrough
+        !repo.compatible -> 0.5f to TextDecoration.LineThrough
         !repo.enable -> 0.5f to TextDecoration.None
         else -> 1f to TextDecoration.None
     }
@@ -114,17 +114,17 @@ fun RepositoryItem(
 
                 Text(
                     text = stringResource(id = R.string.module_update_at,
-                        repo.metadata.timestamp.toDateTime()),
+                        repo.timestamp.toDateTime()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                     textDecoration = textDecoration
                 )
             }
 
-            if (repo.isCompatible) {
+            if (repo.compatible) {
                 LabelItem(
                     text = stringResource(id = R.string.repo_modules,
-                        repo.metadata.size)
+                        repo.size)
                 )
             } else {
                 LabelItem(
@@ -168,7 +168,7 @@ fun RepositoryItem(
 
 @Composable
 private fun BottomSheet(
-    repo: Repo,
+    repo: RepoState,
     onDelete: () -> Unit,
     onClose: () ->  Unit
 ) = ModalBottomSheet(
@@ -202,7 +202,7 @@ private fun BottomSheet(
 
                 Text(
                     text = stringResource(id = R.string.module_update_at,
-                        repo.metadata.timestamp.toDateTime()),
+                        repo.timestamp.toDateTime()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline
                 )
@@ -210,7 +210,7 @@ private fun BottomSheet(
 
             LabelItem(
                 text = stringResource(id = R.string.repo_modules,
-                    repo.metadata.size)
+                    repo.size)
             )
         }
 

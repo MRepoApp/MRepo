@@ -22,15 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.database.entity.Repo
+import com.sanmer.mrepo.model.state.RepoState
 
 @Composable
 fun RepositoriesList(
-    list: List<Repo>,
+    list: List<RepoState>,
     state: LazyListState,
-    update: (Repo) -> Unit,
-    delete: (Repo) -> Unit,
-    getUpdate: (Repo, (Throwable) -> Unit) -> Unit
+    update: (RepoState) -> Unit,
+    delete: (RepoState) -> Unit,
+    getUpdate: (RepoState, (Throwable) -> Unit) -> Unit
 ) = LazyColumn(
     state = state,
     modifier = Modifier.fillMaxSize(),
@@ -52,10 +52,10 @@ fun RepositoriesList(
 
 @Composable
 private fun RepositoryItem(
-    repo: Repo,
-    toggle: (Repo) -> Unit,
-    onUpdate: (Repo, (Throwable) -> Unit) -> Unit,
-    onDelete: (Repo) -> Unit,
+    repo: RepoState,
+    toggle: (RepoState) -> Unit,
+    onUpdate: (RepoState, (Throwable) -> Unit) -> Unit,
+    onDelete: (RepoState) -> Unit,
 ) {
     var delete by remember { mutableStateOf(false) }
     if (delete) DeleteDialog(
@@ -67,7 +67,7 @@ private fun RepositoryItem(
     var failure by remember { mutableStateOf(false) }
     var message: String by remember { mutableStateOf("") }
     if (failure) FailureDialog(
-        repo = repo,
+        name = repo.name,
         message = message,
         onClose = {
             failure = false
@@ -92,7 +92,7 @@ private fun RepositoryItem(
 
 @Composable
 private fun DeleteDialog(
-    repo: Repo,
+    repo: RepoState,
     onClose: () -> Unit,
     onConfirm: () -> Unit
 ) = AlertDialog(
@@ -123,13 +123,13 @@ private fun DeleteDialog(
 
 @Composable
 fun FailureDialog(
-    repo: Repo,
+    name: String,
     message: String,
     onClose: () -> Unit
 ) = AlertDialog(
     shape = RoundedCornerShape(20.dp),
     onDismissRequest = onClose,
-    title = { Text(text = repo.name) },
+    title = { Text(text = name) },
     text = {
         Text(
             text = message,
