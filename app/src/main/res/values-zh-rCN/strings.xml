@@ -64,6 +64,7 @@
     <string name="module_restore">还原</string>
     <string name="module_install">安装</string>
     <string name="module_download">下载</string>
+    <string name="module_update">更新</string>
 
     <!-- Settings-->
     <string name="settings_app">应用</string>

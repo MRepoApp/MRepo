@@ -78,6 +78,7 @@ object ModuleUtils {
                     "versionCode" -> versionCode = value.toInt()
                     "author" -> author = value
                     "description" -> description = value
+                    "updateJson" -> updateJson = value
                 }
             }
         }

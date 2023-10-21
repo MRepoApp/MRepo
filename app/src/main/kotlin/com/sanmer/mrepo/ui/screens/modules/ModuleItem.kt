@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,12 +43,12 @@ import com.sanmer.mrepo.utils.extensions.toDate
 fun ModuleItem(
     module: LocalModule,
     state: LocalState,
+    progress: Float,
     modifier: Modifier = Modifier,
     alpha: Float = 1f,
     decoration: TextDecoration = TextDecoration.None,
     switch: @Composable (() -> Unit?)? = null,
     indicator: @Composable (BoxScope.() -> Unit?)? = null,
-    leadingButton: @Composable (RowScope.() -> Unit)? = null,
     trailingButton: @Composable RowScope.() -> Unit,
 ) = Surface(
     modifier = modifier,
@@ -116,11 +118,22 @@ fun ModuleItem(
                 color = MaterialTheme.colorScheme.outline
             )
 
-            Divider(
-                thickness = 1.5.dp,
-                color = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+            if (progress != 0f) {
+                LinearProgressIndicator(
+                    progress = progress,
+                    strokeCap = StrokeCap.Round,
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .height(2.dp)
+                        .fillMaxWidth()
+                )
+            } else {
+                Divider(
+                    thickness = 1.5.dp,
+                    color = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
 
             Row(
                 modifier = Modifier
@@ -128,7 +141,6 @@ fun ModuleItem(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                leadingButton?.invoke(this)
                 Spacer(modifier = Modifier.weight(1f))
                 trailingButton()
             }

@@ -1,18 +1,21 @@
 package com.sanmer.mrepo.viewmodel
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.datastore.repository.Option
+import com.sanmer.mrepo.model.json.MagiskUpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.state.LocalState
@@ -39,7 +42,7 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val suRepository: SuRepository
-) : ViewModel() {
+) : BaseModuleViewModel() {
     private val fs get() = when {
         suRepository.isInitialized -> suRepository.fs
         else -> FileSystemManager.getLocal()
@@ -63,6 +66,8 @@ class ModulesViewModel @Inject constructor(
         isRefreshing = false
     }
 
+    private val updateJsonSaved = mutableStateMapOf<String, MagiskUpdateJson?>()
+
     init {
         Timber.d("ModulesViewModel init")
         dataObserver()
@@ -72,6 +77,8 @@ class ModulesViewModel @Inject constructor(
         localRepository.getLocalAllAsFlow()
             .onStart { isLoading = true }
             .combine(keyFlow) { list, key ->
+                if (list.isEmpty()) return@combine
+
                 Timber.d("local list, size = ${list.size}")
                 val menu = userPreferencesRepository.data.first()
                     .modulesMenu
@@ -79,7 +86,8 @@ class ModulesViewModel @Inject constructor(
                 valuesFlow.value  = list.map {
                     it.createState(
                         fs = fs,
-                        skipSize = true
+                        skipSize = true,
+                        skipJson = true
                     ) to it
                 }.sortedWith(
                     comparator(menu.option, menu.descending)
@@ -136,9 +144,7 @@ class ModulesViewModel @Inject constructor(
     fun setModulesMenu(value: ModulesMenuExt) =
         userPreferencesRepository.setModulesMenu(value)
 
-    private fun createUiState(
-        module: LocalModule
-    ): LocalUiState = when (module.state) {
+    private fun createUiState(module: LocalModule) = when (module.state) {
         State.ENABLE -> LocalUiState(
             alpha = 1f,
             decoration = TextDecoration.None,
@@ -170,6 +176,30 @@ class ModulesViewModel @Inject constructor(
         return remember(key1 = module.state, key2 = isRefreshing) {
             createUiState(module)
         }
+    }
+
+    @Composable
+    fun rememberUpdateJson(module: LocalModule): MagiskUpdateJson? {
+        LaunchedEffect(key1 = module) {
+            if (updateJsonSaved.containsKey(module.id)) return@LaunchedEffect
+
+            val updateJson = if (module.updateJson.isNotBlank()) {
+                LocalState.loadUpdateJson(module.updateJson)
+            } else {
+                localRepository.getVersionById(module.id)
+                    .firstOrNull()?.let {
+                        MagiskUpdateJson(it)
+                    }
+            }
+
+            updateJsonSaved[module.id] = updateJson
+        }
+
+        return remember {
+            derivedStateOf {
+                updateJsonSaved[module.id]
+            }
+        }.value
     }
 
     companion object {

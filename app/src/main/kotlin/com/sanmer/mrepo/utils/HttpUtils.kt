@@ -5,12 +5,25 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import java.io.OutputStream
 
 object HttpUtils {
+    fun isHTML(text: String) =
+        "<html\\s*>|<head\\s*>|<body\\s*>|<!doctype\\s*html\\s*>"
+            .toRegex()
+            .containsMatchIn(text)
+
+    fun isUrl(url: String) = HttpUrl.parse(url) != null
+
+    fun isBlobUrl(url: String) =
+        "https://github.com/[^/]+/[^/]+/blob/.+"
+            .toRegex()
+            .matches(url)
+
     suspend inline fun <reified T> request(
         url: String,
         crossinline get: (ResponseBody) -> T

@@ -14,7 +14,6 @@ import com.sanmer.mrepo.database.entity.LocalModuleEntity
 import com.sanmer.mrepo.database.entity.OnlineModuleEntity
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.VersionItemEntity
-import com.sanmer.mrepo.utils.extensions.renameDatabase
 
 @Database(
     entities = [
@@ -23,7 +22,7 @@ import com.sanmer.mrepo.utils.extensions.renameDatabase
         VersionItemEntity::class,
         LocalModuleEntity::class
     ],
-    version = 5
+    version = 6
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun repoDao(): RepoDao
@@ -33,21 +32,17 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun joinDao(): JoinDao
 
     companion object {
-        fun build(context: Context): AppDatabase {
-            // MIGRATION TODO: Remove in next version
-            context.deleteDatabase("module")
-            context.renameDatabase("repo", "mrepo")
-
-            return Room.databaseBuilder(context,
+        fun build(context: Context) =
+            Room.databaseBuilder(context,
                 AppDatabase::class.java, "mrepo")
                 .addMigrations(
                     MIGRATION_1_2,
                     MIGRATION_2_3,
                     MIGRATION_3_4,
-                    MIGRATION_4_5
+                    MIGRATION_4_5,
+                    MIGRATION_5_6
                 )
                 .build()
-        }
 
         private val MIGRATION_1_2 = Migration(1, 2) {
             it.execSQL("CREATE TABLE IF NOT EXISTS online_module (" +
@@ -184,6 +179,30 @@ abstract class AppDatabase : RoomDatabase() {
 
             it.execSQL("DROP TABLE onlineModules")
             it.execSQL("ALTER TABLE onlineModules_new RENAME TO onlineModules")
+        }
+
+        private val MIGRATION_5_6 = Migration(5, 6) {
+            it.execSQL("CREATE TABLE IF NOT EXISTS localModules_new (" +
+                    "id TEXT NOT NULL, " +
+                    "name TEXT NOT NULL, " +
+                    "version TEXT NOT NULL, " +
+                    "versionCode INTEGER NOT NULL, " +
+                    "author TEXT NOT NULL, " +
+                    "description TEXT NOT NULL, " +
+                    "state TEXT NOT NULL, " +
+                    "updateJson TEXT NOT NULL, " +
+                    "PRIMARY KEY(id))")
+
+            it.execSQL("INSERT INTO localModules_new (" +
+                    "id, name, version, versionCode, author, description, " +
+                    "state, updateJson) " +
+                    "SELECT " +
+                    "id, name, version, versionCode, author, description, " +
+                    "state, '' " +
+                    "FROM localModules")
+
+            it.execSQL("DROP TABLE localModules")
+            it.execSQL("ALTER TABLE localModules_new RENAME TO localModules")
         }
     }
 }

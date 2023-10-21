@@ -13,7 +13,8 @@ data class LocalModuleEntity(
     val versionCode: Int,
     val author: String,
     val description: String,
-    val state: String
+    val state: String,
+    val updateJson: String
 )
 
 fun LocalModule.toEntity() = LocalModuleEntity(
@@ -23,7 +24,8 @@ fun LocalModule.toEntity() = LocalModuleEntity(
     versionCode = versionCode,
     author = author,
     description = description,
-    state = state.name
+    state = state.name,
+    updateJson = updateJson
 )
 
 fun LocalModuleEntity.toModule() = LocalModule(
@@ -32,7 +34,8 @@ fun LocalModuleEntity.toModule() = LocalModule(
     version = version,
     versionCode = versionCode,
     author = author,
-    description = description
-).apply {
-    state = State.valueOf(this@toModule.state)
+    description = description,
+    updateJson = updateJson
+).also {
+    it.state = State.valueOf(state)
 }

@@ -64,6 +64,7 @@
     <string name="module_restore">Restore</string>
     <string name="module_install">Install</string>
     <string name="module_download">Download</string>
+    <string name="module_update">Update</string>
 
     <!-- Settings -->
     <string name="settings_app">App</string>

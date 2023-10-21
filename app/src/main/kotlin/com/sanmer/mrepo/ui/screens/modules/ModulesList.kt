@@ -15,6 +15,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,9 +28,12 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.model.json.MagiskUpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
+import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.model.state.LocalState
+import com.sanmer.mrepo.ui.component.VersionItemBottomSheet
 import com.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
 import com.sanmer.mrepo.viewmodel.ModulesViewModel.Companion.LocalUiState
 
@@ -34,7 +42,10 @@ fun ModulesList(
     list: List<Pair<LocalState, LocalModule>>,
     state: LazyListState,
     suState: Event,
-    getUiState: @Composable (LocalModule) -> LocalUiState
+    getUiState: @Composable (LocalModule) -> LocalUiState,
+    getUpdateJson: @Composable (LocalModule) -> MagiskUpdateJson?,
+    getProgress: @Composable (VersionItem?) -> Float,
+    onDownload: (String, VersionItem, Boolean) -> Unit
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -52,7 +63,10 @@ fun ModulesList(
                 module = module,
                 state = state,
                 suState = suState,
-                getUiState = getUiState
+                getUiState = getUiState,
+                getUpdateJson = getUpdateJson,
+                getProgress = getProgress,
+                onDownload = onDownload
             )
         }
     }
@@ -68,13 +82,30 @@ fun ModuleItem(
     module: LocalModule,
     state: LocalState,
     suState: Event,
-    getUiState: @Composable (LocalModule) -> LocalUiState
+    getUiState: @Composable (LocalModule) -> LocalUiState,
+    getUpdateJson: @Composable (LocalModule) -> MagiskUpdateJson?,
+    getProgress: @Composable (VersionItem?) -> Float,
+    onDownload: (String, VersionItem, Boolean) -> Unit
 ) {
     val uiState = getUiState(module)
+    val updateJson = getUpdateJson(module)
+    val item by remember(updateJson) { derivedStateOf { updateJson?.toItemOrNull() } }
+    val progress = getProgress(item)
+
+    var open by remember { mutableStateOf(false) }
+    if (open && item != null) {
+        VersionItemBottomSheet(
+            isUpdate = true,
+            item = item!!,
+            onClose = { open = false },
+            onDownload = { onDownload(module.name, item!!, it) }
+        )
+    }
 
     ModuleItem(
         module = module,
         state = state,
+        progress = progress,
         alpha = uiState.alpha,
         decoration = uiState.decoration,
         switch = {
@@ -93,20 +124,50 @@ fun ModuleItem(
             else -> null
         },
         trailingButton = {
+            if (updateJson != null) {
+                UpdateButton(
+                    enabled = updateJson.versionCode > module.versionCode,
+                    onClick = { open = true }
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+
             RemoveOrRestore(
                 module = module,
-                onClick = uiState.change,
-                enabled = suState.isSucceeded
+                enabled = suState.isSucceeded,
+                onClick = uiState.change
             )
         }
     )
 }
 
 @Composable
+private fun UpdateButton(
+    enabled: Boolean,
+    onClick: () -> Unit
+) = FilledTonalButton(
+    onClick = onClick,
+    enabled = enabled,
+    contentPadding = PaddingValues(horizontal = 12.dp)
+) {
+    Icon(
+        modifier = Modifier.size(20.dp),
+        painter = painterResource(id = R.drawable.device_mobile_down),
+        contentDescription = null
+    )
+
+    Spacer(modifier = Modifier.width(6.dp))
+    Text(
+        text = stringResource(id = R.string.module_update)
+    )
+}
+
+@Composable
 private fun RemoveOrRestore(
     module: LocalModule,
-    onClick: () -> Unit,
-    enabled: Boolean
+    enabled: Boolean,
+    onClick: () -> Unit
 ) = FilledTonalButton(
     onClick = onClick,
     enabled = enabled,

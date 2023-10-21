@@ -10,7 +10,11 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -18,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
-import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.screens.repository.view.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.view.pages.OverviewPage
 import com.sanmer.mrepo.ui.screens.repository.view.pages.VersionsPage
@@ -34,15 +37,12 @@ fun ViewScreen(
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val suState = LocalSuState.current
     val scope = rememberCoroutineScope()
-
-    val localState = viewModel.rememberLocalState(suState = suState)
 
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { if (viewModel.isEmptyAbout) 2 else 3 }
 
-    var zipFile = context.cacheDir
+    var zipFile by remember { mutableStateOf(context.cacheDir) }
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/zip")
     ) { uri ->
@@ -96,7 +96,7 @@ fun ViewScreen(
                         online = viewModel.online,
                         item = viewModel.versions.firstOrNull()?.second,
                         local = viewModel.local,
-                        localState = localState,
+                        localState = viewModel.localState,
                         onInstall = { download(it, true) }
                     )
                     1 -> VersionsPage(

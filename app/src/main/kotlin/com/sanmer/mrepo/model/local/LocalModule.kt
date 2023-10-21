@@ -11,7 +11,8 @@ data class LocalModule(
     var version: String = id,
     var versionCode: Int = -1,
     var author: String = id,
-    var description: String = id
+    var description: String = id,
+    var updateJson: String = ""
 ) {
     var state by mutableStateOf(State.DISABLE)
 
