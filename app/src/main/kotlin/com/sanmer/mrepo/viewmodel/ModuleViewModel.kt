@@ -1,7 +1,7 @@
 package com.sanmer.mrepo.viewmodel
 
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,6 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toRepo
+import com.sanmer.mrepo.model.json.MagiskUpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.TrackJson
@@ -54,8 +55,9 @@ class ModuleViewModel @Inject constructor(
     val versions = mutableStateListOf<Pair<Repo, VersionItem>>()
     val tracks = mutableStateListOf<Pair<Repo, TrackJson>>()
 
-    var updatableSize by mutableIntStateOf(0)
-        private set
+    val updatableSize by derivedStateOf {
+        versions.count { it.second.versionCode > local.versionCode }
+    }
 
     init {
         Timber.d("ModuleViewModel init: $moduleId")
@@ -89,12 +91,10 @@ class ModuleViewModel @Inject constructor(
 
         localState = local.createState(fs)
 
-        val updateJson = localState?.updateJson
+        val updateJson = MagiskUpdateJson.load(local.updateJson)
         updateJson?.toItemOrNull()?.let {
             versions.add(0, "Update Json".toRepo() to it)
         }
-
-        updatableSize = versions.count { it.second.versionCode > local.versionCode }
     }
 
     companion object {

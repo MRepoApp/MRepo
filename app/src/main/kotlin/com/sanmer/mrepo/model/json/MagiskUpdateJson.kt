@@ -4,6 +4,7 @@ import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.network.NetworkUtils
 import com.squareup.moshi.JsonClass
 import kotlinx.datetime.Clock
+import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
 data class MagiskUpdateJson(
@@ -37,5 +38,21 @@ data class MagiskUpdateJson(
             zipUrl = zipUrl,
             changelog = changelog
         )
+    }
+
+    companion object {
+        suspend fun load(url: String): MagiskUpdateJson? {
+            if (!NetworkUtils.isUrl(url)) return null
+
+            return NetworkUtils.requestJson<MagiskUpdateJson>(url)
+                .let {
+                    if (it.isSuccess) {
+                        it.getOrThrow()
+                    } else {
+                        Timber.e(it.exceptionOrNull(), "updateJson = $url")
+                        null
+                    }
+                }
+        }
     }
 }

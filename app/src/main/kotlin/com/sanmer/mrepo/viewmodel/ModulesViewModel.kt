@@ -88,8 +88,7 @@ class ModulesViewModel @Inject constructor(
             valuesFlow.value  = list.map {
                 it.createState(
                     fs = fs,
-                    skipSize = true,
-                    skipJson = true
+                    skipSize = true
                 ) to it
             }.sortedWith(
                 comparator(menu.option, menu.descending)
@@ -186,7 +185,7 @@ class ModulesViewModel @Inject constructor(
             if (updateJsonSaved.containsKey(module.id)) return@LaunchedEffect
 
             val updateJson = if (module.updateJson.isNotBlank()) {
-                LocalState.loadUpdateJson(module.updateJson)
+                MagiskUpdateJson.load(module.updateJson)
             } else {
                 localRepository.getVersionById(module.id)
                     .firstOrNull()?.let {
