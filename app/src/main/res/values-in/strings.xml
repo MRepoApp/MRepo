@@ -105,4 +105,6 @@
     <string name="install_logs_save_failed">Gagal untuk menyimpan: %s</string>
     <string name="install_screen_title">Pemasangan</string>
     <string name="module_update">Perbarui</string>
+    <string name="settings_doh">DNS melalui HTTPS</string>
+    <string name="settings_doh_desc">Mengatasi masalah DNS di beberapa negara</string>
 </resources>
