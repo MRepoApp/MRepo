@@ -104,4 +104,7 @@
     <string name="install_logs_saved">Zapisano logi</string>
     <string name="install_logs_save_failed">Zapis nie powiódł się: %s</string>
     <string name="install_screen_title">Instalacja</string>
+    <string name="settings_doh_desc">Ominięcie zatruwania DNS w niektórych krajach</string>
+    <string name="settings_doh">DNS przez HTTPS</string>
+    <string name="module_update">Aktualizuj</string>
 </resources>
