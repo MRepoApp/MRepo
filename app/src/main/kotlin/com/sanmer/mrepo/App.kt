@@ -9,6 +9,7 @@ import com.sanmer.mrepo.app.isNon
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.di.MainScope
+import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.provider.SuProviderImpl
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.timber.DebugTree
@@ -54,6 +55,7 @@ class App : Application(), Configuration.Provider {
         super.onCreate()
 
         NotificationUtils.init(this)
+        NetworkUtils.setCacheDir(cacheDir)
 
         initSuProviderImpl()
         workManger.enqueue(RepoWork.OneTimeWork)

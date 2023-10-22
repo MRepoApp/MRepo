@@ -1,6 +1,4 @@
-package com.sanmer.mrepo.utils.extensions
-
-import com.sanmer.mrepo.utils.HttpUtils
+package com.sanmer.mrepo.network
 
 inline fun <reified T> runRequest(
     run: () -> retrofit2.Response<T>
@@ -17,7 +15,7 @@ inline fun <reified T> runRequest(
         val errorBody = response.errorBody()
         val error = errorBody?.string() ?: "404 Not Found"
 
-        if (HttpUtils.isHTML(error)) {
+        if (NetworkUtils.isHTML(error)) {
             Result.failure(RuntimeException("404 Not Found"))
         } else {
             Result.failure(RuntimeException(error))
@@ -32,18 +30,17 @@ inline fun <reified T> runRequest(
     run: () -> okhttp3.Response
 ): Result<T> = try {
     val response = run()
+    val body = response.body
     if (response.isSuccessful) {
-        val data = response.body()
-        if (data != null) {
-            Result.success(get(data))
+        if (body != null) {
+            Result.success(get(body))
         } else {
             Result.failure(NullPointerException())
         }
     } else {
-        val errorBody = response.body()
-        val error = errorBody?.string() ?: "404 Not Found"
+        val error = body?.string() ?: "404 Not Found"
 
-        if (HttpUtils.isHTML(error)) {
+        if (NetworkUtils.isHTML(error)) {
             Result.failure(RuntimeException("404 Not Found"))
         } else {
             Result.failure(RuntimeException(error))

@@ -15,7 +15,7 @@ import androidx.work.workDataOf
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.di.ApplicationScope
-import com.sanmer.mrepo.utils.HttpUtils
+import com.sanmer.mrepo.network.NetworkUtils
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
@@ -72,7 +72,7 @@ class DownloadWork @AssistedInject constructor(
         val filename = inputData.filename
         val path = context.cacheDir.resolve(filename)
 
-        val result = HttpUtils.downloader(
+        val result = NetworkUtils.downloader(
             url = url,
             output = path.outputStream(),
             onProgress = { progressFlow.value = it to inputData }

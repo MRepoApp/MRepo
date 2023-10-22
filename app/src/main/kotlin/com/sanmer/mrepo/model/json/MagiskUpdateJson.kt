@@ -1,8 +1,7 @@
 package com.sanmer.mrepo.model.json
 
 import com.sanmer.mrepo.model.online.VersionItem
-import com.sanmer.mrepo.utils.HttpUtils
-import com.sanmer.mrepo.utils.ModuleUtils.getVersionDisplay
+import com.sanmer.mrepo.network.NetworkUtils
 import com.squareup.moshi.JsonClass
 import kotlinx.datetime.Clock
 
@@ -20,14 +19,12 @@ data class MagiskUpdateJson(
         changelog = item.changelog
     )
 
-    val versionDisplay get() = getVersionDisplay(version, versionCode)
-
     fun toItemOrNull(): VersionItem? {
-        if (!HttpUtils.isUrl(zipUrl)) return null
+        if (!NetworkUtils.isUrl(zipUrl)) return null
 
         val changelog = when {
-            !HttpUtils.isUrl(changelog) -> ""
-            HttpUtils.isBlobUrl(changelog) -> ""
+            !NetworkUtils.isUrl(changelog) -> ""
+            NetworkUtils.isBlobUrl(changelog) -> ""
             else -> changelog
         }
 

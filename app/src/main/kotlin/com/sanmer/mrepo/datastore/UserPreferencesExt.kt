@@ -19,6 +19,7 @@ data class UserPreferencesExt(
     val darkMode: DarkMode,
     val themeColor: Int,
     val deleteZipFile: Boolean,
+    val useDoh: Boolean,
     val repositoryMenu: RepositoryMenuExt,
     val modulesMenu: ModulesMenuExt
 ) {
@@ -28,6 +29,7 @@ data class UserPreferencesExt(
             darkMode = DarkMode.FOLLOW_SYSTEM,
             themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
             deleteZipFile = false,
+            useDoh = false,
             repositoryMenu = RepositoryMenuExt.default(),
             modulesMenu = ModulesMenuExt.default()
         )
@@ -46,6 +48,7 @@ fun UserPreferencesExt.toProto(): UserPreferences = UserPreferences.newBuilder()
     .setDarkMode(darkMode)
     .setThemeColor(themeColor)
     .setDeleteZipFile(deleteZipFile)
+    .setUseDoh(useDoh)
     .setRepositoryMenu(repositoryMenu.toProto())
     .setModulesMenu(modulesMenu.toProto())
     .build()
@@ -55,6 +58,7 @@ fun UserPreferences.toExt() = UserPreferencesExt(
     darkMode = darkMode,
     themeColor = themeColor,
     deleteZipFile = deleteZipFile,
+    useDoh = useDoh,
     repositoryMenu = repositoryMenuOrNull?.toExt() ?: RepositoryMenuExt.default(),
     modulesMenu = modulesMenuOrNull?.toExt() ?: ModulesMenuExt.default()
 )

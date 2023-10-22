@@ -1,9 +1,8 @@
 package com.sanmer.mrepo.api.online
 
 import com.sanmer.mrepo.model.online.ModulesJson
+import com.sanmer.mrepo.network.NetworkUtils
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
 
@@ -13,9 +12,8 @@ interface RepoApi {
 
     companion object {
         fun build(repoUrl: String): RepoApi {
-            return Retrofit.Builder()
+            return NetworkUtils.createRetrofit()
                 .baseUrl(repoUrl)
-                .addConverterFactory(MoshiConverterFactory.create())
                 .build()
                 .create()
         }

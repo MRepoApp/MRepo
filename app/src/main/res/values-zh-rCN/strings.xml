@@ -92,6 +92,8 @@
     <string name="settings_app_theme_desc">更改主题配色和深色模式</string>
     <string name="settings_delete_zip">删除压缩包</string>
     <string name="settings_delete_zip_desc">安装成功后删除模块压缩包，这将由超级用户执行</string>
+    <string name="settings_doh">安全 DNS（DoH）</string>
+    <string name="settings_doh_desc">解决某些地区的 DNS 污染问题</string>
     <!-- App Theme -->
     <string name="app_theme_palette">主题调色板</string>
     <string name="app_theme_dark_theme">深色主题</string>

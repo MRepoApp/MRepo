@@ -3,7 +3,7 @@ package com.sanmer.mrepo.model.state
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.model.json.MagiskUpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
-import com.sanmer.mrepo.utils.HttpUtils
+import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.utils.extensions.totalSize
 import com.topjohnwu.superuser.nio.FileSystemManager
 import kotlinx.coroutines.Dispatchers
@@ -64,9 +64,9 @@ data class LocalState(
         }
 
         suspend fun loadUpdateJson(url: String): MagiskUpdateJson? {
-            if (!HttpUtils.isUrl(url)) return null
+            if (!NetworkUtils.isUrl(url)) return null
 
-            return HttpUtils.requestJson<MagiskUpdateJson>(url)
+            return NetworkUtils.requestJson<MagiskUpdateJson>(url)
                 .let {
                     if (it.isSuccess) {
                         it.getOrThrow()

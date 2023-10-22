@@ -26,6 +26,7 @@ libsu = "5.2.1"
 protobuf = "3.24.4"
 protobufPlugin = "0.9.4"
 squareRetrofit = "2.9.0"
+squareOkhttp = "4.11.0"
 squareMoshi = "1.15.0"
 
 [libraries]
@@ -67,6 +68,9 @@ protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 square-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "squareRetrofit" }
 square-retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "squareRetrofit" }
+square-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "squareOkhttp" }
+square-okhttp-dnsoverhttps = { group = "com.squareup.okhttp3", name = "okhttp-dnsoverhttps", version.ref = "squareOkhttp" }
+square-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "squareOkhttp" }
 square-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "squareMoshi" }
 square-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "squareMoshi" }
 

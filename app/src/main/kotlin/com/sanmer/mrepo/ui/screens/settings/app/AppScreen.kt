@@ -64,6 +64,14 @@ fun AppScreen(
                 onChange = viewModel::setDeleteZipFile,
                 enabled = userPreferences.isRoot
             )
+
+            SettingSwitchItem(
+                icon = R.drawable.brand_cloudflare,
+                text = stringResource(id = R.string.settings_doh),
+                subText = stringResource(id = R.string.settings_doh_desc),
+                checked = userPreferences.useDoh,
+                onChange = viewModel::setUseDoh
+            )
         }
     }
 }

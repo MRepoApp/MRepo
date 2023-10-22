@@ -45,7 +45,7 @@ import com.sanmer.mrepo.app.isFailed
 import com.sanmer.mrepo.app.isLoading
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.model.json.License
-import com.sanmer.mrepo.ui.utils.jsonRequest
+import com.sanmer.mrepo.network.compose.requestJson
 import timber.log.Timber
 
 @Composable
@@ -54,7 +54,7 @@ fun LicenseContent(
 ) {
     var license: License? by remember { mutableStateOf(null) }
     var message: String? by remember { mutableStateOf(null) }
-    val event = jsonRequest<License>(
+    val event = requestJson<License>(
         url = Const.SPDX_URL.format(licenseId),
         onSuccess = { license = it },
         onFailure = {

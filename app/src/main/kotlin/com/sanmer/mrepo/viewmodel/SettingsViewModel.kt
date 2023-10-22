@@ -34,4 +34,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setDeleteZipFile(value: Boolean) =
         userPreferencesRepository.setDeleteZipFile(value)
+
+    fun setUseDoh(value: Boolean) =
+        userPreferencesRepository.setUseDoh(value)
 }

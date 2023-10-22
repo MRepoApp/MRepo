@@ -134,16 +134,19 @@ dependencies {
     implementation(libs.androidx.work.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.protobuf.kotlin.lite)
+    implementation(libs.markwon.core)
+    implementation(libs.timber)
+
     implementation(libs.libsu.core)
     implementation(libs.libsu.io)
     implementation(libs.libsu.service)
-    implementation(libs.protobuf.kotlin.lite)
+
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.moshi)
-
+    implementation(libs.square.okhttp)
+    implementation(libs.square.okhttp.dnsoverhttps)
+    implementation(libs.square.logging.interceptor)
     implementation(libs.square.moshi)
     ksp(libs.square.moshi.kotlin)
-
-    implementation(libs.markwon.core)
-    implementation(libs.timber)
 }

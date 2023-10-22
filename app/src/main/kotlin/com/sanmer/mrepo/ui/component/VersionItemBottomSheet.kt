@@ -50,10 +50,10 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.isLoading
 import com.sanmer.mrepo.app.isSucceeded
 import com.sanmer.mrepo.model.online.VersionItem
+import com.sanmer.mrepo.network.compose.requestString
 import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.expandedShape
-import com.sanmer.mrepo.ui.utils.stringRequest
 import kotlinx.coroutines.launch
 
 @Composable
@@ -187,7 +187,7 @@ private fun ColumnScope.ButtonRow(
 @Composable
 private fun ChangelogItem(url: String) {
     var changelog by remember { mutableStateOf("") }
-    val event = stringRequest(url) { changelog = it }
+    val event = requestString(url) { changelog = it }
 
     Box(
         modifier = Modifier

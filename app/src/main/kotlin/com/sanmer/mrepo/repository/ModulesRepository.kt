@@ -3,7 +3,7 @@ package com.sanmer.mrepo.repository
 import com.sanmer.mrepo.api.online.RepoApi
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.copy
-import com.sanmer.mrepo.utils.extensions.runRequest
+import com.sanmer.mrepo.network.runRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber

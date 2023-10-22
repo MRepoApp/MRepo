@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.utils
+package com.sanmer.mrepo.network.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -7,11 +7,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.utils.HttpUtils
+import com.sanmer.mrepo.network.NetworkUtils
 import timber.log.Timber
 
 @Composable
-fun <T> launchRequest(
+fun <T> runRequest(
     get: suspend () -> Result<T>,
     onFailure: (Throwable) -> Unit = {},
     onSuccess: (T) -> Unit
@@ -34,23 +34,23 @@ fun <T> launchRequest(
 }
 
 @Composable
-fun stringRequest(
+fun requestString(
     url: String,
     onFailure: (Throwable) -> Unit = {},
     onSuccess: (String) -> Unit
-) = launchRequest(
-    get = { HttpUtils.requestString(url) },
+) = runRequest(
+    get = { NetworkUtils.requestString(url) },
     onSuccess = onSuccess,
     onFailure = onFailure
 )
 
 @Composable
-inline fun <reified T> jsonRequest(
+inline fun <reified T> requestJson(
     url: String,
     noinline onFailure: (Throwable) -> Unit = {},
     noinline onSuccess: (T) -> Unit
-) = launchRequest(
-    get = { HttpUtils.requestJson(url) },
+) = runRequest(
+    get = { NetworkUtils.requestJson(url) },
     onSuccess = onSuccess,
     onFailure = onFailure
 )

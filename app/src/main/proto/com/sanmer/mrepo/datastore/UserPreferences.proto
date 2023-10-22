@@ -13,7 +13,7 @@ message UserPreferences {
   DarkMode darkMode = 2;
   int32 themeColor = 3;
   bool deleteZipFile = 4;
-
+  bool useDoh = 7;
   RepositoryMenu repositoryMenu = 5;
   ModulesMenu modulesMenu = 6;
 }

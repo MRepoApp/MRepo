@@ -47,6 +47,14 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
+    suspend fun setUseDoh(value: Boolean) = withContext(Dispatchers.IO) {
+        userPreferences.updateData {
+            it.new {
+                useDoh = value
+            }
+        }
+    }
+
     suspend fun setRepositoryMenu(value: RepositoryMenuExt) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
             it.new {
