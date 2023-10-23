@@ -56,7 +56,11 @@ class ModuleViewModel @Inject constructor(
     val tracks = mutableStateListOf<Pair<Repo, TrackJson>>()
 
     val updatableSize by derivedStateOf {
-        versions.count { it.second.versionCode > local.versionCode }
+        if (installed) {
+            versions.count { it.second.versionCode > local.versionCode }
+        } else {
+            0
+        }
     }
 
     init {
