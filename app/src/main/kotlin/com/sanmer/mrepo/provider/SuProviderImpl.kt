@@ -10,7 +10,6 @@ import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.api.local.LocalApi
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.utils.extensions.toFile
-import com.topjohnwu.superuser.NoShellException
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
@@ -28,20 +27,21 @@ class SuProviderImpl @Inject constructor(
     private val listener = object : ApiInitializerListener {
         override fun onSuccess() {
             state.value = Event.SUCCEEDED
-            Timber.i("SuProvider created")
+            Timber.i("SuProviderImpl created")
         }
 
         override fun onFailure() {
             state.value = Event.FAILED
-            Timber.w("SuProvider destroyed")
+            Timber.w("SuProviderImpl destroyed")
         }
-
     }
 
     private lateinit var mProvider: ISuProvider
     private lateinit var mApi: LocalApi
     override val isInitialized get() =
         ::mProvider.isInitialized && ::mApi.isInitialized
+
+    private val uid by lazy { context.applicationInfo.uid }
 
     init {
         Shell.enableVerboseLogging = BuildConfig.DEBUG
@@ -61,10 +61,10 @@ class SuProviderImpl @Inject constructor(
         Timber.d("SuProviderImpl init")
 
         runCatching {
-            Shell.getShell().apply {
-                if (!isRoot) throw NoShellException(
-                    "su request rejected (${context.applicationInfo.uid})"
-                )
+            val shell = Shell.getShell()
+            if (!shell.isRoot) {
+                Timber.e("su request rejected ($uid)")
+                return@runCatching
             }
 
             Intent(context, SuService::class.java).apply {
