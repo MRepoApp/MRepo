@@ -104,4 +104,6 @@
     <string name="module_update">Perbarui</string>
     <string name="settings_doh">DNS melalui HTTPS</string>
     <string name="settings_doh_desc">Mengatasi masalah DNS di beberapa negara</string>
+    <string name="view_module_update_ignore">Abaikan</string>
+    <string name="view_module_update_notify">Beritahu</string>
 </resources>
