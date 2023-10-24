@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
             val userPreferences by userPreferencesRepository.data
                 .collectAsStateWithLifecycle(
                     initialValue = UserPreferencesExt.default(),
-                    onReady = { isReady = true }
+                    onReady = { if (!isReady) isReady = true }
                 )
 
             val suState by suRepository.state
@@ -64,6 +64,8 @@ class MainActivity : ComponentActivity() {
             }
 
             LaunchedEffect(userPreferences) {
+                if (!isReady) return@LaunchedEffect
+
                 if (userPreferences.isSetup) {
                     Timber.d("add default repository")
                     localRepository.insertRepo(Const.MY_REPO_URL.toRepo())
