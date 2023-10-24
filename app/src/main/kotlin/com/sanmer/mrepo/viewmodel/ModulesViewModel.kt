@@ -181,6 +181,11 @@ class ModulesViewModel @Inject constructor(
     @Composable
     fun rememberUpdateJson(module: LocalModule): MagiskUpdateJson? {
         LaunchedEffect(key1 = module) {
+            if (module.ignoreUpdates) {
+                updateJsonSaved.remove(module.id)
+                return@LaunchedEffect
+            }
+
             if (updateJsonSaved.containsKey(module.id)) return@LaunchedEffect
 
             val updateJson = if (module.updateJson.isNotBlank()) {

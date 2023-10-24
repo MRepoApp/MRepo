@@ -48,7 +48,8 @@ class ModuleViewModel @Inject constructor(
         private set
 
     private val installed get() = local != LocalModule.example()
-    val localVersionCode get() = if (installed) local.versionCode else Int.MAX_VALUE
+    private val notifyUpdates get() = installed && !local.ignoreUpdates
+    val localVersionCode get() = if (notifyUpdates) local.versionCode else Int.MAX_VALUE
 
     var localState: LocalState? by mutableStateOf(null)
         private set
@@ -56,7 +57,7 @@ class ModuleViewModel @Inject constructor(
     val tracks = mutableStateListOf<Pair<Repo, TrackJson>>()
 
     val updatableSize by derivedStateOf {
-        if (installed) {
+        if (notifyUpdates) {
             versions.count { it.second.versionCode > local.versionCode }
         } else {
             0
@@ -98,6 +99,13 @@ class ModuleViewModel @Inject constructor(
         val updateJson = MagiskUpdateJson.load(local.updateJson)
         updateJson?.toItemOrNull()?.let {
             versions.add(0, "Update Json".toRepo() to it)
+        }
+    }
+
+    fun setIgnoreUpdates(ignore: Boolean) {
+        viewModelScope.launch {
+            local.ignoreUpdates = ignore
+            localRepository.insertLocal(local)
         }
     }
 

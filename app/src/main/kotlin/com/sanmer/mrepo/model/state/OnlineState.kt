@@ -15,8 +15,8 @@ data class OnlineState(
             local: LocalModule?
         ): OnlineState {
             val installed = local != null && local.id == id
-            val updatable = if (installed) {
-                local!!.versionCode < versionCode
+            val updatable = if (installed && local?.ignoreUpdates == false) {
+                local.versionCode < versionCode
             } else {
                 false
             }

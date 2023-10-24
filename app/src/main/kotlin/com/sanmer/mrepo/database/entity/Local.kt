@@ -14,7 +14,8 @@ data class LocalModuleEntity(
     val author: String,
     val description: String,
     val state: String,
-    val updateJson: String
+    val updateJson: String,
+    val ignoreUpdates: Boolean
 )
 
 fun LocalModule.toEntity() = LocalModuleEntity(
@@ -25,7 +26,8 @@ fun LocalModule.toEntity() = LocalModuleEntity(
     author = author,
     description = description,
     state = state.name,
-    updateJson = updateJson
+    updateJson = updateJson,
+    ignoreUpdates = ignoreUpdates
 )
 
 fun LocalModuleEntity.toModule() = LocalModule(
@@ -38,4 +40,5 @@ fun LocalModuleEntity.toModule() = LocalModule(
     updateJson = updateJson
 ).also {
     it.state = State.valueOf(state)
+    it.ignoreUpdates = ignoreUpdates
 }

@@ -22,7 +22,7 @@ import com.sanmer.mrepo.database.entity.VersionItemEntity
         VersionItemEntity::class,
         LocalModuleEntity::class
     ],
-    version = 6
+    version = 7
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun repoDao(): RepoDao
@@ -40,7 +40,8 @@ abstract class AppDatabase : RoomDatabase() {
                     MIGRATION_2_3,
                     MIGRATION_3_4,
                     MIGRATION_4_5,
-                    MIGRATION_5_6
+                    MIGRATION_5_6,
+                    MIGRATION_6_7
                 )
                 .build()
 
@@ -199,6 +200,31 @@ abstract class AppDatabase : RoomDatabase() {
                     "SELECT " +
                     "id, name, version, versionCode, author, description, " +
                     "state, '' " +
+                    "FROM localModules")
+
+            it.execSQL("DROP TABLE localModules")
+            it.execSQL("ALTER TABLE localModules_new RENAME TO localModules")
+        }
+
+        private val MIGRATION_6_7 = Migration(6, 7) {
+            it.execSQL("CREATE TABLE IF NOT EXISTS localModules_new (" +
+                    "id TEXT NOT NULL, " +
+                    "name TEXT NOT NULL, " +
+                    "version TEXT NOT NULL, " +
+                    "versionCode INTEGER NOT NULL, " +
+                    "author TEXT NOT NULL, " +
+                    "description TEXT NOT NULL, " +
+                    "state TEXT NOT NULL, " +
+                    "updateJson TEXT NOT NULL, " +
+                    "ignoreUpdates INTEGER NOT NULL, " +
+                    "PRIMARY KEY(id))")
+
+            it.execSQL("INSERT INTO localModules_new (" +
+                    "id, name, version, versionCode, author, description, " +
+                    "state, updateJson, ignoreUpdates) " +
+                    "SELECT " +
+                    "id, name, version, versionCode, author, description, " +
+                    "state, updateJson, 0 " +
                     "FROM localModules")
 
             it.execSQL("DROP TABLE localModules")

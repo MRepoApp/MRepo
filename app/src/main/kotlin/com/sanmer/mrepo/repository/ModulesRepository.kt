@@ -17,9 +17,15 @@ class ModulesRepository @Inject constructor(
 ) {
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
         suRepository.getModules()
-            .onSuccess {
+            .onSuccess { list ->
+                val values = list.map { new ->
+                    localRepository.getLocalByIdOrNull(new.id)?.apply {
+                        new.ignoreUpdates = ignoreUpdates
+                    }
+                    new
+                }
                 localRepository.deleteLocalAll()
-                localRepository.insertLocal(it)
+                localRepository.insertLocal(values)
             }.onFailure {
                 Timber.e(it, "getLocalAll")
             }

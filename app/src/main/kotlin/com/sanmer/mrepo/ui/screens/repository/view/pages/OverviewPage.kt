@@ -14,6 +14,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedAssistChip
+import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,7 +41,8 @@ fun OverviewPage(
     item: VersionItem?,
     local: LocalModule,
     localState: LocalState?,
-    onInstall: (VersionItem) -> Unit
+    onInstall: (VersionItem) -> Unit,
+    setIgnoreUpdates: (Boolean) -> Unit
 ) = Column(
     modifier = Modifier
         .fillMaxSize()
@@ -78,7 +81,8 @@ fun OverviewPage(
     if (localState != null) {
         LocalItem(
             local = local,
-            state = localState
+            state = localState,
+            setIgnoreUpdates = setIgnoreUpdates
         )
 
         Divider(thickness = 0.9.dp)
@@ -138,7 +142,8 @@ private fun CloudItem(
 @Composable
 private fun LocalItem(
     local: LocalModule,
-    state: LocalState
+    state: LocalState,
+    setIgnoreUpdates: (Boolean) -> Unit
 ) = Column(
     modifier = Modifier
         .padding(all = 16.dp)
@@ -151,10 +156,42 @@ private fun LocalItem(
         color = MaterialTheme.colorScheme.primary
     )
 
-    ValueItem(
-        key = stringResource(id = R.string.view_module_version),
-        value = local.versionDisplay
-    )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        ValueItem(
+            key = stringResource(id = R.string.view_module_version),
+            value = local.versionDisplay,
+            modifier = Modifier.weight(1f)
+        )
+
+        ElevatedFilterChip(
+            selected = !local.ignoreUpdates,
+            onClick = { setIgnoreUpdates(!local.ignoreUpdates) },
+            label = {
+                Text(
+                    text = stringResource(id = if (local.ignoreUpdates) {
+                        R.string.view_module_update_notify
+                    } else {
+                        R.string.view_module_update_ignore
+                    })
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = if (local.ignoreUpdates) {
+                        R.drawable.target
+                    } else {
+                        R.drawable.target_off
+                    }),
+                    contentDescription = null,
+                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+                )
+            }
+        )
+    }
 
     ValueItem(
         key = stringResource(id = R.string.view_module_last_updated),
