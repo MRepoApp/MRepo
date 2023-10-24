@@ -60,7 +60,6 @@
     <string name="module_installed">インストール済</string>
     <string name="view_module_page_overview">概要</string>
     <string name="view_module_description">説明</string>
-    <string name="view_module_last_modified">最終更新日</string>
     <string name="view_module_local">ローカル</string>
     <string name="view_module_version">バージョン</string>
 </resources>

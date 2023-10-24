@@ -30,9 +30,6 @@
     <string name="view_module_page_versions">Wersje</string>
     <string name="view_module_page_about">Informacje</string>
     <string name="view_module_description">Opis</string>
-    <string name="view_module_module_directory">Katalog modułu</string>
-    <string name="view_module_last_modified">Ostatnia modyfikacja</string>
-    <string name="view_module_dir_size">Rozmiar katalogu</string>
     <string name="view_module_provided">Źródło: %s</string>
     <string name="modules_empty">Nie znaleziono modułów</string>
     <string name="module_version_author">%1$s autorstwa %2$s</string>

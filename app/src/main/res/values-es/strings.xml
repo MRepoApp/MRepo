@@ -63,9 +63,6 @@
     <string name="unknown_error">Error desconocido</string>
     <string name="view_module_last_updated">Última actualización</string>
     <string name="view_module_local">Local</string>
-    <string name="view_module_module_directory">Directiorio de módulos</string>
-    <string name="view_module_last_modified">Última modificación</string>
-    <string name="view_module_dir_size">Tamaño del directorio</string>
     <string name="view_module_version_dialog_desc">¿Desea instalar o descargar esta versión del módulo\?</string>
     <string name="view_module_homepage">Página de inicio</string>
     <string name="view_module_source">Código fuente</string>

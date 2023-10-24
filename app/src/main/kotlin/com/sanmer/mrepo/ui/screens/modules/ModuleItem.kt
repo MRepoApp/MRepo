@@ -91,10 +91,10 @@ fun ModuleItem(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
-                    if (state.lastModified != null && menu.showUpdatedTime) {
+                    if (state.lastUpdated != null && menu.showUpdatedTime) {
                         Text(
                             text = stringResource(id = R.string.module_update_at,
-                                state.lastModified.toDate()),
+                                state.lastUpdated.toDate()),
                             style = MaterialTheme.typography.bodySmall,
                             textDecoration = decoration,
                             color = MaterialTheme.colorScheme.outline

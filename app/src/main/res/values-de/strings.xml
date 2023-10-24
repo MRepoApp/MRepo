@@ -23,8 +23,6 @@
     <string name="view_module_page_about">Über</string>
     <string name="view_module_description">Beschreibung</string>
     <string name="view_module_last_updated">Letztes Update</string>
-    <string name="view_module_last_modified">Letzte Änderung</string>
-    <string name="view_module_dir_size">Größe</string>
     <string name="view_module_provided">Bereitgestellt von %s</string>
     <string name="page_repository">Repository</string>
     <string name="view_module_cloud">Online</string>
@@ -95,7 +93,6 @@
     <string name="setup_non_root_desc1">Benötigt keinen Root Zugriff</string>
     <string name="page_modules">Module</string>
     <string name="repository_empty">Repository ist leer</string>
-    <string name="view_module_module_directory">Speicherort</string>
     <string name="view_module_version_dialog_desc">Möchtest du diese Version installieren oder herunterladen\?</string>
     <string name="settings_delete_zip_desc">Löscht Zip Dateien nach der erfolgreichen Installation</string>
     <string name="repo_delete_dialog_desc">Willst du wirklich %s löschen\?</string>

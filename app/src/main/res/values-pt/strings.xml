@@ -62,7 +62,6 @@
     <string name="unknown_error">Erro desconhecido</string>
     <string name="settings_root_access">Acesso Enraizado: %s</string>
     <string name="view_module_page_about">Sobre</string>
-    <string name="view_module_dir_size">Tamanho do Diretório</string>
     <string name="settings_app_desc">Configurações do aplicativo MRepo</string>
     <string name="page_repository">Repositório</string>
     <string name="module_installed">Instalado</string>
@@ -72,8 +71,6 @@
     <string name="view_module_description">Descrição</string>
     <string name="view_module_local">Local</string>
     <string name="view_module_version">Versão</string>
-    <string name="view_module_last_modified">Última Modificação</string>
-    <string name="view_module_module_directory">Diretório dos Módulos</string>
     <string name="view_module_version_dialog_desc">Você deseja instalar ou baixar esta versão desse módulo\?</string>
     <string name="settings_about">Sobre</string>
     <string name="about_app_version">Versão %1$s (%2$s)</string>

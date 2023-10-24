@@ -21,7 +21,6 @@
     <string name="menu_show_updated">अद्यतन समय दिखाएँ</string>
     <string name="setup_root_title">रुट</string>
     <string name="page_modules">मॉड्यूल्स</string>
-    <string name="view_module_last_modified">पिछला संशोधित</string>
     <string name="menu_advanced_menu">उन्नत मेनू</string>
     <string name="module_install">इंस्टाल करें</string>
     <string name="repo_modules">%d मॉड्यूल्स</string>

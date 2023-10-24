@@ -87,8 +87,7 @@ class ModulesViewModel @Inject constructor(
 
             valuesFlow.value  = list.map {
                 it.createState(
-                    fs = fs,
-                    skipSize = true
+                    fs = fs
                 ) to it
             }.sortedWith(
                 comparator(menu.option, menu.descending)
@@ -115,14 +114,14 @@ class ModulesViewModel @Inject constructor(
     ): Comparator<Pair<LocalState, LocalModule>> = if (descending) {
         when (option) {
             Option.NAME -> compareByDescending { it.second.name.lowercase() }
-            Option.UPDATED_TIME -> compareBy { it.first.lastModified }
+            Option.UPDATED_TIME -> compareBy { it.first.lastUpdated }
             else -> compareByDescending { null }
         }
 
     } else {
         when (option) {
             Option.NAME -> compareBy { it.second.name.lowercase() }
-            Option.UPDATED_TIME -> compareByDescending { it.first.lastModified }
+            Option.UPDATED_TIME -> compareByDescending { it.first.lastUpdated }
             else -> compareByDescending { null }
         }
     }

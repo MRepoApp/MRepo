@@ -21,9 +21,6 @@
     <string name="view_module_page_about">О модуле</string>
     <string name="license_fsf_libre">FSF Libre</string>
     <string name="view_module_local">Локальные</string>
-    <string name="view_module_module_directory">Директория модуля</string>
-    <string name="view_module_last_modified">Последние изменения</string>
-    <string name="view_module_dir_size">Размер директории</string>
     <string name="modules_empty">Модули не найдены</string>
     <string name="module_version_author">%1$s от %2$s</string>
     <string name="module_remove">Удалить</string>

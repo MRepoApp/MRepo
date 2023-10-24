@@ -31,7 +31,6 @@ import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
-import com.sanmer.mrepo.utils.extensions.formatSize
 import com.sanmer.mrepo.utils.extensions.toDateTime
 
 @Composable
@@ -64,6 +63,7 @@ fun OverviewPage(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+
     Divider(thickness = 0.9.dp)
 
     if (item != null) {
@@ -71,6 +71,7 @@ fun OverviewPage(
             item = item,
             onInstall = onInstall
         )
+
         Divider(thickness = 0.9.dp)
     }
 
@@ -79,6 +80,7 @@ fun OverviewPage(
             local = local,
             state = localState
         )
+
         Divider(thickness = 0.9.dp)
     }
 }
@@ -155,18 +157,8 @@ private fun LocalItem(
     )
 
     ValueItem(
-        key = stringResource(id = R.string.view_module_module_directory),
-        value = state.path
-    )
-
-    ValueItem(
-        key = stringResource(id = R.string.view_module_last_modified),
-        value = state.lastModified?.toDateTime()
-    )
-
-    ValueItem(
-        key = stringResource(id = R.string.view_module_dir_size),
-        value = state.size?.formatSize()
+        key = stringResource(id = R.string.view_module_last_updated),
+        value = state.lastUpdated?.toDateTime()
     )
 }
 

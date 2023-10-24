@@ -73,12 +73,9 @@
     <string name="view_module_description">Descriere</string>
     <string name="view_module_local">Local</string>
     <string name="view_module_version">Versiune</string>
-    <string name="view_module_module_directory">Locația modulelor</string>
-    <string name="view_module_last_modified">Ultima modificare</string>
     <string name="about_app_version">Versiunea %1$s (%2$s)</string>
     <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
     <string name="about_desc2">Făcut cu ❤️ de %s</string>
-    <string name="view_module_dir_size">Dimensiunea dosarului</string>
     <string name="view_module_added">Adăugat la: %s</string>
     <string name="menu_pin_installed">Fixare instalate</string>
     <string name="menu_show_icon">Afișare pictogramă</string>

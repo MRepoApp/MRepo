@@ -23,9 +23,6 @@
     <string name="view_module_description">Açıklama</string>
     <string name="view_module_local">Yerel</string>
     <string name="view_module_version">Sürüm</string>
-    <string name="view_module_module_directory">Modül Klasörü</string>
-    <string name="view_module_last_modified">Son Değiştirilme</string>
-    <string name="view_module_dir_size">Klasör Boyutu</string>
     <string name="view_module_provided">%s tarafından sağlanmıştır</string>
     <string name="view_module_version_dialog_desc">Modülün bu sürümünü yüklemek veya indirmek istiyor musunuz\?</string>
     <string name="modules_empty">Modül bulunamadı</string>

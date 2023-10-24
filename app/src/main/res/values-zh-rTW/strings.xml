@@ -47,9 +47,6 @@
     <string name="view_module_description">描述</string>
     <string name="view_module_local">本地</string>
     <string name="view_module_version">版本</string>
-    <string name="view_module_module_directory">模組目錄</string>
-    <string name="view_module_last_modified">最後修改</string>
-    <string name="view_module_dir_size">目錄大小</string>
     <string name="view_module_provided">由 %s 提供</string>
     <string name="settings_app_theme">主題</string>
     <string name="settings_app_theme_desc">更改深色模式和主題調色盤</string>

@@ -66,8 +66,6 @@
     <string name="module_new">Nouveau</string>
     <string name="view_module_version">Version</string>
     <string name="view_module_local">Local</string>
-    <string name="view_module_module_directory">Dossier des modules</string>
-    <string name="view_module_dir_size">Taille du dossier</string>
     <string name="settings_app_desc">Paramètres de MRepo</string>
     <string name="page_repository">Dépôt</string>
     <string name="module_installed">Installé</string>
