@@ -35,8 +35,8 @@ fun AppThemeItem(
 
     SettingNormalItem(
         icon = R.drawable.color_swatch,
-        text = stringResource(id = R.string.settings_app_theme),
-        subText = stringResource(id = R.string.settings_app_theme_desc),
+        title = stringResource(id = R.string.settings_app_theme),
+        desc = stringResource(id = R.string.settings_app_theme_desc),
         onClick = { open = true }
     )
 

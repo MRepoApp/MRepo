@@ -72,8 +72,8 @@ fun SettingsScreen(
 
             SettingNormalItem(
                 icon = R.drawable.launcher_outline,
-                text = stringResource(id = R.string.settings_app),
-                subText = stringResource(id = R.string.settings_app_desc),
+                title = stringResource(id = R.string.settings_app),
+                desc = stringResource(id = R.string.settings_app_desc),
                 onClick = {
                     navController.navigateSingleTopTo(SettingsScreen.App.route)
                 }
@@ -81,8 +81,8 @@ fun SettingsScreen(
 
             SettingNormalItem(
                 icon = R.drawable.git_pull_request,
-                text = stringResource(id = R.string.settings_repo),
-                subText = stringResource(id = R.string.settings_repo_desc),
+                title = stringResource(id = R.string.settings_repo),
+                desc = stringResource(id = R.string.settings_repo_desc),
                 onClick = {
                     navController.navigateSingleTopTo(SettingsScreen.Repositories.route)
                 }
@@ -90,8 +90,8 @@ fun SettingsScreen(
 
             SettingNormalItem(
                 icon = R.drawable.components,
-                text = stringResource(id = R.string.settings_mode),
-                subText = if (userPreferences.isRoot) {
+                title = stringResource(id = R.string.settings_mode),
+                desc = if (userPreferences.isRoot) {
                     stringResource(id = R.string.settings_mode_root)
                 } else {
                     stringResource(id = R.string.settings_mode_non_root)
@@ -103,8 +103,8 @@ fun SettingsScreen(
 
             SettingNormalItem(
                 icon = R.drawable.award,
-                text = stringResource(id = R.string.settings_about),
-                subText = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+                title = stringResource(id = R.string.settings_about),
+                desc = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                 onClick = {
                     navController.navigateSingleTopTo(SettingsScreen.About.route)
                 }
