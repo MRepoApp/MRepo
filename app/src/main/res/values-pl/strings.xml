@@ -104,4 +104,6 @@
     <string name="settings_doh_desc">Ominięcie zatruwania DNS w niektórych krajach</string>
     <string name="settings_doh">DNS przez HTTPS</string>
     <string name="module_update">Aktualizuj</string>
+    <string name="view_module_update_notify">Powiadom</string>
+    <string name="view_module_update_ignore">Ignoruj</string>
 </resources>
