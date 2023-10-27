@@ -59,7 +59,7 @@
     <string name="dialog_ok">OK</string>
     <string name="message_download_success">Descărcare reușită</string>
     <string name="message_loading">Se încarcă…</string>
-    <string name="notification_name_download">Serviciu de descărcare</string>
+    <string name="notification_name_download">Descărcare</string>
     <string name="unknown_error">Eroare necunoscută</string>
     <string name="settings_delete_zip">Șterge fișierul Zip</string>
     <string name="settings_delete_zip_desc">Șterge fișierul zip al modulului după ce instalarea a reușit, aceasta va fi executată de Super-utilizator</string>
@@ -98,4 +98,12 @@
     <string name="view_module_view_track">Vizualizare cale</string>
     <string name="view_module_type">Tip: %s</string>
     <string name="menu_sort_option_updated">Data actualizării</string>
+    <string name="view_module_update_notify">Notifică</string>
+    <string name="view_module_update_ignore">Ignoră</string>
+    <string name="settings_doh">DNS prin HTTPS</string>
+    <string name="settings_doh_desc">Soluție de otrăvire DNS în unele țări</string>
+    <string name="install_screen_title">Instalare</string>
+    <string name="install_logs_saved">Jurnale salvate</string>
+    <string name="install_logs_save_failed">Salvare eșuată: %s</string>
+    <string name="module_update">Actualizare</string>
 </resources>
