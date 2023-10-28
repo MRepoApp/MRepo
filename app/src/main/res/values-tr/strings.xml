@@ -101,4 +101,9 @@
     <string name="install_logs_saved">Kayıtlar kaydedildi</string>
     <string name="install_logs_save_failed">%s kaydedilmedi</string>
     <string name="install_screen_title">Yükleme</string>
+    <string name="settings_doh">HTTPS üzerinden DNS</string>
+    <string name="view_module_update_notify">Bildir</string>
+    <string name="view_module_update_ignore">Yoksay</string>
+    <string name="settings_doh_desc">Bazı ülkelerde DNS zehirlenmesine geçici çözüm</string>
+    <string name="module_update">Güncelle</string>
 </resources>
