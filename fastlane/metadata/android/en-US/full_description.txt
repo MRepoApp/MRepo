@@ -6,4 +6,4 @@ Features:
 - Your own modules repository
 - Support multiple repositories
 
-https://github.com/ya0211/MRepo
+https://github.com/MRepoApp/MRepo
