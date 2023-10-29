@@ -6,6 +6,9 @@ import androidx.annotation.StringRes
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
@@ -19,44 +22,13 @@ private enum class Menu(
     @StringRes val label: Int,
     val reason: String,
 ) {
-    Reboot(
-        label = R.string.settings_menu_reboot,
-        reason = ""
-    ),
-
-    Recovery(
-        label = R.string.settings_menu_reboot_recovery,
-        reason = "recovery"
-    ),
-
-    Userspace(
-        label = R.string.settings_menu_reboot_userspace,
-        reason = "userspace"
-    ),
-
-    Bootloader(
-        label = R.string.settings_menu_reboot_bootloader,
-        reason = "bootloader"
-    ),
-
-    Download(
-        label = R.string.settings_menu_reboot_download,
-        reason = "download"
-    ),
-
-    EDL(
-        label = R.string.settings_menu_reboot_edl,
-        reason = "edl"
-    )
+    Reboot(label = R.string.settings_menu_reboot, reason = ""),
+    Userspace(label = R.string.settings_menu_reboot_userspace, reason = "userspace"),
+    Recovery(label = R.string.settings_menu_reboot_recovery, reason = "recovery"),
+    Bootloader(label = R.string.settings_menu_reboot_bootloader, reason = "bootloader"),
+    Download(label = R.string.settings_menu_reboot_download, reason = "download"),
+    EDL(label = R.string.settings_menu_reboot_edl, reason = "edl")
 }
-
-private val options = mutableListOf(
-    Menu.Reboot,
-    Menu.Recovery,
-    Menu.Bootloader,
-    Menu.Download,
-    Menu.EDL
-)
 
 @Composable
 fun SettingsMenu(
@@ -68,16 +40,20 @@ fun SettingsMenu(
     offset = DpOffset(0.dp, 10.dp)
 ) {
     val powerManager = LocalContext.current.getSystemService(Context.POWER_SERVICE) as PowerManager?
-    if (OsUtils.atLeastR && powerManager?.isRebootingUserspaceSupported == true) {
-        options.add(1, Menu.Userspace)
+    val hasUserspace by remember {
+        derivedStateOf { OsUtils.atLeastR && powerManager?.isRebootingUserspaceSupported == true }
     }
 
-    options.forEach {
-        MenuItem(
-            value = it,
-            onClose = onClose
-        )
+    MenuItem(value = Menu.Reboot, onClose = onClose)
+
+    if (hasUserspace) {
+        MenuItem(value = Menu.Userspace, onClose = onClose)
     }
+
+    MenuItem(value = Menu.Recovery, onClose = onClose)
+    MenuItem(value = Menu.Bootloader, onClose = onClose)
+    MenuItem(value = Menu.Download, onClose = onClose)
+    MenuItem(value = Menu.EDL, onClose = onClose)
 }
 
 @Composable
