@@ -140,7 +140,7 @@ fun AboutScreen(
                     Spacer(modifier = Modifier.height(15.dp))
                     HtmlText(
                         text = stringResource(id = R.string.about_desc2,
-                            "<a href=\"https://github.com/ya0211/\">Sanmer</a>"),
+                            "<a href=\"${Const.MY_GITHUB_URL}\">Sanmer</a>"),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

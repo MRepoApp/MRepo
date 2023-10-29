@@ -5,9 +5,10 @@ object Const {
     const val MODULE_PATH = "/data/adb/modules"
 
     // URL
+    const val MY_GITHUB_URL = "https://github.com/ya0211"
     const val TRANSLATE_URL = "https://weblate.sanmer.dev/engage/mrepo"
-    const val GITHUB_URL = "https://github.com/ya0211/MRepo"
+    const val GITHUB_URL = "https://github.com/MRepoApp/MRepo"
     const val TELEGRAM_URL = "https://t.me/mrepo_news"
-    const val MY_REPO_URL = "https://ya0211.github.io/magisk-modules-repo/"
+    const val DEMO_REPO_URL = "https://mrepoapp.github.io/demo-modules-repo/"
     const val SPDX_URL = "https://spdx.org/licenses/%s.json"
 }

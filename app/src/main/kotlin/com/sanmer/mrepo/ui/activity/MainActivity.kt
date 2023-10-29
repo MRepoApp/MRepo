@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
                 if (userPreferences.isSetup) {
                     Timber.d("add default repository")
-                    localRepository.insertRepo(Const.MY_REPO_URL.toRepo())
+                    localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
                 }
 
                 NetworkUtils.setEnableDoh(userPreferences.useDoh)
