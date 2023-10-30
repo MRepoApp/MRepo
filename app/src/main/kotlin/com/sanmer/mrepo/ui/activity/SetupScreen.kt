@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.ui.activity
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +23,9 @@ import com.sanmer.mrepo.ui.screens.settings.workingmode.WorkingModeItem
 fun SetupScreen(
     setMode: (WorkingMode) -> Unit
 ) = Column(
-    modifier = Modifier.fillMaxSize(),
+    modifier = Modifier
+        .background(color = MaterialTheme.colorScheme.background)
+        .fillMaxSize(),
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
