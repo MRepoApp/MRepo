@@ -48,7 +48,7 @@ class SuProviderImpl @Inject constructor(
         Shell.setDefaultBuilder(
             Shell.Builder.create()
                 .setInitializers(SuShellInitializer::class.java)
-                .setFlags(Shell.FLAG_REDIRECT_STDERR)
+                .setFlags(Shell.FLAG_REDIRECT_STDERR or Shell.FLAG_MOUNT_MASTER)
                 .setTimeout(15)
         )
     }
@@ -61,8 +61,7 @@ class SuProviderImpl @Inject constructor(
         Timber.d("SuProviderImpl init")
 
         runCatching {
-            val shell = Shell.getShell()
-            if (!shell.isRoot) {
+            if (!Shell.getShell().isRoot) {
                 Timber.e("su request rejected ($uid)")
                 return@runCatching
             }
@@ -85,7 +84,7 @@ class SuProviderImpl @Inject constructor(
                     context = context,
                     attr = mProvider.context,
                     listener = listener,
-                    fs = getFileSystemManager()
+                    fs = fs
                 )
             }.onFailure {
                 Timber.e(it)
@@ -121,9 +120,7 @@ class SuProviderImpl @Inject constructor(
         }
     }
 
-    override fun getFileSystemManager(): FileSystemManager =
-        FileSystemManager.getRemote(mProvider.fileSystemService)
-
-    override fun getModulesApi(): LocalApi = mApi
+    override val fs get() = FileSystemManager.getRemote(mProvider.fileSystemService)
+    override val api get() = mApi
 
 }

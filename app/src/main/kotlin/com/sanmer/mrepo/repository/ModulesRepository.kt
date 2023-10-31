@@ -4,6 +4,7 @@ import com.sanmer.mrepo.api.online.RepoApi
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.copy
 import com.sanmer.mrepo.network.runRequest
+import com.sanmer.mrepo.provider.SuProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -13,10 +14,10 @@ import javax.inject.Singleton
 @Singleton
 class ModulesRepository @Inject constructor(
     private val localRepository: LocalRepository,
-    private val suRepository: SuRepository
+    private val suProvider: SuProvider
 ) {
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
-        suRepository.getModules()
+        suProvider.api.getModules()
             .onSuccess { list ->
                 val values = list.map { new ->
                     localRepository.getLocalByIdOrNull(new.id)?.apply {

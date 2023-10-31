@@ -19,9 +19,9 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.model.state.LocalState.Companion.createState
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
-import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,10 +40,10 @@ class ModulesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val suRepository: SuRepository
+    private val suProvider: SuProvider
 ) : BaseModuleViewModel() {
     private val fs get() = when {
-        suRepository.isInitialized -> suRepository.fs
+        suProvider.isInitialized -> suProvider.fs
         else -> FileSystemManager.getLocal()
     }
 
@@ -148,20 +148,20 @@ class ModulesViewModel @Inject constructor(
         State.ENABLE -> LocalUiState(
             alpha = 1f,
             decoration = TextDecoration.None,
-            toggle = { suRepository.disable(module) },
-            change = { suRepository.remove(module) }
+            toggle = { suProvider.api.disable(module) },
+            change = { suProvider.api.remove(module) }
         )
 
         State.DISABLE -> LocalUiState(
             alpha = 0.5f,
-            toggle = { suRepository.enable(module) },
-            change = { suRepository.remove(module) }
+            toggle = { suProvider.api.enable(module) },
+            change = { suProvider.api.remove(module) }
         )
 
         State.REMOVE -> LocalUiState(
             alpha = 0.5f,
             decoration = TextDecoration.LineThrough,
-            change = { suRepository.enable(module) }
+            change = { suProvider.api.enable(module) }
         )
         State.ZYGISK_UNLOADED,
         State.RIRU_DISABLE,

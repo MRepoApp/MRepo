@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface SuProvider {
     val state: StateFlow<Event>
     val isInitialized: Boolean
-    fun getFileSystemManager(): FileSystemManager
-    fun getModulesApi(): LocalApi
+
+    val fs: FileSystemManager
+    val api: LocalApi
 }

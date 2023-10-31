@@ -12,8 +12,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.LocalRepository
-import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
 import com.sanmer.mrepo.utils.extensions.now
@@ -31,8 +31,8 @@ import javax.inject.Inject
 @HiltViewModel
 class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val suRepository: SuRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val suProvider: SuProvider,
     application: Application,
     savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(application) {
@@ -65,7 +65,7 @@ class InstallViewModel @Inject constructor(
 
         send("Installing ${zipFile.name}")
 
-        suRepository.install(
+        suProvider.api.install(
             zipFile = zipFile,
             console = { console.add(it) },
             onSuccess = {
@@ -81,7 +81,7 @@ class InstallViewModel @Inject constructor(
     }
 
     private fun deleteBySu() = runCatching {
-        suRepository.fs.getFile(zipFile.absolutePath).apply {
+        suProvider.fs.getFile(zipFile.absolutePath).apply {
             if (exists()) delete()
         }
     }.onFailure {

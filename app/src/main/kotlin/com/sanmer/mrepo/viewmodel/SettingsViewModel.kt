@@ -3,7 +3,7 @@ package com.sanmer.mrepo.viewmodel
 import androidx.lifecycle.ViewModel
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.WorkingMode
-import com.sanmer.mrepo.repository.SuRepository
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -12,11 +12,11 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val suRepository: SuRepository
+    private val suProvider: SuProvider
 ) : ViewModel() {
     val apiVersion get() = when {
-        suRepository.isInitialized -> suRepository.version
-        else -> "unknown"
+        suProvider.isInitialized -> suProvider.api.version
+        else -> ""
     }
 
     init {

@@ -16,8 +16,8 @@ import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.model.state.LocalState.Companion.createState
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.LocalRepository
-import com.sanmer.mrepo.repository.SuRepository
 import com.sanmer.mrepo.ui.navigation.graphs.RepositoryScreen
 import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,11 +28,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ModuleViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val suRepository: SuRepository,
+    private val suProvider: SuProvider,
     savedStateHandle: SavedStateHandle
 ) : BaseModuleViewModel() {
     private val fs get() = when {
-        suRepository.isInitialized -> suRepository.fs
+        suProvider.isInitialized -> suProvider.fs
         else -> FileSystemManager.getLocal()
     }
 
