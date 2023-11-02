@@ -1,19 +1,11 @@
 # MRepo
-[![release](https://img.shields.io/github/v/release/MRepoApp/MRepo?label=release&color=red)](https://github.com/MRepoApp/MRepo/releases) [![download](https://shields.io/github/downloads/MRepoApp/MRepo/total?label=download)](https://github.com/MRepoApp/MRepo/releases/latest) [![license](https://img.shields.io/github/license/MRepoApp/MRepo?color=orange)](LICENSE) [![follow](https://img.shields.io/badge/Telegram-blue.svg?label=follow)](https://t.me/mrepo_news) [![translated](https://weblate.sanmer.dev/widgets/mrepo/-/svg-badge.svg)](https://weblate.sanmer.dev/engage/mrepo/)
+[![release](https://img.shields.io/github/v/release/MRepoApp/MRepo?label=release&color=red)](https://github.com/MRepoApp/MRepo/releases) [![download](https://shields.io/github/downloads/MRepoApp/MRepo/total?label=download)](https://github.com/MRepoApp/MRepo/releases/latest) [![follow](https://img.shields.io/badge/Telegram-blue.svg?label=follow)](https://t.me/mrepo_news) [![translated](https://weblate.sanmer.dev/widgets/mrepo/-/svg-badge.svg)](https://weblate.sanmer.dev/engage/mrepo/)
 
-MRepo (short for `My Repository` or `Modules(Magisk) Repository`) is an Android app that helps manage your own modules repository.
-
-MRepo is written with [Jetpack Compose](https://developer.android.com/jetpack/compose).
+MRepo (short for `My Repository` or `Modules Repository`) is an Android app that helps manage your own modules repository.
 
 ## Preview
 <p><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="32%" /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="32%" /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="32%" />
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="32%" /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width="32%" /> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width="32%" /></p>
-
-## Features
- - Jetpack Compose & Material Design 3
- - Download and update modules
- - Your own modules repository
- - Support multiple repositories
 
 ## Supported Versions
 - Android 8.0 ~ 14
@@ -26,20 +18,3 @@ MRepo is written with [Jetpack Compose](https://developer.android.com/jetpack/co
 
 ## Credits
  - [tabler/tabler-icons](https://github.com/tabler/tabler-icons.git)
-
-## License
-
-    Copyright (C) 2022 Sanmer
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
