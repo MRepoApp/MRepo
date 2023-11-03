@@ -105,4 +105,5 @@
     <string name="settings_menu_reboot_download">Khởi động lại vào Tải xuống</string>
     <string name="view_module_last_updated">Cập nhật mới nhất</string>
     <string name="settings_doh_desc">Cách giải quyết ngộ độc DNS ở một số quốc gia</string>
+    <string name="install_flashing">Đang flash</string>
 </resources>
