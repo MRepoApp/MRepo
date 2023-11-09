@@ -11,6 +11,7 @@ dependencyResolutionManagement {
 }
 
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -20,4 +21,3 @@ pluginManagement {
 
 rootProject.name = "MRepo"
 include(":app")
-includeBuild("build-logic")
