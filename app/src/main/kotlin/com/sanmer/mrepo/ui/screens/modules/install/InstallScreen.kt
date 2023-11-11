@@ -92,7 +92,7 @@ fun InstallScreen(
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument("text/plain")
+        ActivityResultContracts.CreateDocument("*/*")
     ) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
 

@@ -43,7 +43,7 @@ class InstallViewModel @Inject constructor(
     var event by mutableStateOf(Event.LOADING)
         private set
 
-    val logfile get() = "module_install_log_${LocalDateTime.now()}"
+    val logfile get() = "module_install_log_${LocalDateTime.now()}.log"
 
     init {
         Timber.d("InstallViewModel init")
