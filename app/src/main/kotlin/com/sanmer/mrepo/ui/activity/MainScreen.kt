@@ -1,7 +1,6 @@
 package com.sanmer.mrepo.ui.activity
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -49,8 +48,8 @@ fun MainScreen() {
         bottomBar = {
             AnimatedVisibility(
                 visible = showNav,
-                enter = slideInBottomToTop(tween(100)),
-                exit = slideOutTopToBottom(tween(100))
+                enter = slideInBottomToTop(),
+                exit = slideOutTopToBottom()
             ) {
                 BottomNav(
                     navController = navController,
