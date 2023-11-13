@@ -7,7 +7,7 @@
     <string name="module_remove">Eliminar</string>
     <string name="module_restore">Restaurar</string>
     <string name="module_install">Instalar</string>
-    <string name="repository_empty">Repositorios está vacío</string>
+    <string name="repository_empty">Repositorio está vacío</string>
     <string name="modules_empty">No se han encontrado módulos</string>
     <string name="search_empty">Lista vacía</string>
     <string name="search_placeholder">Buscar…</string>
@@ -97,5 +97,5 @@
     <string name="menu_sort_mode">Modo de sorteo</string>
     <string name="menu_sort_option_name">Nombre</string>
     <string name="menu_sort_option_updated">Tiempo de actualización</string>
-    <string name="page_repository">Repositorios</string>
+    <string name="page_repository">Repositorio</string>
 </resources>
