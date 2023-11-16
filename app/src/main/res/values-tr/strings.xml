@@ -44,6 +44,7 @@
     <string name="settings_menu_reboot_download">Download modunda başlat</string>
     <string name="settings_menu_reboot_recovery">Recovery modunda başlat</string>
     <string name="settings_menu_reboot_edl">EDL modunda başlat</string>
+    <string name="settings_download_path">İndirme Yolu</string>
     <string name="settings_app_theme_desc">Renk paleti ve gece modunu değiştirin</string>
     <string name="settings_app_theme">Uygulama Teması</string>
     <string name="app_theme_dark_theme">Karanlık Tema</string>

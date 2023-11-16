@@ -20,6 +20,7 @@
     <string name="view_module_provided">Furnizat de %s</string>
     <string name="settings_app_theme">Tema aplicației</string>
     <string name="settings_app">Aplicație</string>
+    <string name="settings_download_path">Calea de descărcare</string>
     <string name="settings_repo">Depozite</string>
     <string name="app_theme_palette">Paleta temei</string>
     <string name="app_theme_dark_theme_auto">Automat</string>

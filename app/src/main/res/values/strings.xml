@@ -89,6 +89,7 @@
     <!-- App -->
     <string name="settings_app_theme">App Theme</string>
     <string name="settings_app_theme_desc">Change color scheme and night mode</string>
+    <string name="settings_download_path">Download Path</string>
     <string name="settings_delete_zip">Delete Zip File</string>
     <string name="settings_delete_zip_desc">Delete zip of module after the installation is successful, this will be executed by Superuser</string>
     <string name="settings_doh">DNS over HTTPS</string>

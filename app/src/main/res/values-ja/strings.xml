@@ -31,6 +31,7 @@
     <string name="dialog_attention">注意</string>
     <string name="repo_add_dialog_add">追加</string>
     <string name="settings_non_root_desc">機能が制限されています</string>
+    <string name="settings_download_path">ダウンロード場所</string>
     <string name="app_theme_dark_theme">ダークテーマ</string>
     <string name="app_theme_dark_theme_dark">ダーク</string>
     <string name="repo_options_update">更新</string>

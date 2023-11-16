@@ -40,6 +40,7 @@
     <string name="settings_app_theme">سمة التطبيق</string>
     <string name="settings_app">تطبيق</string>
     <string name="search_empty">قائمة فارغة</string>
+    <string name="settings_download_path">مسار التنزيل</string>
     <string name="settings_repo">المستودعات</string>
     <string name="app_theme_palette">لوحة الموضوع</string>
     <string name="app_theme_dark_theme">السمة الداكنة</string>
