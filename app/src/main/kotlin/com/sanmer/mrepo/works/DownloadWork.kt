@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.Data
@@ -16,22 +17,27 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.di.ApplicationScope
 import com.sanmer.mrepo.network.NetworkUtils
+import com.sanmer.mrepo.repository.UserPreferencesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.FileNotFoundException
+import java.io.IOException
 
 @HiltWorker
 class DownloadWork @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
+    private val userPreferencesRepository: UserPreferencesRepository,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) : CoroutineWorker(
     context,
@@ -70,11 +76,26 @@ class DownloadWork @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         val url = inputData.url
         val filename = inputData.filename
-        val path = context.cacheDir.resolve(filename)
+        val cr = context.contentResolver
+
+        val downloadPath = userPreferencesRepository
+            .data.first().downloadPath.let {
+                if (!it.exists()) it.mkdirs()
+                DocumentFile.fromFile(it)
+            }
+
+        val df = downloadPath.createFile("*/*", filename)
+            ?: return@withContext onFailure("Not allowed to create file!")
+
+        val output = try {
+            checkNotNull(cr.openOutputStream(df.uri)) { "The output is null!" }
+        } catch (e: FileNotFoundException) {
+            return@withContext onFailure(e)
+        }
 
         val result = NetworkUtils.downloader(
             url = url,
-            output = path.outputStream(),
+            output = output,
             onProgress = { progressFlow.value = it to inputData }
         )
 
@@ -83,6 +104,10 @@ class DownloadWork @AssistedInject constructor(
         } else {
             onFailure(result.exceptionOrNull())
         }
+    }
+
+    private suspend fun onFailure(msg: String): Result {
+        return onFailure(IOException(msg))
     }
 
     private suspend fun onFailure(e: Throwable?): Result {

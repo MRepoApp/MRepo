@@ -55,6 +55,14 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
+    suspend fun setDownloadPath(value: String) = withContext(Dispatchers.IO) {
+        userPreferences.updateData {
+            it.new {
+                downloadPath = value
+            }
+        }
+    }
+
     suspend fun setRepositoryMenu(value: RepositoryMenuExt) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
             it.new {

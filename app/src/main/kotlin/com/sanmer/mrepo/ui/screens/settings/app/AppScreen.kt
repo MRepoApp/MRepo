@@ -21,6 +21,7 @@ import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.SettingSwitchItem
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.screens.settings.app.items.AppThemeItem
+import com.sanmer.mrepo.ui.screens.settings.app.items.DownloadPathItem
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.SettingsViewModel
 
@@ -54,6 +55,11 @@ fun AppScreen(
                 isDarkMode = userPreferences.isDarkMode(),
                 onThemeColorChange = viewModel::setThemeColor,
                 onDarkModeChange = viewModel::setDarkTheme
+            )
+
+            DownloadPathItem(
+                downloadPath = userPreferences.downloadPath,
+                onChange = viewModel::setDownloadPath
             )
 
             SettingSwitchItem(

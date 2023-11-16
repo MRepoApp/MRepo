@@ -7,6 +7,7 @@ import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,4 +38,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setUseDoh(value: Boolean) =
         userPreferencesRepository.setUseDoh(value)
+
+    fun setDownloadPath(value: File) =
+        userPreferencesRepository.setDownloadPath(value)
 }

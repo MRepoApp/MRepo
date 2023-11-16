@@ -2,6 +2,7 @@ package com.sanmer.mrepo.datastore
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.datastore.modules.toExt
@@ -10,6 +11,7 @@ import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
 import com.sanmer.mrepo.datastore.repository.toExt
 import com.sanmer.mrepo.datastore.repository.toProto
 import com.sanmer.mrepo.ui.theme.Colors
+import java.io.File
 
 data class UserPreferencesExt(
     val workingMode: WorkingMode,
@@ -20,6 +22,7 @@ data class UserPreferencesExt(
     val themeColor: Int,
     val deleteZipFile: Boolean,
     val useDoh: Boolean,
+    val downloadPath: File,
     val repositoryMenu: RepositoryMenuExt,
     val modulesMenu: ModulesMenuExt
 ) {
@@ -30,6 +33,7 @@ data class UserPreferencesExt(
             themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
             deleteZipFile = false,
             useDoh = false,
+            downloadPath = Const.PUBLIC_DOWNLOADS,
             repositoryMenu = RepositoryMenuExt.default(),
             modulesMenu = ModulesMenuExt.default()
         )
@@ -49,6 +53,7 @@ fun UserPreferencesExt.toProto(): UserPreferences = UserPreferences.newBuilder()
     .setThemeColor(themeColor)
     .setDeleteZipFile(deleteZipFile)
     .setUseDoh(useDoh)
+    .setDownloadPath(downloadPath.absolutePath)
     .setRepositoryMenu(repositoryMenu.toProto())
     .setModulesMenu(modulesMenu.toProto())
     .build()
@@ -59,6 +64,7 @@ fun UserPreferences.toExt() = UserPreferencesExt(
     themeColor = themeColor,
     deleteZipFile = deleteZipFile,
     useDoh = useDoh,
+    downloadPath = downloadPath.ifEmpty{ Const.PUBLIC_DOWNLOADS.absolutePath }.let(::File),
     repositoryMenu = repositoryMenuOrNull?.toExt() ?: RepositoryMenuExt.default(),
     modulesMenu = modulesMenuOrNull?.toExt() ?: ModulesMenuExt.default()
 )

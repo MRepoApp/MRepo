@@ -1,7 +1,6 @@
 package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,15 +17,11 @@ import androidx.work.WorkManager
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.works.DownloadWork
 import com.sanmer.mrepo.works.DownloadWork.Companion.progressOrZero
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
-import timber.log.Timber
-import java.io.File
 
-abstract class BaseModuleViewModel : ViewModel() {
+abstract class DownloadViewModel : ViewModel() {
 
     private val progressFlow = MutableStateFlow("url" to 0f)
     private var prefix = "tmp"
@@ -64,25 +59,6 @@ abstract class BaseModuleViewModel : ViewModel() {
                 }
             }
             .launchIn(viewModelScope)
-    }
-
-    suspend fun saveZipFile(
-        context: Context,
-        zip: File,
-        uri: Uri
-    ) = withContext(Dispatchers.IO) {
-        runCatching {
-            val cr = context.contentResolver
-            cr.openOutputStream(uri)?.use { output ->
-                zip.inputStream().use { input ->
-                    input.copyTo(output)
-                }
-            }
-        }.onSuccess {
-            zip.delete()
-        }.onFailure {
-            Timber.d(it)
-        }
     }
 
     @Composable

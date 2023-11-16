@@ -31,7 +31,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,12 +53,12 @@ import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.providable.LocalSuState
+import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun ModulesScreen(
@@ -67,7 +66,7 @@ fun ModulesScreen(
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
+    val userPreferences = LocalUserPreferences.current
     val suState = LocalSuState.current
 
     val list by viewModel.local.collectAsStateWithLifecycle()
@@ -87,27 +86,14 @@ fun ModulesScreen(
         onRefresh = { viewModel.getLocalAll() }
     )
 
-    var zipFile by remember { mutableStateOf(context.cacheDir) }
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument("application/zip")
-    ) { uri ->
-        if (uri == null) return@rememberLauncherForActivityResult
-
-        scope.launch {
-            viewModel.saveZipFile(context, zipFile, uri)
-        }
-    }
-
     val download: (String, VersionItem, Boolean) -> Unit = { prefix, item, install ->
         viewModel.setFilePrefix(prefix)
         viewModel.downloader(context, item) {
-            zipFile = context.cacheDir.resolve(it)
+            val zipFile = userPreferences.downloadPath.resolve(it)
             if (install) {
                 navController.navigateSingleTopTo(
                     InstallViewModel.putPath(zipFile)
                 )
-            } else {
-                launcher.launch(zipFile.nameWithoutExtension)
             }
         }
     }

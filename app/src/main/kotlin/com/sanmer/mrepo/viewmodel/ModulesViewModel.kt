@@ -41,7 +41,7 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val suProvider: SuProvider
-) : BaseModuleViewModel() {
+) : DownloadViewModel() {
     private val fs get() = when {
         suProvider.isInitialized -> suProvider.fs
         else -> FileSystemManager.getLocal()

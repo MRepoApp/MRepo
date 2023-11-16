@@ -1,8 +1,14 @@
 package com.sanmer.mrepo.app
 
+import android.os.Environment
+import java.io.File
+
 object Const {
-    // MODULES
+    // DIR
     const val MODULE_PATH = "/data/adb/modules"
+    val PUBLIC_DOWNLOADS: File = Environment.getExternalStoragePublicDirectory(
+        Environment.DIRECTORY_DOWNLOADS
+    )
 
     // URL
     const val MY_GITHUB_URL = "https://github.com/SanmerDev"

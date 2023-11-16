@@ -8,6 +8,7 @@ import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
 import com.sanmer.mrepo.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,6 +37,10 @@ class UserPreferencesRepository @Inject constructor(
 
     fun setUseDoh(value: Boolean) = applicationScope.launch {
         userPreferencesDataSource.setUseDoh(value)
+    }
+
+    fun setDownloadPath(value: File) = applicationScope.launch {
+        userPreferencesDataSource.setDownloadPath(value.absolutePath)
     }
 
     fun setRepositoryMenu(value: RepositoryMenuExt) = applicationScope.launch {

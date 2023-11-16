@@ -15,6 +15,7 @@ import androidx.work.WorkManager
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.isNon
 import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.database.entity.toRepo
@@ -68,6 +69,7 @@ class MainActivity : ComponentActivity() {
             if (OsUtils.atLeastT) {
                 NotificationUtils.PermissionState()
             }
+            MediaStoreUtils.PermissionState()
 
             LaunchedEffect(userPreferences) {
                 if (!isReady) return@LaunchedEffect

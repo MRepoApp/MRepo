@@ -30,7 +30,7 @@ class ModuleViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val suProvider: SuProvider,
     savedStateHandle: SavedStateHandle
-) : BaseModuleViewModel() {
+) : DownloadViewModel() {
     private val fs get() = when {
         suProvider.isInitialized -> suProvider.fs
         else -> FileSystemManager.getLocal()
