@@ -106,4 +106,5 @@
     <string name="module_update">Aktualizuj</string>
     <string name="view_module_update_notify">Powiadom</string>
     <string name="view_module_update_ignore">Ignoruj</string>
+    <string name="settings_download_path">Ścieżka pobierania</string>
 </resources>
