@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -29,17 +31,21 @@ fun WorkingModeItem(
     selected: Boolean = false,
     onClick: () -> Unit
 ) = Box(
-    modifier = modifier.fillMaxWidth(0.65f)
+    modifier = Modifier
+        .requiredWidth(240.dp)
+        .then(modifier)
 ) {
     Surface(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
         tonalElevation = if (selected) 4.dp else 0.dp,
         border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline),
         shape = RoundedCornerShape(15.dp)
     ) {
         Column(
-            modifier = Modifier.padding(all = 16.dp)
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .requiredHeightIn(min = 120.dp)
+                .fillMaxWidth()
         ) {
             Text(
                 text = title,

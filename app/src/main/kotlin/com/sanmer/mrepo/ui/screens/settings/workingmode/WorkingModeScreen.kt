@@ -2,9 +2,13 @@ package com.sanmer.mrepo.ui.screens.settings.workingmode
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -44,19 +48,19 @@ fun WorkingModeScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(top = 20.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(20.dp))
+
             WorkingModeItem(
                 title = stringResource(id = R.string.setup_root_title),
                 desc1 = stringResource(id = R.string.setup_root_desc1),
                 desc2 = stringResource(id = R.string.setup_root_desc2),
                 selected = userPreferences.isRoot,
-                onClick = {
-                    viewModel.setWorkingMode(WorkingMode.MODE_ROOT)
-                }
+                onClick = { viewModel.setWorkingMode(WorkingMode.MODE_ROOT) }
             )
 
             WorkingModeItem(
@@ -64,9 +68,7 @@ fun WorkingModeScreen(
                 desc1 = stringResource(id = R.string.setup_non_root_desc1),
                 desc2 = stringResource(id = R.string.setup_non_root_desc2),
                 selected = userPreferences.isNonRoot,
-                onClick = {
-                    viewModel.setWorkingMode(WorkingMode.MODE_NON_ROOT)
-                }
+                onClick = { viewModel.setWorkingMode(WorkingMode.MODE_NON_ROOT) }
             )
         }
     }
