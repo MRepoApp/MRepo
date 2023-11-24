@@ -49,7 +49,7 @@
     <string name="settings_app_theme">アプリテーマ</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">キャンセル</string>
-    <string name="notification_name_download">Download Service</string>
+    <string name="notification_name_download">ダウンロード</string>
     <string name="settings_delete_zip">Zip ファイルを削除</string>
     <string name="settings_delete_zip_desc">インストールが成功したらモジュールの Zip ファイルを削除します。これはスーパーユーザーで実行されます。</string>
     <string name="about_desc1">Magisk、KernelSU のモジュール管理、モジュールリポジトリの提供。</string>
@@ -99,4 +99,8 @@
     <string name="menu_sort_option_updated">更新日時</string>
     <string name="menu_descending">降順</string>
     <string name="menu_show_updated">更新日時の表示</string>
+    <string name="view_module_page_about">モジュールについて</string>
+    <string name="install_flashing">書込中</string>
+    <string name="menu_pin_installed">インストール済みのピン留め</string>
+    <string name="menu_pin_updatable">更新可能のピン留め</string>
 </resources>
