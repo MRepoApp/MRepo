@@ -5,11 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.os.SELinux
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.api.local.LocalApi
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.utils.extensions.toFile
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
@@ -99,24 +99,8 @@ class SuProviderImpl @Inject constructor(
 
     private class SuService : RootService() {
         override fun onBind(intent: Intent): IBinder = object : ISuProvider.Stub() {
-            override fun getContext(): String = getContextImpl()
+            override fun getContext(): String = SELinux.getContext()
             override fun getFileSystemService(): IBinder = FileSystemManager.getService()
-        }
-
-        @Suppress("SameParameterValue")
-        private inline fun <T> safe(default: T, block: () -> T): T {
-            return try {
-                block()
-            } catch (e: Throwable) {
-                Timber.e(e)
-                default
-            }
-        }
-
-        private fun getContextImpl() = safe("unknown") {
-            "/proc/self/attr/current".toFile()
-                .readText()
-                .replace("[^a-z0-9:_,]".toRegex(), "")
         }
     }
 
