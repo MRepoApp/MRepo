@@ -86,7 +86,7 @@ class RepositoryViewModel @Inject constructor(
                 }
             }.filter { (_, m) ->
                 if (key.isBlank()) return@filter true
-                key.lowercase() in "${m.name},${m.author},${m.description}".lowercase()
+                key.lowercase() in (m.name + m.author + m.description).lowercase()
 
             }.toMutableStateList()
 
