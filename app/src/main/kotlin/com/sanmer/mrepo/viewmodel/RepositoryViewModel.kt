@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -35,6 +34,7 @@ class RepositoryViewModel @Inject constructor(
         .map { it.repositoryMenu }
 
     var isSearch by mutableStateOf(false)
+        private set
     private val keyFlow = MutableStateFlow("")
 
     private val valuesFlow = MutableStateFlow(
@@ -42,7 +42,7 @@ class RepositoryViewModel @Inject constructor(
     )
     val online get() = valuesFlow.asStateFlow()
 
-    var isLoading by mutableStateOf(false)
+    var isLoading by mutableStateOf(true)
         private set
     var isRefreshing by mutableStateOf(false)
         private set
@@ -59,7 +59,7 @@ class RepositoryViewModel @Inject constructor(
 
     private fun dataObserver() {
         combine(
-            localRepository.getOnlineAllAsFlow().onStart { isLoading = true },
+            localRepository.getOnlineAllAsFlow(),
             repositoryMenu,
             keyFlow,
         ) { list, menu, key ->
@@ -90,7 +90,7 @@ class RepositoryViewModel @Inject constructor(
 
             }.toMutableStateList()
 
-            if (isLoading) isLoading = false
+            isLoading = false
 
         }.launchIn(viewModelScope)
     }
@@ -115,6 +115,10 @@ class RepositoryViewModel @Inject constructor(
 
     fun search(key: String) {
         keyFlow.value = key
+    }
+
+    fun openSearch() {
+        isSearch = true
     }
 
     fun closeSearch() {

@@ -31,7 +31,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,7 +103,7 @@ fun ModulesScreen(
     )
 
     DisposableEffect(viewModel) {
-        onDispose { viewModel.closeSearch() }
+        onDispose(viewModel::closeSearch)
     }
 
     Scaffold(
@@ -112,8 +111,8 @@ fun ModulesScreen(
         topBar = {
             TopBar(
                 isSearch = viewModel.isSearch,
-                onQueryChange = { viewModel.search(it) },
-                onOpenSearch = { viewModel.isSearch = true },
+                onQueryChange = viewModel::search,
+                onOpenSearch = viewModel::openSearch,
                 onCloseSearch = viewModel::closeSearch,
                 setMenu = viewModel::setModulesMenu,
                 scrollBehavior = scrollBehavior
@@ -187,7 +186,10 @@ private fun TopBar(
     setMenu: (ModulesMenuExt) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
-    var query by rememberSaveable { mutableStateOf("") }
+    var query by remember { mutableStateOf("") }
+    DisposableEffect(isSearch) {
+        onDispose { query = "" }
+    }
 
     SearchTopBar(
         isSearch = isSearch,
