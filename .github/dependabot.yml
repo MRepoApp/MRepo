@@ -13,14 +13,10 @@ updates:
       time: "21:00"
     labels: [ "dependencies" ]
     registries: "*"
-    groups:
-      kotlin-ksp-compose:
-        patterns:
-          - "org.jetbrains.kotlin:*"
-          - "org.jetbrains.kotlin.jvm"
-          - "com.google.devtools.ksp"
-          - "com.google.devtools.ksp.gradle.plugin"
-          - "androidx.compose.compiler:compiler"
+    ignore:
+      - dependency-name: "org.jetbrains.kotlin:*"
+      - dependency-name: "com.google.devtools.ksp:*"
+      - dependency-name: "androidx.compose.compiler:*"
 registries:
   maven-google:
     type: "maven-repository"
