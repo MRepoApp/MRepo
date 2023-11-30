@@ -40,10 +40,11 @@ class KernelSuManager(
     private fun getModule(obj: JSONObject) = LocalModule(
         id = obj.getString("id"),
         name = obj.optString("name", "unknown"),
-        author = obj.optString("author", "unknown"),
-        version = obj.optString("version", "unknown"),
+        version = obj.optString("version", ""),
         versionCode = obj.optInt("versionCode", -1),
-        description = obj.optString("description", "unknown")
+        author = obj.optString("author", "unknown"),
+        description = obj.optString("description", ""),
+        updateJson = obj.optString("updateJson", "")
     )
 
     private fun getState(obj: JSONObject): State {

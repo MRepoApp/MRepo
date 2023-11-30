@@ -6,13 +6,13 @@ import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.utils.ModuleUtils.getVersionDisplay
 
 data class LocalModule(
-    var id: String = "unknown",
-    var name: String = id,
-    var version: String = id,
-    var versionCode: Int = -1,
-    var author: String = id,
-    var description: String = id,
-    var updateJson: String = ""
+    val id: String,
+    val name: String,
+    val version: String,
+    val versionCode: Int,
+    val author: String,
+    val description: String,
+    val updateJson: String
 ) {
     var state by mutableStateOf(State.DISABLE)
     var ignoreUpdates by mutableStateOf(false)
@@ -37,7 +37,8 @@ data class LocalModule(
             version = "2022.08.16",
             versionCode = 1703,
             author = "Sanmer",
-            description = "This is an example!"
+            description = "This is an example!",
+            updateJson = ""
         )
     }
 }

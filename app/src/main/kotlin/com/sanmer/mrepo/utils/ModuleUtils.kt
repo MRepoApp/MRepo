@@ -56,32 +56,33 @@ object ModuleUtils {
         }
 
     fun getModule(prop: File) = runCatching {
+        val propsMap = mutableMapOf<String, String>()
         val props = Shell.cmd("dos2unix < ${prop.absolutePath}").exec().out
 
-        LocalModule().apply {
-            for (line in props) {
-                val text = line.split("=".toRegex(), 2).map { it.trim() }
-                if (text.size != 2) {
-                    continue
-                }
-
-                val key = text[0]
-                val value = text[1]
-                if (key.isEmpty() || key[0] == '#') {
-                    continue
-                }
-
-                when (key) {
-                    "id" -> id = value
-                    "name" -> name = value
-                    "version" -> version = value
-                    "versionCode" -> versionCode = value.toInt()
-                    "author" -> author = value
-                    "description" -> description = value
-                    "updateJson" -> updateJson = value
-                }
+        for (line in props) {
+            val text = line.split("=".toRegex(), 2).map { it.trim() }
+            if (text.size != 2) {
+                continue
             }
+
+            val key = text[0]
+            val value = text[1]
+            if (key.isEmpty() || key[0] == '#') {
+                continue
+            }
+
+            propsMap[key] = value
         }
+
+        LocalModule(
+            id = propsMap.getOrDefault("id", "unknown"),
+            name = propsMap.getOrDefault("name", "unknown"),
+            version = propsMap.getOrDefault("version", ""),
+            versionCode = propsMap.getOrDefault("versionCode", "-1").toInt(),
+            author = propsMap.getOrDefault("author", "unknown"),
+            description = propsMap.getOrDefault("description", ""),
+            updateJson = propsMap.getOrDefault("updateJson", "")
+        )
     }.onFailure {
         Timber.e(it, "parseProps")
     }
