@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
@@ -16,14 +16,14 @@ object CoroutineScopeModule {
     @ApplicationScope
     @Provides
     @Singleton
-    fun providesDefaultCoroutineScope(
-        @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
-    ): CoroutineScope = CoroutineScope(SupervisorJob() + defaultDispatcher)
+    fun providesDefaultCoroutineScope() = CoroutineScope(
+        SupervisorJob() + Dispatchers.Default
+    )
 
     @MainScope
     @Provides
     @Singleton
-    fun providesMainCoroutineScope(
-        @MainDispatcher mainDispatcher: CoroutineDispatcher
-    ): CoroutineScope = CoroutineScope(SupervisorJob() + mainDispatcher)
+    fun providesMainCoroutineScope() = CoroutineScope(
+        SupervisorJob() + Dispatchers.Main
+    )
 }
