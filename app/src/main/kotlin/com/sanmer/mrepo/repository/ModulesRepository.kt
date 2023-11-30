@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.repository
 
-import com.sanmer.mrepo.api.online.RepoApi
+import com.sanmer.mrepo.content.IOnlineManager
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.copy
 import com.sanmer.mrepo.network.runRequest
@@ -17,7 +17,7 @@ class ModulesRepository @Inject constructor(
     private val suProvider: SuProvider
 ) {
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
-        suProvider.api.getModules()
+        suProvider.lm.getModules()
             .onSuccess { list ->
                 val values = list.map { new ->
                     localRepository.getLocalByIdOrNull(new.id)?.apply {
@@ -41,7 +41,7 @@ class ModulesRepository @Inject constructor(
 
     suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
         runRequest {
-            val api = RepoApi.build(repo.url)
+            val api = IOnlineManager.build(repo.url)
             return@runRequest api.getModules().execute()
         }.onSuccess { modulesJson ->
             localRepository.insertRepo(repo.copy(modulesJson))

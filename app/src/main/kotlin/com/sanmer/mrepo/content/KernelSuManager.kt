@@ -1,7 +1,6 @@
-package com.sanmer.mrepo.api.local
+package com.sanmer.mrepo.content
 
 import android.content.Context
-import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.utils.ModuleUtils
@@ -14,14 +13,15 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.File
 
-class KernelSuApi(
+class KernelSuManager(
     private val context: Context,
     private val fs: FileSystemManager
-) {
-    private var version = "kernelsu"
+) : ILocalManager {
     private val ksud = "/data/adb/ksud"
 
-    fun build(listener: ApiInitializerListener): LocalApi {
+    override var version = "kernelsu"
+
+    fun init(listener: ILocalManager.InitListener) {
         Timber.i("initKernelSu")
 
         Shell.cmd("su -v").submit {
@@ -34,21 +34,6 @@ class KernelSuApi(
                 Timber.e("initKernelSu: ${it.output}")
                 listener.onFailure()
             }
-        }
-
-        return object : LocalApi {
-            val api = this@KernelSuApi
-            override val version: String get() = api.version
-            override suspend fun getModules() = api.getModules()
-            override fun enable(module: LocalModule) = api.enable(module)
-            override fun disable(module: LocalModule) = api.disable(module)
-            override fun remove(module: LocalModule) = api.remove(module)
-            override fun install(
-                console: (String) -> Unit,
-                onSuccess: (LocalModule) -> Unit,
-                onFailure: () -> Unit,
-                zipFile: File
-            ) = api.install(console, onSuccess, onFailure, zipFile)
         }
     }
 
@@ -76,7 +61,7 @@ class KernelSuApi(
         }
     }
 
-    private fun getModules() = runCatching {
+    override suspend fun getModules() = runCatching {
         Timber.i("getLocal: $version")
 
         val out = Shell.cmd("$ksud module list").exec().out
@@ -95,7 +80,7 @@ class KernelSuApi(
         return@runCatching modules
     }
 
-    private fun enable(module: LocalModule) {
+    override fun enable(module: LocalModule) {
         Shell.cmd("$ksud module enable ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.ENABLE
@@ -103,7 +88,7 @@ class KernelSuApi(
         }
     }
 
-    private fun disable(module: LocalModule) {
+    override fun disable(module: LocalModule) {
         Shell.cmd("$ksud module disable ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.DISABLE
@@ -111,7 +96,7 @@ class KernelSuApi(
         }
     }
 
-    private fun remove(module: LocalModule) {
+    override fun remove(module: LocalModule) {
         Shell.cmd("$ksud module uninstall ${module.id}").submit {
             if (it.isSuccess) {
                 module.state = State.REMOVE
@@ -119,7 +104,7 @@ class KernelSuApi(
         }
     }
 
-    private fun install(
+    override fun install(
         console: (String) -> Unit,
         onSuccess: (LocalModule) -> Unit,
         onFailure: () -> Unit,

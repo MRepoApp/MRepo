@@ -65,7 +65,7 @@ class InstallViewModel @Inject constructor(
 
         send("Installing ${zipFile.name}")
 
-        suProvider.api.install(
+        suProvider.lm.install(
             zipFile = zipFile,
             console = { console.add(it) },
             onSuccess = {

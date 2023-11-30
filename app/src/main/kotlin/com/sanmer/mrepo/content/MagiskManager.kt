@@ -1,7 +1,6 @@
-package com.sanmer.mrepo.api.local
+package com.sanmer.mrepo.content
 
 import android.content.Context
-import com.sanmer.mrepo.api.ApiInitializerListener
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
@@ -13,14 +12,15 @@ import com.topjohnwu.superuser.nio.FileSystemManager
 import timber.log.Timber
 import java.io.File
 
-class MagiskApi(
+class MagiskManager(
     private val context: Context,
     private val fs: FileSystemManager
-) {
-    private var version = "magisk"
+) : ILocalManager {
     private var isZygiskEnabled = false
 
-    fun build(listener: ApiInitializerListener): LocalApi {
+    override var version = "magisk"
+
+    fun init(listener: ILocalManager.InitListener) {
         Timber.d("initMagisk")
 
         Shell.cmd("su -v").submit {
@@ -34,21 +34,6 @@ class MagiskApi(
                 Timber.e("initMagisk: ${it.output}")
                 listener.onFailure()
             }
-        }
-
-        return object : LocalApi {
-            val api = this@MagiskApi
-            override val version: String get() = api.version
-            override suspend fun getModules() = api.getModules()
-            override fun enable(module: LocalModule) = api.enable(module)
-            override fun disable(module: LocalModule) = api.disable(module)
-            override fun remove(module: LocalModule) = api.remove(module)
-            override fun install(
-                console: (String) -> Unit,
-                onSuccess: (LocalModule) -> Unit,
-                onFailure: () -> Unit,
-                zipFile: File
-            ) = api.install(console, onSuccess, onFailure, zipFile)
         }
     }
 
@@ -100,7 +85,7 @@ class MagiskApi(
         }
     }
 
-    private fun getModules() = runCatching {
+    override suspend fun getModules() = runCatching {
         Timber.i("getLocal: ${Const.MODULE_PATH}")
 
         val modules = mutableListOf<LocalModule>()
@@ -120,7 +105,7 @@ class MagiskApi(
 
     private val LocalModule.path get() = "${Const.MODULE_PATH}/${id}"
 
-    private fun enable(module: LocalModule) {
+    override fun enable(module: LocalModule) {
         when (module.state) {
             State.REMOVE -> {
                 fs.getFile(module.path, "remove").delete()
@@ -133,12 +118,12 @@ class MagiskApi(
         module.state = State.ENABLE
     }
 
-    private fun disable(module: LocalModule) {
+    override fun disable(module: LocalModule) {
         fs.getFile(module.path, "disable").createNewFile()
         module.state = State.DISABLE
     }
 
-    private fun remove(module: LocalModule) {
+    override fun remove(module: LocalModule) {
         when (module.state) {
             State.ENABLE -> {
                 fs.getFile(module.path, "remove").createNewFile()
@@ -152,7 +137,7 @@ class MagiskApi(
         module.state = State.REMOVE
     }
 
-    private fun install(
+    override fun install(
         console: (String) -> Unit,
         onSuccess: (LocalModule) -> Unit,
         onFailure: () -> Unit,

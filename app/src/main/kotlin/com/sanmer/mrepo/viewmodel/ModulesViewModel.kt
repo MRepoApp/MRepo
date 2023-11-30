@@ -152,20 +152,20 @@ class ModulesViewModel @Inject constructor(
         State.ENABLE -> LocalUiState(
             alpha = 1f,
             decoration = TextDecoration.None,
-            toggle = { suProvider.api.disable(module) },
-            change = { suProvider.api.remove(module) }
+            toggle = { suProvider.lm.disable(module) },
+            change = { suProvider.lm.remove(module) }
         )
 
         State.DISABLE -> LocalUiState(
             alpha = 0.5f,
-            toggle = { suProvider.api.enable(module) },
-            change = { suProvider.api.remove(module) }
+            toggle = { suProvider.lm.enable(module) },
+            change = { suProvider.lm.remove(module) }
         )
 
         State.REMOVE -> LocalUiState(
             alpha = 0.5f,
             decoration = TextDecoration.LineThrough,
-            change = { suProvider.api.enable(module) }
+            change = { suProvider.lm.enable(module) }
         )
         State.ZYGISK_UNLOADED,
         State.RIRU_DISABLE,

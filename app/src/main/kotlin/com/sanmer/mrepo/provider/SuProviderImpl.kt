@@ -5,11 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.os.Process
 import android.os.SELinux
 import com.sanmer.mrepo.BuildConfig
-import com.sanmer.mrepo.api.ApiInitializerListener
-import com.sanmer.mrepo.api.local.LocalApi
 import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.content.ILocalManager
+import com.sanmer.mrepo.content.ILocalManager.Companion.toPlatform
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
 import com.topjohnwu.superuser.nio.FileSystemManager
@@ -24,7 +25,7 @@ class SuProviderImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : SuProvider {
     override val state = MutableStateFlow(Event.NON)
-    private val listener = object : ApiInitializerListener {
+    private val listener = object : ILocalManager.InitListener {
         override fun onSuccess() {
             state.value = Event.SUCCEEDED
             Timber.i("SuProviderImpl created")
@@ -37,11 +38,9 @@ class SuProviderImpl @Inject constructor(
     }
 
     private lateinit var mProvider: ISuProvider
-    private lateinit var mApi: LocalApi
+    private lateinit var mLocalManager: ILocalManager
     override val isInitialized get() =
-        ::mProvider.isInitialized && ::mApi.isInitialized
-
-    private val uid by lazy { context.applicationInfo.uid }
+        ::mProvider.isInitialized && ::mLocalManager.isInitialized
 
     init {
         Shell.enableVerboseLogging = BuildConfig.DEBUG
@@ -54,7 +53,7 @@ class SuProviderImpl @Inject constructor(
     }
 
     private class SuShellInitializer : Shell.Initializer() {
-        override fun onInit(context: Context, shell: Shell): Boolean = true
+        override fun onInit(context: Context, shell: Shell): Boolean = shell.isRoot
     }
 
     fun init() {
@@ -62,7 +61,7 @@ class SuProviderImpl @Inject constructor(
 
         runCatching {
             if (!Shell.getShell().isRoot) {
-                Timber.e("su request rejected ($uid)")
+                Timber.e("su request rejected (${Process.myUid()})")
                 return@runCatching
             }
 
@@ -80,9 +79,9 @@ class SuProviderImpl @Inject constructor(
             mProvider = ISuProvider.Stub.asInterface(binder)
 
             runCatching {
-                mApi = LocalApi.build(
+                mLocalManager = ILocalManager.build(
                     context = context,
-                    attr = mProvider.context,
+                    platform = mProvider.context.toPlatform(),
                     listener = listener,
                     fs = fs
                 )
@@ -105,6 +104,6 @@ class SuProviderImpl @Inject constructor(
     }
 
     override val fs get() = FileSystemManager.getRemote(mProvider.fileSystemService)
-    override val api get() = mApi
+    override val lm get() = mLocalManager
 
 }

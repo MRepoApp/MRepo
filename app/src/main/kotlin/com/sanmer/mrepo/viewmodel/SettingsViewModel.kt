@@ -16,7 +16,7 @@ class SettingsViewModel @Inject constructor(
     private val suProvider: SuProvider
 ) : ViewModel() {
     val apiVersion get() = when {
-        suProvider.isInitialized -> suProvider.api.version
+        suProvider.isInitialized -> suProvider.lm.version
         else -> ""
     }
 
