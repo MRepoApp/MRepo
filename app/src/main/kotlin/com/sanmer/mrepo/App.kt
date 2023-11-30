@@ -20,6 +20,11 @@ class App : Application(), Configuration.Provider {
 
     private val workManger by lazy { WorkManager.getInstance(this) }
 
+    override val workManagerConfiguration get() =
+        Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+
     init {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
@@ -36,9 +41,4 @@ class App : Application(), Configuration.Provider {
 
         workManger.enqueue(RepoWork.OneTimeWork)
     }
-
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
 }
