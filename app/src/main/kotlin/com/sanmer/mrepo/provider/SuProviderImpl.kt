@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.os.Process
 import android.os.SELinux
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.app.Event
@@ -28,12 +27,12 @@ class SuProviderImpl @Inject constructor(
     private val listener = object : ILocalManager.InitListener {
         override fun onSuccess() {
             state.value = Event.SUCCEEDED
-            Timber.i("SuProviderImpl created")
+            Timber.i("ISuProvider created")
         }
 
         override fun onFailure() {
             state.value = Event.FAILED
-            Timber.w("SuProviderImpl destroyed")
+            Timber.w("ISuProvider destroyed")
         }
     }
 
@@ -53,25 +52,15 @@ class SuProviderImpl @Inject constructor(
     }
 
     private class SuShellInitializer : Shell.Initializer() {
-        override fun onInit(context: Context, shell: Shell): Boolean = shell.isRoot
+        override fun onInit(context: Context, shell: Shell): Boolean {
+            Timber.d("isRoot = ${shell.isRoot}")
+            return true
+        }
     }
 
     fun init() {
-        Timber.d("SuProviderImpl init")
-
-        runCatching {
-            if (!Shell.getShell().isRoot) {
-                Timber.e("su request rejected (${Process.myUid()})")
-                return@runCatching
-            }
-
-            Intent(context, SuService::class.java).apply {
-                RootService.bind(this, connection)
-            }
-        }.onFailure {
-            Timber.e(it, "SuProviderImpl init")
-            listener.onFailure()
-        }
+        val intent = Intent(context, SuService::class.java)
+        RootService.bind(intent, connection)
     }
 
     private val connection = object : ServiceConnection {
