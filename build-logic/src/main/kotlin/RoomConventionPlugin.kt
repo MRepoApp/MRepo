@@ -1,4 +1,3 @@
-
 import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -8,7 +7,6 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
 class RoomConventionPlugin : Plugin<Project> {
-
     override fun apply(target: Project) {
         with(target) {
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")

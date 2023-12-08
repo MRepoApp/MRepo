@@ -1,4 +1,3 @@
-
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra
 import org.jetbrains.kotlin.konan.properties.hasProperty
@@ -13,7 +12,6 @@ val Project.commitCount: Int get() = exec("git rev-list --count HEAD").toInt()
 fun Project.exec(command: String): String = providers.exec {
     commandLine(command.split(" "))
 }.standardOutput.asText.get().trim()
-
 
 val Project.releaseKeyStore: File get() = File(project.properties["keyStore"] as String)
 val Project.releaseKeyStorePassword: String get() = project.properties["keyStorePassword"] as String
@@ -31,7 +29,7 @@ val Project.hasReleaseKeyStore: Boolean get() = run {
     project.hasProperty("keyStore")
 }
 
-fun gradleSigningProperties(rootDir: File) : Properties {
+private fun gradleSigningProperties(rootDir: File): Properties {
     val properties = Properties()
     val signingProperties = rootDir.resolve("signing.properties")
 
@@ -40,5 +38,6 @@ fun gradleSigningProperties(rootDir: File) : Properties {
             properties.load(reader)
         }
     }
+    
     return properties
 }
