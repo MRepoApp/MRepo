@@ -55,7 +55,7 @@ fun AppThemeItem(
 
 @Composable
 private fun BottomSheet(
-    state: SheetState = rememberModalBottomSheetState(),
+    state: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onClose: () -> Unit,
     themeColor: Int,
     darkMode: DarkMode,
