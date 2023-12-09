@@ -1,41 +1,31 @@
 package com.sanmer.mrepo.ui.theme
 
-import android.graphics.Color
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
-fun ComponentActivity.AppTheme(
-    darkMode: Boolean,
+fun AppTheme(
     themeColor: Int,
+    darkMode: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val lightScrim = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
-    val darkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)
-
-    DisposableEffect(darkMode) {
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.auto(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
-            ) { darkMode },
-            navigationBarStyle = SystemBarStyle.auto(
-                lightScrim,
-                darkScrim,
-            ) { darkMode }
-        )
-        onDispose {}
-    }
-
     val color = Colors.getColor(id = themeColor)
     val colorScheme = when {
         darkMode -> color.darkColorScheme
         else -> color.lightColorScheme
     }
+
+    SystemBarStyle(
+        darkMode = darkMode
+    )
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -43,4 +33,32 @@ fun ComponentActivity.AppTheme(
         typography = Typography,
         content = content
     )
+}
+
+@Composable
+private fun SystemBarStyle(
+    darkMode: Boolean,
+    statusBarScrim: Color = Color.Transparent,
+    navigationBarScrim: Color = Color.Transparent
+) {
+    val context = LocalContext.current
+    val activity = context as ComponentActivity
+
+    SideEffect {
+        activity.enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                statusBarScrim.toArgb(),
+                statusBarScrim.toArgb(),
+            ) { darkMode },
+            navigationBarStyle = when {
+                darkMode -> SystemBarStyle.dark(
+                    navigationBarScrim.toArgb()
+                )
+                else -> SystemBarStyle.light(
+                    navigationBarScrim.toArgb(),
+                    navigationBarScrim.toArgb(),
+                )
+            }
+        )
+    }
 }
