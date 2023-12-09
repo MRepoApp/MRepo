@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,7 +20,6 @@ import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.database.entity.toRepo
-import com.sanmer.mrepo.datastore.UserPreferencesExt
 import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.provider.SuProviderImpl
@@ -28,7 +28,6 @@ import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.theme.AppTheme
-import com.sanmer.mrepo.ui.utils.collectAsStateWithLifecycle
 import com.sanmer.mrepo.works.LocalWork
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -47,46 +46,47 @@ class MainActivity : ComponentActivity() {
 
     private val workManger by lazy { WorkManager.getInstance(this) }
 
-    private var isReady by mutableStateOf(false)
+    private var isLoading by mutableStateOf(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        splashScreen.setKeepOnScreenCondition { !isReady }
+        splashScreen.setKeepOnScreenCondition { isLoading }
 
         setContent {
-            val userPreferences by userPreferencesRepository.data
-                .collectAsStateWithLifecycle(
-                    initialValue = UserPreferencesExt.default(),
-                    onReady = { if (!isReady) isReady = true }
-                )
-
-            val suState by suProviderImpl.state
-                .collectAsStateWithLifecycle()
+            MediaStoreUtils.PermissionState()
 
             if (OsUtils.atLeastT) {
                 NotificationUtils.PermissionState()
             }
-            MediaStoreUtils.PermissionState()
+
+            val userPreferences by userPreferencesRepository.data
+                .collectAsStateWithLifecycle(initialValue = null)
+
+            val suState by suProviderImpl.state
+                .collectAsStateWithLifecycle()
+
+            if (userPreferences == null) {
+                // Keep on splash screen
+                return@setContent
+            } else {
+                isLoading = false
+            }
 
             LaunchedEffect(userPreferences) {
-                if (!isReady) return@LaunchedEffect
-
-                if (userPreferences.isSetup) {
+                if (userPreferences!!.isSetup) {
                     Timber.d("add default repository")
                     localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
                 }
 
-                NetworkUtils.setEnableDoh(userPreferences.useDoh)
+                NetworkUtils.setEnableDoh(userPreferences!!.useDoh)
             }
 
             LaunchedEffect(userPreferences, suState) {
-                if (!isReady) return@LaunchedEffect
-
                 when {
-                    suState.isNon && userPreferences.isRoot -> {
+                    suState.isNon && userPreferences!!.isRoot -> {
                         suProviderImpl.init()
                     }
                     suState.isSucceeded -> {
@@ -96,17 +96,24 @@ class MainActivity : ComponentActivity() {
             }
 
             CompositionLocalProvider(
-                LocalUserPreferences provides userPreferences,
+                LocalUserPreferences provides userPreferences!!,
                 LocalSuState provides suState
             ) {
                 AppTheme(
-                    darkMode = userPreferences.isDarkMode(),
-                    themeColor = userPreferences.themeColor
+                    darkMode = userPreferences!!.isDarkMode(),
+                    themeColor = userPreferences!!.themeColor
                 ) {
-                    if (userPreferences.isSetup) {
-                        SetupScreen(setMode = userPreferencesRepository::setWorkingMode)
-                    } else {
-                        MainScreen()
+                    Crossfade(
+                        targetState = userPreferences!!.isSetup,
+                        label = "MainActivity"
+                    ) { isSetup ->
+                        if (isSetup) {
+                            SetupScreen(
+                                setMode = userPreferencesRepository::setWorkingMode
+                            )
+                        } else {
+                            MainScreen()
+                        }
                     }
                 }
             }
