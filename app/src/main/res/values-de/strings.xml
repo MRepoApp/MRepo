@@ -102,4 +102,9 @@
     <string name="install_screen_title">Installation</string>
     <string name="install_logs_saved">Logs gespeichert</string>
     <string name="install_logs_save_failed">Fehler beim Speichern: %s</string>
+    <string name="settings_doh">DNS über HTTPS</string>
+    <string name="settings_doh_desc">Problemumgehung für DNS-Poisoning in einigen Ländern</string>
+    <string name="view_module_update_notify">Benachrichtigen</string>
+    <string name="view_module_update_ignore">Ignorieren</string>
+    <string name="module_update">Update</string>
 </resources>
