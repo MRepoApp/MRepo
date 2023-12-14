@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import com.sanmer.mrepo.ui.utils.ProvideMenuShape
 
 @Composable
 fun DropdownMenu(
@@ -22,15 +22,17 @@ fun DropdownMenu(
     offset: DpOffset = DpOffset.Zero,
     properties: PopupProperties = PopupProperties(focusable = true),
     content: @Composable ColumnScope.() -> Unit
-) = CustomMenuShape(shape) {
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest,
-        modifier = modifier,
-        offset = offset,
-        properties = properties,
-        content = content
-    )
+) {
+    ProvideMenuShape(shape) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            offset = offset,
+            properties = properties,
+            content = content
+        )
+    }
 }
 
 @Composable
@@ -46,7 +48,8 @@ fun DropdownMenu(
     content: @Composable ColumnScope.() -> Unit
 ) = Box {
     surface()
-    CustomMenuShape(shape) {
+
+    ProvideMenuShape(shape) {
         Box(
             modifier = Modifier.align(contentAlignment),
             contentAlignment = contentAlignment
@@ -62,12 +65,3 @@ fun DropdownMenu(
         }
     }
 }
-
-@Composable
-private fun CustomMenuShape(
-    shape: CornerBasedShape,
-    content: @Composable () -> Unit
-) = MaterialTheme(
-    shapes = MaterialTheme.shapes.copy(extraSmall = shape),
-    content = content
-)
