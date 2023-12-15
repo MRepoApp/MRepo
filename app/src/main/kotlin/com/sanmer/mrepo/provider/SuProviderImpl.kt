@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.SELinux
-import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.content.ILocalManager
 import com.sanmer.mrepo.content.ILocalManager.Companion.toPlatform
@@ -42,7 +41,7 @@ class SuProviderImpl @Inject constructor(
         ::mProvider.isInitialized && ::mLocalManager.isInitialized
 
     init {
-        Shell.enableVerboseLogging = BuildConfig.DEBUG
+        Shell.enableVerboseLogging = true
         Shell.setDefaultBuilder(
             Shell.Builder.create()
                 .setInitializers(SuShellInitializer::class.java)
