@@ -2,8 +2,10 @@ package com.sanmer.mrepo.provider.impl
 
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
+import com.sanmer.mrepo.provider.stub.IInstallCallback
 import com.sanmer.mrepo.provider.stub.IModuleManager
 import com.sanmer.mrepo.utils.extensions.unzip
+import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import java.io.File
@@ -12,8 +14,10 @@ class ModuleManagerImpl(
     private val shell: Shell,
     private val platform: Platform
 ) : IModuleManager.Stub() {
-    private val modulesDir = File("/data/adb/modules")
-    private val tmpDir = File("/data/local/tmp")
+    private val modulesDir = File(MODULES_PATH)
+    private val tmpDir = File(TMP_PATH).apply {
+        if (!exists()) mkdirs()
+    }
 
     private var _version: String = ""
     private var _versionCode: Int = Int.MIN_VALUE
@@ -94,7 +98,7 @@ class ModuleManagerImpl(
         return readPropsAndState(moduleDir)
     }
 
-    override fun install(path: String, msg: MutableList<String>): LocalModule? {
+    override fun install(path: String, callback: IInstallCallback) {
         val cmd = when (platform) {
             Platform.KERNELSU -> {
                 "${platform.manager} module install '${path}'"
@@ -104,25 +108,31 @@ class ModuleManagerImpl(
             }
         }
 
+        val msg = object : CallbackList<String>() {
+            override fun onAddElement(msg: String) {
+                callback.console(msg)
+            }
+        }
+
         val result = shell.newJob().add(cmd).to(msg, msg).exec()
-        return if (result.isSuccess) {
-            val tmpModuleDir = tmpDir.resolve("tmp_module")
-                .apply {
-                    if (!exists()) mkdirs()
-                    File(path).unzip(this, "module.prop", true)
-                }
+        if (result.isSuccess) {
+            val file = tmpDir.resolve(PROP_FILE)
+            File(path).unzip(tmpDir, PROP_FILE, true)
 
-            val module = readPropsAndState(tmpModuleDir)
-            tmpModuleDir.deleteRecursively()
+            val id = file.readText().lines()
+                .firstOrNull { it.startsWith("id") }
+                ?.split("=", limit = 2)
+                ?.getOrNull(1)
 
-            module?.copy(state = State.UPDATE)
+            file.delete()
+            callback.onSuccess(id ?: "unknown")
         } else {
-            null
+            callback.onFailure()
         }
     }
 
     private fun readPropsAndState(moduleDir: File): LocalModule? {
-        val props = moduleDir.resolve("module.prop")
+        val props = moduleDir.resolve(PROP_FILE)
             .apply {
                 if (!exists()) return null
             }
@@ -167,4 +177,10 @@ class ModuleManagerImpl(
     private fun String.exec() = ShellUtils.fastCmd(shell, this)
 
     private fun String.execResult() = ShellUtils.fastCmdResult(shell, this)
+
+    companion object {
+        const val PROP_FILE = "module.prop"
+        const val MODULES_PATH = "/data/adb/modules"
+        const val TMP_PATH = "/data/local/tmp"
+    }
 }

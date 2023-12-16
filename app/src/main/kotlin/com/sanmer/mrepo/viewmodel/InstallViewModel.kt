@@ -9,17 +9,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.provider.SuProvider
-import com.sanmer.mrepo.repository.LocalRepository
+import com.sanmer.mrepo.provider.stub.IInstallCallback
+import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
 import com.sanmer.mrepo.utils.extensions.now
 import com.sanmer.mrepo.utils.extensions.tmpDir
-import com.topjohnwu.superuser.CallbackList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
@@ -28,7 +30,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InstallViewModel @Inject constructor(
-    private val localRepository: LocalRepository,
+    private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     application: Application,
     savedStateHandle: SavedStateHandle
@@ -46,34 +48,47 @@ class InstallViewModel @Inject constructor(
         Timber.d("InstallViewModel init")
     }
 
+    suspend fun saveLog(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
+        runCatching {
+            val cr = context.contentResolver
+            cr.openOutputStream(uri)?.use {
+                it.write(console.joinToString(separator = "\n").toByteArray())
+            }
+        }.onFailure {
+            Timber.d(it)
+        }
+    }
+
     suspend fun install() = withContext(Dispatchers.IO) {
         val deleteZipFile = userPreferencesRepository
             .data.first().deleteZipFile
 
-        val msg = object : CallbackList<String?>() {
-            override fun onAddElement(str: String?) {
-                str?.let(console::add)
+        val callback = object : IInstallCallback.Stub() {
+            override fun console(msg: String) {
+                console.add(msg)
+            }
+            override fun onSuccess(id: String) {
+                event = Event.SUCCEEDED
+                getLocal(id)
+
+                if (deleteZipFile) {
+                    deleteBySu()
+                }
+            }
+            override fun onFailure() {
+                event = Event.FAILED
             }
         }
 
         console.add("- Installing ${zipFile.name}")
+        SuProvider.moduleManager.install(zipFile.path, callback)
 
-        val module = SuProvider.moduleManager
-            .install(zipFile.path, msg)
+        context.tmpDir.deleteRecursively()
+    }
 
-        if (module != null) {
-            event = Event.SUCCEEDED
-            if (deleteZipFile || zipFile.startsWith(context.tmpDir)) {
-                deleteBySu()
-            }
-
-            context.tmpDir.apply {
-                if (exists()) deleteRecursively()
-            }
-
-            localRepository.insertLocal(module)
-        } else {
-            event = Event.FAILED
+    private fun getLocal(id: String) {
+        viewModelScope.launch {
+            modulesRepository.getLocal(id)
         }
     }
 
@@ -84,17 +99,6 @@ class InstallViewModel @Inject constructor(
             }
     }.onFailure {
         Timber.e(it)
-    }
-
-    suspend fun saveLog(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
-        runCatching {
-            val cr = context.contentResolver
-            cr.openOutputStream(uri)?.use {
-                it.write(console.joinToString(separator = "\n").toByteArray())
-            }
-        }.onFailure {
-            Timber.d(it)
-        }
     }
 
     companion object {

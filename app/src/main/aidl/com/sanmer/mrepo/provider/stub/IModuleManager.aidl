@@ -1,6 +1,7 @@
 package com.sanmer.mrepo.provider.stub;
 
 import com.sanmer.mrepo.model.local.LocalModule;
+import com.sanmer.mrepo.provider.stub.IInstallCallback;
 
 interface IModuleManager {
     String getVersion();
@@ -10,5 +11,5 @@ interface IModuleManager {
     boolean remove(String id);
     List<LocalModule> getModules();
     LocalModule getModuleById(String id);
-    LocalModule install(String path, out List<String> msg);
+    void install(String path, IInstallCallback callback);
 }
