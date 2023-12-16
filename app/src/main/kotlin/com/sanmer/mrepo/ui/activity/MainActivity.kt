@@ -14,8 +14,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.WorkManager
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.isNon
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.Event.Companion.isNon
+import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.app.utils.OsUtils

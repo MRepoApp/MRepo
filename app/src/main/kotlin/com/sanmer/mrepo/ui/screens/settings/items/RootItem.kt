@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 
 @Composable
 fun RootItem(

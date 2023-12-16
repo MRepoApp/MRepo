@@ -43,7 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.model.online.VersionItem

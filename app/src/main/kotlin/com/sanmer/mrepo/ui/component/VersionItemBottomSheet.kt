@@ -47,8 +47,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.isLoading
-import com.sanmer.mrepo.app.isSucceeded
+import com.sanmer.mrepo.app.Event.Companion.isLoading
+import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.network.compose.requestString
 import com.sanmer.mrepo.ui.providable.LocalSuState
