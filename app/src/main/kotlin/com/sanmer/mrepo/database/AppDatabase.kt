@@ -32,71 +32,19 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun joinDao(): JoinDao
 
     companion object {
+        /**
+         * Only migrate data for [Repo], others is cache
+         */
         fun build(context: Context) =
             Room.databaseBuilder(context,
                 AppDatabase::class.java, "mrepo")
                 .addMigrations(
-                    MIGRATION_1_2,
-                    MIGRATION_2_3,
                     MIGRATION_3_4,
                     MIGRATION_4_5,
                     MIGRATION_5_6,
                     MIGRATION_6_7
                 )
                 .build()
-
-        private val MIGRATION_1_2 = Migration(1, 2) {
-            it.execSQL("CREATE TABLE IF NOT EXISTS online_module (" +
-                    "id TEXT NOT NULL, " +
-                    "repo_url TEXT NOT NULL, " +
-                    "name TEXT NOT NULL, " +
-                    "version TEXT NOT NULL, " +
-                    "version_code INTEGER NOT NULL, " +
-                    "author TEXT NOT NULL, " +
-                    "description TEXT NOT NULL, " +
-                    "license TEXT NOT NULL, " +
-                    "zipUrl TEXT NOT NULL, " +
-                    "changelog TEXT NOT NULL, " +
-                    "PRIMARY KEY(id, repo_url))")
-
-            it.execSQL("CREATE TABLE IF NOT EXISTS repo_new (" +
-                    "url TEXT NOT NULL, " +
-                    "name TEXT NOT NULL, " +
-                    "size INTEGER NOT NULL, " +
-                    "timestamp REAL NOT NULL, " +
-                    "enable INTEGER NOT NULL, " +
-                    "PRIMARY KEY(url))")
-
-            it.execSQL("INSERT INTO repo_new (" +
-                    "url, name, size, timestamp, enable) " +
-                    "SELECT " +
-                    "url, name, size, timestamp, enable " +
-                    "FROM repo")
-
-            it.execSQL("DROP TABLE repo")
-            it.execSQL("ALTER TABLE repo_new RENAME TO repo")
-        }
-
-        private val MIGRATION_2_3 = Migration(2, 3) {
-            it.execSQL("CREATE TABLE IF NOT EXISTS repo_new (" +
-                    "url TEXT NOT NULL, " +
-                    "name TEXT NOT NULL, " +
-                    "enable INTEGER NOT NULL, " +
-                    "size INTEGER NOT NULL, " +
-                    "timestamp REAL NOT NULL, " +
-                    "version TEXT NOT NULL, " +
-                    "version_code INTEGER NOT NULL, " +
-                    "PRIMARY KEY(url))")
-
-            it.execSQL("INSERT INTO repo_new (" +
-                    "url, name, enable, size, timestamp, version, version_code) " +
-                    "SELECT " +
-                    "url, name, enable, size, timestamp, '1.0.0', 240 " +
-                    "FROM repo")
-
-            it.execSQL("DROP TABLE repo")
-            it.execSQL("ALTER TABLE repo_new RENAME TO repo")
-        }
 
         private val MIGRATION_3_4 = Migration(3, 4) {
             it.execSQL("CREATE TABLE IF NOT EXISTS localModules (" +
@@ -170,14 +118,6 @@ abstract class AppDatabase : RoomDatabase() {
                     "donate TEXT NOT NULL, " +
                     "PRIMARY KEY(id, repoUrl))")
 
-            it.execSQL("INSERT INTO onlineModules_new (" +
-                    "id, repoUrl, name, version, versionCode, author, description, " +
-                    "type, added, license, homepage, source, support, donate) " +
-                    "SELECT " +
-                    "id, repoUrl, name, version, versionCode, author, description, " +
-                    "'UNKNOWN', 0, license, '', '', '', '' " +
-                    "FROM onlineModules")
-
             it.execSQL("DROP TABLE onlineModules")
             it.execSQL("ALTER TABLE onlineModules_new RENAME TO onlineModules")
         }
@@ -193,14 +133,6 @@ abstract class AppDatabase : RoomDatabase() {
                     "state TEXT NOT NULL, " +
                     "updateJson TEXT NOT NULL, " +
                     "PRIMARY KEY(id))")
-
-            it.execSQL("INSERT INTO localModules_new (" +
-                    "id, name, version, versionCode, author, description, " +
-                    "state, updateJson) " +
-                    "SELECT " +
-                    "id, name, version, versionCode, author, description, " +
-                    "state, '' " +
-                    "FROM localModules")
 
             it.execSQL("DROP TABLE localModules")
             it.execSQL("ALTER TABLE localModules_new RENAME TO localModules")
@@ -218,14 +150,6 @@ abstract class AppDatabase : RoomDatabase() {
                     "updateJson TEXT NOT NULL, " +
                     "ignoreUpdates INTEGER NOT NULL, " +
                     "PRIMARY KEY(id))")
-
-            it.execSQL("INSERT INTO localModules_new (" +
-                    "id, name, version, versionCode, author, description, " +
-                    "state, updateJson, ignoreUpdates) " +
-                    "SELECT " +
-                    "id, name, version, versionCode, author, description, " +
-                    "state, updateJson, 0 " +
-                    "FROM localModules")
 
             it.execSQL("DROP TABLE localModules")
             it.execSQL("ALTER TABLE localModules_new RENAME TO localModules")
