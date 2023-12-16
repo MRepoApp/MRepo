@@ -23,7 +23,7 @@ interface JoinDao {
         "JOIN repos r ON m.repoUrl = r.url " +
         "WHERE m.id = :id AND m.repoUrl = :repoUrl AND r.enable = 1 AND r.version = :version LIMIT 1"
     )
-    fun getOnlineByIdAndUrl(id: String, repoUrl: String, version: Int = ModulesJson.CURRENT_VERSION): OnlineModuleEntity
+    suspend fun getOnlineByIdAndUrl(id: String, repoUrl: String, version: Int = ModulesJson.CURRENT_VERSION): OnlineModuleEntity
 
     @Query(
         "SELECT v.* " +
@@ -31,5 +31,5 @@ interface JoinDao {
         "JOIN repos r ON v.repoUrl = r.url " +
         "WHERE v.id = :id AND r.enable = 1 AND r.version = :version ORDER BY v.versionCode DESC"
     )
-    fun getVersionById(id: String, version: Int = ModulesJson.CURRENT_VERSION): List<VersionItemEntity>
+    suspend fun getVersionById(id: String, version: Int = ModulesJson.CURRENT_VERSION): List<VersionItemEntity>
 }
