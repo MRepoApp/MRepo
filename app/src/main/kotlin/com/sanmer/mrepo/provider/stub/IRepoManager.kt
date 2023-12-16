@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.content
+package com.sanmer.mrepo.provider.stub
 
 import com.sanmer.mrepo.model.online.ModulesJson
 import com.sanmer.mrepo.network.NetworkUtils

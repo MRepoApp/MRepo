@@ -1,10 +1,10 @@
 package com.sanmer.mrepo.repository
 
-import com.sanmer.mrepo.content.IRepoManager
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.copy
 import com.sanmer.mrepo.network.runRequest
 import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.stub.IRepoManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
