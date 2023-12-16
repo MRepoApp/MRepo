@@ -14,18 +14,15 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.work.WorkManager
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.Event.Companion.isNon
-import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.network.NetworkUtils
-import com.sanmer.mrepo.provider.SuProviderImpl
+import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
-import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.theme.AppTheme
 import com.sanmer.mrepo.works.LocalWork
@@ -37,9 +34,6 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userPreferencesRepository: UserPreferencesRepository
-
-    @Inject
-    lateinit var suProviderImpl: SuProviderImpl
 
     @Inject
     lateinit var localRepository: LocalRepository
@@ -65,9 +59,6 @@ class MainActivity : ComponentActivity() {
             val userPreferences by userPreferencesRepository.data
                 .collectAsStateWithLifecycle(initialValue = null)
 
-            val suState by suProviderImpl.state
-                .collectAsStateWithLifecycle()
-
             if (userPreferences == null) {
                 // Keep on splash screen
                 return@setContent
@@ -81,23 +72,21 @@ class MainActivity : ComponentActivity() {
                     localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
                 }
 
+                if (userPreferences!!.isRoot && !SuProvider.isAlive) {
+                    SuProvider.init()
+                }
+
                 NetworkUtils.setEnableDoh(userPreferences!!.useDoh)
             }
 
-            LaunchedEffect(userPreferences, suState) {
-                when {
-                    suState.isNon && userPreferences!!.isRoot -> {
-                        suProviderImpl.init()
-                    }
-                    suState.isSucceeded -> {
-                        workManger.enqueue(LocalWork.OneTimeWork)
-                    }
+            LaunchedEffect(SuProvider.isAlive) {
+                if (SuProvider.isAlive) {
+                    workManger.enqueue(LocalWork.OneTimeWork)
                 }
             }
 
             CompositionLocalProvider(
-                LocalUserPreferences provides userPreferences!!,
-                LocalSuState provides suState
+                LocalUserPreferences provides userPreferences!!
             ) {
                 AppTheme(
                     darkMode = userPreferences!!.isDarkMode(),

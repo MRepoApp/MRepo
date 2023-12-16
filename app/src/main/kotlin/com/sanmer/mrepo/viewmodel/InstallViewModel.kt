@@ -9,19 +9,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
 import com.sanmer.mrepo.utils.extensions.now
-import com.sanmer.mrepo.utils.extensions.toFile
+import com.sanmer.mrepo.utils.extensions.tmpDir
+import com.topjohnwu.superuser.CallbackList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
@@ -32,7 +30,6 @@ import javax.inject.Inject
 class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val suProvider: SuProvider,
     application: Application,
     savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(application) {
@@ -47,43 +44,44 @@ class InstallViewModel @Inject constructor(
 
     init {
         Timber.d("InstallViewModel init")
-        install()
     }
 
-    private fun send(message: String) = console.add("- $message")
-
-    private val onSucceeded: (LocalModule) -> Unit = {
-        viewModelScope.launch {
-            localRepository.insertLocal(it)
-            event = Event.SUCCEEDED
-        }
-    }
-
-    private fun install() = viewModelScope.launch {
+    suspend fun install() = withContext(Dispatchers.IO) {
         val deleteZipFile = userPreferencesRepository
             .data.first().deleteZipFile
 
-        send("Installing ${zipFile.name}")
-
-        suProvider.lm.install(
-            zipFile = zipFile,
-            console = { console.add(it) },
-            onSuccess = {
-                onSucceeded(it)
-                if (deleteZipFile || zipFile.startsWith(context.cacheDir)) {
-                    deleteBySu()
-                }
-            },
-            onFailure = {
-                event = Event.FAILED
+        val msg = object : CallbackList<String?>() {
+            override fun onAddElement(str: String?) {
+                str?.let(console::add)
             }
-        )
+        }
+
+        console.add("- Installing ${zipFile.name}")
+
+        val module = SuProvider.moduleManager
+            .install(zipFile.path, msg)
+
+        if (module != null) {
+            event = Event.SUCCEEDED
+            if (deleteZipFile || zipFile.startsWith(context.tmpDir)) {
+                deleteBySu()
+            }
+
+            context.tmpDir.apply {
+                if (exists()) deleteRecursively()
+            }
+
+            localRepository.insertLocal(module)
+        } else {
+            event = Event.FAILED
+        }
     }
 
     private fun deleteBySu() = runCatching {
-        suProvider.fs.getFile(zipFile.absolutePath).apply {
-            if (exists()) delete()
-        }
+        SuProvider.fileSystemManager
+            .getFile(zipFile.absolutePath).apply {
+                if (exists()) delete()
+            }
     }.onFailure {
         Timber.e(it)
     }
@@ -108,6 +106,6 @@ class InstallViewModel @Inject constructor(
         fun getPath(savedStateHandle: SavedStateHandle) =
             Uri.decode(
                 checkNotNull(savedStateHandle["path"])
-            ).toFile()
+            ).let(::File)
     }
 }

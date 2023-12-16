@@ -35,10 +35,9 @@ fun LocalModuleEntity.toModule() = LocalModule(
     versionCode = versionCode,
     author = author,
     description = description,
-    updateJson = updateJson
-).also {
-    it.state = State.valueOf(state)
-}
+    updateJson = updateJson,
+    state = State.valueOf(state)
+)
 
 @Entity(tableName = "localModules_updatable")
 data class LocalModuleUpdatable(

@@ -26,8 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
@@ -41,7 +39,7 @@ import com.sanmer.mrepo.viewmodel.ModulesViewModel.Companion.LocalUiState
 fun ModulesList(
     list: List<Pair<LocalState, LocalModule>>,
     state: LazyListState,
-    suState: Event,
+    isProviderAlive: Boolean,
     getUiState: @Composable (LocalModule) -> LocalUiState,
     getUpdateJson: @Composable (LocalModule) -> UpdateJson?,
     getProgress: @Composable (VersionItem?) -> Float,
@@ -62,7 +60,7 @@ fun ModulesList(
             ModuleItem(
                 module = module,
                 state = state,
-                suState = suState,
+                isProviderAlive = isProviderAlive,
                 getUiState = getUiState,
                 getUpdateJson = getUpdateJson,
                 getProgress = getProgress,
@@ -81,7 +79,7 @@ fun ModulesList(
 fun ModuleItem(
     module: LocalModule,
     state: LocalState,
-    suState: Event,
+    isProviderAlive: Boolean,
     getUiState: @Composable (LocalModule) -> LocalUiState,
     getUpdateJson: @Composable (LocalModule) -> UpdateJson?,
     getProgress: @Composable (VersionItem?) -> Float,
@@ -97,6 +95,7 @@ fun ModuleItem(
         VersionItemBottomSheet(
             isUpdate = true,
             item = item!!,
+            isProviderAlive = isProviderAlive,
             onClose = { open = false },
             onDownload = { onDownload(module.name, item!!, it) }
         )
@@ -112,15 +111,12 @@ fun ModuleItem(
             Switch(
                 checked = module.state == State.ENABLE,
                 onCheckedChange = uiState.toggle,
-                enabled = suState.isSucceeded
+                enabled = isProviderAlive
             )
         },
         indicator = when (module.state) {
             State.REMOVE -> stateIndicator(R.drawable.trash)
             State.UPDATE -> stateIndicator(R.drawable.device_mobile_down)
-            State.ZYGISK_UNLOADED,
-            State.RIRU_DISABLE,
-            State.ZYGISK_DISABLE -> stateIndicator(R.drawable.alert_triangle)
             else -> null
         },
         trailingButton = {
@@ -135,7 +131,7 @@ fun ModuleItem(
 
             RemoveOrRestore(
                 module = module,
-                enabled = suState.isSucceeded,
+                enabled = isProviderAlive,
                 onClick = uiState.change
             )
         }

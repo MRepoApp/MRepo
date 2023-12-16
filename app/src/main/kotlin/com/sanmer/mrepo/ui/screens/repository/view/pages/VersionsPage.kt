@@ -37,6 +37,7 @@ import com.sanmer.mrepo.utils.extensions.toDate
 fun VersionsPage(
     versions: List<Pair<Repo, VersionItem>>,
     localVersionCode: Int,
+    isProviderAlive: Boolean,
     getProgress: @Composable (VersionItem) -> Float,
     onDownload: (VersionItem, Boolean) -> Unit
 ) = LazyColumn(
@@ -50,6 +51,7 @@ fun VersionsPage(
             item = item,
             repo = repo,
             localVersionCode = localVersionCode,
+            isProviderAlive = isProviderAlive,
             onDownload = { onDownload(item, it) }
         )
 
@@ -73,12 +75,14 @@ private fun VersionItem(
     item: VersionItem,
     repo: Repo,
     localVersionCode: Int,
+    isProviderAlive: Boolean,
     onDownload: (Boolean) -> Unit
 ) {
     var open by remember { mutableStateOf(false) }
     if (open) VersionItemBottomSheet(
         isUpdate = false,
         item = item,
+        isProviderAlive = isProviderAlive,
         onClose = { open = false },
         onDownload = onDownload
     )

@@ -1,9 +1,8 @@
 package com.sanmer.mrepo.model.local
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import com.sanmer.mrepo.utils.ModuleUtils.getVersionDisplay
+import android.os.Parcel
+import android.os.Parcelable
+import com.sanmer.mrepo.utils.ModuleUtils
 
 data class LocalModule(
     val id: String,
@@ -12,11 +11,21 @@ data class LocalModule(
     val versionCode: Int,
     val author: String,
     val description: String,
-    val updateJson: String
-) {
-    var state by mutableStateOf(State.DISABLE)
+    val updateJson: String,
+    val state: State
+) : Parcelable {
+    val versionDisplay get() = ModuleUtils.getVersionDisplay(version, versionCode)
 
-    val versionDisplay get() = getVersionDisplay(version, versionCode)
+    constructor(parcel: Parcel) : this(
+        id = parcel.readString() ?: "",
+        name = parcel.readString() ?: "",
+        version = parcel.readString() ?: "",
+        versionCode = parcel.readInt(),
+        author = parcel.readString() ?: "",
+        description = parcel.readString() ?: "",
+        updateJson = parcel.readString() ?: "",
+        state = parcel.readString()?.let(State::valueOf) ?: State.DISABLE
+    )
 
     override fun equals(other: Any?): Boolean {
         return when (other) {
@@ -29,7 +38,33 @@ data class LocalModule(
         return id.hashCode()
     }
 
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeString(name)
+        parcel.writeString(version)
+        parcel.writeInt(versionCode)
+        parcel.writeString(author)
+        parcel.writeString(description)
+        parcel.writeString(updateJson)
+        parcel.writeString(state.name)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
     companion object {
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<LocalModule> {
+            override fun createFromParcel(parcel: Parcel): LocalModule {
+                return LocalModule(parcel)
+            }
+
+            override fun newArray(size: Int): Array<LocalModule?> {
+                return arrayOfNulls(size)
+            }
+        }
+
         fun example() = LocalModule(
             id = "local_example",
             name = "Example",
@@ -37,7 +72,8 @@ data class LocalModule(
             versionCode = 1703,
             author = "Sanmer",
             description = "This is an example!",
-            updateJson = ""
+            updateJson = "",
+            state = State.ENABLE
         )
     }
 }

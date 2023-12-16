@@ -14,17 +14,18 @@ import javax.inject.Singleton
 @Singleton
 class ModulesRepository @Inject constructor(
     private val localRepository: LocalRepository,
-    private val suProvider: SuProvider
 ) {
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
-        suProvider.lm.getModules()
-            .onSuccess { list ->
-                localRepository.deleteLocalAll()
-                localRepository.insertLocal(list)
-                localRepository.clearUpdatableTag(list.map { it.id })
-            }.onFailure {
-                Timber.e(it, "getLocalAll")
-            }
+        with(SuProvider.moduleManager.modules) {
+            localRepository.deleteLocalAll()
+            localRepository.insertLocal(this)
+            localRepository.clearUpdatableTag(map { it.id })
+        }
+    }
+
+    suspend fun getLocal(id: String) = withContext(Dispatchers.IO) {
+        val module = SuProvider.moduleManager.getModuleById(id)
+        localRepository.insertLocal(module)
     }
 
     suspend fun getRepoAll(onlyEnable: Boolean = true) =

@@ -128,6 +128,8 @@ androidComponents {
 }
 
 dependencies {
+    compileOnly(projects.hiddenApi)
+    
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

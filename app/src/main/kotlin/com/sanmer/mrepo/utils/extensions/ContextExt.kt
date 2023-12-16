@@ -5,6 +5,9 @@ import android.content.Intent
 import androidx.core.app.ShareCompat
 
 val Context.tmpDir get() = cacheDir.resolve("tmp")
+    .apply {
+        if (!exists()) mkdirs()
+    }
 
 fun Context.renameDatabase(old: String, new: String) {
     databaseList().forEach {
