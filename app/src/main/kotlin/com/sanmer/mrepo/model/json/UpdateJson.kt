@@ -7,7 +7,7 @@ import kotlinx.datetime.Clock
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
-data class MagiskUpdateJson(
+data class UpdateJson(
     val version: String,
     val versionCode: Int,
     val zipUrl: String,
@@ -41,10 +41,10 @@ data class MagiskUpdateJson(
     }
 
     companion object {
-        suspend fun load(url: String): MagiskUpdateJson? {
+        suspend fun load(url: String): UpdateJson? {
             if (!NetworkUtils.isUrl(url)) return null
 
-            return NetworkUtils.requestJson<MagiskUpdateJson>(url)
+            return NetworkUtils.requestJson<UpdateJson>(url)
                 .let {
                     if (it.isSuccess) {
                         it.getOrThrow()

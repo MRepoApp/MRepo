@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.datastore.repository.Option
-import com.sanmer.mrepo.model.json.MagiskUpdateJson
+import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.state.LocalState
@@ -68,7 +68,7 @@ class ModulesViewModel @Inject constructor(
         isRefreshing = false
     }
 
-    private val updateJsonSaved = mutableStateMapOf<String, MagiskUpdateJson?>()
+    private val updateJsonSaved = mutableStateMapOf<String, UpdateJson?>()
 
     init {
         Timber.d("ModulesViewModel init")
@@ -183,7 +183,7 @@ class ModulesViewModel @Inject constructor(
     }
 
     @Composable
-    fun rememberUpdateJson(module: LocalModule): MagiskUpdateJson? {
+    fun rememberUpdateJson(module: LocalModule): UpdateJson? {
         LaunchedEffect(key1 = module) {
             if (!localRepository.hasUpdatableTag(module.id)) {
                 updateJsonSaved.remove(module.id)
@@ -193,11 +193,11 @@ class ModulesViewModel @Inject constructor(
             if (updateJsonSaved.containsKey(module.id)) return@LaunchedEffect
 
             val updateJson = if (module.updateJson.isNotBlank()) {
-                MagiskUpdateJson.load(module.updateJson)
+                UpdateJson.load(module.updateJson)
             } else {
                 localRepository.getVersionById(module.id)
                     .firstOrNull()?.let {
-                        MagiskUpdateJson(it)
+                        UpdateJson(it)
                     }
             }
 

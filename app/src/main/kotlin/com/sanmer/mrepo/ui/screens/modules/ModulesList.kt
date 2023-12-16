@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.isSucceeded
-import com.sanmer.mrepo.model.json.MagiskUpdateJson
+import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.online.VersionItem
@@ -43,7 +43,7 @@ fun ModulesList(
     state: LazyListState,
     suState: Event,
     getUiState: @Composable (LocalModule) -> LocalUiState,
-    getUpdateJson: @Composable (LocalModule) -> MagiskUpdateJson?,
+    getUpdateJson: @Composable (LocalModule) -> UpdateJson?,
     getProgress: @Composable (VersionItem?) -> Float,
     onDownload: (String, VersionItem, Boolean) -> Unit
 ) = Box(
@@ -83,7 +83,7 @@ fun ModuleItem(
     state: LocalState,
     suState: Event,
     getUiState: @Composable (LocalModule) -> LocalUiState,
-    getUpdateJson: @Composable (LocalModule) -> MagiskUpdateJson?,
+    getUpdateJson: @Composable (LocalModule) -> UpdateJson?,
     getProgress: @Composable (VersionItem?) -> Float,
     onDownload: (String, VersionItem, Boolean) -> Unit
 ) {

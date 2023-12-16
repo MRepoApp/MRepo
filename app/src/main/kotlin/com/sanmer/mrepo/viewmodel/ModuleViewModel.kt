@@ -9,7 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toRepo
-import com.sanmer.mrepo.model.json.MagiskUpdateJson
+import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.TrackJson
@@ -99,7 +99,7 @@ class ModuleViewModel @Inject constructor(
 
         localState = local.createState(fs)
 
-        val updateJson = MagiskUpdateJson.load(local.updateJson)
+        val updateJson = UpdateJson.load(local.updateJson)
         updateJson?.toItemOrNull()?.let {
             versions.add(0, "Update Json".toRepo() to it)
         }
