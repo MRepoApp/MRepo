@@ -185,7 +185,7 @@ class ModulesViewModel @Inject constructor(
     @Composable
     fun rememberUpdateJson(module: LocalModule): MagiskUpdateJson? {
         LaunchedEffect(key1 = module) {
-            if (module.ignoreUpdates) {
+            if (!localRepository.hasUpdatableTag(module.id)) {
                 updateJsonSaved.remove(module.id)
                 return@LaunchedEffect
             }

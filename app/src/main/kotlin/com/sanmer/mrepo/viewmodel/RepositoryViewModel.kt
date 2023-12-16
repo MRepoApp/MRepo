@@ -68,7 +68,8 @@ class RepositoryViewModel @Inject constructor(
 
             valuesFlow.value = list.map {
                 it.createState(
-                    local = localRepository.getLocalByIdOrNull(it.id)
+                    local = localRepository.getLocalByIdOrNull(it.id),
+                    hasUpdatableTag = localRepository.hasUpdatableTag(it.id)
                 ) to it
             }.sortedWith(
                 comparator(menu.option, menu.descending)

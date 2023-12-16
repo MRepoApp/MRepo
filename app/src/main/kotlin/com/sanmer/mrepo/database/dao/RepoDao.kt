@@ -14,10 +14,10 @@ interface RepoDao {
     fun getAllAsFlow(): Flow<List<Repo>>
 
     @Query("SELECT * FROM repos")
-    fun getAll(): List<Repo>
+    suspend fun getAll(): List<Repo>
 
     @Query("SELECT * FROM repos WHERE url = :url LIMIT 1")
-    fun getByUrl(url: String): Repo
+    suspend fun getByUrl(url: String): Repo
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: Repo)

@@ -48,7 +48,9 @@ class ModuleViewModel @Inject constructor(
         private set
 
     private val installed get() = local != LocalModule.example()
-    private val notifyUpdates get() = installed && !local.ignoreUpdates
+    var notifyUpdates by mutableStateOf(true)
+        private set
+
     val localVersionCode get() = if (notifyUpdates) local.versionCode else Int.MAX_VALUE
 
     var localState: LocalState? by mutableStateOf(null)
@@ -77,6 +79,7 @@ class ModuleViewModel @Inject constructor(
 
         localRepository.getLocalByIdOrNull(moduleId)?.let {
             local = it
+            notifyUpdates = localRepository.hasUpdatableTag(moduleId)
         }
 
         localRepository.getVersionById(moduleId).forEach {
@@ -102,10 +105,10 @@ class ModuleViewModel @Inject constructor(
         }
     }
 
-    fun setIgnoreUpdates(ignore: Boolean) {
+    fun setUpdatesTag(updatable: Boolean) {
         viewModelScope.launch {
-            local.ignoreUpdates = ignore
-            localRepository.insertLocal(local)
+            notifyUpdates = updatable
+            localRepository.insertUpdatableTag(moduleId, updatable)
         }
     }
 

@@ -11,6 +11,7 @@ import com.sanmer.mrepo.database.dao.OnlineDao
 import com.sanmer.mrepo.database.dao.RepoDao
 import com.sanmer.mrepo.database.dao.VersionDao
 import com.sanmer.mrepo.database.entity.LocalModuleEntity
+import com.sanmer.mrepo.database.entity.LocalModuleUpdatable
 import com.sanmer.mrepo.database.entity.OnlineModuleEntity
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.VersionItemEntity
@@ -18,11 +19,12 @@ import com.sanmer.mrepo.database.entity.VersionItemEntity
 @Database(
     entities = [
         Repo::class,
+        LocalModuleUpdatable::class,
         OnlineModuleEntity::class,
         VersionItemEntity::class,
         LocalModuleEntity::class
     ],
-    version = 7
+    version = 8
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun repoDao(): RepoDao
@@ -33,7 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         /**
-         * Only migrate data for [Repo], others is cache
+         * Only migrate data for [Repo] and [LocalModuleUpdatable]
          */
         fun build(context: Context) =
             Room.databaseBuilder(context,
@@ -42,7 +44,8 @@ abstract class AppDatabase : RoomDatabase() {
                     MIGRATION_3_4,
                     MIGRATION_4_5,
                     MIGRATION_5_6,
-                    MIGRATION_6_7
+                    MIGRATION_6_7,
+                    MIGRATION_7_8
                 )
                 .build()
 
@@ -149,6 +152,27 @@ abstract class AppDatabase : RoomDatabase() {
                     "state TEXT NOT NULL, " +
                     "updateJson TEXT NOT NULL, " +
                     "ignoreUpdates INTEGER NOT NULL, " +
+                    "PRIMARY KEY(id))")
+
+            it.execSQL("DROP TABLE localModules")
+            it.execSQL("ALTER TABLE localModules_new RENAME TO localModules")
+        }
+
+        private val MIGRATION_7_8 = Migration(7, 8) {
+            it.execSQL("CREATE TABLE IF NOT EXISTS localModules_new (" +
+                    "id TEXT NOT NULL, " +
+                    "name TEXT NOT NULL, " +
+                    "version TEXT NOT NULL, " +
+                    "versionCode INTEGER NOT NULL, " +
+                    "author TEXT NOT NULL, " +
+                    "description TEXT NOT NULL, " +
+                    "state TEXT NOT NULL, " +
+                    "updateJson TEXT NOT NULL, " +
+                    "PRIMARY KEY(id))")
+
+            it.execSQL("CREATE TABLE IF NOT EXISTS localModules_updatable (" +
+                    "id TEXT NOT NULL, " +
+                    "updatable INTEGER NOT NULL, " +
                     "PRIMARY KEY(id))")
 
             it.execSQL("DROP TABLE localModules")

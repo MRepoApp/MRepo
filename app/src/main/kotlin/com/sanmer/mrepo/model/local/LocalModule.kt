@@ -15,7 +15,6 @@ data class LocalModule(
     val updateJson: String
 ) {
     var state by mutableStateOf(State.DISABLE)
-    var ignoreUpdates by mutableStateOf(false)
 
     val versionDisplay get() = getVersionDisplay(version, versionCode)
 

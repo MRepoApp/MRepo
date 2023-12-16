@@ -77,8 +77,9 @@ fun ViewScreen(
                         item = viewModel.versions.firstOrNull()?.second,
                         local = viewModel.local,
                         localState = viewModel.localState,
+                        notifyUpdates = viewModel.notifyUpdates,
+                        setUpdatesTag = viewModel::setUpdatesTag,
                         onInstall = { download(it, true) },
-                        setIgnoreUpdates = viewModel::setIgnoreUpdates
                     )
                     1 -> VersionsPage(
                         versions = viewModel.versions,
