@@ -28,7 +28,6 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.navigation.graphs.SettingsScreen
-import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.screens.settings.items.NonRootItem
 import com.sanmer.mrepo.ui.screens.settings.items.RootItem
@@ -42,7 +41,6 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val userPreferences = LocalUserPreferences.current
-    val suState = LocalSuState.current
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -64,8 +62,8 @@ fun SettingsScreen(
         ) {
             when {
                 userPreferences.isRoot -> RootItem(
-                    suState = suState,
-                    apiVersion = viewModel.apiVersion
+                    isAlive = viewModel.isProviderAlive,
+                    version = viewModel.version
                 )
                 userPreferences.isNonRoot -> NonRootItem()
             }

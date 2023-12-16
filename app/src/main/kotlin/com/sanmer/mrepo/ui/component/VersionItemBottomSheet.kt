@@ -51,16 +51,16 @@ import com.sanmer.mrepo.app.Event.Companion.isLoading
 import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.network.compose.requestString
-import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.expandedShape
 import kotlinx.coroutines.launch
 
 @Composable
 fun VersionItemBottomSheet(
+    state: SheetState = rememberModalBottomSheetState(),
     isUpdate: Boolean,
     item: VersionItem,
-    state: SheetState = rememberModalBottomSheetState(),
+    isProviderAlive: Boolean,
     onDownload: (Boolean) -> Unit,
     onClose: () -> Unit
 ) {
@@ -89,10 +89,9 @@ fun VersionItemBottomSheet(
         }
     ) {
         val userPreferences = LocalUserPreferences.current
-        val suState = LocalSuState.current
         val enableInstall by remember {
             derivedStateOf {
-                userPreferences.isRoot && suState.isSucceeded
+                userPreferences.isRoot && isProviderAlive
             }
         }
 
@@ -187,7 +186,10 @@ private fun ColumnScope.ButtonRow(
 @Composable
 private fun ChangelogItem(url: String) {
     var changelog by remember { mutableStateOf("") }
-    val event = requestString(url) { changelog = it }
+    val event = requestString(
+        url = url,
+        onSuccess = { changelog = it }
+    )
 
     Box(
         modifier = Modifier

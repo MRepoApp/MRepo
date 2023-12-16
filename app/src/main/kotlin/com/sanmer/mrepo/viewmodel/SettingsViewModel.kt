@@ -12,11 +12,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val userPreferencesRepository: UserPreferencesRepository,
-    private val suProvider: SuProvider
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
-    val apiVersion get() = when {
-        suProvider.isInitialized -> suProvider.lm.version
+    val isProviderAlive get() = SuProvider.isAlive
+
+    val version get() = when {
+        isProviderAlive -> with(SuProvider.moduleManager) {
+            "$version (${versionCode})"
+        }
         else -> ""
     }
 

@@ -1,10 +1,10 @@
 package com.sanmer.mrepo.repository
 
-import com.sanmer.mrepo.content.IRepoManager
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.copy
 import com.sanmer.mrepo.network.runRequest
 import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.stub.IRepoManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -14,17 +14,18 @@ import javax.inject.Singleton
 @Singleton
 class ModulesRepository @Inject constructor(
     private val localRepository: LocalRepository,
-    private val suProvider: SuProvider
 ) {
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
-        suProvider.lm.getModules()
-            .onSuccess { list ->
-                localRepository.deleteLocalAll()
-                localRepository.insertLocal(list)
-                localRepository.clearUpdatableTag(list.map { it.id })
-            }.onFailure {
-                Timber.e(it, "getLocalAll")
-            }
+        with(SuProvider.moduleManager.modules) {
+            localRepository.deleteLocalAll()
+            localRepository.insertLocal(this)
+            localRepository.clearUpdatableTag(map { it.id })
+        }
+    }
+
+    suspend fun getLocal(id: String) = withContext(Dispatchers.IO) {
+        val module = SuProvider.moduleManager.getModuleById(id)
+        localRepository.insertLocal(module)
     }
 
     suspend fun getRepoAll(onlyEnable: Boolean = true) =

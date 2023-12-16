@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.model.online
 
-import com.sanmer.mrepo.utils.ModuleUtils.getVersionDisplay
+import com.sanmer.mrepo.utils.ModuleUtils
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -13,5 +13,5 @@ data class VersionItem(
     val zipUrl: String,
     val changelog: String
 ) {
-    val versionDisplay get() = getVersionDisplay(version, versionCode)
+    val versionDisplay get() = ModuleUtils.getVersionDisplay(version, versionCode)
 }

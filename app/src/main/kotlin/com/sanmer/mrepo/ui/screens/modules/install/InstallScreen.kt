@@ -74,7 +74,7 @@ fun InstallScreen(
     val focusRequester = remember { FocusRequester() }
     val listState = rememberLazyListState()
     val isScrollingUp = listState.isScrollingUp()
-    val showFab by remember(isScrollingUp) {
+    val showFab by remember {
         derivedStateOf {
             isScrollingUp && viewModel.event.isSucceeded
         }
@@ -82,6 +82,10 @@ fun InstallScreen(
 
     LaunchedEffect(focusRequester) {
         focusRequester.requestFocus()
+    }
+
+    LaunchedEffect(true) {
+        viewModel.install()
     }
 
     BackHandler(
@@ -130,7 +134,7 @@ fun InstallScreen(
             .onKeyEvent {
                 when (it.key) {
                     Key.VolumeUp,
-                    Key.VolumeDown-> viewModel.event.isLoading
+                    Key.VolumeDown -> viewModel.event.isLoading
 
                     else -> false
                 }

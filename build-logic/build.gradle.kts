@@ -15,6 +15,11 @@ gradlePlugin {
             implementationClass = "ApplicationConventionPlugin"
         }
 
+        register("proLibrary") {
+            id = "pro.library"
+            implementationClass = "LibraryConventionPlugin"
+        }
+
         register("proCompose") {
             id = "pro.compose"
             implementationClass = "ComposeConventionPlugin"

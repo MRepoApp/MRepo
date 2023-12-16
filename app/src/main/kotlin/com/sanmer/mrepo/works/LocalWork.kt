@@ -23,13 +23,9 @@ class LocalWork @AssistedInject constructor(
 ) {
     override suspend fun doWork(): Result {
         Timber.d("LocalWork: doWork")
-        val result = modulesRepository.getLocalAll()
+        modulesRepository.getLocalAll()
 
-        return if (result.isSuccess) {
-            Result.success()
-        } else {
-            Result.retry()
-        }
+        return Result.success()
     }
 
     companion object {

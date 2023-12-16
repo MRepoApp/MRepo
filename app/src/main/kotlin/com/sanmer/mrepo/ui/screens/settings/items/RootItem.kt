@@ -20,13 +20,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 
 @Composable
 fun RootItem(
-    suState: Event,
-    apiVersion: String
+    isAlive: Boolean,
+    version: String
 ) = Surface(
     modifier = Modifier.padding(all = 18.dp),
     shape = RoundedCornerShape(15.dp),
@@ -40,7 +38,7 @@ fun RootItem(
     ) {
         Icon(
             modifier = Modifier.size(30.dp),
-            painter = painterResource(id = if (suState.isSucceeded) {
+            painter = painterResource(id = if (isAlive) {
                 R.drawable.circle_check_filled
             } else {
                 R.drawable.alert_circle_filled
@@ -55,7 +53,7 @@ fun RootItem(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = if (suState.isSucceeded) {
+                text = if (isAlive) {
                     stringResource(id = R.string.settings_root_access,
                         stringResource(id = R.string.settings_root_granted))
                 } else {
@@ -67,9 +65,8 @@ fun RootItem(
             )
 
             Text(
-                text = if (suState.isSucceeded) {
-                    stringResource(id = R.string.settings_root_provider,
-                        apiVersion)
+                text = if (isAlive) {
+                    stringResource(id = R.string.settings_root_provider, version)
                 } else {
                     stringResource(id = R.string.settings_root_provider,
                         stringResource(id = R.string.settings_root_not_available))

@@ -2,6 +2,7 @@
 accompanist = "0.32.0"
 androidGradlePlugin = "8.2.0"
 androidxActivity = "1.8.2"
+androidxAnnotation = "1.7.1"
 androidxAppCompat = "1.6.1"
 androidxCompose = "1.5.4"
 androidxComposeCompiler = "1.5.6"
@@ -32,6 +33,7 @@ squareMoshi = "1.15.0"
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" , version.ref = "androidxComposeMaterial" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxComposeMaterial3" }
@@ -93,6 +95,7 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 
 # Plugins defined by this project
 pro-application = { id = "pro.application", version = "unspecified" }
+pro-library = { id = "pro.library", version = "unspecified" }
 pro-compose = { id = "pro.compose", version = "unspecified" }
 pro-hilt = { id = "pro.hilt", version = "unspecified" }
 pro-room = { id = "pro.room", version = "unspecified" }

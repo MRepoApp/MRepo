@@ -43,7 +43,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.model.online.VersionItem
@@ -51,7 +50,6 @@ import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
-import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
@@ -66,7 +64,6 @@ fun ModulesScreen(
 ) {
     val context = LocalContext.current
     val userPreferences = LocalUserPreferences.current
-    val suState = LocalSuState.current
 
     val list by viewModel.local.collectAsStateWithLifecycle()
 
@@ -74,9 +71,9 @@ fun ModulesScreen(
     val listState = rememberLazyListState()
 
     val isScrollingUp = listState.isScrollingUp()
-    val showFab by remember(isScrollingUp, suState) {
+    val showFab by remember {
         derivedStateOf {
-            isScrollingUp && !viewModel.isSearch && suState.isSucceeded
+            isScrollingUp && !viewModel.isSearch && viewModel.isProviderAlive
         }
     }
 
@@ -158,7 +155,7 @@ fun ModulesScreen(
             ModulesList(
                 list = list,
                 state = listState,
-                suState = suState,
+                isProviderAlive = viewModel.isProviderAlive,
                 getUiState = { viewModel.rememberUiState(it) },
                 getUpdateJson = { viewModel.rememberUpdateJson(it) },
                 getProgress = { viewModel.rememberProgress(it) },

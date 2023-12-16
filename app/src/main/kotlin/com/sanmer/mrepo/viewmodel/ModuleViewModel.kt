@@ -28,11 +28,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ModuleViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val suProvider: SuProvider,
     savedStateHandle: SavedStateHandle
 ) : DownloadViewModel() {
+    val isProviderAlive get() = SuProvider.isAlive
+
     private val fs get() = when {
-        suProvider.isInitialized -> suProvider.fs
+        isProviderAlive -> SuProvider.fileSystemManager
         else -> FileSystemManager.getLocal()
     }
 

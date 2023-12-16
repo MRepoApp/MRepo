@@ -78,12 +78,14 @@ fun ViewScreen(
                         local = viewModel.local,
                         localState = viewModel.localState,
                         notifyUpdates = viewModel.notifyUpdates,
+                        isProviderAlive = viewModel.isProviderAlive,
                         setUpdatesTag = viewModel::setUpdatesTag,
                         onInstall = { download(it, true) },
                     )
                     1 -> VersionsPage(
                         versions = viewModel.versions,
                         localVersionCode = viewModel.localVersionCode,
+                        isProviderAlive = viewModel.isProviderAlive,
                         getProgress = { viewModel.rememberProgress(it) },
                         onDownload = download
                     )

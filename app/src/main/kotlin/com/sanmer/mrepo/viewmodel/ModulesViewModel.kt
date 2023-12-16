@@ -39,10 +39,13 @@ class ModulesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val suProvider: SuProvider
 ) : DownloadViewModel() {
+    val isProviderAlive get() = SuProvider.isAlive
+
+    private val mm get() = SuProvider.moduleManager
+
     private val fs get() = when {
-        suProvider.isInitialized -> suProvider.fs
+        isProviderAlive -> SuProvider.fileSystemManager
         else -> FileSystemManager.getLocal()
     }
 
@@ -139,38 +142,56 @@ class ModulesViewModel @Inject constructor(
         keyFlow.value = ""
     }
 
-    fun getLocalAll() = viewModelScope.launch {
-        refreshing {
-            modulesRepository.getLocalAll()
+    fun getLocalAll() {
+        viewModelScope.launch {
+            refreshing {
+                modulesRepository.getLocalAll()
+            }
         }
     }
 
     fun setModulesMenu(value: ModulesMenuExt) =
         userPreferencesRepository.setModulesMenu(value)
 
+    private fun getLocal(id: String) {
+        viewModelScope.launch {
+            modulesRepository.getLocal(id)
+        }
+    }
+
     private fun createUiState(module: LocalModule) = when (module.state) {
         State.ENABLE -> LocalUiState(
             alpha = 1f,
             decoration = TextDecoration.None,
-            toggle = { suProvider.lm.disable(module) },
-            change = { suProvider.lm.remove(module) }
+            toggle = {
+                mm.disable(module.id)
+                getLocal(module.id)
+            },
+            change = {
+                mm.remove(module.id)
+                getLocal(module.id)
+            }
         )
 
         State.DISABLE -> LocalUiState(
             alpha = 0.5f,
-            toggle = { suProvider.lm.enable(module) },
-            change = { suProvider.lm.remove(module) }
+            toggle = {
+                mm.enable(module.id)
+                getLocal(module.id)
+            },
+            change = {
+                mm.remove(module.id)
+                getLocal(module.id)
+            }
         )
 
         State.REMOVE -> LocalUiState(
             alpha = 0.5f,
             decoration = TextDecoration.LineThrough,
-            change = { suProvider.lm.enable(module) }
-        )
-        State.ZYGISK_UNLOADED,
-        State.RIRU_DISABLE,
-        State.ZYGISK_DISABLE -> LocalUiState(
-            alpha = 0.5f
+            change = {
+                mm.enable(module.id)
+                getLocal(module.id)
+            }
         )
         State.UPDATE -> LocalUiState()
     }

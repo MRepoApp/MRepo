@@ -11,13 +11,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.provider.SuProvider
-import com.sanmer.mrepo.repository.LocalRepository
+import com.sanmer.mrepo.provider.stub.IInstallCallback
+import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
 import com.sanmer.mrepo.utils.extensions.now
-import com.sanmer.mrepo.utils.extensions.toFile
+import com.sanmer.mrepo.utils.extensions.tmpDir
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -30,9 +30,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InstallViewModel @Inject constructor(
-    private val localRepository: LocalRepository,
+    private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val suProvider: SuProvider,
     application: Application,
     savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(application) {
@@ -47,45 +46,6 @@ class InstallViewModel @Inject constructor(
 
     init {
         Timber.d("InstallViewModel init")
-        install()
-    }
-
-    private fun send(message: String) = console.add("- $message")
-
-    private val onSucceeded: (LocalModule) -> Unit = {
-        viewModelScope.launch {
-            localRepository.insertLocal(it)
-            event = Event.SUCCEEDED
-        }
-    }
-
-    private fun install() = viewModelScope.launch {
-        val deleteZipFile = userPreferencesRepository
-            .data.first().deleteZipFile
-
-        send("Installing ${zipFile.name}")
-
-        suProvider.lm.install(
-            zipFile = zipFile,
-            console = { console.add(it) },
-            onSuccess = {
-                onSucceeded(it)
-                if (deleteZipFile || zipFile.startsWith(context.cacheDir)) {
-                    deleteBySu()
-                }
-            },
-            onFailure = {
-                event = Event.FAILED
-            }
-        )
-    }
-
-    private fun deleteBySu() = runCatching {
-        suProvider.fs.getFile(zipFile.absolutePath).apply {
-            if (exists()) delete()
-        }
-    }.onFailure {
-        Timber.e(it)
     }
 
     suspend fun saveLog(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
@@ -99,6 +59,48 @@ class InstallViewModel @Inject constructor(
         }
     }
 
+    suspend fun install() = withContext(Dispatchers.IO) {
+        val deleteZipFile = userPreferencesRepository
+            .data.first().deleteZipFile
+
+        val callback = object : IInstallCallback.Stub() {
+            override fun console(msg: String) {
+                console.add(msg)
+            }
+            override fun onSuccess(id: String) {
+                event = Event.SUCCEEDED
+                getLocal(id)
+
+                if (deleteZipFile) {
+                    deleteBySu()
+                }
+            }
+            override fun onFailure() {
+                event = Event.FAILED
+            }
+        }
+
+        console.add("- Installing ${zipFile.name}")
+        SuProvider.moduleManager.install(zipFile.path, callback)
+
+        context.tmpDir.deleteRecursively()
+    }
+
+    private fun getLocal(id: String) {
+        viewModelScope.launch {
+            modulesRepository.getLocal(id)
+        }
+    }
+
+    private fun deleteBySu() = runCatching {
+        SuProvider.fileSystemManager
+            .getFile(zipFile.absolutePath).apply {
+                if (exists()) delete()
+            }
+    }.onFailure {
+        Timber.e(it)
+    }
+
     companion object {
         fun putPath(path: File) =
             ModulesScreen.Install.route.replace(
@@ -108,6 +110,6 @@ class InstallViewModel @Inject constructor(
         fun getPath(savedStateHandle: SavedStateHandle) =
             Uri.decode(
                 checkNotNull(savedStateHandle["path"])
-            ).toFile()
+            ).let(::File)
     }
 }

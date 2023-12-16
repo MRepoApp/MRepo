@@ -26,12 +26,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.model.state.LocalState
-import com.sanmer.mrepo.ui.providable.LocalSuState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.toDateTime
 
@@ -41,6 +39,7 @@ fun OverviewPage(
     item: VersionItem?,
     local: LocalModule,
     localState: LocalState?,
+    isProviderAlive: Boolean,
     notifyUpdates: Boolean,
     setUpdatesTag: (Boolean) -> Unit,
     onInstall: (VersionItem) -> Unit
@@ -73,6 +72,7 @@ fun OverviewPage(
     if (item != null) {
         CloudItem(
             item = item,
+            isProviderAlive = isProviderAlive,
             onInstall = onInstall
         )
 
@@ -94,6 +94,7 @@ fun OverviewPage(
 @Composable
 private fun CloudItem(
     item: VersionItem,
+    isProviderAlive: Boolean,
     onInstall: (VersionItem) -> Unit
 ) = Column(
     modifier = Modifier
@@ -102,7 +103,6 @@ private fun CloudItem(
     verticalArrangement = Arrangement.spacedBy(16.dp)
 ) {
     val userPreferences = LocalUserPreferences.current
-    val suState = LocalSuState.current
 
     Text(
         text = stringResource(id = R.string.view_module_cloud),
@@ -122,7 +122,7 @@ private fun CloudItem(
         )
 
         ElevatedAssistChip(
-            enabled = userPreferences.isRoot && suState.isSucceeded,
+            enabled = userPreferences.isRoot && isProviderAlive,
             onClick = { onInstall(item) },
             label = { Text(text = stringResource(id = R.string.module_install)) },
             leadingIcon = {
