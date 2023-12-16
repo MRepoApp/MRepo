@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.repository
 
-import com.sanmer.mrepo.content.IOnlineManager
+import com.sanmer.mrepo.content.IRepoManager
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.copy
 import com.sanmer.mrepo.network.runRequest
@@ -41,8 +41,8 @@ class ModulesRepository @Inject constructor(
 
     suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
         runRequest {
-            val api = IOnlineManager.build(repo.url)
-            return@runRequest api.getModules().execute()
+            val api = IRepoManager.build(repo.url)
+            return@runRequest api.modules.execute()
         }.onSuccess { modulesJson ->
             localRepository.insertRepo(repo.copy(modulesJson))
             localRepository.deleteOnlineByUrl(repo.url)

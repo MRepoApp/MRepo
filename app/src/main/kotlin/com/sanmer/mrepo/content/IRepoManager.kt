@@ -6,12 +6,13 @@ import retrofit2.Call
 import retrofit2.create
 import retrofit2.http.GET
 
-interface IOnlineManager {
-    @GET("json/modules.json")
-    fun getModules(): Call<ModulesJson>
+interface IRepoManager {
+
+    @get:GET("json/modules.json")
+    val modules: Call<ModulesJson>
 
     companion object {
-        fun build(repoUrl: String): IOnlineManager {
+        fun build(repoUrl: String): IRepoManager {
             return NetworkUtils.createRetrofit()
                 .baseUrl(repoUrl)
                 .build()
