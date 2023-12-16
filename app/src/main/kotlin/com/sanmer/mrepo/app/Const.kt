@@ -4,13 +4,16 @@ import android.os.Environment
 import java.io.File
 
 object Const {
-    // DIR
-    const val MODULE_PATH = "/data/adb/modules"
+    const val MODULES_PATH = "/data/adb/modules"
+    val MODULE_FILES = listOf(
+        "post-fs-data.sh", "service.sh", "uninstall.sh",
+        "system", "system.prop", "module.prop"
+    )
+
     val PUBLIC_DOWNLOADS: File = Environment.getExternalStoragePublicDirectory(
         Environment.DIRECTORY_DOWNLOADS
     )
 
-    // URL
     const val MY_GITHUB_URL = "https://github.com/SanmerDev"
     const val TRANSLATE_URL = "https://weblate.sanmer.dev/engage/mrepo"
     const val GITHUB_URL = "https://github.com/MRepoApp/MRepo"

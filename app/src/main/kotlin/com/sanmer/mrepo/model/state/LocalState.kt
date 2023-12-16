@@ -14,22 +14,15 @@ data class LocalState(
         suspend fun LocalModule.createState(
             fs: FileSystemManager
         ) = withContext(Dispatchers.IO) {
-            val path = "${Const.MODULE_PATH}/${id}"
-
-            val lastUpdated = safe(null) {
-                val f1 = fs.getFile("$path/post-fs-data.sh")
-                if (f1.exists()) return@safe f1.lastModified()
-
-                val f2 = fs.getFile("$path/service.sh")
-                if (f1.exists()) return@safe f2.lastModified()
-
-                val f3 = fs.getFile("$path/system")
-                if (f3.exists()) return@safe f3.lastModified()
-
-                val f4 = fs.getFile("$path/module.prop")
-                if (f4.exists()) return@safe f3.lastModified()
-
-                return@safe null
+            var lastUpdated: Long? = null
+            Const.MODULE_FILES.first { filename ->
+                val file = fs.getFile("${Const.MODULES_PATH}/${id}/${filename}")
+                if (file.exists()) {
+                    lastUpdated = file.lastModified()
+                    true
+                } else {
+                    false
+                }
             }
 
             return@withContext LocalState(
