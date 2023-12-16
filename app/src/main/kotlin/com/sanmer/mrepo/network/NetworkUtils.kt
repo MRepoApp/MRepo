@@ -21,9 +21,8 @@ import java.util.Locale
 object NetworkUtils {
     private var useDoh: Boolean = false
     private var cacheDirOrNull: File? = null
-    private val cacheOrNull: Cache? get() {
-        if (cacheDirOrNull == null) return null
-        return Cache(File(cacheDirOrNull, "okhttp"), 10 * 1024 * 1024)
+    private val cacheOrNull: Cache? get() = cacheDirOrNull?.let {
+        Cache(File(it, "okhttp"), 10 * 1024 * 1024)
     }
 
     fun setCacheDir(dir: File) {
