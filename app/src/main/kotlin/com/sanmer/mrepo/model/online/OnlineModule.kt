@@ -29,7 +29,7 @@ data class OnlineModule(
 
     companion object {
         fun example() = OnlineModule(
-            id = "example",
+            id = "online_example",
             name = "Example",
             version = "2022.08.16",
             versionCode = 1703,

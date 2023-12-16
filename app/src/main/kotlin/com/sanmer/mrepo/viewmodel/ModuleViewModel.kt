@@ -47,7 +47,8 @@ class ModuleViewModel @Inject constructor(
     var local by mutableStateOf(LocalModule.example())
         private set
 
-    private val installed get() = local != LocalModule.example()
+    private val installed get() = local.id == online.id
+            && local.author == online.author
     var notifyUpdates by mutableStateOf(true)
         private set
 

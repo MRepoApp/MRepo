@@ -16,6 +16,8 @@ data class OnlineState(
             hasUpdatableTag: Boolean,
         ): OnlineState {
             val installed = local != null && local.id == id
+                    && local.author == author
+
             val updatable = if (installed && hasUpdatableTag) {
                 local!!.versionCode < versionCode
             } else {

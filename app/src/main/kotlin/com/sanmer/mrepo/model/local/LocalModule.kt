@@ -31,7 +31,7 @@ data class LocalModule(
 
     companion object {
         fun example() = LocalModule(
-            id = "example",
+            id = "local_example",
             name = "Example",
             version = "2022.08.16",
             versionCode = 1703,
