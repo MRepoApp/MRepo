@@ -5,6 +5,7 @@ import com.sanmer.mrepo.database.dao.LocalDao
 import com.sanmer.mrepo.database.dao.OnlineDao
 import com.sanmer.mrepo.database.dao.RepoDao
 import com.sanmer.mrepo.database.dao.VersionDao
+import com.sanmer.mrepo.database.entity.LocalModuleUpdatable
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toEntity
 import com.sanmer.mrepo.database.entity.toItem
@@ -44,6 +45,24 @@ class LocalRepository @Inject constructor(
 
     suspend fun deleteLocalAll() = withContext(Dispatchers.IO) {
         localDao.deleteAll()
+    }
+
+    suspend fun insertUpdatableTag(id: String, updatable: Boolean) = withContext(Dispatchers.IO) {
+        localDao.insertUpdatableTag(
+            LocalModuleUpdatable(
+                id = id,
+                updatable = updatable
+            )
+        )
+    }
+
+    suspend fun hasUpdatableTag(id: String) = withContext(Dispatchers.IO) {
+        localDao.hasUpdatableTagOrNull(id)?.updatable ?: true
+    }
+
+    suspend fun clearUpdatableTag(new: List<String>) = withContext(Dispatchers.IO) {
+        val removed = localDao.getUpdatableTagAll().filter { it.id !in new }
+        localDao.deleteUpdatableTag(removed)
     }
 
     fun getRepoAllAsFlow() = repoDao.getAllAsFlow()

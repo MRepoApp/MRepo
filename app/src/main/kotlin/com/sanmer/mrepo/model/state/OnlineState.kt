@@ -12,11 +12,12 @@ data class OnlineState(
     @Suppress("FloatingPointLiteralPrecision")
     companion object {
         fun OnlineModule.createState(
-            local: LocalModule?
+            local: LocalModule?,
+            hasUpdatableTag: Boolean,
         ): OnlineState {
             val installed = local != null && local.id == id
-            val updatable = if (installed && local?.ignoreUpdates == false) {
-                local.versionCode < versionCode
+            val updatable = if (installed && hasUpdatableTag) {
+                local!!.versionCode < versionCode
             } else {
                 false
             }
