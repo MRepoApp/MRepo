@@ -9,16 +9,6 @@ val Context.tmpDir get() = cacheDir.resolve("tmp")
         if (!exists()) mkdirs()
     }
 
-fun Context.renameDatabase(old: String, new: String) {
-    databaseList().forEach {
-        if (it.startsWith(old)) {
-            val oldFile = getDatabasePath(it)
-            val newFile = getDatabasePath(it.replace(old, new))
-            oldFile.renameTo(newFile)
-        }
-    }
-}
-
 fun Context.openUrl(url: String) {
     Intent.parseUri(url, Intent.URI_INTENT_SCHEME).apply {
         startActivity(this)

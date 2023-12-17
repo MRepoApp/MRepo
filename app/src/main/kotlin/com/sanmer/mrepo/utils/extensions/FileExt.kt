@@ -6,8 +6,6 @@ import java.io.InputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-fun String.toFile() = File(this)
-
 @Throws(IOException::class)
 fun File.unzip(folder: File, path: String = "", junkPath: Boolean = false) {
     inputStream().buffered().use {

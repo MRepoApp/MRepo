@@ -13,7 +13,6 @@ import androidx.documentfile.provider.DocumentFile
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.sanmer.mrepo.utils.extensions.tmpDir
-import com.sanmer.mrepo.utils.extensions.toFile
 import java.io.File
 
 object MediaStoreUtils {
@@ -60,14 +59,14 @@ object MediaStoreUtils {
             uri
         }
 
-        val cr =  context.contentResolver
+        val cr = context.contentResolver
         return cr.openFileDescriptor(newUri, "r")?.use {
             Os.readlink("/proc/self/fd/${it.fd}")
         } ?: uri.toString()
     }
 
     fun getAbsoluteFileForUri(context: Context, uri: Uri) =
-        getAbsolutePathForUri(context, uri).toFile()
+        getAbsolutePathForUri(context, uri).let(::File)
 
     fun copyToTmp(context: Context, uri: Uri): File {
         val filename = getDisplayNameForUri(context, uri)
@@ -75,7 +74,7 @@ object MediaStoreUtils {
             .apply { if (!exists()) mkdirs() }
             .resolve(filename)
 
-        val cr =  context.contentResolver
+        val cr = context.contentResolver
         cr.openInputStream(uri)?.use { input ->
             cr.openOutputStream(file.toUri())?.use { output ->
                 input.copyTo(output)
