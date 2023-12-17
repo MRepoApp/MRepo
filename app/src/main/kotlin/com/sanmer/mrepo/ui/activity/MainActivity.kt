@@ -50,12 +50,6 @@ class MainActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition { isLoading }
 
         setContent {
-            MediaStoreUtils.PermissionState()
-
-            if (OsUtils.atLeastT) {
-                NotificationUtils.PermissionState()
-            }
-
             val userPreferences by userPreferencesRepository.data
                 .collectAsStateWithLifecycle(initialValue = null)
 
@@ -103,6 +97,12 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+
+            if (OsUtils.atLeastT) {
+                NotificationUtils.PermissionState()
+            }
+
+            MediaStoreUtils.PermissionState()
         }
     }
 }
