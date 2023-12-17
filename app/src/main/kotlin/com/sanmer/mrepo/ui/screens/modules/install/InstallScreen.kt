@@ -73,7 +73,7 @@ fun InstallScreen(
 
     val focusRequester = remember { FocusRequester() }
     val listState = rememberLazyListState()
-    val isScrollingUp = listState.isScrollingUp()
+    val isScrollingUp by listState.isScrollingUp()
     val showFab by remember {
         derivedStateOf {
             isScrollingUp && viewModel.event.isSucceeded

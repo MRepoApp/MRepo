@@ -70,7 +70,7 @@ fun ModulesScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
 
-    val isScrollingUp = listState.isScrollingUp()
+    val isScrollingUp by listState.isScrollingUp()
     val showFab by remember {
         derivedStateOf {
             isScrollingUp && !viewModel.isSearch && viewModel.isProviderAlive

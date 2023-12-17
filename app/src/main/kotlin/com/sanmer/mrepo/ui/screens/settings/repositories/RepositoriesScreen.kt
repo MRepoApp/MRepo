@@ -60,7 +60,7 @@ fun RepositoriesScreen(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listSate = rememberLazyListState()
-    val showFab = listSate.isScrollingUp()
+    val showFab by listSate.isScrollingUp()
 
     var repoUrl by remember { mutableStateOf("") }
     var message: String by remember { mutableStateOf("") }
