@@ -17,13 +17,10 @@ import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
-import com.sanmer.mrepo.model.state.LocalState
-import com.sanmer.mrepo.model.state.LocalState.Companion.createState
 import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
-import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,13 +39,6 @@ class ModulesViewModel @Inject constructor(
 ) : DownloadViewModel() {
     val isProviderAlive get() = SuProvider.isAlive
 
-    private val mm get() = SuProvider.moduleManager
-
-    private val fs get() = when {
-        isProviderAlive -> SuProvider.fileSystemManager
-        else -> FileSystemManager.getLocal()
-    }
-
     private val modulesMenu get() = userPreferencesRepository.data
         .map { it.modulesMenu }
 
@@ -57,7 +47,7 @@ class ModulesViewModel @Inject constructor(
     private val keyFlow = MutableStateFlow("")
 
     private val valuesFlow = MutableStateFlow(
-        listOf<Pair<LocalState, LocalModule>>()
+        listOf<LocalModule>()
     )
     val local get() = valuesFlow.asStateFlow()
 
@@ -88,19 +78,15 @@ class ModulesViewModel @Inject constructor(
 
             Timber.d("local list, size = ${list.size}")
 
-            valuesFlow.value  = list.map {
-                it.createState(
-                    fs = fs
-                ) to it
-            }.sortedWith(
+            valuesFlow.value  = list.sortedWith(
                 comparator(menu.option, menu.descending)
             ).let { v ->
                 if (menu.pinEnabled) {
-                    v.sortedByDescending { it.second.state == State.ENABLE }
+                    v.sortedByDescending { it.state == State.ENABLE }
                 } else {
                     v
                 }
-            }.filter { (_, m) ->
+            }.filter { m ->
                 if (key.isBlank()) return@filter true
                 key.lowercase() in (m.name + m.author + m.description).lowercase()
 
@@ -114,17 +100,17 @@ class ModulesViewModel @Inject constructor(
     private fun comparator(
         option: Option,
         descending: Boolean
-    ): Comparator<Pair<LocalState, LocalModule>> = if (descending) {
+    ): Comparator<LocalModule> = if (descending) {
         when (option) {
-            Option.NAME -> compareByDescending { it.second.name.lowercase() }
-            Option.UPDATED_TIME -> compareBy { it.first.lastUpdated }
+            Option.NAME -> compareByDescending { it.name.lowercase() }
+            Option.UPDATED_TIME -> compareBy { it.lastUpdated }
             else -> compareByDescending { null }
         }
 
     } else {
         when (option) {
-            Option.NAME -> compareBy { it.second.name.lowercase() }
-            Option.UPDATED_TIME -> compareByDescending { it.first.lastUpdated }
+            Option.NAME -> compareBy { it.name.lowercase() }
+            Option.UPDATED_TIME -> compareByDescending { it.lastUpdated }
             else -> compareByDescending { null }
         }
     }
@@ -159,41 +145,44 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
-    private fun createUiState(module: LocalModule) = when (module.state) {
-        State.ENABLE -> LocalUiState(
-            alpha = 1f,
-            decoration = TextDecoration.None,
-            toggle = {
-                mm.disable(module.id)
-                getLocal(module.id)
-            },
-            change = {
-                mm.remove(module.id)
-                getLocal(module.id)
-            }
-        )
+    private fun createUiState(module: LocalModule) = with(SuProvider.moduleManager) {
+        when (module.state) {
+            State.ENABLE -> LocalUiState(
+                alpha = 1f,
+                decoration = TextDecoration.None,
+                toggle = {
+                    disable(module.id)
+                    getLocal(module.id)
+                },
+                change = {
+                    remove(module.id)
+                    getLocal(module.id)
+                }
+            )
 
-        State.DISABLE -> LocalUiState(
-            alpha = 0.5f,
-            toggle = {
-                mm.enable(module.id)
-                getLocal(module.id)
-            },
-            change = {
-                mm.remove(module.id)
-                getLocal(module.id)
-            }
-        )
+            State.DISABLE -> LocalUiState(
+                alpha = 0.5f,
+                toggle = {
+                    enable(module.id)
+                    getLocal(module.id)
+                },
+                change = {
+                    remove(module.id)
+                    getLocal(module.id)
+                }
+            )
 
-        State.REMOVE -> LocalUiState(
-            alpha = 0.5f,
-            decoration = TextDecoration.LineThrough,
-            change = {
-                mm.enable(module.id)
-                getLocal(module.id)
-            }
-        )
-        State.UPDATE -> LocalUiState()
+            State.REMOVE -> LocalUiState(
+                alpha = 0.5f,
+                decoration = TextDecoration.LineThrough,
+                change = {
+                    enable(module.id)
+                    getLocal(module.id)
+                }
+            )
+
+            State.UPDATE -> LocalUiState()
+        }
     }
 
     @Composable

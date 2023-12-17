@@ -29,7 +29,6 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
-import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.toDateTime
 
@@ -38,7 +37,6 @@ fun OverviewPage(
     online: OnlineModule,
     item: VersionItem?,
     local: LocalModule,
-    localState: LocalState?,
     isProviderAlive: Boolean,
     notifyUpdates: Boolean,
     setUpdatesTag: (Boolean) -> Unit,
@@ -79,16 +77,13 @@ fun OverviewPage(
         Divider(thickness = 0.9.dp)
     }
 
-    if (localState != null) {
-        LocalItem(
-            local = local,
-            state = localState,
-            notifyUpdates = notifyUpdates,
-            setUpdatesTag = setUpdatesTag
-        )
+    LocalItem(
+        local = local,
+        notifyUpdates = notifyUpdates,
+        setUpdatesTag = setUpdatesTag
+    )
 
-        Divider(thickness = 0.9.dp)
-    }
+    Divider(thickness = 0.9.dp)
 }
 
 @Composable
@@ -144,7 +139,6 @@ private fun CloudItem(
 @Composable
 private fun LocalItem(
     local: LocalModule,
-    state: LocalState,
     notifyUpdates: Boolean,
     setUpdatesTag: (Boolean) -> Unit
 ) = Column(
@@ -196,10 +190,12 @@ private fun LocalItem(
         )
     }
 
-    ValueItem(
-        key = stringResource(id = R.string.view_module_last_updated),
-        value = state.lastUpdated?.toDateTime()
-    )
+    if (local.lastUpdated != 0L) {
+        ValueItem(
+            key = stringResource(id = R.string.view_module_last_updated),
+            value = local.lastUpdated.toDateTime()
+        )
+    }
 }
 
 @Composable

@@ -154,7 +154,8 @@ class ModuleManagerImpl(
             author = props.getOrDefault("author", ""),
             description = props.getOrDefault("description", ""),
             updateJson = props.getOrDefault("updateJson", ""),
-            state = readState(moduleDir)
+            state = readState(moduleDir),
+            lastUpdated = readLastUpdated(moduleDir)
         )
     }
 
@@ -174,6 +175,17 @@ class ModuleManagerImpl(
         return State.ENABLE
     }
 
+    private fun readLastUpdated(path: File): Long {
+        MODULE_FILES.forEach { filename ->
+            val file = path.resolve(filename)
+            if (file.exists()) {
+                return file.lastModified()
+            }
+        }
+
+        return 0L
+    }
+
     private fun String.exec() = ShellUtils.fastCmd(shell, this)
 
     private fun String.execResult() = ShellUtils.fastCmdResult(shell, this)
@@ -182,5 +194,10 @@ class ModuleManagerImpl(
         const val PROP_FILE = "module.prop"
         const val MODULES_PATH = "/data/adb/modules"
         const val TMP_PATH = "/data/local/tmp"
+
+        val MODULE_FILES = listOf(
+            "post-fs-data.sh", "service.sh", "uninstall.sh",
+            "system", "system.prop", "module.prop"
+        )
     }
 }

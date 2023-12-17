@@ -14,12 +14,9 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.model.online.VersionItem
-import com.sanmer.mrepo.model.state.LocalState
-import com.sanmer.mrepo.model.state.LocalState.Companion.createState
 import com.sanmer.mrepo.provider.SuProvider
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.ui.navigation.graphs.RepositoryScreen
-import com.topjohnwu.superuser.nio.FileSystemManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,11 +28,6 @@ class ModuleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : DownloadViewModel() {
     val isProviderAlive get() = SuProvider.isAlive
-
-    private val fs get() = when {
-        isProviderAlive -> SuProvider.fileSystemManager
-        else -> FileSystemManager.getLocal()
-    }
 
     private val moduleId = getModuleId(savedStateHandle)
     var online: OnlineModule by mutableStateOf(OnlineModule.example())
@@ -55,8 +47,6 @@ class ModuleViewModel @Inject constructor(
 
     val localVersionCode get() = if (notifyUpdates) local.versionCode else Int.MAX_VALUE
 
-    var localState: LocalState? by mutableStateOf(null)
-        private set
     val versions = mutableStateListOf<Pair<Repo, VersionItem>>()
     val tracks = mutableStateListOf<Pair<Repo, TrackJson>>()
 
@@ -98,8 +88,6 @@ class ModuleViewModel @Inject constructor(
         }
 
         if (!installed) return@launch
-
-        localState = local.createState(fs)
 
         val updateJson = UpdateJson.load(local.updateJson)
         updateJson?.toItemOrNull()?.let {

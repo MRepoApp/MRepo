@@ -12,7 +12,8 @@ data class LocalModule(
     val author: String,
     val description: String,
     val updateJson: String,
-    val state: State
+    val state: State,
+    val lastUpdated: Long
 ) : Parcelable {
     val versionDisplay get() = ModuleUtils.getVersionDisplay(version, versionCode)
 
@@ -24,7 +25,8 @@ data class LocalModule(
         author = parcel.readString() ?: "",
         description = parcel.readString() ?: "",
         updateJson = parcel.readString() ?: "",
-        state = parcel.readString()?.let(State::valueOf) ?: State.DISABLE
+        state = parcel.readString()?.let(State::valueOf) ?: State.DISABLE,
+        lastUpdated = parcel.readLong()
     )
 
     override fun equals(other: Any?): Boolean {
@@ -47,6 +49,7 @@ data class LocalModule(
         parcel.writeString(description)
         parcel.writeString(updateJson)
         parcel.writeString(state.name)
+        parcel.writeLong(lastUpdated)
     }
 
     override fun describeContents(): Int {
@@ -73,7 +76,8 @@ data class LocalModule(
             author = "Sanmer",
             description = "This is an example!",
             updateJson = "",
-            state = State.ENABLE
+            state = State.ENABLE,
+            lastUpdated = 0L
         )
     }
 }

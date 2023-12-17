@@ -76,7 +76,6 @@ fun ViewScreen(
                         online = viewModel.online,
                         item = viewModel.versions.firstOrNull()?.second,
                         local = viewModel.local,
-                        localState = viewModel.localState,
                         notifyUpdates = viewModel.notifyUpdates,
                         isProviderAlive = viewModel.isProviderAlive,
                         setUpdatesTag = viewModel::setUpdatesTag,

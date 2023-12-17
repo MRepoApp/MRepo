@@ -34,14 +34,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
-import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.toDate
 
 @Composable
 fun ModuleItem(
     module: LocalModule,
-    state: LocalState,
     progress: Float,
     modifier: Modifier = Modifier,
     alpha: Float = 1f,
@@ -92,10 +90,10 @@ fun ModuleItem(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
-                    if (state.lastUpdated != null && menu.showUpdatedTime) {
+                    if (module.lastUpdated != 0L && menu.showUpdatedTime) {
                         Text(
                             text = stringResource(id = R.string.module_update_at,
-                                state.lastUpdated.toDate()),
+                                module.lastUpdated.toDate()),
                             style = MaterialTheme.typography.bodySmall,
                             textDecoration = decoration,
                             color = MaterialTheme.colorScheme.outline

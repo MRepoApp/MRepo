@@ -14,7 +14,8 @@ data class LocalModuleEntity(
     val author: String,
     val description: String,
     val state: String,
-    val updateJson: String
+    val updateJson: String,
+    val lastUpdated: Long
 )
 
 fun LocalModule.toEntity() = LocalModuleEntity(
@@ -25,7 +26,8 @@ fun LocalModule.toEntity() = LocalModuleEntity(
     author = author,
     description = description,
     state = state.name,
-    updateJson = updateJson
+    updateJson = updateJson,
+    lastUpdated = lastUpdated
 )
 
 fun LocalModuleEntity.toModule() = LocalModule(
@@ -36,7 +38,8 @@ fun LocalModuleEntity.toModule() = LocalModule(
     author = author,
     description = description,
     updateJson = updateJson,
-    state = State.valueOf(state)
+    state = State.valueOf(state),
+    lastUpdated = lastUpdated
 )
 
 @Entity(tableName = "localModules_updatable")

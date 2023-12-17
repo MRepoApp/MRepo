@@ -24,7 +24,7 @@ import com.sanmer.mrepo.database.entity.VersionItemEntity
         VersionItemEntity::class,
         LocalModuleEntity::class
     ],
-    version = 8
+    version = 9
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun repoDao(): RepoDao
@@ -45,7 +45,8 @@ abstract class AppDatabase : RoomDatabase() {
                     MIGRATION_4_5,
                     MIGRATION_5_6,
                     MIGRATION_6_7,
-                    MIGRATION_7_8
+                    MIGRATION_7_8,
+                    MIGRATION_8_9
                 )
                 .build()
 
@@ -173,6 +174,23 @@ abstract class AppDatabase : RoomDatabase() {
             it.execSQL("CREATE TABLE IF NOT EXISTS localModules_updatable (" +
                     "id TEXT NOT NULL, " +
                     "updatable INTEGER NOT NULL, " +
+                    "PRIMARY KEY(id))")
+
+            it.execSQL("DROP TABLE localModules")
+            it.execSQL("ALTER TABLE localModules_new RENAME TO localModules")
+        }
+
+        private val MIGRATION_8_9 = Migration(8, 9) {
+            it.execSQL("CREATE TABLE IF NOT EXISTS localModules_new (" +
+                    "id TEXT NOT NULL, " +
+                    "name TEXT NOT NULL, " +
+                    "version TEXT NOT NULL, " +
+                    "versionCode INTEGER NOT NULL, " +
+                    "author TEXT NOT NULL, " +
+                    "description TEXT NOT NULL, " +
+                    "state TEXT NOT NULL, " +
+                    "updateJson TEXT NOT NULL, " +
+                    "lastUpdated INTEGER NOT NULL, " +
                     "PRIMARY KEY(id))")
 
             it.execSQL("DROP TABLE localModules")

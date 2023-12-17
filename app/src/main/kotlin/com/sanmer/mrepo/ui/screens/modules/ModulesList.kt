@@ -30,14 +30,13 @@ import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.online.VersionItem
-import com.sanmer.mrepo.model.state.LocalState
 import com.sanmer.mrepo.ui.component.VersionItemBottomSheet
 import com.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
 import com.sanmer.mrepo.viewmodel.ModulesViewModel.Companion.LocalUiState
 
 @Composable
 fun ModulesList(
-    list: List<Pair<LocalState, LocalModule>>,
+    list: List<LocalModule>,
     state: LazyListState,
     isProviderAlive: Boolean,
     getUiState: @Composable (LocalModule) -> LocalUiState,
@@ -55,11 +54,10 @@ fun ModulesList(
     ) {
         items(
             items = list,
-            key = { it.second.id }
-        ) { (state, module) ->
+            key = { it.id }
+        ) { module ->
             ModuleItem(
                 module = module,
-                state = state,
                 isProviderAlive = isProviderAlive,
                 getUiState = getUiState,
                 getUpdateJson = getUpdateJson,
@@ -78,7 +76,6 @@ fun ModulesList(
 @Composable
 fun ModuleItem(
     module: LocalModule,
-    state: LocalState,
     isProviderAlive: Boolean,
     getUiState: @Composable (LocalModule) -> LocalUiState,
     getUpdateJson: @Composable (LocalModule) -> UpdateJson?,
@@ -103,7 +100,6 @@ fun ModuleItem(
 
     ModuleItem(
         module = module,
-        state = state,
         progress = progress,
         alpha = uiState.alpha,
         decoration = uiState.decoration,
