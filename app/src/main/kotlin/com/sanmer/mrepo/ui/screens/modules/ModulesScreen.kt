@@ -99,7 +99,8 @@ fun ModulesScreen(
         onBack = viewModel::closeSearch
     )
 
-    DisposableEffect(viewModel) {
+    DisposableEffect(viewModel.isProviderAlive) {
+        viewModel.loadDataOneTime()
         onDispose(viewModel::closeSearch)
     }
 

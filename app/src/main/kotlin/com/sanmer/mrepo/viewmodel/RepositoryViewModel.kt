@@ -42,6 +42,7 @@ class RepositoryViewModel @Inject constructor(
     )
     val online get() = valuesFlow.asStateFlow()
 
+    private var oneTimeFinished = false
     var isLoading by mutableStateOf(true)
         private set
     var isRefreshing by mutableStateOf(false)
@@ -57,15 +58,21 @@ class RepositoryViewModel @Inject constructor(
         dataObserver()
     }
 
+    fun loadDataOneTime() {
+        viewModelScope.launch {
+            if (!oneTimeFinished) {
+                modulesRepository.getRepoAll()
+                oneTimeFinished = true
+            }
+        }
+    }
+
     private fun dataObserver() {
         combine(
             localRepository.getOnlineAllAsFlow(),
             repositoryMenu,
             keyFlow,
         ) { list, menu, key ->
-
-            Timber.d("online list, size = ${list.size}")
-
             valuesFlow.value = list.map {
                 it.createState(
                     local = localRepository.getLocalByIdOrNull(it.id),
@@ -127,9 +134,11 @@ class RepositoryViewModel @Inject constructor(
         keyFlow.value = ""
     }
 
-    fun getOnlineAll() = viewModelScope.launch {
-        refreshing {
-            modulesRepository.getRepoAll()
+    fun getOnlineAll() {
+        viewModelScope.launch {
+            refreshing {
+                modulesRepository.getRepoAll()
+            }
         }
     }
 

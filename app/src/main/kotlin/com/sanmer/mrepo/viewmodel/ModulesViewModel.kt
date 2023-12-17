@@ -51,6 +51,7 @@ class ModulesViewModel @Inject constructor(
     )
     val local get() = valuesFlow.asStateFlow()
 
+    private var oneTimeFinished = false
     var isLoading by mutableStateOf(true)
         private set
     var isRefreshing by mutableStateOf(false)
@@ -68,6 +69,15 @@ class ModulesViewModel @Inject constructor(
         dataObserver()
     }
 
+    fun loadDataOneTime() {
+        viewModelScope.launch {
+            if (!oneTimeFinished && isProviderAlive) {
+                modulesRepository.getLocalAll()
+                oneTimeFinished = true
+            }
+        }
+    }
+
     private fun dataObserver() {
         combine(
             localRepository.getLocalAllAsFlow(),
@@ -75,8 +85,6 @@ class ModulesViewModel @Inject constructor(
             keyFlow,
         ) { list, menu, key ->
             if (list.isEmpty()) return@combine
-
-            Timber.d("local list, size = ${list.size}")
 
             valuesFlow.value  = list.sortedWith(
                 comparator(menu.option, menu.descending)

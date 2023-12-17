@@ -12,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.work.WorkManager
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.app.utils.NotificationUtils
@@ -25,20 +24,14 @@ import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.theme.AppTheme
-import com.sanmer.mrepo.works.LocalWork
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var userPreferencesRepository: UserPreferencesRepository
-
-    @Inject
-    lateinit var localRepository: LocalRepository
-
-    private val workManger by lazy { WorkManager.getInstance(this) }
+    @Inject lateinit var userPreferencesRepository: UserPreferencesRepository
+    @Inject lateinit var localRepository: LocalRepository
 
     private var isLoading by mutableStateOf(true)
 
@@ -68,12 +61,6 @@ class MainActivity : ComponentActivity() {
 
                 ProviderCompat.init(userPreferences!!.workingMode)
                 NetworkUtils.setEnableDoh(userPreferences!!.useDoh)
-            }
-
-            LaunchedEffect(ProviderCompat.isAlive) {
-                if (ProviderCompat.isAlive) {
-                    workManger.enqueue(LocalWork.OneTimeWork)
-                }
             }
 
             CompositionLocalProvider(
