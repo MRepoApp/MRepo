@@ -53,7 +53,7 @@ class ServiceManagerImpl : IServiceManager.Stub() {
 
     private fun getPlatform(): Platform {
         return when {
-            ShellUtils.fastCmdResult(main,"which ${Platform.MAGISK.manager}") -> Platform.MAGISK
+            ShellUtils.fastCmdResult(main,"nsenter --mount=/proc/1/ns/mnt which ${Platform.MAGISK.manager}") -> Platform.MAGISK
             File(Platform.KERNELSU.manager).exists() -> Platform.KERNELSU
             else -> throw IllegalArgumentException("unsupported platform: $seLinuxContext")
         }
