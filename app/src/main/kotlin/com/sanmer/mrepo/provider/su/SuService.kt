@@ -7,7 +7,7 @@ import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.provider.impl.ServiceManagerImpl
 import com.topjohnwu.superuser.ipc.RootService
 
-internal class SuService : RootService() {
+class SuService : RootService() {
     override fun onBind(intent: Intent): IBinder {
         return ServiceManagerImpl()
     }
