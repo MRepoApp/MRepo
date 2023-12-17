@@ -4,11 +4,7 @@
     <string name="repository_empty">O Repositório está vazio</string>
     <string name="setup_mode">Modo de Operação</string>
     <string name="setup_root_title">Enraizado</string>
-    <string name="setup_root_desc1">Requer permissão de acesso enraizado via Magisk ou KernelSU</string>
-    <string name="setup_root_desc2">Disponível: Todas as Funcionalidades</string>
     <string name="setup_non_root_title">Não Enraizado</string>
-    <string name="setup_non_root_desc1">Não requer permissões de acesso enraizado</string>
-    <string name="setup_non_root_desc2">Disponível: Baixar módulos</string>
     <string name="install_flashing">Descarregando</string>
     <string name="install_done">Concluído</string>
     <string name="install_failure">Falha</string>

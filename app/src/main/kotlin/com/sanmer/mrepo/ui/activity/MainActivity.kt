@@ -20,7 +20,7 @@ import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.network.NetworkUtils
-import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
@@ -72,15 +72,12 @@ class MainActivity : ComponentActivity() {
                     localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
                 }
 
-                if (userPreferences!!.isRoot && !SuProvider.isAlive) {
-                    SuProvider.init()
-                }
-
+                ProviderCompat.init(userPreferences!!.workingMode)
                 NetworkUtils.setEnableDoh(userPreferences!!.useDoh)
             }
 
-            LaunchedEffect(SuProvider.isAlive) {
-                if (SuProvider.isAlive) {
+            LaunchedEffect(ProviderCompat.isAlive) {
+                if (ProviderCompat.isAlive) {
                     workManger.enqueue(LocalWork.OneTimeWork)
                 }
             }

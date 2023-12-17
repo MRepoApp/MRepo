@@ -3,11 +3,10 @@
     <!-- Setup -->
     <string name="setup_mode">Working Mode</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Require Root access from Magisk or KernelSU</string>
-    <string name="setup_root_desc2">Available: full functionality</string>
+    <string name="setup_root_desc">Requires Root permissions provided by Magisk or KernelSU</string>
+    <string name="setup_shizuku_desc">Requires permission provided by Sui or Shizuku (root)</string>
     <string name="setup_non_root_title">Non-Root</string>
-    <string name="setup_non_root_desc1">Does not require Root access</string>
-    <string name="setup_non_root_desc2">Available: download module</string>
+    <string name="setup_non_root_desc">Not require Root permissions, only the download module function is available</string>
 
     <!-- Install -->
     <string name="install_screen_title">Installation</string>
@@ -58,6 +57,7 @@
 
     <!-- Modules -->
     <string name="modules_empty">No modules found</string>
+    <!-- Module Item -->
     <string name="module_version_author">%1$s by %2$s</string>
     <string name="module_remove">Remove</string>
     <string name="module_restore">Restore</string>

@@ -11,7 +11,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.provider.stub.IInstallCallback
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -81,7 +81,7 @@ class InstallViewModel @Inject constructor(
         }
 
         console.add("- Installing ${zipFile.name}")
-        SuProvider.moduleManager.install(zipFile.path, callback)
+        ProviderCompat.moduleManager.install(zipFile.path, callback)
 
         context.tmpDir.deleteRecursively()
     }
@@ -93,7 +93,7 @@ class InstallViewModel @Inject constructor(
     }
 
     private fun deleteBySu() = runCatching {
-        SuProvider.fileManager.deleteOnExit(zipFile.path)
+        ProviderCompat.fileManager.deleteOnExit(zipFile.path)
     }.onFailure {
         Timber.e(it)
     }.onSuccess {

@@ -2,10 +2,7 @@
 <resources>
     <string name="settings_root_access">تصريح الروت: %s</string>
     <string name="setup_root_title">روت</string>
-    <string name="setup_root_desc2">متاح : الوصول الكامل للوظائف</string>
     <string name="setup_non_root_title">بدون روت</string>
-    <string name="setup_non_root_desc1">لا يتطلب خصائص الروت</string>
-    <string name="setup_non_root_desc2">متاح : تحميل الملف</string>
     <string name="install_flashing">تفليش</string>
     <string name="install_done">إنتهى</string>
     <string name="install_failure">فشل</string>
@@ -16,7 +13,6 @@
     <string name="settings_root_none">غير متوفر</string>
     <string name="settings_non_root_desc">الوظائف محدودة</string>
     <string name="setup_mode">نمط العمل</string>
-    <string name="setup_root_desc1">مطلوب تصريح الوصول إلى خصائص الروت من ماجيسك أو أي برنامج مسؤول آخر</string>
     <string name="page_settings">الإعدادات</string>
     <string name="settings_root_granted">تم التصريح</string>
     <string name="settings_root_not_available">غير متاح</string>

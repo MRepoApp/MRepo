@@ -15,7 +15,7 @@ import java.io.File
 
 data class UserPreferencesExt(
     val workingMode: WorkingMode,
-    val isRoot: Boolean = workingMode == WorkingMode.MODE_ROOT,
+    val isRoot: Boolean = workingMode != WorkingMode.MODE_NON_ROOT,
     val isNonRoot: Boolean = workingMode == WorkingMode.MODE_NON_ROOT,
     val isSetup: Boolean = workingMode == WorkingMode.FIRST_SETUP,
     val darkMode: DarkMode,

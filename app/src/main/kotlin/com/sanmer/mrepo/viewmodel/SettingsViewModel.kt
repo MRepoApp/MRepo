@@ -3,7 +3,7 @@ package com.sanmer.mrepo.viewmodel
 import androidx.lifecycle.ViewModel
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.WorkingMode
-import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -14,10 +14,10 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
-    val isProviderAlive get() = SuProvider.isAlive
+    val isProviderAlive get() = ProviderCompat.isAlive
 
     val version get() = when {
-        isProviderAlive -> with(SuProvider.moduleManager) {
+        isProviderAlive -> with(ProviderCompat.moduleManager) {
             "$version (${versionCode})"
         }
         else -> ""

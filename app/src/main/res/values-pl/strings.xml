@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="setup_mode">Tryb pracy</string>
-    <string name="setup_root_desc1">Wymaga dostępu do roota z Magisk lub KernelSU</string>
     <string name="repository_empty">Repozytorium jest puste</string>
     <string name="view_module_local">Lokalnie</string>
     <string name="view_module_version">Wersja</string>
@@ -13,9 +12,6 @@
     <string name="app_theme_palette">Paleta barw</string>
     <string name="setup_root_title">Root</string>
     <string name="setup_non_root_title">Bez roota</string>
-    <string name="setup_non_root_desc1">Nie wymaga dostępu do roota</string>
-    <string name="setup_non_root_desc2">Dostępne: pobieranie modułów</string>
-    <string name="setup_root_desc2">Dostępne: pełna funkcjonalność</string>
     <string name="install_flashing">Wgrywanie</string>
     <string name="install_done">Ukończona</string>
     <string name="install_failure">Nieudana</string>

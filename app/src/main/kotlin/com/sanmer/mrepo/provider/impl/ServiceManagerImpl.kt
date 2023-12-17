@@ -8,6 +8,7 @@ import com.sanmer.mrepo.provider.stub.IServiceManager
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import java.io.File
+import kotlin.system.exitProcess
 
 class ServiceManagerImpl : IServiceManager.Stub() {
     private val main by lazy {
@@ -44,6 +45,10 @@ class ServiceManagerImpl : IServiceManager.Stub() {
 
     override fun getFileManager(): IFileManager {
         return fileManager
+    }
+
+    override fun destroy() {
+        exitProcess(0)
     }
 
     private fun getPlatform(): Platform {

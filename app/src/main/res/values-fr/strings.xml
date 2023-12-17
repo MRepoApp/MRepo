@@ -2,11 +2,7 @@
 <resources>
     <string name="setup_mode">Traitement en cours</string>
     <string name="setup_root_title">Raçine</string>
-    <string name="setup_root_desc1">Accès à la racine requis via Magisk ou KernelSU</string>
-    <string name="setup_root_desc2">Disponible  : toutes les fonctionnalités</string>
     <string name="setup_non_root_title">Sans racine</string>
-    <string name="setup_non_root_desc1">Accès à la racine non requis</string>
-    <string name="setup_non_root_desc2">Disponible : téléchargement de modules</string>
     <string name="install_flashing">Flashage</string>
     <string name="install_done">Terminé</string>
     <string name="install_failure">Échec</string>

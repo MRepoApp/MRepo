@@ -7,4 +7,5 @@ enum WorkingMode {
   FIRST_SETUP = 0;
   MODE_ROOT = 1;
   MODE_NON_ROOT = 2;
+  MODE_SHIZUKU = 3;
 }

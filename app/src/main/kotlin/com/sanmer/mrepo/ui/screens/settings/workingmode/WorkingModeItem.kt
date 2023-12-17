@@ -25,8 +25,7 @@ import com.sanmer.mrepo.R
 @Composable
 fun WorkingModeItem(
     title: String,
-    desc1: String,
-    desc2: String,
+    desc: String,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     onClick: () -> Unit
@@ -53,18 +52,10 @@ fun WorkingModeItem(
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = desc1,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                text = desc2,
+                text = desc,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

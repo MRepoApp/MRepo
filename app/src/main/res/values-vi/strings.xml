@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="setup_mode">Chế độ làm việc</string>
-    <string name="setup_root_desc1">Yêu cầu quyền truy cập Root từ Magisk hoặc KernelSU</string>
-    <string name="setup_root_desc2">Có sẵn: đầy đủ chức năng</string>
     <string name="setup_non_root_title">Không root</string>
-    <string name="setup_non_root_desc1">Không yêu cầu quyền truy cập Root</string>
-    <string name="setup_non_root_desc2">Có sẵn: mô-đun tải xuống</string>
     <string name="install_screen_title">Cài đặt</string>
     <string name="install_done">Xong</string>
     <string name="setup_root_title">Root</string>

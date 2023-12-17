@@ -57,16 +57,21 @@ fun WorkingModeScreen(
 
             WorkingModeItem(
                 title = stringResource(id = R.string.setup_root_title),
-                desc1 = stringResource(id = R.string.setup_root_desc1),
-                desc2 = stringResource(id = R.string.setup_root_desc2),
-                selected = userPreferences.isRoot,
+                desc = stringResource(id = R.string.setup_root_desc),
+                selected = userPreferences.workingMode == WorkingMode.MODE_ROOT,
                 onClick = { viewModel.setWorkingMode(WorkingMode.MODE_ROOT) }
             )
 
             WorkingModeItem(
+                title = stringResource(id = R.string.setup_shizuku_title),
+                desc = stringResource(id = R.string.setup_shizuku_desc),
+                selected = userPreferences.workingMode == WorkingMode.MODE_SHIZUKU,
+                onClick = { viewModel.setWorkingMode(WorkingMode.MODE_SHIZUKU) }
+            )
+
+            WorkingModeItem(
                 title = stringResource(id = R.string.setup_non_root_title),
-                desc1 = stringResource(id = R.string.setup_non_root_desc1),
-                desc2 = stringResource(id = R.string.setup_non_root_desc2),
+                desc = stringResource(id = R.string.setup_non_root_desc),
                 selected = userPreferences.isNonRoot,
                 onClick = { viewModel.setWorkingMode(WorkingMode.MODE_NON_ROOT) }
             )
@@ -79,7 +84,7 @@ private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
 ) = NavigateUpTopBar(
-    title = stringResource(id = R.string.settings_mode),
+    title = stringResource(id = R.string.setup_mode),
     scrollBehavior = scrollBehavior,
     navController = navController
 )
