@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.provider.stub;
 
+import com.sanmer.mrepo.provider.stub.IFileManager;
 import com.sanmer.mrepo.provider.stub.IModuleManager;
 
 interface IServiceManager {
@@ -7,5 +8,5 @@ interface IServiceManager {
     int getPid();
     String getSELinuxContext();
     IModuleManager getModuleManager();
-    IBinder getFileSystemService();
+    IFileManager getFileManager();
 }

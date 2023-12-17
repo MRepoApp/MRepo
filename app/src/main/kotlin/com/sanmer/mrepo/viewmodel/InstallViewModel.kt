@@ -93,12 +93,11 @@ class InstallViewModel @Inject constructor(
     }
 
     private fun deleteBySu() = runCatching {
-        SuProvider.fileSystemManager
-            .getFile(zipFile.absolutePath).apply {
-                if (exists()) delete()
-            }
+        SuProvider.fileManager.deleteOnExit(zipFile.path)
     }.onFailure {
         Timber.e(it)
+    }.onSuccess {
+        Timber.d("deleteOnExit: $it")
     }
 
     companion object {

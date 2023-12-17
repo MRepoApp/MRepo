@@ -6,6 +6,7 @@ import android.os.IBinder
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.sanmer.mrepo.provider.stub.IFileManager
 import com.sanmer.mrepo.provider.stub.IModuleManager
 import com.sanmer.mrepo.provider.stub.IProvider
 import com.sanmer.mrepo.provider.stub.IServiceManager
@@ -13,7 +14,6 @@ import com.sanmer.mrepo.provider.su.SuService
 import com.sanmer.mrepo.provider.su.SuShellInitializer
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
-import com.topjohnwu.superuser.nio.FileSystemManager
 import timber.log.Timber
 
 object SuProvider : IProvider {
@@ -28,8 +28,7 @@ object SuProvider : IProvider {
     override val pid: Int get() = mService.pid
     override val seLinuxContext: String get() = mService.seLinuxContext
     override val moduleManager: IModuleManager get() = mService.moduleManager
-    override val fileSystemManager: FileSystemManager get() =
-        FileSystemManager.getRemote(mService.fileSystemService)
+    override val fileManager: IFileManager get() = mService.fileManager
 
     override var isAlive by mutableStateOf(false)
         private set

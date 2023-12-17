@@ -1,13 +1,12 @@
 package com.sanmer.mrepo.provider.impl
 
-import android.os.IBinder
 import android.os.SELinux
 import android.system.Os
+import com.sanmer.mrepo.provider.stub.IFileManager
 import com.sanmer.mrepo.provider.stub.IModuleManager
 import com.sanmer.mrepo.provider.stub.IServiceManager
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
-import com.topjohnwu.superuser.nio.FileSystemManager
 import java.io.File
 
 class ServiceManagerImpl : IServiceManager.Stub() {
@@ -21,6 +20,10 @@ class ServiceManagerImpl : IServiceManager.Stub() {
             shell = main,
             platform = getPlatform()
         )
+    }
+
+    private val fileManager by lazy {
+        FileManagerImpl()
     }
 
     override fun getUid(): Int {
@@ -39,8 +42,8 @@ class ServiceManagerImpl : IServiceManager.Stub() {
         return moduleManager
     }
 
-    override fun getFileSystemService(): IBinder {
-        return FileSystemManager.getService()
+    override fun getFileManager(): IFileManager {
+        return fileManager
     }
 
     private fun getPlatform(): Platform {
