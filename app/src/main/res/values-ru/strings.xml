@@ -4,10 +4,7 @@
     <string name="settings_delete_zip_desc">Удаление zip файла модуля после успешной установки. Будет выполнено суперпользователем</string>
     <string name="setup_mode">Режим работы</string>
     <string name="setup_root_title">Рут</string>
-    <string name="setup_root_desc1">Запрос рут-доступа от Magisk или KernelSU</string>
-    <string name="setup_root_desc2">Доступно: полный функционал</string>
     <string name="setup_non_root_title">Без рут</string>
-    <string name="setup_non_root_desc1">Не требует рут-доступа</string>
     <string name="install_flashing">Прошивка</string>
     <string name="install_done">Выполнено</string>
     <string name="install_failure">Ошибка</string>
@@ -56,7 +53,6 @@
     <string name="notification_name_download">Работа загрузки</string>
     <string name="search_empty">Список пустой</string>
     <string name="unknown_error">Неизвестная ошибка</string>
-    <string name="setup_non_root_desc2">Доступно: загрузка модулей</string>
     <string name="page_settings">Настройки</string>
     <string name="view_module_description">Описание</string>
     <string name="view_module_version">Версия</string>

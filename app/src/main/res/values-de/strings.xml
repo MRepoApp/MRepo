@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Benötigt Root Zugriff von Magisk oder KernelSU</string>
-    <string name="setup_root_desc2">Volle Funktionalität</string>
     <string name="setup_non_root_title">Non-Root</string>
-    <string name="setup_non_root_desc2">Nur Module herunterladen</string>
     <string name="install_flashing">Installiet</string>
     <string name="install_failure">Fehlgeschlagen</string>
     <string name="license_title">Lizenz anschauen</string>
@@ -91,7 +88,6 @@
     <string name="search_placeholder">Suche…</string>
     <string name="unknown_error">Unbekannter Fehler</string>
     <string name="setup_mode">Arbeitsmodus</string>
-    <string name="setup_non_root_desc1">Benötigt keinen Root Zugriff</string>
     <string name="page_modules">Module</string>
     <string name="repository_empty">Repository ist leer</string>
     <string name="view_module_version_dialog_desc">Möchtest du diese Version installieren oder herunterladen\?</string>

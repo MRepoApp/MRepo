@@ -17,7 +17,7 @@ import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
-import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -37,7 +37,7 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : DownloadViewModel() {
-    val isProviderAlive get() = SuProvider.isAlive
+    val isProviderAlive get() = ProviderCompat.isAlive
 
     private val modulesMenu get() = userPreferencesRepository.data
         .map { it.modulesMenu }
@@ -150,13 +150,13 @@ class ModulesViewModel @Inject constructor(
                 alpha = 1f,
                 decoration = TextDecoration.None,
                 toggle = {
-                    SuProvider.moduleManager
+                    ProviderCompat.moduleManager
                         .disable(module.id)
 
                     getLocal(module.id)
                 },
                 change = {
-                    SuProvider.moduleManager
+                    ProviderCompat.moduleManager
                         .remove(module.id)
 
                     getLocal(module.id)
@@ -166,13 +166,13 @@ class ModulesViewModel @Inject constructor(
             State.DISABLE -> LocalUiState(
                 alpha = 0.5f,
                 toggle = {
-                    SuProvider.moduleManager
+                    ProviderCompat.moduleManager
                         .enable(module.id)
 
                     getLocal(module.id)
                 },
                 change = {
-                    SuProvider.moduleManager
+                    ProviderCompat.moduleManager
                         .remove(module.id)
 
                     getLocal(module.id)
@@ -183,7 +183,7 @@ class ModulesViewModel @Inject constructor(
                 alpha = 0.5f,
                 decoration = TextDecoration.LineThrough,
                 change = {
-                    SuProvider.moduleManager
+                    ProviderCompat.moduleManager
                         .enable(module.id)
 
                     getLocal(module.id)

@@ -26,6 +26,7 @@ ksp = "1.9.21-1.0.15"
 libsu = "5.2.2"
 protobuf = "3.25.1"
 protobufPlugin = "0.9.4"
+shizuku = "13.1.5"
 squareRetrofit = "2.9.0"
 squareOkhttp = "4.12.0"
 squareMoshi = "1.15.0"
@@ -68,6 +69,8 @@ libsu-io = { group = "com.github.topjohnwu.libsu", name = "io", version.ref = "l
 libsu-service = { group = "com.github.topjohnwu.libsu", name = "service", version.ref = "libsu" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+rikka-shizuku-api = { module = "dev.rikka.shizuku:api", version.ref = "shizuku" }
+rikka-shizuku-provider = { module = "dev.rikka.shizuku:provider", version.ref = "shizuku" }
 square-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "squareRetrofit" }
 square-retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "squareRetrofit" }
 square-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "squareOkhttp" }

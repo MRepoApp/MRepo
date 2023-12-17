@@ -2,21 +2,20 @@ package com.sanmer.mrepo.provider
 
 import android.content.ComponentName
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.IBinder
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.sanmer.mrepo.provider.shizuku.ShizukuService
 import com.sanmer.mrepo.provider.stub.IFileManager
 import com.sanmer.mrepo.provider.stub.IModuleManager
 import com.sanmer.mrepo.provider.stub.IProvider
 import com.sanmer.mrepo.provider.stub.IServiceManager
-import com.sanmer.mrepo.provider.su.SuService
-import com.sanmer.mrepo.provider.su.SuShellInitializer
-import com.topjohnwu.superuser.Shell
-import com.topjohnwu.superuser.ipc.RootService
+import rikka.shizuku.Shizuku
 import timber.log.Timber
 
-object SuProvider : IProvider {
+object ShizukuProvider : IProvider, Shizuku.OnRequestPermissionResultListener {
     private var mServiceOrNull: IServiceManager? = null
     private val mService get() = checkNotNull(mServiceOrNull) {
         "IServiceManager haven't been received"
@@ -31,37 +30,58 @@ object SuProvider : IProvider {
     override var isAlive by mutableStateOf(false)
         private set
 
+    private var isGranted = false
+    private val isBinderAlive get() = Shizuku.pingBinder()
+
     init {
-        Shell.enableVerboseLogging = true
-        Shell.setDefaultBuilder(
-            Shell.Builder.create()
-                .setInitializers(SuShellInitializer::class.java)
-                .setTimeout(15)
-        )
+        if (isBinderAlive) {
+            isGranted = Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
+        }
     }
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             mServiceOrNull = IServiceManager.Stub.asInterface(service)
             isAlive = true
-            Timber.i("SuProvider: IServiceManager created")
-            Timber.d("SuProvider: uid = $uid, pid = $pid, context = $seLinuxContext")
+            Timber.i("ShizukuProvider: IServiceManager created")
+            Timber.d("ShizukuProvider: uid = $uid, pid = $pid, context = $seLinuxContext")
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
             mServiceOrNull = null
             isAlive = false
-            Timber.w("SuProvider: IServiceManager destroyed")
+            Timber.w("ShizukuProvider: IServiceManager destroyed")
         }
 
     }
 
     override fun init() {
-        RootService.bind(SuService.intent, connection)
+        if (!isBinderAlive) return
+
+        if (isGranted) {
+            if (Shizuku.getUid() == 2000) {
+                Timber.e("ShizukuProvider: unsupported platform, adb (uid == 2000)")
+                return
+            }
+
+            Shizuku.bindUserService(ShizukuService(), connection)
+        } else {
+            Shizuku.addRequestPermissionResultListener(this)
+            Shizuku.requestPermission(0)
+        }
     }
 
     override fun destroy() {
-        RootService.stop(SuService.intent)
+        if (!isBinderAlive) return
+
+        Shizuku.unbindUserService(ShizukuService(), connection, true)
     }
 
+    override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
+        isGranted = grantResult == PackageManager.PERMISSION_GRANTED
+        if (isGranted) {
+            Shizuku.removeRequestPermissionResultListener(this)
+            init()
+        }
+    }
 }

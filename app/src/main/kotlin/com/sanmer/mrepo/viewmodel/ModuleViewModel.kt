@@ -14,7 +14,7 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.model.online.VersionItem
-import com.sanmer.mrepo.provider.SuProvider
+import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.ui.navigation.graphs.RepositoryScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +27,7 @@ class ModuleViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     savedStateHandle: SavedStateHandle
 ) : DownloadViewModel() {
-    val isProviderAlive get() = SuProvider.isAlive
+    val isProviderAlive get() = ProviderCompat.isAlive
 
     private val moduleId = getModuleId(savedStateHandle)
     var online: OnlineModule by mutableStateOf(OnlineModule.example())

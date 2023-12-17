@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.navigation.graphs.SettingsScreen
@@ -88,12 +89,13 @@ fun SettingsScreen(
 
             SettingNormalItem(
                 icon = R.drawable.components,
-                title = stringResource(id = R.string.settings_mode),
-                desc = if (userPreferences.isRoot) {
-                    stringResource(id = R.string.settings_mode_root)
-                } else {
-                    stringResource(id = R.string.settings_mode_non_root)
-                },
+                title = stringResource(id = R.string.setup_mode),
+                desc = stringResource(id = when (userPreferences.workingMode) {
+                    WorkingMode.MODE_ROOT -> R.string.setup_root_title
+                    WorkingMode.MODE_SHIZUKU -> R.string.setup_shizuku_title
+                    WorkingMode.MODE_NON_ROOT -> R.string.setup_non_root_title
+                    else -> R.string.settings_root_none
+                }),
                 onClick = {
                     navController.navigateSingleTopTo(SettingsScreen.WorkingMode.route)
                 }

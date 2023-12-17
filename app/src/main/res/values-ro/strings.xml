@@ -26,10 +26,7 @@
     <string name="app_theme_dark_theme_auto">Automat</string>
     <string name="app_theme_dark_theme_light">Luminoasă</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Necesită acces root de la Magisk sau KernelSU</string>
-    <string name="setup_root_desc2">Disponibil: funcționalitate completă</string>
     <string name="setup_non_root_title">Fără acces root</string>
-    <string name="setup_non_root_desc1">Nu necesită acces root</string>
     <string name="install_flashing">Instalare</string>
     <string name="install_done">Finalizat</string>
     <string name="install_failure">Eșuat</string>
@@ -39,7 +36,6 @@
     <string name="page_modules">Module</string>
     <string name="repo_options_update">Actualizare</string>
     <string name="setup_mode">Mod de funcționare</string>
-    <string name="setup_non_root_desc2">Disponibil: descărcare modul</string>
     <string name="settings_non_root_desc">Funcționalitatea este limitată</string>
     <string name="settings_menu_reboot_userspace">Repornire rapidă</string>
     <string name="settings_menu_reboot_bootloader">Repornire în Bootloader</string>

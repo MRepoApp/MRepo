@@ -8,6 +8,7 @@ import com.sanmer.mrepo.provider.stub.IServiceManager
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import java.io.File
+import kotlin.system.exitProcess
 
 class ServiceManagerImpl : IServiceManager.Stub() {
     private val main by lazy {
@@ -46,9 +47,13 @@ class ServiceManagerImpl : IServiceManager.Stub() {
         return fileManager
     }
 
+    override fun destroy() {
+        exitProcess(0)
+    }
+
     private fun getPlatform(): Platform {
         return when {
-            ShellUtils.fastCmdResult(main,"which ${Platform.MAGISK.manager}") -> Platform.MAGISK
+            ShellUtils.fastCmdResult(main,"nsenter --mount=/proc/1/ns/mnt which ${Platform.MAGISK.manager}") -> Platform.MAGISK
             File(Platform.KERNELSU.manager).exists() -> Platform.KERNELSU
             else -> throw IllegalArgumentException("unsupported platform: $seLinuxContext")
         }

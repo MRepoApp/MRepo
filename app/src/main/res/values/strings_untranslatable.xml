@@ -2,14 +2,14 @@
 <resources>
     <string name="app_name" translatable="false">MRepo</string>
 
+    <!-- Setup -->
+    <string name="setup_shizuku_title" translatable="false">Shizuku</string>
+
     <!-- Modules -->
     <!-- Module Item -->
     <string name="module_update_at" translatable="false">@string/repo_update_at</string>
 
     <!-- Settings -->
-    <string name="settings_mode" translatable="false">@string/setup_mode</string>
-    <string name="settings_mode_root" translatable="false">@string/setup_root_title</string>
-    <string name="settings_mode_non_root" translatable="false">@string/setup_non_root_title</string>
     <!-- Non Root Item -->
     <string name="settings_non_root" translatable="false">@string/setup_non_root_title</string>
     <!-- Repo -->

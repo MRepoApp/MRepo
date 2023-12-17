@@ -3,7 +3,6 @@
     <string name="unknown_error">不明なエラー</string>
     <string name="repo_add_dialog_title">リポジトリの追加</string>
     <string name="repo_options_delete">削除</string>
-    <string name="setup_non_root_desc2">利用可能: モジュールのダウンロード</string>
     <string name="repository_empty">リポジトリは空です</string>
     <string name="view_module_page_versions">バージョン</string>
     <string name="search_placeholder">検索…</string>
@@ -14,10 +13,7 @@
     <string name="page_modules">モジュール</string>
     <string name="setup_mode">動作モード</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Magisk または KernelSU からの Root アクセスが必要です</string>
-    <string name="setup_root_desc2">利用可能: 全ての機能</string>
     <string name="setup_non_root_title">非 Root</string>
-    <string name="setup_non_root_desc1">Root アクセスは不要です</string>
     <string name="license_osi_approved">OSI Approved</string>
     <string name="license_fsf_libre">FSF Libre</string>
     <string name="settings_menu_reboot">再起動</string>

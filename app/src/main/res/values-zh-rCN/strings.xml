@@ -3,11 +3,10 @@
     <!-- Setup -->
     <string name="setup_mode">工作模式</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">需要由 Magisk 或 KernelSU 提供 Root 权限</string>
-    <string name="setup_root_desc2">可用：完整功能</string>
+    <string name="setup_root_desc">需要由 Magisk 或 KernelSU 提供 Root 权限</string>
+    <string name="setup_shizuku_desc">需要由 Sui 或 Shizuku (root) 提供权限</string>
     <string name="setup_non_root_title">免 Root</string>
-    <string name="setup_non_root_desc1">不需要 Root 权限</string>
-    <string name="setup_non_root_desc2">可用：下载模块</string>
+    <string name="setup_non_root_desc">不需要 Root 权限，只有模块下载功能可用</string>
 
     <!-- Install -->
     <string name="install_screen_title">安装</string>

@@ -24,10 +24,7 @@
     <string name="settings_menu_reboot_recovery">Reiniciar a Recovery</string>
     <string name="module_download">Descargar</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc1">Requiere acceso Root desde Magisk o KernelSU</string>
-    <string name="setup_root_desc2">Disponible: funcionalidad completa</string>
     <string name="setup_non_root_title">Sin Root</string>
-    <string name="setup_non_root_desc2">Disponible: descargar módulo</string>
     <string name="install_flashing">Flasheando</string>
     <string name="install_done">Hecho</string>
     <string name="install_failure">Fallida</string>
@@ -42,7 +39,6 @@
     <string name="settings_root_not_available">No disponible</string>
     <string name="settings_root_none">Ninguno</string>
     <string name="setup_mode">Modo de trabajo</string>
-    <string name="setup_non_root_desc1">No requiere acceso Root</string>
     <string name="settings_non_root_desc">La funcionalidad es limitada</string>
     <string name="app_theme_palette">Colores del fondo</string>
     <string name="app_theme_dark_theme">Tema oscuro</string>
