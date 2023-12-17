@@ -145,17 +145,20 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
-    private fun createUiState(module: LocalModule) = with(SuProvider.moduleManager) {
-        when (module.state) {
+    private fun createUiState(module: LocalModule) = when (module.state) {
             State.ENABLE -> LocalUiState(
                 alpha = 1f,
                 decoration = TextDecoration.None,
                 toggle = {
-                    disable(module.id)
+                    SuProvider.moduleManager
+                        .disable(module.id)
+
                     getLocal(module.id)
                 },
                 change = {
-                    remove(module.id)
+                    SuProvider.moduleManager
+                        .remove(module.id)
+
                     getLocal(module.id)
                 }
             )
@@ -163,11 +166,15 @@ class ModulesViewModel @Inject constructor(
             State.DISABLE -> LocalUiState(
                 alpha = 0.5f,
                 toggle = {
-                    enable(module.id)
+                    SuProvider.moduleManager
+                        .enable(module.id)
+
                     getLocal(module.id)
                 },
                 change = {
-                    remove(module.id)
+                    SuProvider.moduleManager
+                        .remove(module.id)
+
                     getLocal(module.id)
                 }
             )
@@ -176,14 +183,15 @@ class ModulesViewModel @Inject constructor(
                 alpha = 0.5f,
                 decoration = TextDecoration.LineThrough,
                 change = {
-                    enable(module.id)
+                    SuProvider.moduleManager
+                        .enable(module.id)
+
                     getLocal(module.id)
                 }
             )
 
             State.UPDATE -> LocalUiState()
         }
-    }
 
     @Composable
     fun rememberUiState(module: LocalModule): LocalUiState {
