@@ -132,7 +132,7 @@
     <string name="message_loading">加载中…</string>
 
     <!-- Notification -->
-    <string name="notification_name_download">下载任务</string>
+    <string name="notification_name_download">下载服务</string>
 
     <!-- Search -->
     <string name="search_empty">空列表</string>

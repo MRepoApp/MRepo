@@ -14,7 +14,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.sanmer.mrepo.R
 
 object NotificationUtils {
-    const val CHANNEL_ID_DOWNLOAD = "download_work"
+    const val CHANNEL_ID_DOWNLOAD = "DOWNLOAD"
+    const val NOTIFICATION_ID_DOWNLOAD = 1024
 
     fun init(context: Context) {
         val channels = listOf(

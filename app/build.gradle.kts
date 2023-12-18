@@ -144,7 +144,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.viewModel.compose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.work.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
     implementation(libs.protobuf.kotlin.lite)

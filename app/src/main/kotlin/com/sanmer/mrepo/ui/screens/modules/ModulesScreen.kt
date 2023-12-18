@@ -45,12 +45,12 @@ import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
+import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
-import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
@@ -63,7 +63,6 @@ fun ModulesScreen(
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val userPreferences = LocalUserPreferences.current
 
     val list by viewModel.local.collectAsStateWithLifecycle()
 
@@ -82,13 +81,11 @@ fun ModulesScreen(
         onRefresh = { viewModel.getLocalAll() }
     )
 
-    val download: (String, VersionItem, Boolean) -> Unit = { prefix, item, install ->
-        viewModel.setFilePrefix(prefix)
-        viewModel.downloader(context, item) {
-            val zipFile = userPreferences.downloadPath.resolve(it)
+    val download: (LocalModule, VersionItem, Boolean) -> Unit = { module, item, install ->
+        viewModel.downloader(context, module, item) {
             if (install) {
                 navController.navigateSingleTopTo(
-                    InstallViewModel.putPath(zipFile)
+                    InstallViewModel.putPath(it)
                 )
             }
         }
@@ -158,8 +155,8 @@ fun ModulesScreen(
                 state = listState,
                 isProviderAlive = viewModel.isProviderAlive,
                 getUiState = { viewModel.rememberUiState(it) },
-                getUpdateJson = { viewModel.rememberUpdateJson(it) },
-                getProgress = { viewModel.rememberProgress(it) },
+                getVersionItem = { viewModel.getVersionItem(it) },
+                getProgress = { viewModel.getProgress(it) },
                 onDownload = download
             )
 

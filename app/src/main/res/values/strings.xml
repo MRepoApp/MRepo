@@ -133,7 +133,7 @@
     <string name="message_loading">Loading…</string>
 
     <!-- Notification -->
-    <string name="notification_name_download">Download Work</string>
+    <string name="notification_name_download">Download Service</string>
 
     <!-- Search -->
     <string name="search_empty">Empty list</string>

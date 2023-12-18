@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -11,24 +12,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
+import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
+import com.sanmer.mrepo.service.DownloadService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,7 +43,7 @@ class ModulesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
-) : DownloadViewModel() {
+) : ViewModel() {
     val isProviderAlive get() = ProviderCompat.isAlive
 
     private val modulesMenu get() = userPreferencesRepository.data
@@ -62,7 +69,7 @@ class ModulesViewModel @Inject constructor(
         isRefreshing = false
     }
 
-    private val updateJsonSaved = mutableStateMapOf<String, UpdateJson?>()
+    private val versionItemCache = mutableStateMapOf<String, VersionItem?>()
 
     init {
         Timber.d("ModulesViewModel init")
@@ -209,32 +216,80 @@ class ModulesViewModel @Inject constructor(
     }
 
     @Composable
-    fun rememberUpdateJson(module: LocalModule): UpdateJson? {
+    fun getVersionItem(module: LocalModule): VersionItem? {
+        val item by remember {
+            derivedStateOf {
+                versionItemCache[module.id]
+            }
+        }
+
         LaunchedEffect(key1 = module) {
             if (!localRepository.hasUpdatableTag(module.id)) {
-                updateJsonSaved.remove(module.id)
+                versionItemCache.remove(module.id)
                 return@LaunchedEffect
             }
 
-            if (updateJsonSaved.containsKey(module.id)) return@LaunchedEffect
+            if (versionItemCache.containsKey(module.id)) return@LaunchedEffect
 
-            val updateJson = if (module.updateJson.isNotBlank()) {
-                UpdateJson.load(module.updateJson)
+            val versionItem = if (module.updateJson.isNotBlank()) {
+                UpdateJson.load(module.updateJson)?.toItemOrNull()
             } else {
                 localRepository.getVersionById(module.id)
-                    .firstOrNull()?.let {
-                        UpdateJson(it)
-                    }
+                    .firstOrNull()
             }
 
-            updateJsonSaved[module.id] = updateJson
+            versionItemCache[module.id] = versionItem
         }
 
-        return remember {
-            derivedStateOf {
-                updateJsonSaved[module.id]
+        return item
+    }
+
+    fun downloader(
+        context: Context,
+        module: LocalModule,
+        item: VersionItem,
+        onSuccess: (File) -> Unit
+    ) {
+        viewModelScope.launch {
+            val downloadPath = userPreferencesRepository.data
+                .first().downloadPath
+
+            val filename = "${module.name}_${item.versionDisplay}.zip"
+                .replace("[\\s+|(/)]".toRegex(), "_")
+
+            val task = DownloadService.TaskItem(
+                key = item.toString(),
+                url = item.zipUrl,
+                filename = filename,
+                title = module.name,
+                desc = item.versionDisplay
+            )
+
+            val listener = object : DownloadService.IDownloadListener {
+                override fun getProgress(value: Float) {}
+                override fun onSuccess() {
+                    onSuccess(downloadPath.resolve(filename))
+                }
+
+                override fun onFailure(e: Throwable) {
+                    Timber.d(e)
+                }
             }
-        }.value
+
+            DownloadService.start(
+                context = context,
+                task = task,
+                listener = listener
+            )
+        }
+    }
+
+    @Composable
+    fun getProgress(item: VersionItem?): Float {
+        val progress by DownloadService.getProgressByKey(item.toString())
+            .collectAsStateWithLifecycle(initialValue = 0f)
+
+        return progress
     }
 
     companion object {

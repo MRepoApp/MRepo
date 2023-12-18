@@ -15,7 +15,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
-import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.screens.repository.view.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.view.pages.OverviewPage
 import com.sanmer.mrepo.ui.screens.repository.view.pages.VersionsPage
@@ -30,17 +29,15 @@ fun ViewScreen(
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val userPreferences = LocalUserPreferences.current
 
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { if (viewModel.isEmptyAbout) 2 else 3 }
 
     val download: (VersionItem, Boolean) -> Unit = { item, install ->
         viewModel.downloader(context, item) {
-            val zipFile = userPreferences.downloadPath.resolve(it)
             if (install) {
                 navController.navigateSingleTopTo(
-                    InstallViewModel.putPath(zipFile)
+                    InstallViewModel.putPath(it)
                 )
             }
         }
@@ -85,7 +82,7 @@ fun ViewScreen(
                         versions = viewModel.versions,
                         localVersionCode = viewModel.localVersionCode,
                         isProviderAlive = viewModel.isProviderAlive,
-                        getProgress = { viewModel.rememberProgress(it) },
+                        getProgress = { viewModel.getProgress(it) },
                         onDownload = download
                     )
                     2 -> AboutPage(
