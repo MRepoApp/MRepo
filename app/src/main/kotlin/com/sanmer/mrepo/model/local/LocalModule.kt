@@ -18,14 +18,14 @@ data class LocalModule(
     val versionDisplay get() = ModuleUtils.getVersionDisplay(version, versionCode)
 
     constructor(parcel: Parcel) : this(
-        id = parcel.readString() ?: "",
-        name = parcel.readString() ?: "",
-        version = parcel.readString() ?: "",
+        id = checkNotNull(parcel.readString()),
+        name = checkNotNull(parcel.readString()),
+        version = checkNotNull(parcel.readString()),
         versionCode = parcel.readInt(),
-        author = parcel.readString() ?: "",
-        description = parcel.readString() ?: "",
-        updateJson = parcel.readString() ?: "",
-        state = parcel.readString()?.let(State::valueOf) ?: State.DISABLE,
+        author = checkNotNull(parcel.readString()),
+        description = checkNotNull(parcel.readString()),
+        updateJson = checkNotNull(parcel.readString()),
+        state = checkNotNull(parcel.readString()).let(State::valueOf),
         lastUpdated = parcel.readLong()
     )
 
