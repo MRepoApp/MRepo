@@ -56,7 +56,7 @@
     <string name="dialog_ok">OK</string>
     <string name="message_download_success">Descarga con éxito</string>
     <string name="message_loading">Cargando…</string>
-    <string name="notification_name_download">La descarga funciona</string>
+    <string name="notification_name_download">Servicio de Descargas</string>
     <string name="unknown_error">Error desconocido</string>
     <string name="view_module_last_updated">Última actualización</string>
     <string name="view_module_local">Local</string>
@@ -103,4 +103,7 @@
     <string name="install_logs_saved">Registros guardados</string>
     <string name="install_logs_save_failed">Error al guardar: %s</string>
     <string name="module_update">Actualizar</string>
+    <string name="setup_root_desc">Requiere permisos Root proporcionados por Magisk o KernelSU</string>
+    <string name="setup_shizuku_desc">Requiere permiso de Sui o Shizuku (root)</string>
+    <string name="setup_non_root_desc">No requiere permisos Root, sólo está disponible la función de módulo de descarga</string>
 </resources>
