@@ -38,6 +38,7 @@ class InstallViewModel @Inject constructor(
     private val context: Context by lazy { getApplication() }
     private val zipFile = getPath(savedStateHandle)
 
+    val logs = mutableListOf<String>()
     val console = mutableStateListOf<String>()
     var event by mutableStateOf(Event.LOADING)
         private set
@@ -52,7 +53,7 @@ class InstallViewModel @Inject constructor(
         runCatching {
             val cr = context.contentResolver
             cr.openOutputStream(uri)?.use {
-                it.write(console.joinToString(separator = "\n").toByteArray())
+                it.write(logs.joinToString(separator = "\n").toByteArray())
             }
         }.onFailure {
             Timber.d(it)
@@ -64,9 +65,15 @@ class InstallViewModel @Inject constructor(
             .data.first().deleteZipFile
 
         val callback = object : IInstallCallback.Stub() {
-            override fun console(msg: String) {
+            override fun onStdout(msg: String) {
                 console.add(msg)
+                logs.add(msg)
             }
+
+            override fun onStderr(msg: String) {
+                logs.add(msg)
+            }
+
             override fun onSuccess(id: String) {
                 event = Event.SUCCEEDED
                 getLocal(id)

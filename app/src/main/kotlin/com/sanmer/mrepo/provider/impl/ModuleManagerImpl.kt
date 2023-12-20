@@ -144,13 +144,19 @@ class ModuleManagerImpl(
             }
         }
 
-        val msg = object : CallbackList<String>() {
-            override fun onAddElement(msg: String) {
-                callback.console(msg)
+        val stdout = object : CallbackList<String?>() {
+            override fun onAddElement(msg: String?) {
+                msg?.let(callback::onStdout)
             }
         }
 
-        val result = shell.newJob().add(cmd).to(msg, msg).exec()
+        val stderr = object : CallbackList<String?>() {
+            override fun onAddElement(msg: String?) {
+                msg?.let(callback::onStderr)
+            }
+        }
+
+        val result = shell.newJob().add(cmd).to(stdout, stderr).exec()
         if (result.isSuccess) {
             val file = tmpDir.resolve(PROP_FILE)
             File(path).unzip(tmpDir, PROP_FILE, true)
