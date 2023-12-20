@@ -22,6 +22,7 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.provider.ProviderCompat
+import com.sanmer.mrepo.provider.stub.IModuleOpsCallback
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -44,6 +45,7 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
+    val isProviderKsu get() = ProviderCompat.isKsu
     val isProviderAlive get() = ProviderCompat.isAlive
 
     private val modulesMenu get() = userPreferencesRepository.data
@@ -70,6 +72,20 @@ class ModulesViewModel @Inject constructor(
     }
 
     private val versionItemCache = mutableStateMapOf<String, VersionItem?>()
+
+    private val opsCallback = object : IModuleOpsCallback.Stub() {
+        override fun onSuccess(id: String) {
+            viewModelScope.launch {
+                modulesRepository.getLocal(id)
+                isRefreshing = false
+            }
+        }
+
+        override fun onFailure(id: String, msg: String?) {
+            isRefreshing = false
+            Timber.w("$id: $msg")
+        }
+    }
 
     init {
         Timber.d("ModulesViewModel init")
@@ -154,43 +170,33 @@ class ModulesViewModel @Inject constructor(
     fun setModulesMenu(value: ModulesMenuExt) =
         userPreferencesRepository.setModulesMenu(value)
 
-    private fun getLocal(id: String) {
-        viewModelScope.launch {
-            modulesRepository.getLocal(id)
-        }
-    }
-
     private fun createUiState(module: LocalModule) = when (module.state) {
             State.ENABLE -> LocalUiState(
                 alpha = 1f,
                 decoration = TextDecoration.None,
                 toggle = {
+                    isRefreshing = true
                     ProviderCompat.moduleManager
-                        .disable(module.id)
-
-                    getLocal(module.id)
+                        .disable(module.id, opsCallback)
                 },
                 change = {
+                    isRefreshing = true
                     ProviderCompat.moduleManager
-                        .remove(module.id)
-
-                    getLocal(module.id)
+                        .remove(module.id, opsCallback)
                 }
             )
 
             State.DISABLE -> LocalUiState(
                 alpha = 0.5f,
                 toggle = {
+                    isRefreshing = true
                     ProviderCompat.moduleManager
-                        .enable(module.id)
-
-                    getLocal(module.id)
+                        .enable(module.id, opsCallback)
                 },
                 change = {
+                    isRefreshing = true
                     ProviderCompat.moduleManager
-                        .remove(module.id)
-
-                    getLocal(module.id)
+                        .remove(module.id, opsCallback)
                 }
             )
 
@@ -198,10 +204,11 @@ class ModulesViewModel @Inject constructor(
                 alpha = 0.5f,
                 decoration = TextDecoration.LineThrough,
                 change = {
-                    ProviderCompat.moduleManager
-                        .enable(module.id)
-
-                    getLocal(module.id)
+                    if (!ProviderCompat.isKsu) {
+                        isRefreshing = true
+                        ProviderCompat.moduleManager
+                            .enable(module.id, opsCallback)
+                    }
                 }
             )
 
@@ -292,13 +299,11 @@ class ModulesViewModel @Inject constructor(
         return progress
     }
 
-    companion object {
-        @Stable
-        data class LocalUiState(
-            val alpha: Float = 1f,
-            val decoration: TextDecoration = TextDecoration.None,
-            val toggle: (Boolean) -> Unit = {},
-            val change: () -> Unit = {}
-        )
-    }
+    @Stable
+    data class LocalUiState(
+        val alpha: Float = 1f,
+        val decoration: TextDecoration = TextDecoration.None,
+        val toggle: (Boolean) -> Unit = {},
+        val change: () -> Unit = {}
+    )
 }

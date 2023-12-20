@@ -26,6 +26,7 @@ object ShizukuProvider : IProvider, Shizuku.OnRequestPermissionResultListener {
     override val seLinuxContext: String get() = mService.seLinuxContext
     override val moduleManager: IModuleManager get() = mService.moduleManager
     override val fileManager: IFileManager get() = mService.fileManager
+    override val isKsu: Boolean get() = mService.isKsu
 
     override var isAlive by mutableStateOf(false)
         private set

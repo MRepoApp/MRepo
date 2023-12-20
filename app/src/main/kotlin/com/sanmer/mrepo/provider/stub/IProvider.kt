@@ -6,6 +6,7 @@ interface IProvider {
     val seLinuxContext: String
     val moduleManager: IModuleManager
     val fileManager: IFileManager
+    val isKsu: Boolean
 
     val isAlive: Boolean
     fun init()

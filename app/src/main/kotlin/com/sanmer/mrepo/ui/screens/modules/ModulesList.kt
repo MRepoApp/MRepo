@@ -30,13 +30,14 @@ import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.VersionItemBottomSheet
 import com.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
-import com.sanmer.mrepo.viewmodel.ModulesViewModel.Companion.LocalUiState
+import com.sanmer.mrepo.viewmodel.ModulesViewModel.LocalUiState
 
 @Composable
 fun ModulesList(
     list: List<LocalModule>,
     state: LazyListState,
     isProviderAlive: Boolean,
+    isProviderKsu: Boolean,
     getUiState: @Composable (LocalModule) -> LocalUiState,
     getVersionItem: @Composable (LocalModule) -> VersionItem?,
     getProgress: @Composable (VersionItem?) -> Float,
@@ -57,6 +58,7 @@ fun ModulesList(
             ModuleItem(
                 module = module,
                 isProviderAlive = isProviderAlive,
+                isProviderKsu = isProviderKsu,
                 getUiState = getUiState,
                 getVersionItem = getVersionItem,
                 getProgress = getProgress,
@@ -75,6 +77,7 @@ fun ModulesList(
 fun ModuleItem(
     module: LocalModule,
     isProviderAlive: Boolean,
+    isProviderKsu: Boolean,
     getUiState: @Composable (LocalModule) -> LocalUiState,
     getVersionItem: @Composable (LocalModule) -> VersionItem?,
     getProgress: @Composable (VersionItem?) -> Float,
@@ -124,7 +127,10 @@ fun ModuleItem(
 
             RemoveOrRestore(
                 module = module,
-                enabled = isProviderAlive,
+                enabled = when (module.state) {
+                    State.REMOVE -> isProviderAlive && !isProviderKsu
+                    else -> isProviderAlive
+                },
                 onClick = uiState.change
             )
         }

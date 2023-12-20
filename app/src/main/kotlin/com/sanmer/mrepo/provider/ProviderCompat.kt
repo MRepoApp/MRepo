@@ -11,6 +11,7 @@ object ProviderCompat {
 
     val moduleManager: IModuleManager get() = mProvider.moduleManager
     val fileManager: IFileManager get() = mProvider.fileManager
+    val isKsu: Boolean get() = mProvider.isKsu
 
     val isAlive get() = when {
         ::mProvider.isInitialized -> mProvider.isAlive

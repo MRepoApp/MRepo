@@ -9,6 +9,7 @@ interface IServiceManager {
     String getSELinuxContext() = 2;
     IModuleManager getModuleManager() = 3;
     IFileManager getFileManager() = 4;
+    boolean isKsu() = 5;
 
     void destroy() = 16777114; // Only for Shizuku
 }

@@ -154,6 +154,7 @@ fun ModulesScreen(
                 list = list,
                 state = listState,
                 isProviderAlive = viewModel.isProviderAlive,
+                isProviderKsu = viewModel.isProviderKsu,
                 getUiState = { viewModel.rememberUiState(it) },
                 getVersionItem = { viewModel.getVersionItem(it) },
                 getProgress = { viewModel.getProgress(it) },

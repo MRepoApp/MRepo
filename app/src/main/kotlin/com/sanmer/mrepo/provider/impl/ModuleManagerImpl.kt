@@ -4,6 +4,7 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.provider.stub.IInstallCallback
 import com.sanmer.mrepo.provider.stub.IModuleManager
+import com.sanmer.mrepo.provider.stub.IModuleOpsCallback
 import com.sanmer.mrepo.utils.extensions.unzip
 import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
@@ -19,11 +20,11 @@ class ModuleManagerImpl(
         if (!exists()) mkdirs()
     }
 
-    private var _version: String = ""
-    private var _versionCode: Int = Int.MIN_VALUE
+    private var _version: String = "unknown"
+    private var _versionCode: Int = -1
 
     override fun getVersion(): String {
-        if (_version.isBlank()) {
+        if (_version == "unknown") {
             _version = runCatching { "su -v".exec() }
                 .getOrDefault("unknown")
         }
@@ -32,58 +33,12 @@ class ModuleManagerImpl(
     }
 
     override fun getVersionCode(): Int {
-        if (_versionCode == Int.MIN_VALUE) {
+        if (_versionCode == -1) {
             _versionCode = runCatching { "su -V".exec().toInt() }
                 .getOrDefault(-1)
         }
 
         return _versionCode
-    }
-
-    override fun enable(id: String): Boolean {
-        val dir = modulesDir.resolve(id)
-        if (!dir.exists()) return false
-
-        return when (platform) {
-            Platform.KERNELSU -> {
-                "${platform.manager} module enable $id".execResult()
-            }
-            Platform.MAGISK -> {
-                dir.resolve("remove").apply { if (exists()) delete() }
-                dir.resolve("disable").apply { if (exists()) delete() }
-                true
-            }
-        }
-    }
-
-    override fun disable(id: String): Boolean {
-        val dir = modulesDir.resolve(id)
-        if (!dir.exists()) return false
-
-        return when (platform) {
-            Platform.KERNELSU -> {
-                "${platform.manager} module disable $id".execResult()
-            }
-            Platform.MAGISK -> {
-                dir.resolve("remove").apply { if (exists()) delete() }
-                dir.resolve("disable").createNewFile()
-            }
-        }
-    }
-
-    override fun remove(id: String): Boolean {
-        val dir = modulesDir.resolve(id)
-        if (!dir.exists()) return false
-
-        return when (platform) {
-            Platform.KERNELSU -> {
-                "${platform.manager} module uninstall $id".execResult()
-            }
-            Platform.MAGISK -> {
-                dir.resolve("disable").apply { if (exists()) delete() }
-                dir.resolve("remove").createNewFile()
-            }
-        }
     }
 
     override fun getModules(): List<LocalModule> {
@@ -96,6 +51,87 @@ class ModuleManagerImpl(
     override fun getModuleById(id: String): LocalModule? {
         val moduleDir = modulesDir.resolve(id)
         return readPropsAndState(moduleDir)
+    }
+
+    override fun enable(id: String, callback: IModuleOpsCallback) {
+        val dir = modulesDir.resolve(id)
+        if (!dir.exists()) callback.onFailure(id, null)
+
+        when (platform) {
+            Platform.KERNELSU -> {
+                "${platform.manager} module enable $id".submit {
+                    if (it.isSuccess) {
+                        callback.onSuccess(id)
+                    } else {
+                        callback.onFailure(id, it.out.joinToString())
+                    }
+                }
+            }
+            Platform.MAGISK -> {
+                runCatching {
+                    dir.resolve("remove").apply { if (exists()) delete() }
+                    dir.resolve("disable").apply { if (exists()) delete() }
+                }.onSuccess {
+                    callback.onSuccess(id)
+                }.onFailure {
+                    callback.onFailure(id, it.message)
+                }
+            }
+        }
+    }
+
+    override fun disable(id: String, callback: IModuleOpsCallback) {
+        val dir = modulesDir.resolve(id)
+        if (!dir.exists()) return callback.onFailure(id, null)
+
+        when (platform) {
+            Platform.KERNELSU -> {
+                "${platform.manager} module disable $id".submit {
+                    if (it.isSuccess) {
+                        callback.onSuccess(id)
+                    } else {
+                        callback.onFailure(id, it.out.joinToString())
+                    }
+                }
+            }
+            Platform.MAGISK -> {
+                runCatching {
+                    dir.resolve("remove").apply { if (exists()) delete() }
+                    dir.resolve("disable").createNewFile()
+                }.onSuccess {
+                    callback.onSuccess(id)
+                }.onFailure {
+                    callback.onFailure(id, it.message)
+                }
+            }
+        }
+    }
+
+    override fun remove(id: String, callback: IModuleOpsCallback) {
+        val dir = modulesDir.resolve(id)
+        if (!dir.exists()) return callback.onFailure(id, null)
+
+        when (platform) {
+            Platform.KERNELSU -> {
+                "${platform.manager} module uninstall $id".submit {
+                    if (it.isSuccess) {
+                        callback.onSuccess(id)
+                    } else {
+                        callback.onFailure(id, it.out.joinToString())
+                    }
+                }
+            }
+            Platform.MAGISK -> {
+                runCatching {
+                    dir.resolve("disable").apply { if (exists()) delete() }
+                    dir.resolve("remove").createNewFile()
+                }.onSuccess {
+                    callback.onSuccess(id)
+                }.onFailure {
+                    callback.onFailure(id, it.message)
+                }
+            }
+        }
     }
 
     override fun install(path: String, callback: IInstallCallback) {
@@ -188,7 +224,9 @@ class ModuleManagerImpl(
 
     private fun String.exec() = ShellUtils.fastCmd(shell, this)
 
-    private fun String.execResult() = ShellUtils.fastCmdResult(shell, this)
+    private fun String.submit(cb: Shell.ResultCallback) = shell
+        .newJob().add(this).to(ArrayList(), null)
+        .submit(cb)
 
     companion object {
         const val PROP_FILE = "module.prop"

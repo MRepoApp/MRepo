@@ -16,10 +16,14 @@ class ServiceManagerImpl : IServiceManager.Stub() {
             .build("sh")
     }
 
+    private val platform by lazy {
+        getProviderPlatform()
+    }
+
     private val moduleManager by lazy {
         ModuleManagerImpl(
             shell = main,
-            platform = getPlatform()
+            platform = platform
         )
     }
 
@@ -47,11 +51,15 @@ class ServiceManagerImpl : IServiceManager.Stub() {
         return fileManager
     }
 
+    override fun isKsu(): Boolean {
+        return platform == Platform.KERNELSU
+    }
+
     override fun destroy() {
         exitProcess(0)
     }
 
-    private fun getPlatform(): Platform {
+    private fun getProviderPlatform(): Platform {
         return when {
             ShellUtils.fastCmdResult(main,"nsenter --mount=/proc/1/ns/mnt which ${Platform.MAGISK.manager}") -> Platform.MAGISK
             File(Platform.KERNELSU.manager).exists() -> Platform.KERNELSU
