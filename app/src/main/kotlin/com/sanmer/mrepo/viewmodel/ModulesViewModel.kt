@@ -22,12 +22,12 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.provider.ProviderCompat
-import com.sanmer.mrepo.provider.stub.IModuleOpsCallback
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.service.DownloadService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sanmer.mrepo.compat.stub.IModuleOpsCallback
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine

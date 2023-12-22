@@ -22,3 +22,4 @@ pluginManagement {
 rootProject.name = "MRepo"
 include(":app")
 include(":hidden-api")
+include(":compat")
