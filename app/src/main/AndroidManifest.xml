@@ -34,6 +34,21 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.activity.InstallActivity"
+            android:label="@string/install_activity"
+            android:exported="true"
+            android:noHistory="true"
+            android:excludeFromRecents="true"
+            android:taskAffinity="${applicationId}.INSTALL">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:mimeType="application/zip" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".service.DownloadService"
             android:foregroundServiceType="dataSync"

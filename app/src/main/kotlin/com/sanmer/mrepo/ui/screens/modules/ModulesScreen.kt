@@ -39,26 +39,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.VersionItem
+import com.sanmer.mrepo.ui.activity.InstallActivity
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
 import com.sanmer.mrepo.ui.utils.isScrollingUp
-import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.viewmodel.InstallViewModel
 import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun ModulesScreen(
+    @Suppress("UNUSED_PARAMETER")
     navController: NavController,
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
@@ -84,8 +84,9 @@ fun ModulesScreen(
     val download: (LocalModule, VersionItem, Boolean) -> Unit = { module, item, install ->
         viewModel.downloader(context, module, item) {
             if (install) {
-                navController.navigateSingleTopTo(
-                    InstallViewModel.putPath(it)
+                InstallActivity.start(
+                    context = context,
+                    uri = it.toUri()
                 )
             }
         }
@@ -125,9 +126,7 @@ fun ModulesScreen(
                     targetScale = 0.8f
                 )
             ) {
-                FloatingButton(
-                    navController = navController
-                )
+                FloatingButton()
             }
         },
         contentWindowInsets = WindowInsets.none
@@ -220,20 +219,16 @@ private fun TopBar(
 }
 
 @Composable
-private fun FloatingButton(
-    navController: NavController
-) {
+private fun FloatingButton() {
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
 
-        var path = MediaStoreUtils.getAbsoluteFileForUri(context, uri)
-        if (path.startsWith("/mnt/appfuse")) {
-            path = MediaStoreUtils.copyToTmp(context, uri)
-        }
-
-        navController.navigateSingleTopTo(InstallViewModel.putPath(path))
+        InstallActivity.start(
+            context = context,
+            uri = uri
+        )
     }
 
     LaunchedEffect(interactionSource) {

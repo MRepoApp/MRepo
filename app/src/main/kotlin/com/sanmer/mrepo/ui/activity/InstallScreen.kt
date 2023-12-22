@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.ui.screens.modules.install
+package com.sanmer.mrepo.ui.activity
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -49,7 +49,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.Event.Companion.isFinished
@@ -64,7 +63,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun InstallScreen(
-    navController: NavController,
     viewModel: InstallViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
@@ -82,10 +80,6 @@ fun InstallScreen(
 
     LaunchedEffect(focusRequester) {
         focusRequester.requestFocus()
-    }
-
-    LaunchedEffect(true) {
-        viewModel.install()
     }
 
     BackHandler(
@@ -145,7 +139,6 @@ fun InstallScreen(
         topBar = {
             TopBar(
                 event = viewModel.event,
-                navController = navController,
                 interactionSource = interactionSource,
                 scrollBehavior = scrollBehavior
             )
@@ -205,7 +198,6 @@ private fun Console(
 private fun TopBar(
     event: Event,
     interactionSource: MutableInteractionSource,
-    navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
     title = stringResource(id = R.string.install_screen_title),
@@ -228,8 +220,7 @@ private fun TopBar(
                 )
             }
         }
-    },
-    navController = navController
+    }
 )
 
 @Composable

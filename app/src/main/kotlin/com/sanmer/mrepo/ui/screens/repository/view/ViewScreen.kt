@@ -11,16 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.model.online.VersionItem
+import com.sanmer.mrepo.ui.activity.InstallActivity
 import com.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import com.sanmer.mrepo.ui.screens.repository.view.pages.AboutPage
 import com.sanmer.mrepo.ui.screens.repository.view.pages.OverviewPage
 import com.sanmer.mrepo.ui.screens.repository.view.pages.VersionsPage
-import com.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.viewmodel.InstallViewModel
 import com.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
@@ -36,8 +36,9 @@ fun ViewScreen(
     val download: (VersionItem, Boolean) -> Unit = { item, install ->
         viewModel.downloader(context, item) {
             if (install) {
-                navController.navigateSingleTopTo(
-                    InstallViewModel.putPath(it)
+                InstallActivity.start(
+                    context = context,
+                    uri = it.toUri()
                 )
             }
         }

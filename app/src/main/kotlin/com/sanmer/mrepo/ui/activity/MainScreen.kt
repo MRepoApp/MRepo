@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.ui.activity
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -21,10 +20,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sanmer.mrepo.ui.animate.slideInBottomToTop
-import com.sanmer.mrepo.ui.animate.slideOutTopToBottom
 import com.sanmer.mrepo.ui.navigation.MainScreen
-import com.sanmer.mrepo.ui.navigation.graphs.ModulesScreen
 import com.sanmer.mrepo.ui.navigation.graphs.modulesScreen
 import com.sanmer.mrepo.ui.navigation.graphs.repositoryScreen
 import com.sanmer.mrepo.ui.navigation.graphs.settingsScreen
@@ -36,26 +32,12 @@ fun MainScreen() {
     val userPreferences = LocalUserPreferences.current
     val navController = rememberNavController()
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    val showNav by remember(navBackStackEntry) {
-        derivedStateOf {
-            currentDestination?.route.toString() != ModulesScreen.Install.route
-        }
-    }
-
     Scaffold(
         bottomBar = {
-            AnimatedVisibility(
-                visible = showNav,
-                enter = slideInBottomToTop(),
-                exit = slideOutTopToBottom()
-            ) {
-                BottomNav(
-                    navController = navController,
-                    isRoot = userPreferences.isRoot
-                )
-            }
+            BottomNav(
+                navController = navController,
+                isRoot = userPreferences.isRoot
+            )
         }
     ) {
         NavHost(
