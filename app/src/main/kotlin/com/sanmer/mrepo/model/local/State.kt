@@ -1,8 +1,5 @@
 package com.sanmer.mrepo.model.local
 
-enum class State {
-    ENABLE,
-    REMOVE,
-    DISABLE,
-    UPDATE
-}
+import dev.sanmer.mrepo.compat.content.State
+
+typealias State = State

@@ -73,7 +73,6 @@ android {
     }
 
     buildFeatures {
-        aidl = true
         buildConfig = true
     }
 
@@ -129,7 +128,8 @@ androidComponents {
 
 dependencies {
     compileOnly(projects.hiddenApi)
-    
+    implementation(projects.compat)
+
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

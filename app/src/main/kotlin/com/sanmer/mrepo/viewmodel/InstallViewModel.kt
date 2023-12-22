@@ -10,11 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.provider.ProviderCompat
-import com.sanmer.mrepo.provider.stub.IInstallCallback
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.extensions.now
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sanmer.mrepo.compat.stub.IInstallCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

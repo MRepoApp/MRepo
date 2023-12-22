@@ -15,6 +15,7 @@ import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.local.example
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.model.online.VersionItem

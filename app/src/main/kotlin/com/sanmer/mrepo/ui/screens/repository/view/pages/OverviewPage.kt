@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.model.local.versionDisplay
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
