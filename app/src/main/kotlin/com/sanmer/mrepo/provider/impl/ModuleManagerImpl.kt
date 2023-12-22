@@ -44,13 +44,38 @@ class ModuleManagerImpl(
     override fun getModules(): List<LocalModule> {
         return modulesDir.listFiles().orEmpty()
             .mapNotNull { moduleDir ->
-                readPropsAndState(moduleDir)
+                runCatching {
+                    readProps(moduleDir)
+                        .toModule(
+                            state = readState(moduleDir),
+                            lastUpdated = readLastUpdated(moduleDir)
+                        )
+                }.getOrNull()
             }
     }
 
     override fun getModuleById(id: String): LocalModule? {
-        val moduleDir = modulesDir.resolve(id)
-        return readPropsAndState(moduleDir)
+        return runCatching {
+            val moduleDir = modulesDir.resolve(id)
+            readProps(moduleDir)
+                .toModule(
+                    state = readState(moduleDir),
+                    lastUpdated = readLastUpdated(moduleDir)
+                )
+        }.getOrNull()
+    }
+
+    override fun getModuleInfo(zipPath: String): LocalModule? {
+        return runCatching {
+            val zipFile = File(zipPath)
+            val propFile = tmpDir.resolve(PROP_FILE)
+            zipFile.unzip(tmpDir, PROP_FILE, true)
+
+            val module = readProps(tmpDir).toModule()
+            propFile.delete()
+
+            module
+        }.getOrNull()
     }
 
     override fun enable(id: String, callback: IModuleOpsCallback) {
@@ -158,23 +183,15 @@ class ModuleManagerImpl(
 
         val result = shell.newJob().add(cmd).to(stdout, stderr).exec()
         if (result.isSuccess) {
-            val file = tmpDir.resolve(PROP_FILE)
-            File(path).unzip(tmpDir, PROP_FILE, true)
-
-            val id = file.readText().lines()
-                .firstOrNull { it.startsWith("id") }
-                ?.split("=", limit = 2)
-                ?.getOrNull(1)
-
-            file.delete()
-            callback.onSuccess(id ?: "unknown")
+            val module = getModuleInfo(path)
+            callback.onSuccess(module?.id ?: "unknown")
         } else {
             callback.onFailure()
         }
     }
 
-    private fun readPropsAndState(moduleDir: File): LocalModule? {
-        val props = moduleDir.resolve(PROP_FILE)
+    private fun readProps(moduleDir: File): Map<String, String>? {
+        return moduleDir.resolve(PROP_FILE)
             .apply {
                 if (!exists()) return null
             }
@@ -187,45 +204,51 @@ class ModuleManagerImpl(
                     items[0] to items[1]
                 }
             }
-
-        return LocalModule(
-            id = props.getOrDefault("id", "unknown"),
-            name = props.getOrDefault("name", "unknown"),
-            version = props.getOrDefault("version", ""),
-            versionCode = props.getOrDefault("versionCode", "-1").toInt(),
-            author = props.getOrDefault("author", ""),
-            description = props.getOrDefault("description", ""),
-            updateJson = props.getOrDefault("updateJson", ""),
-            state = readState(moduleDir),
-            lastUpdated = readLastUpdated(moduleDir)
-        )
     }
 
-    private fun readState(path: File): State {
-        path.resolve("remove").apply {
+    private fun readState(moduleDir: File): State {
+        moduleDir.resolve("remove").apply {
             if (exists()) return State.REMOVE
         }
 
-        path.resolve("disable").apply {
+        moduleDir.resolve("disable").apply {
             if (exists()) return State.DISABLE
         }
 
-        path.resolve("update").apply {
+        moduleDir.resolve("update").apply {
             if (exists()) return State.UPDATE
         }
 
         return State.ENABLE
     }
 
-    private fun readLastUpdated(path: File): Long {
+    private fun readLastUpdated(moduleDir: File): Long {
         MODULE_FILES.forEach { filename ->
-            val file = path.resolve(filename)
+            val file = moduleDir.resolve(filename)
             if (file.exists()) {
                 return file.lastModified()
             }
         }
 
         return 0L
+    }
+
+    private fun Map<String, String>?.toModule(
+        state: State = State.ENABLE,
+        lastUpdated: Long = 0L
+    ): LocalModule? {
+        if (this == null) return null
+        return LocalModule(
+            id = getOrDefault("id", "unknown"),
+            name = getOrDefault("name", "unknown"),
+            version = getOrDefault("version", ""),
+            versionCode = getOrDefault("versionCode", "-1").toInt(),
+            author = getOrDefault("author", ""),
+            description = getOrDefault("description", ""),
+            updateJson = getOrDefault("updateJson", ""),
+            state = state,
+            lastUpdated = lastUpdated
+        )
     }
 
     private fun String.exec() = ShellUtils.fastCmd(shell, this)

@@ -9,6 +9,7 @@ interface IModuleManager {
     int getVersionCode();
     List<LocalModule> getModules();
     LocalModule getModuleById(String id);
+    LocalModule getModuleInfo(String zipPath);
     oneway void enable(String id, IModuleOpsCallback callback);
     oneway void disable(String id, IModuleOpsCallback callback);
     oneway void remove(String id, IModuleOpsCallback callback);
