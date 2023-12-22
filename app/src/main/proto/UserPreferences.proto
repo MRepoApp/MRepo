@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-import "com/sanmer/mrepo/datastore/WorkingMode.proto";
-import "com/sanmer/mrepo/datastore/DarkMode.proto";
-import "com/sanmer/mrepo/datastore/repository/RepositoryMenu.proto";
-import "com/sanmer/mrepo/datastore/modules/ModulesMenu.proto";
+import "WorkingMode.proto";
+import "DarkMode.proto";
+import "repository/RepositoryMenu.proto";
+import "modules/ModulesMenu.proto";
 
 option java_package = "com.sanmer.mrepo.datastore";
 option java_multiple_files = true;
