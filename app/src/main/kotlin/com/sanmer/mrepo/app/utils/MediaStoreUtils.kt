@@ -8,11 +8,9 @@ import android.system.Os
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.core.net.toFile
-import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.sanmer.mrepo.utils.extensions.tmpDir
 import java.io.File
 
 object MediaStoreUtils {
@@ -67,20 +65,4 @@ object MediaStoreUtils {
 
     fun getAbsoluteFileForUri(context: Context, uri: Uri) =
         getAbsolutePathForUri(context, uri).let(::File)
-
-    fun copyToTmp(context: Context, uri: Uri): File {
-        val filename = getDisplayNameForUri(context, uri)
-        val file = context.tmpDir
-            .apply { if (!exists()) mkdirs() }
-            .resolve(filename)
-
-        val cr = context.contentResolver
-        cr.openInputStream(uri)?.use { input ->
-            cr.openOutputStream(file.toUri())?.use { output ->
-                input.copyTo(output)
-            }
-        }
-
-        return file
-    }
 }

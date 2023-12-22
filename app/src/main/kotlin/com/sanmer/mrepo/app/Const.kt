@@ -4,12 +4,6 @@ import android.os.Environment
 import java.io.File
 
 object Const {
-    const val MODULES_PATH = "/data/adb/modules"
-    val MODULE_FILES = listOf(
-        "post-fs-data.sh", "service.sh", "uninstall.sh",
-        "system", "system.prop", "module.prop"
-    )
-
     val PUBLIC_DOWNLOADS: File = Environment.getExternalStoragePublicDirectory(
         Environment.DIRECTORY_DOWNLOADS
     )
