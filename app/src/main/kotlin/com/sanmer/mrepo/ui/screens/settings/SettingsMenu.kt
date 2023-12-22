@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.OsUtils
 import com.sanmer.mrepo.ui.component.DropdownMenu
-import com.sanmer.mrepo.utils.ModuleUtils
+import com.sanmer.mrepo.utils.Utils
 
 private enum class Menu(
     @StringRes val label: Int,
@@ -63,7 +63,7 @@ private fun MenuItem(
 ) = DropdownMenuItem(
     text = { Text(text = stringResource(id = value.label)) },
     onClick = {
-        ModuleUtils.reboot(value.reason)
+        Utils.reboot(value.reason)
         onClose()
     }
 )

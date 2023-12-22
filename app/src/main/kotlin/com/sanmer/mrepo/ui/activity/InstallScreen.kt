@@ -57,7 +57,7 @@ import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
 import com.sanmer.mrepo.ui.utils.none
-import com.sanmer.mrepo.utils.ModuleUtils
+import com.sanmer.mrepo.utils.Utils
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import kotlinx.coroutines.launch
 
@@ -225,7 +225,7 @@ private fun TopBar(
 
 @Composable
 private fun FloatingButton() = FloatingActionButton(
-    onClick = { ModuleUtils.reboot() }
+    onClick = { Utils.reboot() }
 ) {
     Icon(
         painter = painterResource(id = R.drawable.reload),

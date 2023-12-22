@@ -2,7 +2,7 @@ package com.sanmer.mrepo.model.local
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.sanmer.mrepo.utils.ModuleUtils
+import com.sanmer.mrepo.utils.Utils
 
 data class LocalModule(
     val id: String,
@@ -15,7 +15,7 @@ data class LocalModule(
     val state: State,
     val lastUpdated: Long
 ) : Parcelable {
-    val versionDisplay get() = ModuleUtils.getVersionDisplay(version, versionCode)
+    val versionDisplay get() = Utils.getVersionDisplay(version, versionCode)
 
     constructor(parcel: Parcel) : this(
         id = checkNotNull(parcel.readString()),

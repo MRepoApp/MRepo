@@ -2,7 +2,7 @@ package com.sanmer.mrepo.utils
 
 import com.topjohnwu.superuser.Shell
 
-object ModuleUtils {
+object Utils {
     fun reboot(reason: String = "") {
         if (reason == "recovery") {
             // KEYCODE_POWER = 26, hide incorrect "Factory data reset" message
