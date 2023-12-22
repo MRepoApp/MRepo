@@ -127,6 +127,7 @@ androidComponents {
 }
 
 dependencies {
+    compileOnly(projects.hiddenApi)
     implementation(projects.compat)
 
     implementation(libs.accompanist.permissions)
