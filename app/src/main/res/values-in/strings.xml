@@ -69,7 +69,7 @@
     <string name="dialog_ok">Oke</string>
     <string name="message_download_success">Download berhasil</string>
     <string name="message_loading">Memuat…</string>
-    <string name="notification_name_download">Download Bekerja</string>
+    <string name="notification_name_download">Layanan Download</string>
     <string name="search_empty">Daftar kosong</string>
     <string name="search_placeholder">Cari…</string>
     <string name="unknown_error">Kesalahan tidak diketahui</string>
@@ -103,4 +103,7 @@
     <string name="settings_doh_desc">Mengatasi masalah DNS di beberapa negara</string>
     <string name="view_module_update_ignore">Abaikan</string>
     <string name="view_module_update_notify">Beritahu</string>
+    <string name="setup_root_desc">Membutuhkan izin Root yang diberikan oleh Magisk atau KernelSU</string>
+    <string name="setup_shizuku_desc">Membutuhkan izin yang diberikan oleh Sui atau Shizuku (root)</string>
+    <string name="setup_non_root_desc">Tidak membutuhkan izin Root, hanya menyediakan fitur men-download modul</string>
 </resources>
