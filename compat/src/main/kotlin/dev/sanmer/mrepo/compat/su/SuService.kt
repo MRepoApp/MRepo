@@ -18,8 +18,6 @@ internal class SuService : RootService() {
                 BuildConfig.APPLICATION_ID,
                 SuService::class.java.name
             )
-
-            addCategory(CATEGORY_DAEMON_MODE)
         }
     }
 }

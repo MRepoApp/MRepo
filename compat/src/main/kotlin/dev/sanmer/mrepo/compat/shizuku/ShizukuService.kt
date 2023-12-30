@@ -12,7 +12,7 @@ internal class ShizukuService : Shizuku.UserServiceArgs(
     )
 ) {
     init {
-        daemon(true)
+        daemon(false)
         debuggable(BuildConfig.DEBUG)
         version(BuildConfig.VERSION_CODE)
         processNameSuffix("shizuku")
