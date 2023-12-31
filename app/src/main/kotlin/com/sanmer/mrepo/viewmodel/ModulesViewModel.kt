@@ -45,8 +45,12 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
-    val isProviderKsu get() = ProviderCompat.isKsu
     val isProviderAlive get() = ProviderCompat.isAlive
+
+    val isProviderKsu get() = when {
+        isProviderAlive -> ProviderCompat.isKsu
+        else -> false
+    }
 
     private val modulesMenu get() = userPreferencesRepository.data
         .map { it.modulesMenu }
