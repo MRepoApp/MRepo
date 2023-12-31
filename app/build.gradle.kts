@@ -11,7 +11,7 @@ plugins {
     alias(libs.plugins.protobuf)
 }
 
-val baseVersionName = "2.4.1"
+val baseVersionName = "2.4.2"
 val isDevVersion get() = exec("git tag --contains HEAD").isEmpty()
 val verNameSuffix get() = if (isDevVersion) ".dev" else ""
 
