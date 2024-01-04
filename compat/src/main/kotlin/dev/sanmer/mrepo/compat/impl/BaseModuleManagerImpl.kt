@@ -64,11 +64,11 @@ internal abstract class BaseModuleManagerImpl(
     override fun getModuleInfo(zipPath: String): LocalModule? {
         return runCatching {
             val zipFile = File(zipPath)
-            val propFile = tmpDir.resolve(PROP_FILE)
-            zipFile.unzip(tmpDir, PROP_FILE, true)
+            val mDir = tmpDir.resolve("mrepo")
+            zipFile.unzip(mDir, PROP_FILE, true)
 
-            val module = readProps(tmpDir).toModule()
-            propFile.delete()
+            val module = readProps(mDir).toModule()
+            mDir.deleteRecursively()
 
             module
         }.getOrNull()
