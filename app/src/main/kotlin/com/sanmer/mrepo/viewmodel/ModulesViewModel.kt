@@ -243,7 +243,7 @@ class ModulesViewModel @Inject constructor(
             if (versionItemCache.containsKey(module.id)) return@LaunchedEffect
 
             val versionItem = if (module.updateJson.isNotBlank()) {
-                UpdateJson.load(module.updateJson)?.toItemOrNull()
+                UpdateJson.loadToVersionItem(module.updateJson)
             } else {
                 localRepository.getVersionById(module.id)
                     .firstOrNull()

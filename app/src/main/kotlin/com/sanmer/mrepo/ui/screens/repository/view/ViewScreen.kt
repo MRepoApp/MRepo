@@ -72,7 +72,7 @@ fun ViewScreen(
                 when (pageIndex) {
                     0 -> OverviewPage(
                         online = viewModel.online,
-                        item = viewModel.versions.firstOrNull()?.second,
+                        item = viewModel.lastVersionItem,
                         local = viewModel.local,
                         notifyUpdates = viewModel.notifyUpdates,
                         isProviderAlive = viewModel.isProviderAlive,

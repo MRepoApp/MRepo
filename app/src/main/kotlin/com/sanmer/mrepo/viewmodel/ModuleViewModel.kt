@@ -42,6 +42,9 @@ class ModuleViewModel @Inject constructor(
     private val moduleId = getModuleId(savedStateHandle)
     var online: OnlineModule by mutableStateOf(OnlineModule.example())
         private set
+    val lastVersionItem by derivedStateOf {
+        versions.firstOrNull()?.second
+    }
 
     val isEmptyAbout get() = online.track.homepage.isBlank()
             && online.track.source.isBlank()
@@ -91,11 +94,10 @@ class ModuleViewModel @Inject constructor(
             if (track !in tracks) tracks.add(track)
         }
 
-        if (!installed) return@launch
-
-        val updateJson = UpdateJson.load(local.updateJson)
-        updateJson?.toItemOrNull()?.let {
-            versions.add(0, "Update Json".toRepo() to it)
+        if (installed) {
+            UpdateJson.loadToVersionItem(local.updateJson)?.let {
+                versions.add(0, "Update Json".toRepo() to it)
+            }
         }
     }
 
