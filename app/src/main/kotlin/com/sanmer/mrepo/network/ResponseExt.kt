@@ -26,14 +26,15 @@ inline fun <reified T> runRequest(
 }
 
 inline fun <reified T> runRequest(
-    get: (okhttp3.ResponseBody) -> T,
+    get: (okhttp3.ResponseBody, okhttp3.Headers) -> T,
     run: () -> okhttp3.Response
 ): Result<T> = try {
     val response = run()
     val body = response.body
+    val headers = response.headers
     if (response.isSuccessful) {
         if (body != null) {
-            Result.success(get(body))
+            Result.success(get(body, headers))
         } else {
             Result.failure(NullPointerException())
         }

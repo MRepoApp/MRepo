@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
+import okhttp3.Headers
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -78,7 +79,7 @@ object NetworkUtils {
 
     suspend inline fun <reified T> request(
         url: String,
-        crossinline get: (ResponseBody) -> T
+        crossinline get: (ResponseBody, Headers) -> T
     ) = withContext(Dispatchers.IO) {
         runRequest(get = get) {
             val client = createOkHttpClient()
@@ -93,22 +94,24 @@ object NetworkUtils {
     suspend fun requestString(url: String) =
         request(
             url = url,
-            get = { it.string() }
+            get = { body, _ ->
+                body.string()
+            }
         )
 
     suspend inline fun <reified T> requestJson(
         url: String
     ): Result<T> {
-        val result = request(url) {
+        val result = request(url) { body, _ ->
             val adapter = Moshi.Builder()
                 .build()
                 .adapter<T>()
 
-            adapter.fromJson(it.string())
+            adapter.fromJson(body.string())
         }
 
         if (result.isSuccess) {
-            val json = result.getOrNull()
+            val json = result.getOrThrow()
             if (json != null) return Result.success(json)
         }
 
@@ -119,7 +122,7 @@ object NetworkUtils {
         url: String,
         output: OutputStream,
         onProgress: (Float) -> Unit
-    ) = request(url) { body ->
+    ) = request(url) { body, headers ->
         val buffer = ByteArray(2048)
         val input = body.byteStream()
 
@@ -139,6 +142,6 @@ object NetworkUtils {
         output.close()
         input.close()
 
-        return@request true
+        return@request headers
     }
 }
