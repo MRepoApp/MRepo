@@ -154,12 +154,10 @@ private fun AddDialog(
     onClose: () -> Unit,
     onAdd: (String) -> Unit
 ) {
-    var url by remember { mutableStateOf("") }
+    var domain by remember { mutableStateOf("") }
 
     val onDone: () -> Unit = {
-        if (!url.endsWith("/")) url += "/"
-
-        onAdd(url)
+        onAdd("https://${domain}/")
         onClose()
     }
 
@@ -170,7 +168,7 @@ private fun AddDialog(
         confirmButton = {
             TextButton(
                 onClick = onDone,
-                enabled = url.isNotBlank()
+                enabled = domain.isNotBlank()
             ) {
                 Text(text = stringResource(id = R.string.repo_add_dialog_add))
             }
@@ -186,16 +184,16 @@ private fun AddDialog(
         OutlinedTextField(
             modifier = Modifier.focusRequester(focusRequester),
             textStyle = MaterialTheme.typography.bodyLarge,
-            value = url,
-            onValueChange = { url = it },
-            placeholder = { Text(text = "https://your-repo.com/") },
+            value = domain,
+            onValueChange = { domain = it },
+            prefix = { Text(text = "https://") },
             singleLine = false,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions {
-                if (url.isNotBlank()) onDone()
+                if (domain.isNotBlank()) onDone()
             },
             shape = RoundedCornerShape(15.dp)
         )
