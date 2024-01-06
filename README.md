@@ -10,7 +10,7 @@ MRepo (short for `My Repository` or `Modules Repository`) is an Android app that
 ## Supported Versions
 - Android 8.0 ~ 14
 - Magisk 24.0 ~ latest
-- KernelSU 0.5.0 ~ latest
+- KernelSU 0.5.1 ~ latest
 
 ## Modules Repository
  - [magisk-modules-repo-util](https://github.com/MRepoApp/magisk-modules-repo-util): the util to help build modules repository
