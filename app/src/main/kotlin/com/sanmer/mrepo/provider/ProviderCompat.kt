@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.datastore.WorkingMode
 import dev.sanmer.mrepo.compat.ShizukuProvider
 import dev.sanmer.mrepo.compat.SuProvider
+import dev.sanmer.mrepo.compat.impl.Platform
 import dev.sanmer.mrepo.compat.stub.IFileManager
 import dev.sanmer.mrepo.compat.stub.IModuleManager
 import dev.sanmer.mrepo.compat.stub.IProvider
@@ -22,7 +23,7 @@ object ProviderCompat {
 
     val moduleManager: IModuleManager get() = mProvider.moduleManager
     val fileManager: IFileManager get() = mProvider.fileManager
-    val isKsu: Boolean get() = mProvider.isKsu
+    val isKsu: Boolean get() = mProvider.platform == Platform.KERNELSU
 
     var isAlive by mutableStateOf(false)
         private set

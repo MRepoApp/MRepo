@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.IBinder
 import android.os.Process
 import android.util.Log
+import dev.sanmer.mrepo.compat.impl.Platform
 import dev.sanmer.mrepo.compat.shizuku.ShizukuService
 import dev.sanmer.mrepo.compat.stub.IFileManager
 import dev.sanmer.mrepo.compat.stub.IModuleManager
@@ -26,7 +27,7 @@ object ShizukuProvider : IProvider, Shizuku.OnRequestPermissionResultListener {
     override val seLinuxContext: String get() = mService.seLinuxContext
     override val moduleManager: IModuleManager get() = mService.moduleManager
     override val fileManager: IFileManager get() = mService.fileManager
-    override val isKsu: Boolean get() = mService.isKsu
+    override val platform: Platform get() = Platform.valueOf(mService.currentPlatform())
 
     override val isAlive = MutableStateFlow(false)
 

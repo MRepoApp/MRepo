@@ -7,7 +7,6 @@ import com.topjohnwu.superuser.ShellUtils
 import dev.sanmer.mrepo.compat.stub.IFileManager
 import dev.sanmer.mrepo.compat.stub.IModuleManager
 import dev.sanmer.mrepo.compat.stub.IServiceManager
-import java.io.File
 import kotlin.system.exitProcess
 
 internal class ServiceManagerImpl : IServiceManager.Stub() {
@@ -17,7 +16,11 @@ internal class ServiceManagerImpl : IServiceManager.Stub() {
     }
 
     private val platform by lazy {
-        currentPlatform()
+        when {
+            "nsenter --mount=/proc/1/ns/mnt which magisk".execResult() -> Platform.MAGISK
+            "which ksud".execResult() -> Platform.KERNELSU
+            else -> throw IllegalArgumentException("unsupported platform: $seLinuxContext")
+        }
     }
 
     private val moduleManager by lazy {
@@ -51,19 +54,13 @@ internal class ServiceManagerImpl : IServiceManager.Stub() {
         return fileManager
     }
 
-    override fun isKsu(): Boolean {
-        return platform == Platform.KERNELSU
+    override fun currentPlatform(): String {
+        return platform.name
     }
 
     override fun destroy() {
         exitProcess(0)
     }
 
-    private fun currentPlatform(): Platform {
-        return when {
-            ShellUtils.fastCmdResult(main,"nsenter --mount=/proc/1/ns/mnt which ${Platform.MAGISK.manager}") -> Platform.MAGISK
-            File(Platform.KERNELSU.manager).exists() -> Platform.KERNELSU
-            else -> throw IllegalArgumentException("unsupported platform: $seLinuxContext")
-        }
-    }
+    private fun String.execResult() = ShellUtils.fastCmdResult(main, this)
 }

@@ -8,13 +8,11 @@ import dev.sanmer.mrepo.compat.stub.IModuleOpsCallback
 internal class KernelSUModuleManagerImpl(
     private val shell: Shell,
 ) : BaseModuleManagerImpl(shell) {
-    private val manager = Platform.KERNELSU.manager
-
     override fun enable(id: String, callback: IModuleOpsCallback) {
         val dir = modulesDir.resolve(id)
         if (!dir.exists()) callback.onFailure(id, null)
 
-        "$manager module enable $id".submit {
+        "ksud module enable $id".submit {
             if (it.isSuccess) {
                 callback.onSuccess(id)
             } else {
@@ -28,7 +26,7 @@ internal class KernelSUModuleManagerImpl(
         val dir = modulesDir.resolve(id)
         if (!dir.exists()) return callback.onFailure(id, null)
 
-        "$manager module disable $id".submit {
+        "ksud module disable $id".submit {
             if (it.isSuccess) {
                 callback.onSuccess(id)
             } else {
@@ -41,7 +39,7 @@ internal class KernelSUModuleManagerImpl(
         val dir = modulesDir.resolve(id)
         if (!dir.exists()) return callback.onFailure(id, null)
 
-        "$manager module uninstall $id".submit {
+        "ksud module uninstall $id".submit {
             if (it.isSuccess) {
                 callback.onSuccess(id)
             } else {
@@ -51,7 +49,7 @@ internal class KernelSUModuleManagerImpl(
     }
 
     override fun install(path: String, callback: IInstallCallback) {
-        val cmd = "$manager module install '${path}'"
+        val cmd = "ksud module install '${path}'"
 
         val stdout = object : CallbackList<String?>() {
             override fun onAddElement(msg: String?) {

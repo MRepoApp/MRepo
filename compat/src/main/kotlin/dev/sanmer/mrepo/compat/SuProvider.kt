@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.util.Log
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ipc.RootService
+import dev.sanmer.mrepo.compat.impl.Platform
 import dev.sanmer.mrepo.compat.stub.IFileManager
 import dev.sanmer.mrepo.compat.stub.IModuleManager
 import dev.sanmer.mrepo.compat.stub.IProvider
@@ -26,7 +27,7 @@ object SuProvider : IProvider {
     override val seLinuxContext: String get() = mService.seLinuxContext
     override val moduleManager: IModuleManager get() = mService.moduleManager
     override val fileManager: IFileManager get() = mService.fileManager
-    override val isKsu: Boolean get() = mService.isKsu
+    override val platform: Platform get() = Platform.valueOf(mService.currentPlatform())
 
     override val isAlive = MutableStateFlow(false)
 

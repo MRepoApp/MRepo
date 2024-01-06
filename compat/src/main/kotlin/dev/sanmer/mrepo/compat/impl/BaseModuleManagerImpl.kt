@@ -90,7 +90,7 @@ internal abstract class BaseModuleManagerImpl(
             }
     }
 
-    internal fun readState(moduleDir: File): State {
+    private fun readState(moduleDir: File): State {
         moduleDir.resolve("remove").apply {
             if (exists()) return State.REMOVE
         }
@@ -106,7 +106,7 @@ internal abstract class BaseModuleManagerImpl(
         return State.ENABLE
     }
 
-    internal fun readLastUpdated(moduleDir: File): Long {
+    private fun readLastUpdated(moduleDir: File): Long {
         MODULE_FILES.forEach { filename ->
             val file = moduleDir.resolve(filename)
             if (file.exists()) {
@@ -117,7 +117,7 @@ internal abstract class BaseModuleManagerImpl(
         return 0L
     }
 
-    internal fun Map<String, String>?.toModule(
+    private fun Map<String, String>?.toModule(
         state: State = State.ENABLE,
         lastUpdated: Long = 0L
     ): LocalModule? {
@@ -135,7 +135,7 @@ internal abstract class BaseModuleManagerImpl(
         )
     }
 
-    internal fun String.exec() = ShellUtils.fastCmd(shell, this)
+    private fun String.exec() = ShellUtils.fastCmd(shell, this)
 
     internal fun String.submit(cb: Shell.ResultCallback) = shell
         .newJob().add(this).to(ArrayList(), null)

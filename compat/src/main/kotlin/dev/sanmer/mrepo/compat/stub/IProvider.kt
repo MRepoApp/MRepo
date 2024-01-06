@@ -1,5 +1,6 @@
 package dev.sanmer.mrepo.compat.stub
 
+import dev.sanmer.mrepo.compat.impl.Platform
 import kotlinx.coroutines.flow.StateFlow
 
 interface IProvider {
@@ -8,7 +9,7 @@ interface IProvider {
     val seLinuxContext: String
     val moduleManager: IModuleManager
     val fileManager: IFileManager
-    val isKsu: Boolean
+    val platform: Platform
 
     val isAlive: StateFlow<Boolean>
     fun init()

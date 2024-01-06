@@ -8,8 +8,6 @@ import dev.sanmer.mrepo.compat.stub.IModuleOpsCallback
 internal class MagiskModuleManagerImpl(
     private val shell: Shell
 ) : BaseModuleManagerImpl(shell) {
-    private val manager = Platform.MAGISK.manager
-
     override fun enable(id: String, callback: IModuleOpsCallback) {
         val dir = modulesDir.resolve(id)
         if (!dir.exists()) callback.onFailure(id, null)
@@ -53,7 +51,7 @@ internal class MagiskModuleManagerImpl(
     }
 
     override fun install(path: String, callback: IInstallCallback) {
-        val cmd = "$manager --install-module '${path}'"
+        val cmd = "magisk --install-module '${path}'"
 
         val stdout = object : CallbackList<String?>() {
             override fun onAddElement(msg: String?) {
