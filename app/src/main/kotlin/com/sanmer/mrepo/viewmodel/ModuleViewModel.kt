@@ -24,6 +24,7 @@ import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.ui.navigation.graphs.RepositoryScreen
+import com.sanmer.mrepo.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -108,13 +109,21 @@ class ModuleViewModel @Inject constructor(
         }
     }
 
-    fun downloader(context: Context, item: VersionItem, onSuccess: (File) -> Unit) {
+    fun downloader(
+        context: Context,
+        item: VersionItem,
+        onSuccess: (File) -> Unit
+    ) {
         viewModelScope.launch {
             val downloadPath = userPreferencesRepository.data
                 .first().downloadPath
 
-            val filename = "${online.name}_${item.versionDisplay}.zip"
-                .replace("[\\s+|(/)]".toRegex(), "_")
+            val filename = Utils.getFilename(
+                name = online.name,
+                version = item.version,
+                versionCode = item.versionCode,
+                extension = "zip"
+            )
 
             val task = DownloadService.TaskItem(
                 key = item.toString(),

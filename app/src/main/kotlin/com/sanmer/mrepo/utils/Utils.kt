@@ -11,10 +11,7 @@ object Utils {
         Shell.cmd("/system/bin/svc power reboot $reason || /system/bin/reboot $reason").submit()
     }
 
-    fun getVersionDisplay(
-        version: String,
-        versionCode: Int
-    ): String {
+    fun getVersionDisplay(version: String, versionCode: Int): String {
         val included = "\\(.*?${versionCode}.*?\\)".toRegex()
             .containsMatchIn(version)
 
@@ -23,5 +20,11 @@ object Utils {
         } else {
             "$version (${versionCode})"
         }
+    }
+
+    fun getFilename(name: String, version: String, versionCode: Int, extension: String): String {
+        val versionNew = version.replace("\\([^)]*\\)".toRegex(), "")
+        return "${name}-${versionNew}-${versionCode}.${extension}"
+            .replace("[\\\\/:*?\"<>|]".toRegex(), "")
     }
 }

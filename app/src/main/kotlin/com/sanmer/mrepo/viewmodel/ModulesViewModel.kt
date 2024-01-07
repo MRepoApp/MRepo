@@ -27,6 +27,7 @@ import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.service.DownloadService
+import com.sanmer.mrepo.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.compat.stub.IModuleOpsCallback
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -268,8 +269,12 @@ class ModulesViewModel @Inject constructor(
             val downloadPath = userPreferencesRepository.data
                 .first().downloadPath
 
-            val filename = "${module.name}_${item.versionDisplay}.zip"
-                .replace("[\\s+|(/)]".toRegex(), "_")
+            val filename = Utils.getFilename(
+                name = module.name,
+                version = item.version,
+                versionCode = item.versionCode,
+                extension = "zip"
+            )
 
             val task = DownloadService.TaskItem(
                 key = item.toString(),
