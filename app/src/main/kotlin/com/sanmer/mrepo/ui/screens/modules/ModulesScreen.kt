@@ -65,6 +65,7 @@ fun ModulesScreen(
     val context = LocalContext.current
 
     val list by viewModel.local.collectAsStateWithLifecycle()
+    val showRefreshIndicator = viewModel.isRefreshing || viewModel.isOpsRunning
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
@@ -77,7 +78,7 @@ fun ModulesScreen(
     }
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = viewModel.isRefreshing,
+        refreshing = showRefreshIndicator,
         onRefresh = { viewModel.getLocalAll() }
     )
 
@@ -162,7 +163,7 @@ fun ModulesScreen(
 
             PullRefreshIndicator(
                 modifier = Modifier.align(Alignment.TopCenter),
-                refreshing = viewModel.isRefreshing,
+                refreshing = showRefreshIndicator,
                 state = pullRefreshState,
                 backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
                 contentColor = MaterialTheme.colorScheme.primary,

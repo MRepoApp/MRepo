@@ -6,6 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,16 +78,18 @@ class ModulesViewModel @Inject constructor(
 
     private val versionItemCache = mutableStateMapOf<String, VersionItem?>()
 
+    private val opsTasks = mutableStateListOf<String>()
+    val isOpsRunning get() = opsTasks.isNotEmpty()
     private val opsCallback = object : IModuleOpsCallback.Stub() {
         override fun onSuccess(id: String) {
             viewModelScope.launch {
                 modulesRepository.getLocal(id)
-                isRefreshing = false
+                opsTasks.remove(id)
             }
         }
 
         override fun onFailure(id: String, msg: String?) {
-            isRefreshing = false
+            opsTasks.remove(id)
             Timber.w("$id: $msg")
         }
     }
@@ -179,12 +182,12 @@ class ModulesViewModel @Inject constructor(
                 alpha = 1f,
                 decoration = TextDecoration.None,
                 toggle = {
-                    isRefreshing = true
+                    opsTasks.add(module.id)
                     ProviderCompat.moduleManager
                         .disable(module.id, opsCallback)
                 },
                 change = {
-                    isRefreshing = true
+                    opsTasks.add(module.id)
                     ProviderCompat.moduleManager
                         .remove(module.id, opsCallback)
                 }
@@ -193,12 +196,12 @@ class ModulesViewModel @Inject constructor(
             State.DISABLE -> LocalUiState(
                 alpha = 0.5f,
                 toggle = {
-                    isRefreshing = true
+                    opsTasks.add(module.id)
                     ProviderCompat.moduleManager
                         .enable(module.id, opsCallback)
                 },
                 change = {
-                    isRefreshing = true
+                    opsTasks.add(module.id)
                     ProviderCompat.moduleManager
                         .remove(module.id, opsCallback)
                 }
@@ -209,7 +212,7 @@ class ModulesViewModel @Inject constructor(
                 decoration = TextDecoration.LineThrough,
                 change = {
                     if (!ProviderCompat.isKsu) {
-                        isRefreshing = true
+                        opsTasks.add(module.id)
                         ProviderCompat.moduleManager
                             .enable(module.id, opsCallback)
                     }
