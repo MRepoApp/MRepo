@@ -2,8 +2,8 @@ package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -311,7 +311,7 @@ class ModulesViewModel @Inject constructor(
         return progress
     }
 
-    @Stable
+    @Immutable
     data class LocalUiState(
         val alpha: Float = 1f,
         val decoration: TextDecoration = TextDecoration.None,

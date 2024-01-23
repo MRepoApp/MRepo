@@ -21,7 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -164,7 +164,7 @@ fun SettingSwitchItem(
     }
 }
 
-@Stable
+@Immutable
 class SettingItemTextStyle internal constructor(
     val titleTextColor: Color,
     val descTextColor: Color,

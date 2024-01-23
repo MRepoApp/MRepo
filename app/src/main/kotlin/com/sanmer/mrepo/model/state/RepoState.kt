@@ -1,10 +1,10 @@
 package com.sanmer.mrepo.model.state
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.RepoMetadata
 
-@Stable
+@Immutable
 data class RepoState(
     val url: String,
     val name: String,

@@ -36,8 +36,8 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -432,7 +432,7 @@ private val TopAppBarHorizontalPadding = 4.dp
 // navigation icon is missing.
 private val TopAppBarTitleInset = 16.dp - TopAppBarHorizontalPadding
 
-@Stable
+@Immutable
 class CollapsingTopAppBarColors internal constructor(
     private val containerColor: Color,
     private val scrolledContainerColor: Color,
