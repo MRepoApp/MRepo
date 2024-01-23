@@ -36,7 +36,7 @@ fun LabelItem(
             style = MaterialTheme.typography.labelSmall
                 .copy(fontSize = 8.sp),
             color = contentColor,
-            modifier = Modifier.padding(all = 3.dp)
+            modifier = Modifier.padding(vertical = 2.dp, horizontal = 4.dp)
         )
     }
 }
