@@ -30,7 +30,7 @@ data class UserPreferencesExt(
         fun default() = UserPreferencesExt(
             workingMode = WorkingMode.FIRST_SETUP,
             darkMode = DarkMode.FOLLOW_SYSTEM,
-            themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Sakura.id,
+            themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Pourville.id,
             deleteZipFile = false,
             useDoh = false,
             downloadPath = Const.PUBLIC_DOWNLOADS,
