@@ -9,7 +9,7 @@ object Const {
     )
 
     const val MY_GITHUB_URL = "https://github.com/SanmerDev"
-    const val TRANSLATE_URL = "https://weblate.sanmer.dev/engage/mrepo"
+    const val TRANSLATE_URL = "https://weblate.sanmer.app/engage/mrepo"
     const val GITHUB_URL = "https://github.com/MRepoApp/MRepo"
     const val TELEGRAM_URL = "https://t.me/mrepo_news"
     const val DEMO_REPO_URL = "https://demo-repo.sanmer.app/"
