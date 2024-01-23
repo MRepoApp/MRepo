@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.pro.compose)
     alias(libs.plugins.pro.hilt)
     alias(libs.plugins.pro.room)
-    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.protobuf)
 }

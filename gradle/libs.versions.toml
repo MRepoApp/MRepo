@@ -16,9 +16,7 @@ androidxHiltNavigationCompose = "1.1.0"
 androidxLifecycle = "2.7.0"
 androidxNavigation = "2.7.6"
 androidxRoom = "2.6.1"
-androidxWork = "2.9.0"
 hilt = "2.50"
-hiltExt = "1.1.0"
 kotlin = "1.9.21"
 kotlinxCoroutines = "1.7.3"
 kotlinxDatetime = "0.5.0"
@@ -55,17 +53,11 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
-androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
-hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
-kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 libsu-core = { group = "com.github.topjohnwu.libsu", name = "core", version.ref = "libsu" }
-libsu-io = { group = "com.github.topjohnwu.libsu", name = "io", version.ref = "libsu" }
 libsu-service = { group = "com.github.topjohnwu.libsu", name = "service", version.ref = "libsu" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
