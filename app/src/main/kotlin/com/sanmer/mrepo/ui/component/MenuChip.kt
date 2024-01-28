@@ -49,7 +49,8 @@ fun MenuChip(
         iconColor = MaterialTheme.colorScheme.secondary,
         selectedContainerColor = MaterialTheme.colorScheme.secondary,
         selectedLabelColor = MaterialTheme.colorScheme.onSecondary,
-        selectedLeadingIconColor = MaterialTheme.colorScheme.onSecondary
+        selectedLeadingIconColor = MaterialTheme.colorScheme.onSecondary,
+        selectedTrailingIconColor = MaterialTheme.colorScheme.onSecondary
     ),
     border = FilterChipDefaults.filterChipBorder(
         enabled = enabled,
