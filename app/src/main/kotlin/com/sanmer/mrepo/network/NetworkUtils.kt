@@ -15,6 +15,7 @@ import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 import java.io.File
 import java.io.OutputStream
 import java.util.Locale
@@ -50,9 +51,12 @@ object NetworkUtils {
         val builder = OkHttpClient.Builder().cache(cacheOrNull)
 
         if (BuildConfig.DEBUG) {
-            builder.addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BASIC
-            })
+            builder.addInterceptor(
+                HttpLoggingInterceptor { Timber.i(it) }
+                    .apply {
+                        level = HttpLoggingInterceptor.Level.BASIC
+                    }
+            )
         } else {
             builder.connectionSpecs(listOf(ConnectionSpec.MODERN_TLS))
         }
