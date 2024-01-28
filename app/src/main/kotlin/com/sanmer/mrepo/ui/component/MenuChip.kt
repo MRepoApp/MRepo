@@ -52,6 +52,8 @@ fun MenuChip(
         selectedLeadingIconColor = MaterialTheme.colorScheme.onSecondary
     ),
     border = FilterChipDefaults.filterChipBorder(
+        enabled = enabled,
+        selected = selected,
         borderColor = MaterialTheme.colorScheme.secondary,
     )
 )

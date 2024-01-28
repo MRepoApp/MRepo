@@ -18,7 +18,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -31,7 +30,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 
-@OptIn(ExperimentalComposeUiApi::class) // TODO: Remove in version 1.6.x
 @Composable
 fun SearchTopBar(
     isSearch: Boolean,
