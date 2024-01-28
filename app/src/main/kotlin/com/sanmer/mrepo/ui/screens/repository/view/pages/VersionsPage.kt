@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -58,14 +58,14 @@ fun VersionsPage(
         val progress = getProgress(item)
         if (progress != 0f) {
             LinearProgressIndicator(
-                progress = progress,
+                progress = { progress },
                 strokeCap = StrokeCap.Round,
                 modifier = Modifier
                     .height(2.dp)
                     .fillMaxWidth()
             )
         } else {
-            Divider(thickness = 0.9.dp)
+            HorizontalDivider(thickness = 0.9.dp)
         }
     }
 }

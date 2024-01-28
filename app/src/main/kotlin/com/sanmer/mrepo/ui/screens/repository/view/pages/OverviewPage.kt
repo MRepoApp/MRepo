@@ -12,10 +12,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -66,7 +66,7 @@ fun OverviewPage(
         )
     }
 
-    Divider(thickness = 0.9.dp)
+    HorizontalDivider(thickness = 0.9.dp)
 
     if (item != null) {
         CloudItem(
@@ -75,7 +75,7 @@ fun OverviewPage(
             onInstall = onInstall
         )
 
-        Divider(thickness = 0.9.dp)
+        HorizontalDivider(thickness = 0.9.dp)
     }
 
     LocalItem(
@@ -84,7 +84,7 @@ fun OverviewPage(
         setUpdatesTag = setUpdatesTag
     )
 
-    Divider(thickness = 0.9.dp)
+    HorizontalDivider(thickness = 0.9.dp)
 }
 
 @Composable

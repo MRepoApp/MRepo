@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -117,7 +117,7 @@ fun ModuleItem(
 
             if (progress != 0f) {
                 LinearProgressIndicator(
-                    progress = progress,
+                    progress = { progress },
                     strokeCap = StrokeCap.Round,
                     modifier = Modifier
                         .padding(top = 8.dp)
@@ -125,7 +125,7 @@ fun ModuleItem(
                         .fillMaxWidth()
                 )
             } else {
-                Divider(
+                HorizontalDivider(
                     thickness = 1.5.dp,
                     color = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.padding(top = 8.dp)
