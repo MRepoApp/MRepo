@@ -56,7 +56,7 @@ fun RepositoryItem(
     update: () -> Unit,
     delete: () -> Unit,
 ) = Surface(
-    shape = RoundedCornerShape(12.dp),
+    shape = RoundedCornerShape(15.dp),
     color = MaterialTheme.colorScheme.surface,
     tonalElevation = 1.dp,
     onClick = { toggle(!repo.enable) },
@@ -69,7 +69,7 @@ fun RepositoryItem(
 
     Column(
         modifier = Modifier
-            .padding(all = 12.dp)
+            .padding(all = 15.dp)
             .fillMaxWidth()
     ) {
         Row(
