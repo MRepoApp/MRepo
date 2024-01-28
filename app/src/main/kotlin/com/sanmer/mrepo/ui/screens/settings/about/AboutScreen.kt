@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.ui.screens.settings.about
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,13 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -126,8 +128,10 @@ fun AboutScreen(
                 }
             }
 
-            OutlinedCard(
-                modifier = Modifier.padding(vertical = 30.dp, horizontal = 20.dp)
+            Surface(
+                modifier = Modifier.padding(vertical = 30.dp, horizontal = 20.dp),
+                border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline),
+                shape = RoundedCornerShape(15.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(all = 15.dp)
