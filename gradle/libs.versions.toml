@@ -27,7 +27,7 @@ protobufPlugin = "0.9.4"
 shizuku = "13.1.5"
 squareRetrofit = "2.9.0"
 squareOkhttp = "4.12.0"
-squareMoshi = "1.15.0"
+squareMoshi = "1.15.1"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
