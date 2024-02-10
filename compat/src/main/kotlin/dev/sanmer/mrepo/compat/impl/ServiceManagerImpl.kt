@@ -17,7 +17,7 @@ internal class ServiceManagerImpl : IServiceManager.Stub() {
 
     private val platform by lazy {
         when {
-            "nsenter --mount=/proc/1/ns/mnt which magisk".execResult() -> Platform.MAGISK
+            "which magisk".execResult() -> Platform.MAGISK
             "which ksud".execResult() -> Platform.KERNELSU
             else -> throw IllegalArgumentException("unsupported platform: $seLinuxContext")
         }
