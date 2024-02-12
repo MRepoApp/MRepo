@@ -37,7 +37,6 @@ fun ModulesList(
     list: List<LocalModule>,
     state: LazyListState,
     isProviderAlive: Boolean,
-    isProviderKsu: Boolean,
     getUiState: @Composable (LocalModule) -> LocalUiState,
     getVersionItem: @Composable (LocalModule) -> VersionItem?,
     getProgress: @Composable (VersionItem?) -> Float,
@@ -58,7 +57,6 @@ fun ModulesList(
             ModuleItem(
                 module = module,
                 isProviderAlive = isProviderAlive,
-                isProviderKsu = isProviderKsu,
                 getUiState = getUiState,
                 getVersionItem = getVersionItem,
                 getProgress = getProgress,
@@ -77,7 +75,6 @@ fun ModulesList(
 fun ModuleItem(
     module: LocalModule,
     isProviderAlive: Boolean,
-    isProviderKsu: Boolean,
     getUiState: @Composable (LocalModule) -> LocalUiState,
     getVersionItem: @Composable (LocalModule) -> VersionItem?,
     getProgress: @Composable (VersionItem?) -> Float,
@@ -127,10 +124,7 @@ fun ModuleItem(
 
             RemoveOrRestore(
                 module = module,
-                enabled = when (module.state) {
-                    State.REMOVE -> isProviderAlive && !isProviderKsu
-                    else -> isProviderAlive
-                },
+                enabled = isProviderAlive,
                 onClick = uiState.change
             )
         }

@@ -49,11 +49,6 @@ class ModulesViewModel @Inject constructor(
 ) : ViewModel() {
     val isProviderAlive get() = ProviderCompat.isAlive
 
-    val isProviderKsu get() = when {
-        isProviderAlive -> ProviderCompat.isKsu
-        else -> false
-    }
-
     private val modulesMenu get() = userPreferencesRepository.data
         .map { it.modulesMenu }
 
@@ -212,11 +207,9 @@ class ModulesViewModel @Inject constructor(
                 alpha = 0.5f,
                 decoration = TextDecoration.LineThrough,
                 change = {
-                    if (!ProviderCompat.isKsu) {
-                        opsTasks.add(module.id)
-                        ProviderCompat.moduleManager
-                            .enable(module.id, opsCallback)
-                    }
+                    opsTasks.add(module.id)
+                    ProviderCompat.moduleManager
+                        .enable(module.id, opsCallback)
                 }
             )
 
