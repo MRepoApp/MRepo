@@ -19,14 +19,16 @@ internal class ServiceManagerImpl : IServiceManager.Stub() {
         when {
             "which magisk".execResult() -> Platform.MAGISK
             "which ksud".execResult() -> Platform.KERNELSU
+            "which apd".execResult() -> Platform.APatch
             else -> throw IllegalArgumentException("unsupported platform: $seLinuxContext")
         }
     }
 
     private val moduleManager by lazy {
         when (platform) {
-            Platform.KERNELSU -> KernelSUModuleManagerImpl(main)
             Platform.MAGISK -> MagiskModuleManagerImpl(main)
+            Platform.KERNELSU -> KernelSUModuleManagerImpl(main)
+            Platform.APatch -> APatchModuleManagerImpl(main)
         }
     }
 
