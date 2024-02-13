@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -41,7 +40,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +58,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastFirst
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -109,19 +108,16 @@ private fun CollapsingTopAppBarLayout(
     pinnedHeight: Dp,
     scrollBehavior: TopAppBarScrollBehavior?
 ) {
+    var maxHeightPx by remember { mutableFloatStateOf(0f) }
     val pinnedHeightPx = with(LocalDensity.current) {
         pinnedHeight.toPx()
     }
 
-    // Sets the app bar's height offset to collapse the entire bar's height when content is
-    // scrolled.
-    var heightOffsetLimit by remember { mutableFloatStateOf(-pinnedHeightPx) }
-
     // Sets the app bar's height offset limit to hide just the bottom title area and keep top title
     // visible when collapsed.
     SideEffect {
-        if (scrollBehavior?.state?.heightOffsetLimit != heightOffsetLimit) {
-            scrollBehavior?.state?.heightOffsetLimit = heightOffsetLimit
+        if (scrollBehavior?.state?.heightOffsetLimit != pinnedHeightPx - maxHeightPx) {
+            scrollBehavior?.state?.heightOffsetLimit = pinnedHeightPx - maxHeightPx
         }
     }
 
@@ -131,7 +127,7 @@ private fun CollapsingTopAppBarLayout(
     // This will potentially animate or interpolate a transition between the container color and the
     // container's scrolled color according to the app bar's scroll state.
     val colorTransitionFraction = scrollBehavior?.state?.collapsedFraction ?: 0f
-    val appBarContainerColor by rememberUpdatedState(colors.containerColor(colorTransitionFraction))
+    val appBarContainerColor = colors.containerColor(colorTransitionFraction)
 
     // Wrap the given actions in a Row.
     val actionsRow = @Composable {
@@ -153,7 +149,7 @@ private fun CollapsingTopAppBarLayout(
         Modifier.draggable(
             orientation = Orientation.Vertical,
             state = rememberDraggableState { delta ->
-                scrollBehavior.state.heightOffset = scrollBehavior.state.heightOffset + delta
+                scrollBehavior.state.heightOffset += delta
             },
             onDragStopped = { velocity ->
                 settleAppBar(
@@ -207,12 +203,10 @@ private fun CollapsingTopAppBarLayout(
                             })
                             .graphicsLayer(alpha = bottomTitleAlpha)
                     ) {
-                        ProvideTextStyle(value = titleTextStyle) {
-                            CompositionLocalProvider(
-                                LocalContentColor provides colors.titleContentColor,
-                                content = title
-                            )
-                        }
+                        ProvideContentColorTextStyle(
+                            contentColor = colors.titleContentColor,
+                            textStyle = titleTextStyle,
+                            content = title)
                     }
                 },
                 modifier = Modifier
@@ -222,20 +216,20 @@ private fun CollapsingTopAppBarLayout(
                     .clipToBounds()
             ) { measurables, constraints ->
                 val titlePlaceable =
-                    measurables.first { it.layoutId == "title" }
+                    measurables.fastFirst { it.layoutId == "title" }
                         .measure(constraints.copy(minWidth = 0))
                         .apply {
-                            heightOffsetLimit = - (pinnedHeightPx + height)
+                            maxHeightPx = pinnedHeightPx + height
                         }
 
-                val heightOffset = scrollBehavior?.state?.heightOffset ?: 0f
-                val layoutHeight = (titlePlaceable.height + heightOffset)
-                    .roundToInt()
+                val heightPx = maxHeightPx - pinnedHeightPx + (scrollBehavior?.state?.heightOffset
+                    ?: 0f)
 
+                val layoutHeight = if (heightPx.isNaN()) 0 else heightPx.roundToInt()
                 layout(constraints.maxWidth, layoutHeight) {
                     titlePlaceable.placeRelative(
                         x = 0,
-                        y = layoutHeight - titlePlaceable.height
+                        y = 0
                     )
                 }
             }
@@ -243,7 +237,6 @@ private fun CollapsingTopAppBarLayout(
     }
 }
 
-@Suppress("SameParameterValue")
 @Composable
 private fun TopAppBarLayout(
     modifier: Modifier,
@@ -280,12 +273,10 @@ private fun TopAppBarLayout(
                     .then(if (hideTitleSemantics) Modifier.clearAndSetSemantics { } else Modifier)
                     .graphicsLayer(alpha = titleAlpha)
             ) {
-                ProvideTextStyle(value = titleTextStyle) {
-                    CompositionLocalProvider(
-                        LocalContentColor provides titleContentColor,
-                        content = title
-                    )
-                }
+                ProvideContentColorTextStyle(
+                    contentColor = titleContentColor,
+                    textStyle = titleTextStyle,
+                    content = title)
             }
             Box(
                 Modifier
@@ -301,10 +292,10 @@ private fun TopAppBarLayout(
         modifier = modifier
     ) { measurables, constraints ->
         val navigationIconPlaceable =
-            measurables.first { it.layoutId == "navigationIcon" }
+            measurables.fastFirst { it.layoutId == "navigationIcon" }
                 .measure(constraints.copy(minWidth = 0))
         val actionIconsPlaceable =
-            measurables.first { it.layoutId == "actionIcons" }
+            measurables.fastFirst { it.layoutId == "actionIcons" }
                 .measure(constraints.copy(minWidth = 0))
 
         val maxTitleWidth = if (constraints.maxWidth == Constraints.Infinity) {
@@ -314,7 +305,7 @@ private fun TopAppBarLayout(
                 .coerceAtLeast(0)
         }
         val titlePlaceable =
-            measurables.first { it.layoutId == "title" }
+            measurables.fastFirst { it.layoutId == "title" }
                 .measure(constraints.copy(minWidth = 0, maxWidth = maxTitleWidth))
 
         // Locate the title's baseline.
@@ -325,7 +316,7 @@ private fun TopAppBarLayout(
                 0
             }
 
-        val layoutHeight = heightPx.roundToInt()
+        val layoutHeight = if (heightPx.isNaN()) 0 else heightPx.roundToInt()
 
         layout(constraints.maxWidth, layoutHeight) {
             // Navigation icon
@@ -337,7 +328,24 @@ private fun TopAppBarLayout(
             // Title
             titlePlaceable.placeRelative(
                 x = when (titleHorizontalArrangement) {
-                    Arrangement.Center -> (constraints.maxWidth - titlePlaceable.width) / 2
+                    Arrangement.Center -> {
+                        var baseX = (constraints.maxWidth - titlePlaceable.width) / 2
+                        if (baseX < navigationIconPlaceable.width) {
+                            // May happen if the navigation is wider than the actions and the
+                            // title is long. In this case, prioritize showing more of the title by
+                            // offsetting it to the right.
+                            baseX += (navigationIconPlaceable.width - baseX)
+                        } else if (baseX + titlePlaceable.width >
+                            constraints.maxWidth - actionIconsPlaceable.width
+                        ) {
+                            // May happen if the actions are wider than the navigation and the title
+                            // is long. In this case, offset to the left.
+                            baseX += ((constraints.maxWidth - actionIconsPlaceable.width) -
+                                    (baseX + titlePlaceable.width))
+                        }
+                        baseX
+                    }
+
                     Arrangement.End ->
                         constraints.maxWidth - titlePlaceable.width - actionIconsPlaceable.width
                     // Arrangement.Start.
@@ -449,7 +457,6 @@ class CollapsingTopAppBarColors internal constructor(
         )
     }
 
-    @Suppress("RedundantIf")
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || other !is CollapsingTopAppBarColors) return false
