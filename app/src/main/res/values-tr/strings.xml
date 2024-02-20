@@ -64,7 +64,7 @@
     <string name="dialog_ok">Tamam</string>
     <string name="message_download_success">İndirme başarılı</string>
     <string name="message_loading">Yükleniyor…</string>
-    <string name="notification_name_download">İndirme İşlemi</string>
+    <string name="notification_name_download">İndirme Servisi</string>
     <string name="search_empty">Liste boş</string>
     <string name="search_placeholder">Ara…</string>
     <string name="unknown_error">Bilinmeyen hata</string>
