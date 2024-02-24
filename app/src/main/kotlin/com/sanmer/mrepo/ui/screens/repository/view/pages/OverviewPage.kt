@@ -37,7 +37,7 @@ import com.sanmer.mrepo.utils.extensions.toDateTime
 fun OverviewPage(
     online: OnlineModule,
     item: VersionItem?,
-    local: LocalModule,
+    local: LocalModule?,
     isProviderAlive: Boolean,
     notifyUpdates: Boolean,
     setUpdatesTag: (Boolean) -> Unit,
@@ -78,13 +78,15 @@ fun OverviewPage(
         HorizontalDivider(thickness = 0.9.dp)
     }
 
-    LocalItem(
-        local = local,
-        notifyUpdates = notifyUpdates,
-        setUpdatesTag = setUpdatesTag
-    )
+    if (local != null) {
+        LocalItem(
+            local = local,
+            notifyUpdates = notifyUpdates,
+            setUpdatesTag = setUpdatesTag
+        )
 
-    HorizontalDivider(thickness = 0.9.dp)
+        HorizontalDivider(thickness = 0.9.dp)
+    }
 }
 
 @Composable

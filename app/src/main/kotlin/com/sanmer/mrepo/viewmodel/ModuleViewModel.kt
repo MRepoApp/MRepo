@@ -15,7 +15,6 @@ import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
-import com.sanmer.mrepo.model.local.example
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.model.online.VersionItem
@@ -51,15 +50,15 @@ class ModuleViewModel @Inject constructor(
             && online.track.source.isBlank()
             && online.track.support.isBlank()
 
-    var local by mutableStateOf(LocalModule.example())
+    var local: LocalModule? by mutableStateOf(null)
         private set
 
-    private val installed get() = local.id == online.id
-            && local.author == online.author
+    private val installed get() = local?.let { it.author == online.author } ?: false
     var notifyUpdates by mutableStateOf(false)
         private set
 
-    val localVersionCode get() = if (notifyUpdates) local.versionCode else Int.MAX_VALUE
+    val localVersionCode get() =
+        if (notifyUpdates && installed) local!!.versionCode else Int.MAX_VALUE
     val updatableSize by derivedStateOf {
         versions.count { it.second.versionCode > localVersionCode }
     }
@@ -96,7 +95,7 @@ class ModuleViewModel @Inject constructor(
         }
 
         if (installed) {
-            UpdateJson.loadToVersionItem(local.updateJson)?.let {
+            UpdateJson.loadToVersionItem(local!!.updateJson)?.let {
                 versions.add(0, "Update Json".toRepo() to it)
             }
         }
