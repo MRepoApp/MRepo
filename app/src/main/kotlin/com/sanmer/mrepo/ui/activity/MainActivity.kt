@@ -1,5 +1,7 @@
 package com.sanmer.mrepo.ui.activity
 
+import android.content.ComponentName
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -61,6 +63,7 @@ class MainActivity : ComponentActivity() {
 
                 ProviderCompat.init(userPreferences!!.workingMode)
                 NetworkUtils.setEnableDoh(userPreferences!!.useDoh)
+                setInstallActivityEnabled(userPreferences!!.isRoot)
             }
 
             CompositionLocalProvider(
@@ -91,5 +94,23 @@ class MainActivity : ComponentActivity() {
 
             MediaStoreUtils.PermissionState()
         }
+    }
+
+    private fun setInstallActivityEnabled(enable: Boolean) {
+        val component = ComponentName(
+            this, InstallActivity::class.java
+        )
+
+        val state = if (enable) {
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        } else {
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        }
+
+        packageManager.setComponentEnabledSetting(
+            component,
+            state,
+            PackageManager.DONT_KILL_APP
+        )
     }
 }
