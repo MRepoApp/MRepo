@@ -82,7 +82,7 @@ class DownloadService : LifecycleService() {
 
             val df = downloadPath.createFile("*/*", item.filename)
             if (df == null) {
-                notifyFailure(item, null)
+                notifyFailure(item, "Failed to create file")
                 return@launch
             }
 
@@ -91,7 +91,7 @@ class DownloadService : LifecycleService() {
                     contentResolver.openOutputStream(df.uri)
                 )
             } catch (e: FileNotFoundException) {
-                notifyFailure(item, e)
+                notifyFailure(item, e.message)
                 return@launch
             }
 
@@ -110,7 +110,7 @@ class DownloadService : LifecycleService() {
                 }
 
                 override fun onFailure(e: Throwable) {
-                    notifyFailure(item, e)
+                    notifyFailure(item, e.message)
 
                     progressFlow.value = item to 0f
                     listeners[item]?.onFailure(e)
@@ -203,14 +203,14 @@ class DownloadService : LifecycleService() {
         notify(item.taskId, notification.build())
     }
 
-    private fun notifyFailure(item: TaskItem, e: Throwable?) {
-        val message = e?.message ?: context.getString(R.string.unknown_error)
+    private fun notifyFailure(item: TaskItem, message: String?) {
+        val msg = message ?: context.getString(R.string.unknown_error)
         val notification = buildNotification(
             title = item.title,
             desc = item.desc,
             silent = false
         ).apply {
-            setContentText(message)
+            setContentText(msg)
         }
 
         notify(item.taskId, notification.build())
