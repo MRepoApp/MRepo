@@ -15,7 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.model.local.LocalModule
@@ -78,8 +77,7 @@ class InstallActivity : ComponentActivity() {
             }
 
             CompositionLocalProvider(
-                LocalUserPreferences provides userPreferences!!,
-                LocalViewModelStoreOwner provides this
+                LocalUserPreferences provides userPreferences!!
             ) {
                 AppTheme(
                     darkMode = userPreferences!!.isDarkMode(),
