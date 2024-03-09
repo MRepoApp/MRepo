@@ -9,9 +9,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -56,7 +53,6 @@ import com.sanmer.mrepo.app.Event.Companion.isLoading
 import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
-import com.sanmer.mrepo.ui.utils.none
 import com.sanmer.mrepo.utils.Utils
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import kotlinx.coroutines.launch
@@ -88,14 +84,13 @@ fun InstallScreen(
     )
 
     val context = LocalContext.current
-    val interactionSource = remember { MutableInteractionSource() }
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("*/*")
     ) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
 
         scope.launch {
-            viewModel.saveLog(context, uri)
+            viewModel.writeLogsTo(context, uri)
                 .onSuccess {
                     val message = context.getString(R.string.install_logs_saved)
                     snackbarHostState.showSnackbar(
@@ -115,21 +110,12 @@ fun InstallScreen(
         }
     }
 
-    LaunchedEffect(interactionSource) {
-        interactionSource.interactions.collect { interaction ->
-            if (interaction is PressInteraction.Release) {
-                launcher.launch(viewModel.logfile)
-            }
-        }
-    }
-
     Scaffold(
         modifier = Modifier
             .onKeyEvent {
                 when (it.key) {
                     Key.VolumeUp,
                     Key.VolumeDown -> viewModel.event.isLoading
-
                     else -> false
                 }
             }
@@ -138,8 +124,8 @@ fun InstallScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopBar(
+                exportLog = { launcher.launch(viewModel.logfile) },
                 event = viewModel.event,
-                interactionSource = interactionSource,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -158,8 +144,7 @@ fun InstallScreen(
                 FloatingButton()
             }
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        contentWindowInsets = WindowInsets.none
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         Console(
             list = viewModel.console.asReversed(),
@@ -196,8 +181,8 @@ private fun Console(
 
 @Composable
 private fun TopBar(
+    exportLog: () -> Unit,
     event: Event,
-    interactionSource: MutableInteractionSource,
     scrollBehavior: TopAppBarScrollBehavior
 ) = NavigateUpTopBar(
     title = stringResource(id = R.string.install_screen_title),
@@ -211,8 +196,7 @@ private fun TopBar(
     actions = {
         if (event.isFinished) {
             IconButton(
-                interactionSource = interactionSource,
-                onClick = {}
+                onClick = exportLog
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.device_floppy),

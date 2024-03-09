@@ -12,16 +12,15 @@ import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
-import com.sanmer.mrepo.utils.extensions.now
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.compat.stub.IInstallCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
 import java.io.File
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,13 +33,13 @@ class InstallViewModel @Inject constructor(
     var event by mutableStateOf(Event.LOADING)
         private set
 
-    val logfile get() = "module_install_log_${LocalDateTime.now()}.log"
+    val logfile get() = "Install_${LocalDateTime.now()}.log"
 
     init {
         Timber.d("InstallViewModel init")
     }
 
-    suspend fun saveLog(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
+    suspend fun writeLogsTo(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
         runCatching {
             val cr = context.contentResolver
             cr.openOutputStream(uri)?.use {
