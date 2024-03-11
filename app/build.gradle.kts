@@ -85,6 +85,8 @@ android {
         "**/*.proto"
     )
 
+    dependenciesInfo.includeInApk = false
+
     applicationVariants.configureEach {
         outputs.configureEach {
             (this as? ApkVariantOutputImpl)?.outputFileName =
