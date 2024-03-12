@@ -48,33 +48,33 @@ class MainActivity : ComponentActivity() {
             val userPreferences by userPreferencesRepository.data
                 .collectAsStateWithLifecycle(initialValue = null)
 
-            if (userPreferences == null) {
-                // Keep on splash screen
+            val preferences = if (userPreferences == null) {
                 return@setContent
             } else {
                 isLoading = false
+                checkNotNull(userPreferences)
             }
 
             LaunchedEffect(userPreferences) {
-                if (userPreferences!!.isSetup) {
+                if (preferences.isSetup) {
                     Timber.d("add default repository")
                     localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
                 }
 
-                ProviderCompat.init(userPreferences!!.workingMode)
-                NetworkUtils.setEnableDoh(userPreferences!!.useDoh)
-                setInstallActivityEnabled(userPreferences!!.isRoot)
+                ProviderCompat.init(preferences.workingMode)
+                NetworkUtils.setEnableDoh(preferences.useDoh)
+                setInstallActivityEnabled(preferences.isRoot)
             }
 
             CompositionLocalProvider(
-                LocalUserPreferences provides userPreferences!!
+                LocalUserPreferences provides preferences
             ) {
                 AppTheme(
-                    darkMode = userPreferences!!.isDarkMode(),
-                    themeColor = userPreferences!!.themeColor
+                    darkMode = preferences.isDarkMode(),
+                    themeColor = preferences.themeColor
                 ) {
                     Crossfade(
-                        targetState = userPreferences!!.isSetup,
+                        targetState = preferences.isSetup,
                         label = "MainActivity"
                     ) { isSetup ->
                         if (isSetup) {
