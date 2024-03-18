@@ -1,14 +1,8 @@
 package com.sanmer.mrepo.ui.component
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,32 +57,14 @@ fun LicenseContent(
         }
     )
 
-    Box(
-        modifier = Modifier
-            .animateContentSize(spring(stiffness = Spring.StiffnessLow))
+    Crossfade(
+        targetState = event,
+        label = "LicenseContent"
     ) {
-        AnimatedVisibility(
-            visible = event.isLoading,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Loading(minHeight = 200.dp)
-        }
-
-        AnimatedVisibility(
-            visible = event.isSucceeded,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            ViewLicense(license = license!!)
-        }
-
-        AnimatedVisibility(
-            visible = event.isFailed,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Failed(message = message, minHeight = 200.dp)
+        when {
+            it.isLoading -> Loading(minHeight = 200.dp)
+            it.isSucceeded -> ViewLicense(license = checkNotNull(license))
+            it.isFailed -> Failed(message = message, minHeight = 200.dp)
         }
     }
 }
@@ -98,8 +74,8 @@ private fun ViewLicense(
     license: License
 ) = Column(
     modifier = Modifier
-        .padding(horizontal = 18.dp)
         .padding(top = 18.dp)
+        .padding(horizontal = 18.dp)
         .fillMaxSize(),
     verticalArrangement = Arrangement.spacedBy(18.dp),
     horizontalAlignment = Alignment.CenterHorizontally
