@@ -9,9 +9,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
+import com.sanmer.mrepo.app.utils.MediaStoreUtils
 import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
+import com.sanmer.mrepo.utils.extensions.tmpDir
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.compat.stub.IInstallCallback
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +52,41 @@ class InstallViewModel @Inject constructor(
         }
     }
 
-    suspend fun install(zipPath: String, isReal: Boolean) = withContext(Dispatchers.IO) {
+    suspend fun loadData(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
+        val path = MediaStoreUtils.getAbsolutePathForUri(context, uri)
+        Timber.d("path = $path")
+
+        ProviderCompat.moduleManager
+            .getModuleInfo(path)?.let {
+                Timber.d("module = $it")
+                install(path)
+
+                return@withContext
+            }
+
+        console.add("- Copying zip to temp directory")
+        val name = MediaStoreUtils.getDisplayNameForUri(context, uri)
+        val tmpFile = context.tmpDir.resolve(name)
+        val cr = context.contentResolver
+        cr.openInputStream(uri)?.use { input ->
+            tmpFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        ProviderCompat.moduleManager
+            .getModuleInfo(tmpFile.path)?.let {
+                Timber.d("module = $it")
+                install(tmpFile.path)
+
+                return@withContext
+            }
+
+        event = Event.FAILED
+        console.add("- Unknown file: path = $path, uri = $uri")
+    }
+
+    private suspend fun install(zipPath: String) = withContext(Dispatchers.IO) {
         val zipFile = File(zipPath)
         val deleteZipFile = userPreferencesRepository
             .data.first().deleteZipFile
@@ -69,7 +105,7 @@ class InstallViewModel @Inject constructor(
                 event = Event.SUCCEEDED
                 getLocal(id)
 
-                if (deleteZipFile && isReal) {
+                if (deleteZipFile) {
                     deleteBySu(zipPath)
                 }
             }

@@ -116,6 +116,7 @@ fun InstallScreen(
                 when (it.key) {
                     Key.VolumeUp,
                     Key.VolumeDown -> viewModel.event.isLoading
+
                     else -> false
                 }
             }
@@ -147,7 +148,7 @@ fun InstallScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         Console(
-            list = viewModel.console.asReversed(),
+            list = viewModel.console,
             state = listState,
             modifier = Modifier
                 .padding(it)
@@ -162,20 +163,25 @@ private fun Console(
     list: List<String>,
     state: LazyListState,
     modifier: Modifier = Modifier,
-) = LazyColumn(
-    state = state,
-    modifier = modifier,
-    reverseLayout = true
 ) {
-    items(list) {
-        Text(
-            text = it,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 8.dp),
-            style = MaterialTheme.typography.bodySmall.copy(
-                fontFamily = FontFamily.Monospace
+    LaunchedEffect(list.size) {
+        state.animateScrollToItem(list.size)
+    }
+
+    LazyColumn(
+        state = state,
+        modifier = modifier
+    ) {
+        items(list) {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 8.dp),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontFamily = FontFamily.Monospace
+                )
             )
-        )
+        }
     }
 }
 
