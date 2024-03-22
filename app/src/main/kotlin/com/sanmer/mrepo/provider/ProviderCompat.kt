@@ -28,12 +28,12 @@ object ProviderCompat {
 
     fun init(mode: WorkingMode) {
         if (mode == mMode) {
-            return
+            if (isAlive) return
         } else {
-            destroy() // destroy last provider
-            mMode = mode
+            if (isAlive) destroy()
         }
 
+        mMode = mode
         when (mMode) {
             WorkingMode.MODE_ROOT -> {
                 SuProvider.apply {
