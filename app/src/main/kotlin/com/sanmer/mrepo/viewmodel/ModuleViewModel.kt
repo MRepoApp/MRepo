@@ -11,6 +11,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.toRepo
 import com.sanmer.mrepo.model.json.UpdateJson
@@ -18,7 +19,6 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.TrackJson
 import com.sanmer.mrepo.model.online.VersionItem
-import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.service.DownloadService

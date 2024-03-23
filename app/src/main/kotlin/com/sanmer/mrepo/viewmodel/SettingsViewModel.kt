@@ -1,9 +1,9 @@
 package com.sanmer.mrepo.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.WorkingMode
-import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber

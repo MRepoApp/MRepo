@@ -16,13 +16,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.online.VersionItem
-import com.sanmer.mrepo.provider.ProviderCompat
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository

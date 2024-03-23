@@ -1,4 +1,4 @@
-package com.sanmer.mrepo.provider
+package com.sanmer.mrepo.compat
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

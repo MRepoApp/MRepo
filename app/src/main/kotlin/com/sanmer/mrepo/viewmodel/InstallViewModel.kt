@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.app.utils.MediaStoreUtils
-import com.sanmer.mrepo.provider.ProviderCompat
+import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.extensions.tmpDir
