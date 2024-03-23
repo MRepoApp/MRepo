@@ -1,9 +1,9 @@
-package com.sanmer.mrepo.app.utils
+package com.sanmer.mrepo.compat
 
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 
-object OsUtils {
+object BuildCompat {
     @get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
     val atLeastT get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 

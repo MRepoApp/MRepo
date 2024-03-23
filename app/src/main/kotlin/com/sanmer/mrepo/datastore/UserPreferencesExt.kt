@@ -3,7 +3,7 @@ package com.sanmer.mrepo.datastore
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.app.utils.OsUtils
+import com.sanmer.mrepo.compat.BuildCompat
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.datastore.modules.toExt
 import com.sanmer.mrepo.datastore.modules.toProto
@@ -30,7 +30,7 @@ data class UserPreferencesExt(
         fun default() = UserPreferencesExt(
             workingMode = WorkingMode.FIRST_SETUP,
             darkMode = DarkMode.FOLLOW_SYSTEM,
-            themeColor = if (OsUtils.atLeastS) Colors.Dynamic.id else Colors.Pourville.id,
+            themeColor = if (BuildCompat.atLeastS) Colors.Dynamic.id else Colors.Pourville.id,
             deleteZipFile = false,
             useDoh = false,
             downloadPath = Const.PUBLIC_DOWNLOADS,

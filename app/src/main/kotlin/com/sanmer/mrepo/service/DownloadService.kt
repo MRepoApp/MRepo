@@ -17,7 +17,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.NotificationUtils
-import com.sanmer.mrepo.app.utils.OsUtils
+import com.sanmer.mrepo.compat.BuildCompat
 import com.sanmer.mrepo.compat.PermissionCompat
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -304,7 +304,7 @@ class DownloadService : LifecycleService() {
             if (Build.VERSION.SDK_INT <= 29) {
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
-            if (OsUtils.atLeastT) {
+            if (BuildCompat.atLeastT) {
                 permissions.add(Manifest.permission.POST_NOTIFICATIONS)
             }
 

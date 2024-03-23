@@ -8,7 +8,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.sanmer.mrepo.app.utils.OsUtils
+import com.sanmer.mrepo.compat.BuildCompat
 import com.sanmer.mrepo.ui.theme.color.AlmondBlossomDarkScheme
 import com.sanmer.mrepo.ui.theme.color.AlmondBlossomLightScheme
 import com.sanmer.mrepo.ui.theme.color.JeufosseDarkScheme
@@ -95,7 +95,7 @@ sealed class Colors(
         fun getColor(id: Int): Colors {
             val context = LocalContext.current
 
-            return if (OsUtils.atLeastS && id == Dynamic.id) {
+            return if (BuildCompat.atLeastS && id == Dynamic.id) {
                 Dynamic(context)
             } else {
                 mColors[id]

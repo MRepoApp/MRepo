@@ -25,7 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.utils.OsUtils
+import com.sanmer.mrepo.compat.BuildCompat
 import com.sanmer.mrepo.ui.theme.Colors
 
 @Composable
@@ -39,7 +39,7 @@ fun ThemePaletteItem(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        if (OsUtils.atLeastS) {
+        if (BuildCompat.atLeastS) {
             ThemeColorItem(
                 id = Colors.Dynamic.id,
                 themeColor = themeColor,

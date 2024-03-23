@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.app.utils.OsUtils
+import com.sanmer.mrepo.compat.BuildCompat
 import com.sanmer.mrepo.ui.component.DropdownMenu
 import com.sanmer.mrepo.utils.Utils
 
@@ -41,7 +41,7 @@ fun SettingsMenu(
 ) {
     val powerManager = LocalContext.current.getSystemService(Context.POWER_SERVICE) as PowerManager?
     val hasUserspace by remember {
-        derivedStateOf { OsUtils.atLeastR && powerManager?.isRebootingUserspaceSupported == true }
+        derivedStateOf { BuildCompat.atLeastR && powerManager?.isRebootingUserspaceSupported == true }
     }
 
     MenuItem(value = Menu.Reboot, onClose = onClose)
