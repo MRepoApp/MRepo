@@ -1,5 +1,4 @@
 [versions]
-accompanist = "0.34.0"
 androidGradlePlugin = "8.3.1"
 androidxActivity = "1.8.2"
 androidxAnnotation = "1.7.1"
@@ -30,7 +29,6 @@ squareOkhttp = "4.12.0"
 squareMoshi = "1.15.1"
 
 [libraries]
-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
