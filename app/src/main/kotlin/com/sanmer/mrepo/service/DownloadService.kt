@@ -5,6 +5,7 @@ import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.core.app.NotificationCompat
@@ -16,6 +17,8 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.utils.NotificationUtils
+import com.sanmer.mrepo.app.utils.OsUtils
+import com.sanmer.mrepo.compat.PermissionCompat
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.extensions.parcelable
@@ -297,11 +300,25 @@ class DownloadService : LifecycleService() {
             task: TaskItem,
             listener: IDownloadListener
         ) {
-            val intent = Intent(context, DownloadService::class.java)
-            intent.putExtra(PARAM_TASK_ITEM, task)
+            val permissions = mutableListOf<String>()
+            if (Build.VERSION.SDK_INT <= 29) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+            if (OsUtils.atLeastT) {
+                permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+            }
 
-            listeners[task] = listener
-            context.startService(intent)
+            PermissionCompat.requestPermissions(context, permissions) { state ->
+                if (state.allGranted) {
+                    val intent = Intent(context, DownloadService::class.java)
+                    intent.putExtra(PARAM_TASK_ITEM, task)
+
+                    listeners[task] = listener
+                    context.startService(intent)
+                } else {
+                    Timber.w("permissions: $state")
+                }
+            }
         }
     }
 }
