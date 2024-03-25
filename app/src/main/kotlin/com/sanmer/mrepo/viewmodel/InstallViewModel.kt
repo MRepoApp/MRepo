@@ -9,7 +9,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.app.Event
-import com.sanmer.mrepo.app.utils.MediaStoreUtils
+import com.sanmer.mrepo.compat.MediaStoreCompat.copyToDir
+import com.sanmer.mrepo.compat.MediaStoreCompat.getPathForUri
 import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.repository.ModulesRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -53,7 +54,7 @@ class InstallViewModel @Inject constructor(
     }
 
     suspend fun loadData(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
-        val path = MediaStoreUtils.getAbsolutePathForUri(context, uri)
+        val path = context.getPathForUri(uri)
         Timber.d("path = $path")
 
         ProviderCompat.moduleManager
@@ -65,8 +66,7 @@ class InstallViewModel @Inject constructor(
             }
 
         console.add("- Copying zip to temp directory")
-        val name = MediaStoreUtils.getDisplayNameForUri(context, uri)
-        val tmpFile = context.tmpDir.resolve(name)
+        val tmpFile = context.copyToDir(uri, context.tmpDir)
         val cr = context.contentResolver
         cr.openInputStream(uri)?.use { input ->
             tmpFile.outputStream().use { output ->
