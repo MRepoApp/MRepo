@@ -1,17 +1,16 @@
 package com.sanmer.mrepo.service
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
-import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
@@ -43,10 +42,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class DownloadService : LifecycleService() {
+    @Inject lateinit var userPreferencesRepository: UserPreferencesRepository
+
     private val context: Context by lazy { applicationContext }
     private val tasks = mutableListOf<TaskItem>()
-
-    @Inject lateinit var userPreferencesRepository: UserPreferencesRepository
 
     init {
         lifecycleScope.launch {
@@ -61,7 +60,7 @@ class DownloadService : LifecycleService() {
             .flowOn(Dispatchers.IO)
             .onEach { (item, progress) ->
                 if (progress != 0f) {
-                    notifyProgress(item, progress)
+                    onProgressChanged(item, progress)
                 }
             }
             .launchIn(lifecycleScope)
@@ -70,7 +69,15 @@ class DownloadService : LifecycleService() {
     override fun onCreate() {
         Timber.d("DownloadService onCreate")
         super.onCreate()
+
         setForeground()
+    }
+
+    override fun onDestroy() {
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
+
+        Timber.d("DownloadService onDestroy")
+        super.onDestroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -85,7 +92,7 @@ class DownloadService : LifecycleService() {
 
             val df = downloadPath.createFile("*/*", item.filename)
             if (df == null) {
-                notifyFailure(item, "Failed to create file")
+                onDownloadFailed(item, "Failed to create file")
                 return@launch
             }
 
@@ -94,7 +101,7 @@ class DownloadService : LifecycleService() {
                     contentResolver.openOutputStream(df.uri)
                 )
             } catch (e: FileNotFoundException) {
-                notifyFailure(item, e.message)
+                onDownloadFailed(item, e.message)
                 return@launch
             }
 
@@ -105,7 +112,7 @@ class DownloadService : LifecycleService() {
                 }
 
                 override fun onSuccess() {
-                    notifySuccess(item)
+                    onDownloadSucceeded(item)
 
                     progressFlow.value = item to 0f
                     listeners[item]?.onSuccess()
@@ -113,7 +120,7 @@ class DownloadService : LifecycleService() {
                 }
 
                 override fun onFailure(e: Throwable) {
-                    notifyFailure(item, e.message)
+                    onDownloadFailed(item, e.message)
 
                     progressFlow.value = item to 0f
                     listeners[item]?.onFailure(e)
@@ -137,12 +144,6 @@ class DownloadService : LifecycleService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    override fun onDestroy() {
-        Timber.d("DownloadService onDestroy")
-        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
-        super.onDestroy()
-    }
-
     private fun setForeground() {
         val notification = NotificationCompat.Builder(this, NotificationUtils.CHANNEL_ID_DOWNLOAD)
             .setSmallIcon(R.drawable.launcher_outline)
@@ -154,6 +155,45 @@ class DownloadService : LifecycleService() {
             .build()
 
         startForeground(NotificationUtils.NOTIFICATION_ID_DOWNLOAD, notification)
+    }
+
+    private fun onProgressChanged(item: TaskItem, progress: Float) {
+        val notification = buildNotification(
+            title = item.title,
+            desc = item.desc,
+            silent = true,
+            ongoing = true
+        ).apply {
+            setProgress(100, (progress * 100).toInt(), false)
+        }
+
+        notify(item.taskId, notification.build())
+    }
+
+    private fun onDownloadSucceeded(item: TaskItem) {
+        val message = context.getString(R.string.message_download_success)
+        val notification = buildNotification(
+            title = item.title,
+            desc = item.desc,
+            silent = true
+        ).apply {
+            setContentText(message)
+        }
+
+        notify(item.taskId, notification.build())
+    }
+
+    private fun onDownloadFailed(item: TaskItem, message: String?) {
+        val msg = message ?: context.getString(R.string.unknown_error)
+        val notification = buildNotification(
+            title = item.title,
+            desc = item.desc,
+            silent = false
+        ).apply {
+            setContentText(msg)
+        }
+
+        notify(item.taskId, notification.build())
     }
 
     private fun buildNotification(
@@ -169,54 +209,21 @@ class DownloadService : LifecycleService() {
         .setOngoing(ongoing)
         .setGroup(GROUP_KEY)
 
+
+    @SuppressLint("MissingPermission")
     private fun notify(id: Int, notification: Notification) {
-        val notificationId = NotificationUtils.NOTIFICATION_ID_DOWNLOAD + id
-        NotificationManagerCompat.from(context).apply {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED
-            ) return
-
-            notify(notificationId, notification)
-        }
-    }
-
-    private fun notifyProgress(item: TaskItem, progress: Float) {
-        val notification = buildNotification(
-            title = item.title,
-            desc = item.desc,
-            silent = true,
-            ongoing = true
-        ).apply {
-            setProgress(100, (progress * 100).toInt(), false)
+        val granted = if (BuildCompat.atLeastT) {
+            PermissionCompat.checkPermissions(
+                context,
+                listOf(Manifest.permission.POST_NOTIFICATIONS)
+            ).allGranted
+        } else {
+            true
         }
 
-        notify(item.taskId, notification.build())
-    }
-
-    private fun notifySuccess(item: TaskItem) {
-        val message = context.getString(R.string.message_download_success)
-        val notification = buildNotification(
-            title = item.title,
-            desc = item.desc,
-            silent = true
-        ).apply {
-            setContentText(message)
+        NotificationManagerCompat.from(this).apply {
+            if (granted) notify(id, notification)
         }
-
-        notify(item.taskId, notification.build())
-    }
-
-    private fun notifyFailure(item: TaskItem, message: String?) {
-        val msg = message ?: context.getString(R.string.unknown_error)
-        val notification = buildNotification(
-            title = item.title,
-            desc = item.desc,
-            silent = false
-        ).apply {
-            setContentText(msg)
-        }
-
-        notify(item.taskId, notification.build())
     }
 
     data class TaskItem(
