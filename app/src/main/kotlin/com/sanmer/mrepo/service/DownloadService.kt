@@ -44,7 +44,6 @@ import javax.inject.Inject
 class DownloadService : LifecycleService() {
     @Inject lateinit var userPreferencesRepository: UserPreferencesRepository
 
-    private val context: Context by lazy { applicationContext }
     private val tasks = mutableListOf<TaskItem>()
 
     init {
@@ -74,7 +73,7 @@ class DownloadService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
 
         Timber.d("DownloadService onDestroy")
         super.onDestroy()
@@ -144,9 +143,42 @@ class DownloadService : LifecycleService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    private fun onProgressChanged(item: TaskItem, progress: Float) {
+        val notification = baseNotificationBuilder()
+            .setContentTitle(item.title)
+            .setSubText(item.desc)
+            .setSilent(true)
+            .setOngoing(true)
+            .setGroup(GROUP_KEY)
+            .setProgress(100, (progress * 100).toInt(), false)
+            .build()
+
+        notify(item.taskId, notification)
+    }
+
+    private fun onDownloadSucceeded(item: TaskItem) {
+        val notification = baseNotificationBuilder()
+            .setContentTitle(item.title)
+            .setSubText(item.desc)
+            .setContentText(getString(R.string.message_download_success))
+            .setSilent(true)
+            .build()
+
+        notify(item.taskId, notification)
+    }
+
+    private fun onDownloadFailed(item: TaskItem, message: String?) {
+        val notification = baseNotificationBuilder()
+            .setContentTitle(item.title)
+            .setSubText(item.desc)
+            .setContentText(message ?: getString(R.string.unknown_error))
+            .build()
+
+        notify(item.taskId, notification)
+    }
+
     private fun setForeground() {
-        val notification = NotificationCompat.Builder(this, NotificationUtils.CHANNEL_ID_DOWNLOAD)
-            .setSmallIcon(R.drawable.launcher_outline)
+        val notification = baseNotificationBuilder()
             .setContentTitle(getString(R.string.notification_name_download))
             .setSilent(true)
             .setOngoing(true)
@@ -157,64 +189,15 @@ class DownloadService : LifecycleService() {
         startForeground(NotificationUtils.NOTIFICATION_ID_DOWNLOAD, notification)
     }
 
-    private fun onProgressChanged(item: TaskItem, progress: Float) {
-        val notification = buildNotification(
-            title = item.title,
-            desc = item.desc,
-            silent = true,
-            ongoing = true
-        ).apply {
-            setProgress(100, (progress * 100).toInt(), false)
-        }
-
-        notify(item.taskId, notification.build())
-    }
-
-    private fun onDownloadSucceeded(item: TaskItem) {
-        val message = context.getString(R.string.message_download_success)
-        val notification = buildNotification(
-            title = item.title,
-            desc = item.desc,
-            silent = true
-        ).apply {
-            setContentText(message)
-        }
-
-        notify(item.taskId, notification.build())
-    }
-
-    private fun onDownloadFailed(item: TaskItem, message: String?) {
-        val msg = message ?: context.getString(R.string.unknown_error)
-        val notification = buildNotification(
-            title = item.title,
-            desc = item.desc,
-            silent = false
-        ).apply {
-            setContentText(msg)
-        }
-
-        notify(item.taskId, notification.build())
-    }
-
-    private fun buildNotification(
-        title: String?,
-        desc: String?,
-        silent: Boolean = false,
-        ongoing: Boolean = false,
-    ) = NotificationCompat.Builder(context, NotificationUtils.CHANNEL_ID_DOWNLOAD)
-        .setSmallIcon(R.drawable.launcher_outline)
-        .setContentTitle(title)
-        .setSubText(desc)
-        .setSilent(silent)
-        .setOngoing(ongoing)
-        .setGroup(GROUP_KEY)
-
+    private fun baseNotificationBuilder() =
+        NotificationCompat.Builder(this, NotificationUtils.CHANNEL_ID_DOWNLOAD)
+            .setSmallIcon(R.drawable.launcher_outline)
 
     @SuppressLint("MissingPermission")
     private fun notify(id: Int, notification: Notification) {
         val granted = if (BuildCompat.atLeastT) {
             PermissionCompat.checkPermissions(
-                context,
+                this,
                 listOf(Manifest.permission.POST_NOTIFICATIONS)
             ).allGranted
         } else {
@@ -287,9 +270,9 @@ class DownloadService : LifecycleService() {
 
     companion object {
         private const val GROUP_KEY = "DOWNLOAD_SERVICE_GROUP_KEY"
-        private const val PARAM_TASK_ITEM = "TASK_ITEM"
+        private const val EXTRA_TASK = "com.sanmer.mrepo.extra.TASK"
         private val Intent.taskItemOrNull: TaskItem? get() =
-            parcelable(PARAM_TASK_ITEM)
+            parcelable(EXTRA_TASK)
 
         private val listeners = hashMapOf<TaskItem, IDownloadListener>()
         private val progressFlow = MutableStateFlow(TaskItem.empty() to 0f)
@@ -318,7 +301,7 @@ class DownloadService : LifecycleService() {
             PermissionCompat.requestPermissions(context, permissions) { state ->
                 if (state.allGranted) {
                     val intent = Intent(context, DownloadService::class.java)
-                    intent.putExtra(PARAM_TASK_ITEM, task)
+                    intent.putExtra(EXTRA_TASK, task)
 
                     listeners[task] = listener
                     context.startService(intent)
