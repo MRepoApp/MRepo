@@ -30,6 +30,7 @@ android {
             "fr",
             "hi",
             "in",
+            "it",
             "ja",
             "pl",
             "pt",
