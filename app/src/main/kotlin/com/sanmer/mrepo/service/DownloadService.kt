@@ -6,7 +6,6 @@ import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Parcel
 import android.os.Parcelable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -36,6 +35,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.io.FileNotFoundException
 import javax.inject.Inject
@@ -209,6 +209,7 @@ class DownloadService : LifecycleService() {
         }
     }
 
+    @Parcelize
     data class TaskItem(
         val key: String,
         val url: String,
@@ -217,40 +218,7 @@ class DownloadService : LifecycleService() {
         val desc: String?,
         val taskId: Int = System.currentTimeMillis().toInt(),
     ) : Parcelable {
-        constructor(parcel: Parcel) : this(
-            key = checkNotNull(parcel.readString()),
-            url = checkNotNull(parcel.readString()),
-            filename = checkNotNull(parcel.readString()),
-            title = parcel.readString(),
-            desc = parcel.readString(),
-            taskId = parcel.readInt()
-        )
-
-        override fun writeToParcel(parcel: Parcel, flags: Int) {
-            parcel.writeString(key)
-            parcel.writeString(url)
-            parcel.writeString(filename)
-            parcel.writeString(title)
-            parcel.writeString(desc)
-            parcel.writeInt(taskId)
-        }
-
-        override fun describeContents(): Int {
-            return 0
-        }
-
         companion object {
-            @JvmField
-            val CREATOR = object : Parcelable.Creator<TaskItem> {
-                override fun createFromParcel(parcel: Parcel): TaskItem {
-                    return TaskItem(parcel)
-                }
-
-                override fun newArray(size: Int): Array<TaskItem?> {
-                    return arrayOfNulls(size)
-                }
-            }
-
             fun empty() = TaskItem(
                 key = "",
                 url = "",

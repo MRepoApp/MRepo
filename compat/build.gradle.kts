@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.pro.library)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
