@@ -91,7 +91,7 @@
     <string name="menu_pin_enabled">Ghim Đã kích hoạt</string>
     <string name="message_download_success">Tải xuống thành công</string>
     <string name="message_loading">Đang tải…</string>
-    <string name="notification_name_download">Tải xuống công việc</string>
+    <string name="notification_name_download">Dịch vụ tải xuống</string>
     <string name="search_empty">Danh sách trống</string>
     <string name="search_placeholder">Tìm kiếm…</string>
     <string name="unknown_error">Lỗi không rõ</string>
@@ -102,4 +102,8 @@
     <string name="view_module_last_updated">Cập nhật mới nhất</string>
     <string name="settings_doh_desc">Cách giải quyết ngộ độc DNS ở một số quốc gia</string>
     <string name="install_flashing">Đang flash</string>
+    <string name="setup_shizuku_desc">Yêu cầu sự cho phép của Sui hoặc Shizuku (root)</string>
+    <string name="settings_download_path">Đường dẫn tải xuống</string>
+    <string name="setup_root_desc">Yêu cầu quyền Root do Magisk hoặc KernelSU cung cấp</string>
+    <string name="setup_non_root_desc">Không yêu cầu quyền Root, chỉ có sẵn chức năng mô-đun tải xuống</string>
 </resources>
