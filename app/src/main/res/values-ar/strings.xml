@@ -24,7 +24,7 @@
     <string name="settings_menu_reboot_bootloader">اعادة التشغيل الى محمل الإقلاع</string>
     <string name="settings_menu_reboot_download">اعادة التشغيل الى وضع التنزيل</string>
     <string name="settings_menu_reboot_edl">اعادة التشغيل الى وضع EDL</string>
-    <string name="module_remove">حذف</string>
+    <string name="module_remove">إزالة</string>
     <string name="module_restore">استرجاع</string>
     <string name="module_install">تثبيت</string>
     <string name="module_download">تنزيل</string>
@@ -95,4 +95,15 @@
     <string name="menu_sort_option_updated">وقت التحديث</string>
     <string name="menu_descending">تنازلي</string>
     <string name="menu_pin_enabled">تدبيس المفعلة</string>
+    <string name="view_module_update_notify">الإخطار</string>
+    <string name="setup_root_desc">يتطلب أذونات الجذر التي يوفرها Magisk أو KernelSU</string>
+    <string name="setup_non_root_desc">لا يتطلب أذونات الجذر، تتوفر وظيفة وحدة التنزيل فقط</string>
+    <string name="install_screen_title">تثبيت</string>
+    <string name="install_logs_save_failed">فشل حفظ: %s</string>
+    <string name="setup_shizuku_desc">يتطلب إذنًا مقدمًا من Sui أو Shizuku (الجذر)</string>
+    <string name="install_logs_saved">تم حفظ السجلات</string>
+    <string name="view_module_update_ignore">تجاهل</string>
+    <string name="module_update">تحديث</string>
+    <string name="settings_doh">DNS عبر HTTPS</string>
+    <string name="settings_doh_desc">الحل البديل لتسمم DNS في بعض الدول</string>
 </resources>
