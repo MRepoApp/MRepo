@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -72,7 +71,7 @@ fun VersionItemBottomSheet(
         onDismissRequest = onClose,
         sheetState = state,
         shape = BottomSheetDefaults.expandedShape(15.dp),
-        windowInsets = WindowInsets.navigationBars,
+        windowInsets = WindowInsets(0),
         dragHandle = {
             if (hasChangelog) {
                 BottomSheetDefaults.DragHandle()
@@ -113,6 +112,8 @@ fun VersionItemBottomSheet(
                 onClose = onClose
             )
         }
+
+        NavigationBarsSpacer()
     }
 }
 

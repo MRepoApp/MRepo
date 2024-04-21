@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.state.RepoState
 import com.sanmer.mrepo.ui.component.LabelItem
+import com.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import com.sanmer.mrepo.ui.utils.expandedShape
 import com.sanmer.mrepo.utils.extensions.shareText
 import com.sanmer.mrepo.utils.extensions.toDateTime
@@ -173,9 +173,9 @@ private fun BottomSheet(
     onClose: () ->  Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
-    sheetState = rememberModalBottomSheetState(),
+    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     shape = BottomSheetDefaults.expandedShape(15.dp),
-    windowInsets = WindowInsets.navigationBars
+    windowInsets = WindowInsets(0)
 ) {
     val context = LocalContext.current
 
@@ -242,6 +242,8 @@ private fun BottomSheet(
             )
         }
     }
+
+    NavigationBarsSpacer()
 }
 
 @Composable

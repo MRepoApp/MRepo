@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.BottomSheetDefaults
@@ -13,7 +12,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -30,6 +28,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
 import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.ui.component.MenuChip
+import com.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import com.sanmer.mrepo.ui.component.Segment
 import com.sanmer.mrepo.ui.component.SegmentedButtons
 import com.sanmer.mrepo.ui.component.SegmentedButtonsDefaults
@@ -63,15 +62,14 @@ fun ModulesMenu(
 
 @Composable
 private fun BottomSheet(
-    state: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onClose: () -> Unit,
     menu: ModulesMenuExt,
     setMenu: (ModulesMenuExt) -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
-    sheetState = state,
+    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     shape = BottomSheetDefaults.expandedShape(15.dp),
-    windowInsets = WindowInsets.navigationBars
+    windowInsets = WindowInsets(0)
 ) {
     val options = listOf(
         Option.NAME to R.string.menu_sort_option_name,
@@ -139,4 +137,6 @@ private fun BottomSheet(
             )
         }
     }
+
+    NavigationBarsSpacer()
 }

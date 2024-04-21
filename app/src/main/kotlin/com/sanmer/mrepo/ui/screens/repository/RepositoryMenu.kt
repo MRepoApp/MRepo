@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -35,6 +33,7 @@ import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.state.OnlineState
 import com.sanmer.mrepo.ui.component.MenuChip
+import com.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import com.sanmer.mrepo.ui.component.Segment
 import com.sanmer.mrepo.ui.component.SegmentedButtons
 import com.sanmer.mrepo.ui.component.SegmentedButtonsDefaults
@@ -68,15 +67,14 @@ fun RepositoryMenu(
 
 @Composable
 private fun BottomSheet(
-    state: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     onClose: () -> Unit,
     menu: RepositoryMenuExt,
     setMenu: (RepositoryMenuExt) -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
-    sheetState = state,
+    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     shape = BottomSheetDefaults.expandedShape(15.dp),
-    windowInsets = WindowInsets.navigationBars
+    windowInsets = WindowInsets(0)
 ) {
     val options = listOf(
         Option.NAME to R.string.menu_sort_option_name,
@@ -174,5 +172,7 @@ private fun BottomSheet(
                 label = { Text(text = stringResource(id = R.string.menu_show_updated)) }
             )
         }
+
+        NavigationBarsSpacer()
     }
 }

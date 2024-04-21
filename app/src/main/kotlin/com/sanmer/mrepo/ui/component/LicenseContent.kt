@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,7 +43,8 @@ import timber.log.Timber
 
 @Composable
 fun LicenseContent(
-    licenseId: String
+    licenseId: String,
+    modifier: Modifier = Modifier
 ) {
     var license: License? by remember { mutableStateOf(null) }
     var message: String? by remember { mutableStateOf(null) }
@@ -62,22 +62,28 @@ fun LicenseContent(
         label = "LicenseContent"
     ) {
         when {
-            it.isLoading -> Loading(minHeight = 200.dp)
-            it.isSucceeded -> ViewLicense(license = checkNotNull(license))
-            it.isFailed -> Failed(message = message, minHeight = 200.dp)
+            it.isLoading -> Loading(
+                minHeight = 200.dp
+            )
+            it.isSucceeded -> ViewLicense(
+                license = checkNotNull(license),
+                modifier = modifier
+            )
+            it.isFailed -> Failed(
+                message = message,
+                minHeight = 200.dp
+            )
         }
     }
 }
 
 @Composable
 private fun ViewLicense(
-    license: License
+    license: License,
+    modifier: Modifier = Modifier
 ) = Column(
-    modifier = Modifier
-        .padding(top = 18.dp)
-        .padding(horizontal = 18.dp)
-        .fillMaxSize(),
-    verticalArrangement = Arrangement.spacedBy(18.dp),
+    modifier = modifier,
+    verticalArrangement = Arrangement.spacedBy(16.dp),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
     Surface(
