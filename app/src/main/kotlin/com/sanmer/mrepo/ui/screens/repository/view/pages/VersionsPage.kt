@@ -23,8 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.database.entity.Repo
@@ -109,8 +107,7 @@ private fun VersionItem(
 
                 if (localVersionCode < item.versionCode) {
                     LabelItem(
-                        text = stringResource(id = R.string.module_new)
-                            .toUpperCase(Locale.current),
+                        text = stringResource(id = R.string.module_new),
                         containerColor = MaterialTheme.colorScheme.error,
                         contentColor = MaterialTheme.colorScheme.onError
                     )

@@ -18,9 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.online.OnlineModule
@@ -106,25 +104,19 @@ fun ModuleItem(
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     if (menu.showLicense && module.track.hasLicense) {
-                        LabelItem(
-                            text = module.track.license.toUpperCase(Locale.current)
-                        )
+                        LabelItem(text = module.track.license)
                     }
 
                     when {
                         state.updatable ->
                             LabelItem(
-                                text = stringResource(id = R.string.module_new)
-                                    .toUpperCase(Locale.current),
+                                text = stringResource(id = R.string.module_new),
                                 containerColor = MaterialTheme.colorScheme.error,
                                 contentColor = MaterialTheme.colorScheme.onError
                             )
 
                         state.installed ->
-                            LabelItem(
-                                text = stringResource(id = R.string.module_installed)
-                                    .toUpperCase(Locale.current)
-                            )
+                            LabelItem(text = stringResource(id = R.string.module_installed))
                     }
                 }
             }

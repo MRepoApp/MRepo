@@ -36,10 +36,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.state.RepoState
@@ -123,13 +121,12 @@ fun RepositoryItem(
 
             if (repo.compatible) {
                 LabelItem(
-                    text = stringResource(id = R.string.repo_modules,
-                        repo.size)
+                    text = stringResource(id = R.string.repo_modules, repo.size),
+                    upperCase = false
                 )
             } else {
                 LabelItem(
-                    text = stringResource(id = R.string.repo_incompatible)
-                        .toUpperCase(Locale.current),
+                    text = stringResource(id = R.string.repo_incompatible),
                     containerColor = MaterialTheme.colorScheme.error,
                     contentColor = MaterialTheme.colorScheme.onError
                 )
@@ -209,8 +206,8 @@ private fun BottomSheet(
             }
 
             LabelItem(
-                text = stringResource(id = R.string.repo_modules,
-                    repo.size)
+                text = stringResource(id = R.string.repo_modules, repo.size),
+                upperCase = false
             )
         }
 
