@@ -3,7 +3,6 @@ package com.sanmer.mrepo.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.database.entity.toRepo
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -25,10 +23,8 @@ class RepositoriesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
-    private val valuesFlow = MutableStateFlow(
-        listOf<RepoState>()
-    )
-    val repos get() = valuesFlow.asStateFlow()
+    private val reposFlow = MutableStateFlow(listOf<RepoState>())
+    val repos get() = reposFlow.asStateFlow()
 
     var isLoading by mutableStateOf(true)
         private set
@@ -47,13 +43,11 @@ class RepositoriesViewModel @Inject constructor(
 
     private fun dataObserver() {
         localRepository.getRepoAllAsFlow()
-            .onStart { isLoading = true }
             .onEach { list ->
-                valuesFlow.value = list.map { RepoState(it) }
+                reposFlow.value = list.map { RepoState(it) }
                     .sortedBy { it.name }
-                    .toMutableStateList()
 
-                if (isLoading) isLoading = false
+                isLoading = false
 
             }.launchIn(viewModelScope)
     }
