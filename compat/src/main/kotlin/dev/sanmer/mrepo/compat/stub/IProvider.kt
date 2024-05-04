@@ -7,9 +7,10 @@ interface IProvider {
     val uid: Int
     val pid: Int
     val seLinuxContext: String
+
+    val platform: Platform
     val moduleManager: IModuleManager
     val fileManager: IFileManager
-    val platform: Platform
 
     val isAlive: StateFlow<Boolean>
     fun init()

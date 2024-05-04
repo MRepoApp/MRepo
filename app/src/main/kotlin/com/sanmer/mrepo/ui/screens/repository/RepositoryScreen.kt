@@ -59,8 +59,7 @@ fun RepositoryScreen(
         onBack = viewModel::closeSearch
     )
 
-    DisposableEffect(viewModel) {
-        viewModel.loadDataOneTime()
+    DisposableEffect(true) {
         onDispose(viewModel::closeSearch)
     }
 

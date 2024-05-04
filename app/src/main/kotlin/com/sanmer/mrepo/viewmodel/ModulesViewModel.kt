@@ -11,7 +11,6 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,6 +35,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -56,12 +56,10 @@ class ModulesViewModel @Inject constructor(
         private set
     private val keyFlow = MutableStateFlow("")
 
-    private val valuesFlow = MutableStateFlow(
-        listOf<LocalModule>()
-    )
-    val local get() = valuesFlow.asStateFlow()
+    private val cacheFlow = MutableStateFlow(listOf<LocalModule>())
+    private val localFlow = MutableStateFlow(listOf<LocalModule>())
+    val local get() = localFlow.asStateFlow()
 
-    private var oneTimeFinished = false
     var isLoading by mutableStateOf(true)
         private set
     var isRefreshing by mutableStateOf(false)
@@ -92,27 +90,27 @@ class ModulesViewModel @Inject constructor(
 
     init {
         Timber.d("ModulesViewModel init")
+        providerObserver()
         dataObserver()
+        keyObserver()
     }
 
-    fun loadDataOneTime() {
-        viewModelScope.launch {
-            if (!oneTimeFinished && isProviderAlive) {
-                modulesRepository.getLocalAll()
-                oneTimeFinished = true
-            }
-        }
+    private fun providerObserver() {
+        ProviderCompat.isAliveFlow
+            .onEach {
+                if (it) getLocalAll()
+
+            }.launchIn(viewModelScope)
     }
 
     private fun dataObserver() {
         combine(
             localRepository.getLocalAllAsFlow(),
-            modulesMenu,
-            keyFlow,
-        ) { list, menu, key ->
+            modulesMenu
+        ) { list, menu ->
             if (list.isEmpty()) return@combine
 
-            valuesFlow.value  = list.sortedWith(
+            cacheFlow.value  = list.sortedWith(
                 comparator(menu.option, menu.descending)
             ).let { v ->
                 if (menu.pinEnabled) {
@@ -120,13 +118,28 @@ class ModulesViewModel @Inject constructor(
                 } else {
                     v
                 }
-            }.filter { m ->
-                if (key.isBlank()) return@filter true
-                key.lowercase() in (m.name + m.author + m.description).lowercase()
-
-            }.toMutableStateList()
+            }
 
             isLoading = false
+
+        }.launchIn(viewModelScope)
+    }
+
+    private fun keyObserver() {
+        combine(
+            keyFlow,
+            cacheFlow
+        ) { key, source ->
+            localFlow.value = source
+                .filter {
+                    if (key.isNotBlank()) {
+                        it.name.contains(key, ignoreCase = true)
+                                || it.author.contains(key, ignoreCase = true)
+                                || it.description.contains(key, ignoreCase = true)
+                    } else {
+                        true
+                    }
+                }
 
         }.launchIn(viewModelScope)
     }

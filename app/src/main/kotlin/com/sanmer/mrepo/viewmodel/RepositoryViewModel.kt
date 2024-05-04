@@ -3,7 +3,6 @@ package com.sanmer.mrepo.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.datastore.repository.Option
@@ -37,12 +36,10 @@ class RepositoryViewModel @Inject constructor(
         private set
     private val keyFlow = MutableStateFlow("")
 
-    private val valuesFlow = MutableStateFlow(
-        listOf<Pair<OnlineState, OnlineModule>>()
-    )
-    val online get() = valuesFlow.asStateFlow()
+    private val cacheFlow = MutableStateFlow(listOf<Pair<OnlineState, OnlineModule>>())
+    private val onlineFlow = MutableStateFlow(listOf<Pair<OnlineState, OnlineModule>>())
+    val online get() = onlineFlow.asStateFlow()
 
-    private var oneTimeFinished = false
     var isLoading by mutableStateOf(true)
         private set
     var isRefreshing by mutableStateOf(false)
@@ -55,25 +52,17 @@ class RepositoryViewModel @Inject constructor(
 
     init {
         Timber.d("RepositoryViewModel init")
+        getOnlineAll()
         dataObserver()
-    }
-
-    fun loadDataOneTime() {
-        viewModelScope.launch {
-            if (!oneTimeFinished) {
-                modulesRepository.getRepoAll()
-                oneTimeFinished = true
-            }
-        }
+        keyObserver()
     }
 
     private fun dataObserver() {
         combine(
             localRepository.getOnlineAllAsFlow(),
-            repositoryMenu,
-            keyFlow,
-        ) { list, menu, key ->
-            valuesFlow.value = list.map {
+            repositoryMenu
+        ) { list, menu ->
+            cacheFlow.value = list.map {
                 it.createState(
                     local = localRepository.getLocalByIdOrNull(it.id),
                     hasUpdatableTag = localRepository.hasUpdatableTag(it.id)
@@ -92,13 +81,28 @@ class RepositoryViewModel @Inject constructor(
                 } else {
                     a
                 }
-            }.filter { (_, m) ->
-                if (key.isBlank()) return@filter true
-                key.lowercase() in (m.name + m.author + m.description).lowercase()
-
-            }.toMutableStateList()
+            }
 
             isLoading = false
+
+        }.launchIn(viewModelScope)
+    }
+
+    private fun keyObserver() {
+        combine(
+            keyFlow,
+            cacheFlow
+        ) { key, source ->
+            onlineFlow.value = source
+                .filter { (_, m) ->
+                    if (key.isNotBlank()) {
+                        m.name.contains(key, ignoreCase = true)
+                                || m.author.contains(key, ignoreCase = true)
+                                || m.description.contains(key, ignoreCase = true)
+                    } else {
+                        true
+                    }
+                }
 
         }.launchIn(viewModelScope)
     }

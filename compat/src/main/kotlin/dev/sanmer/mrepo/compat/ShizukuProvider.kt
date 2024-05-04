@@ -15,7 +15,7 @@ import dev.sanmer.mrepo.compat.stub.IServiceManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import rikka.shizuku.Shizuku
 
-object ShizukuProvider : IProvider, Shizuku.OnRequestPermissionResultListener {
+object ShizukuProvider : IProvider, ServiceConnection, Shizuku.OnRequestPermissionResultListener {
     private const val TAG = "ShizukuProvider"
     private var mServiceOrNull: IServiceManager? = null
     private val mService get() = checkNotNull(mServiceOrNull) {
@@ -25,9 +25,10 @@ object ShizukuProvider : IProvider, Shizuku.OnRequestPermissionResultListener {
     override val uid: Int get() = mService.uid
     override val pid: Int get() = mService.pid
     override val seLinuxContext: String get() = mService.seLinuxContext
+
+    override val platform: Platform get() = Platform.valueOf(mService.currentPlatform())
     override val moduleManager: IModuleManager get() = mService.moduleManager
     override val fileManager: IFileManager get() = mService.fileManager
-    override val platform: Platform get() = Platform.valueOf(mService.currentPlatform())
 
     override val isAlive = MutableStateFlow(false)
 
@@ -40,20 +41,17 @@ object ShizukuProvider : IProvider, Shizuku.OnRequestPermissionResultListener {
         }
     }
 
-    private val connection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            mServiceOrNull = IServiceManager.Stub.asInterface(service)
-            isAlive.value = true
-            Log.i(TAG, "IServiceManager created")
-            Log.d(TAG, "uid = $uid, pid = $pid, context = $seLinuxContext")
-        }
+    override fun onServiceConnected(name: ComponentName, service: IBinder) {
+        mServiceOrNull = IServiceManager.Stub.asInterface(service)
+        isAlive.value = true
+        Log.i(TAG, "IServiceManager created")
+        Log.d(TAG, "uid = $uid, pid = $pid, context = $seLinuxContext")
+    }
 
-        override fun onServiceDisconnected(name: ComponentName) {
-            mServiceOrNull = null
-            isAlive.value = false
-            Log.w(TAG, "IServiceManager destroyed")
-        }
-
+    override fun onServiceDisconnected(name: ComponentName) {
+        mServiceOrNull = null
+        isAlive.value = false
+        Log.w(TAG, "IServiceManager destroyed")
     }
 
     override fun init() {
@@ -65,7 +63,7 @@ object ShizukuProvider : IProvider, Shizuku.OnRequestPermissionResultListener {
                 return
             }
 
-            Shizuku.bindUserService(ShizukuService(), connection)
+            Shizuku.bindUserService(ShizukuService(), this)
         } else {
             Shizuku.addRequestPermissionResultListener(this)
             Shizuku.requestPermission(0)
@@ -75,7 +73,7 @@ object ShizukuProvider : IProvider, Shizuku.OnRequestPermissionResultListener {
     override fun destroy() {
         if (!isBinderAlive) return
 
-        Shizuku.unbindUserService(ShizukuService(), connection, true)
+        Shizuku.unbindUserService(ShizukuService(), this, true)
     }
 
     override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {

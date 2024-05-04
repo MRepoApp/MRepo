@@ -130,7 +130,6 @@ androidComponents {
 }
 
 dependencies {
-    compileOnly(projects.hiddenApi)
     implementation(projects.compat)
 
     implementation(libs.androidx.activity.compose)

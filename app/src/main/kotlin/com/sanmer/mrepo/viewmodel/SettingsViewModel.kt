@@ -16,11 +16,8 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
     val isProviderAlive get() = ProviderCompat.isAlive
 
-    val version get() = when {
-        isProviderAlive -> with(ProviderCompat.moduleManager) {
-            "$version (${versionCode})"
-        }
-        else -> ""
+    val version get() = ProviderCompat.get("") {
+        with(moduleManager) { "$version (${versionCode})" }
     }
 
     init {

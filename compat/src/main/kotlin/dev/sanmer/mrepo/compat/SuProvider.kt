@@ -15,7 +15,7 @@ import dev.sanmer.mrepo.compat.su.SuService
 import dev.sanmer.mrepo.compat.su.SuShellInitializer
 import kotlinx.coroutines.flow.MutableStateFlow
 
-object SuProvider : IProvider {
+object SuProvider : IProvider, ServiceConnection {
     private const val TAG = "SuProvider"
     private var mServiceOrNull: IServiceManager? = null
     private val mService get() = checkNotNull(mServiceOrNull) {
@@ -25,9 +25,10 @@ object SuProvider : IProvider {
     override val uid: Int get() = mService.uid
     override val pid: Int get() = mService.pid
     override val seLinuxContext: String get() = mService.seLinuxContext
+
+    override val platform: Platform get() = Platform.valueOf(mService.currentPlatform())
     override val moduleManager: IModuleManager get() = mService.moduleManager
     override val fileManager: IFileManager get() = mService.fileManager
-    override val platform: Platform get() = Platform.valueOf(mService.currentPlatform())
 
     override val isAlive = MutableStateFlow(false)
 
@@ -40,28 +41,24 @@ object SuProvider : IProvider {
         )
     }
 
-    private val connection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            mServiceOrNull = IServiceManager.Stub.asInterface(service)
-            isAlive.value = true
-            Log.i(TAG, "IServiceManager created")
-            Log.d(TAG, "uid = $uid, pid = $pid, context = $seLinuxContext")
-        }
+    override fun onServiceConnected(name: ComponentName, service: IBinder) {
+        mServiceOrNull = IServiceManager.Stub.asInterface(service)
+        isAlive.value = true
+        Log.i(TAG, "IServiceManager created")
+        Log.d(TAG, "uid = $uid, pid = $pid, context = $seLinuxContext")
+    }
 
-        override fun onServiceDisconnected(name: ComponentName) {
-            mServiceOrNull = null
-            isAlive.value = false
-            Log.w(TAG, "SuProvider: IServiceManager destroyed")
-        }
-
+    override fun onServiceDisconnected(name: ComponentName) {
+        mServiceOrNull = null
+        isAlive.value = false
+        Log.w(TAG, "SuProvider: IServiceManager destroyed")
     }
 
     override fun init() {
-        RootService.bind(SuService.intent, connection)
+        RootService.bind(SuService.intent, this)
     }
 
     override fun destroy() {
         RootService.stop(SuService.intent)
     }
-
 }
