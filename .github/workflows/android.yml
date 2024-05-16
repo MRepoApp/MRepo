@@ -16,9 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v3
-
       - name: Set up signing key
         if: github.ref == 'refs/heads/main'
         run: |
@@ -39,6 +36,7 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
+          validate-wrappers: true
           gradle-home-cache-cleanup: true
 
       - name: Build with Gradle
