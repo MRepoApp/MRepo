@@ -14,15 +14,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.database.entity.toRepo
+import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -75,7 +78,7 @@ class MainActivity : ComponentActivity() {
                     ) { isSetup ->
                         if (isSetup) {
                             SetupScreen(
-                                setMode = userPreferencesRepository::setWorkingMode
+                                setMode = ::setWorkingMode
                             )
                         } else {
                             MainScreen()
@@ -83,6 +86,12 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun setWorkingMode(value: WorkingMode) {
+        lifecycleScope.launch {
+            userPreferencesRepository.setWorkingMode(value)
         }
     }
 

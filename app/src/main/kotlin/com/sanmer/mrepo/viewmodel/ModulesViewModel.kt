@@ -171,8 +171,11 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
-    fun setModulesMenu(value: ModulesMenuCompat) =
-        userPreferencesRepository.setModulesMenu(value)
+    fun setModulesMenu(value: ModulesMenuCompat) {
+        viewModelScope.launch {
+            userPreferencesRepository.setModulesMenu(value)
+        }
+    }
 
     fun createModuleOps(module: LocalModule) = when (module.state) {
         State.ENABLE -> ModuleOps(

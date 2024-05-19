@@ -130,12 +130,9 @@ class RepositoryViewModel @Inject constructor(
         keyFlow.value = ""
     }
 
-    private fun getOnlineAll() {
+    fun setRepositoryMenu(value: RepositoryMenuCompat) {
         viewModelScope.launch {
-            modulesRepository.getRepoAll()
+            userPreferencesRepository.setRepositoryMenu(value)
         }
     }
-
-    fun setRepositoryMenu(value: RepositoryMenuCompat) =
-        userPreferencesRepository.setRepositoryMenu(value)
 }
