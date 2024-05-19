@@ -5,7 +5,6 @@ androidxAnnotation = "1.8.0"
 androidxAppCompat = "1.6.1"
 androidxCompose = "1.7.0-beta01"
 androidxComposeCompiler = "1.5.14"
-androidxComposeMaterial = "1.6.7"
 androidxComposeMaterial3 = "1.2.1"
 androidxCore = "1.13.1"
 androidxCoreSplashscreen = "1.0.1"
@@ -32,7 +31,6 @@ squareMoshi = "1.15.1"
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
-androidx-compose-material = { group = "androidx.compose.material", name = "material" , version.ref = "androidxComposeMaterial" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxComposeMaterial3" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidxCompose" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidxCompose" }
