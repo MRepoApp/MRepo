@@ -1,6 +1,5 @@
 package com.sanmer.mrepo.datastore.repository
 
-
 data class RepositoryMenuCompat(
     val option: Option,
     val descending: Boolean,
@@ -10,6 +9,26 @@ data class RepositoryMenuCompat(
     val showLicense: Boolean,
     val showUpdatedTime: Boolean
 ) {
+    constructor(original: RepositoryMenu) : this(
+        option = original.option,
+        descending = original.descending,
+        pinInstalled = original.pinInstalled,
+        pinUpdatable = original.pinUpdatable,
+        showIcon = original.showIcon,
+        showLicense = original.showLicense,
+        showUpdatedTime = original.showUpdatedTime
+    )
+
+    fun toProto(): RepositoryMenu = RepositoryMenu.newBuilder()
+        .setOption(option)
+        .setDescending(descending)
+        .setPinInstalled(pinInstalled)
+        .setPinUpdatable(pinUpdatable)
+        .setShowIcon(showIcon)
+        .setShowLicense(showLicense)
+        .setShowUpdatedTime(showUpdatedTime)
+        .build()
+
     companion object {
         fun default() = RepositoryMenuCompat(
             option = Option.NAME,
@@ -22,23 +41,3 @@ data class RepositoryMenuCompat(
         )
     }
 }
-
-fun RepositoryMenuCompat.toProto(): RepositoryMenu = RepositoryMenu.newBuilder()
-    .setOption(option)
-    .setDescending(descending)
-    .setPinInstalled(pinInstalled)
-    .setPinUpdatable(pinUpdatable)
-    .setShowIcon(showIcon)
-    .setShowLicense(showLicense)
-    .setShowUpdatedTime(showUpdatedTime)
-    .build()
-
-fun RepositoryMenu.toExt() = RepositoryMenuCompat(
-    option = option,
-    descending = descending,
-    pinInstalled = pinInstalled,
-    pinUpdatable = pinUpdatable,
-    showIcon = showIcon,
-    showLicense = showLicense,
-    showUpdatedTime = showUpdatedTime
-)

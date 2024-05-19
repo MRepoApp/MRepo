@@ -8,6 +8,20 @@ data class ModulesMenuCompat(
     val pinEnabled: Boolean,
     val showUpdatedTime: Boolean
 ) {
+    constructor(original: ModulesMenu) : this(
+        option = original.option,
+        descending = original.descending,
+        pinEnabled = original.pinEnabled,
+        showUpdatedTime = original.showUpdatedTime
+    )
+
+    fun toProto(): ModulesMenu = ModulesMenu.newBuilder()
+        .setOption(option)
+        .setDescending(descending)
+        .setPinEnabled(pinEnabled)
+        .setShowUpdatedTime(showUpdatedTime)
+        .build()
+
     companion object {
         fun default() = ModulesMenuCompat(
             option = Option.NAME,
@@ -17,17 +31,3 @@ data class ModulesMenuCompat(
         )
     }
 }
-
-fun ModulesMenuCompat.toProto(): ModulesMenu = ModulesMenu.newBuilder()
-    .setOption(option)
-    .setDescending(descending)
-    .setPinEnabled(pinEnabled)
-    .setShowUpdatedTime(showUpdatedTime)
-    .build()
-
-fun ModulesMenu.toExt() = ModulesMenuCompat(
-    option = option,
-    descending = descending,
-    pinEnabled = pinEnabled,
-    showUpdatedTime = showUpdatedTime
-)

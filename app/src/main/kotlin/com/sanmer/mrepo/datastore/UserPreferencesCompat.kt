@@ -5,11 +5,7 @@ import androidx.compose.runtime.Composable
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.compat.BuildCompat
 import com.sanmer.mrepo.datastore.modules.ModulesMenuCompat
-import com.sanmer.mrepo.datastore.modules.toExt
-import com.sanmer.mrepo.datastore.modules.toProto
 import com.sanmer.mrepo.datastore.repository.RepositoryMenuCompat
-import com.sanmer.mrepo.datastore.repository.toExt
-import com.sanmer.mrepo.datastore.repository.toProto
 import com.sanmer.mrepo.ui.theme.Colors
 import java.io.File
 
@@ -26,6 +22,37 @@ data class UserPreferencesCompat(
     val repositoryMenu: RepositoryMenuCompat,
     val modulesMenu: ModulesMenuCompat
 ) {
+    constructor(original: UserPreferences) : this(
+        workingMode = original.workingMode,
+        darkMode = original.darkMode,
+        themeColor = original.themeColor,
+        deleteZipFile = original.deleteZipFile,
+        useDoh = original.useDoh,
+        downloadPath = original.downloadPath.ifEmpty{ Const.PUBLIC_DOWNLOADS.absolutePath }.let(::File),
+        repositoryMenu = original.repositoryMenuOrNull?.let(::RepositoryMenuCompat)
+            ?: RepositoryMenuCompat.default(),
+        modulesMenu = original.modulesMenuOrNull?.let(::ModulesMenuCompat)
+            ?: ModulesMenuCompat.default()
+    )
+
+    @Composable
+    fun isDarkMode() = when (darkMode) {
+        DarkMode.ALWAYS_OFF -> false
+        DarkMode.ALWAYS_ON -> true
+        else -> isSystemInDarkTheme()
+    }
+
+    fun toProto(): UserPreferences = UserPreferences.newBuilder()
+        .setWorkingMode(workingMode)
+        .setDarkMode(darkMode)
+        .setThemeColor(themeColor)
+        .setDeleteZipFile(deleteZipFile)
+        .setUseDoh(useDoh)
+        .setDownloadPath(downloadPath.absolutePath)
+        .setRepositoryMenu(repositoryMenu.toProto())
+        .setModulesMenu(modulesMenu.toProto())
+        .build()
+
     companion object {
         fun default() = UserPreferencesCompat(
             workingMode = WorkingMode.FIRST_SETUP,
@@ -37,40 +64,11 @@ data class UserPreferencesCompat(
             repositoryMenu = RepositoryMenuCompat.default(),
             modulesMenu = ModulesMenuCompat.default()
         )
+
+        fun UserPreferences.new(
+            block: UserPreferencesKt.Dsl.() -> Unit
+        ) = UserPreferencesCompat(this)
+            .toProto()
+            .copy(block)
     }
 }
-
-@Composable
-fun UserPreferencesCompat.isDarkMode() = when (darkMode) {
-    DarkMode.ALWAYS_OFF -> false
-    DarkMode.ALWAYS_ON -> true
-    else -> isSystemInDarkTheme()
-}
-
-fun UserPreferencesCompat.toProto(): UserPreferences = UserPreferences.newBuilder()
-    .setWorkingMode(workingMode)
-    .setDarkMode(darkMode)
-    .setThemeColor(themeColor)
-    .setDeleteZipFile(deleteZipFile)
-    .setUseDoh(useDoh)
-    .setDownloadPath(downloadPath.absolutePath)
-    .setRepositoryMenu(repositoryMenu.toProto())
-    .setModulesMenu(modulesMenu.toProto())
-    .build()
-
-fun UserPreferences.toExt() = UserPreferencesCompat(
-    workingMode = workingMode,
-    darkMode = darkMode,
-    themeColor = themeColor,
-    deleteZipFile = deleteZipFile,
-    useDoh = useDoh,
-    downloadPath = downloadPath.ifEmpty{ Const.PUBLIC_DOWNLOADS.absolutePath }.let(::File),
-    repositoryMenu = repositoryMenuOrNull?.toExt() ?: RepositoryMenuCompat.default(),
-    modulesMenu = modulesMenuOrNull?.toExt() ?: ModulesMenuCompat.default()
-)
-
-fun UserPreferences.new(
-    block: UserPreferencesKt.Dsl.() -> Unit
-) = toExt()
-    .toProto()
-    .copy(block)

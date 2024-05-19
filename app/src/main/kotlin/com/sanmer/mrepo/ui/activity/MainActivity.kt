@@ -17,7 +17,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.database.entity.toRepo
-import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository

@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.compat.ProviderCompat
-import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.theme.AppTheme

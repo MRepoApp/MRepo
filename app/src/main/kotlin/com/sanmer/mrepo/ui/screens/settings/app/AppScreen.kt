@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.datastore.isDarkMode
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.SettingSwitchItem
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
