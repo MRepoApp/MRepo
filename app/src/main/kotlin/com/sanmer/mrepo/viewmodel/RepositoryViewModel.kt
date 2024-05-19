@@ -42,17 +42,9 @@ class RepositoryViewModel @Inject constructor(
 
     var isLoading by mutableStateOf(true)
         private set
-    var isRefreshing by mutableStateOf(false)
-        private set
-    private inline fun <T> T.refreshing(callback: T.() -> Unit) {
-        isRefreshing  = true
-        callback()
-        isRefreshing = false
-    }
 
     init {
         Timber.d("RepositoryViewModel init")
-        getOnlineAll()
         dataObserver()
         keyObserver()
     }
@@ -138,11 +130,9 @@ class RepositoryViewModel @Inject constructor(
         keyFlow.value = ""
     }
 
-    fun getOnlineAll() {
+    private fun getOnlineAll() {
         viewModelScope.launch {
-            refreshing {
-                modulesRepository.getRepoAll()
-            }
+            modulesRepository.getRepoAll()
         }
     }
 
