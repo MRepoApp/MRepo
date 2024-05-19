@@ -2,14 +2,14 @@ package com.sanmer.mrepo.datastore.modules
 
 import com.sanmer.mrepo.datastore.repository.Option
 
-data class ModulesMenuExt(
+data class ModulesMenuCompat(
     val option: Option,
     val descending: Boolean,
     val pinEnabled: Boolean,
     val showUpdatedTime: Boolean
 ) {
     companion object {
-        fun default() = ModulesMenuExt(
+        fun default() = ModulesMenuCompat(
             option = Option.NAME,
             descending = false,
             pinEnabled = false,
@@ -18,14 +18,14 @@ data class ModulesMenuExt(
     }
 }
 
-fun ModulesMenuExt.toProto(): ModulesMenu = ModulesMenu.newBuilder()
+fun ModulesMenuCompat.toProto(): ModulesMenu = ModulesMenu.newBuilder()
     .setOption(option)
     .setDescending(descending)
     .setPinEnabled(pinEnabled)
     .setShowUpdatedTime(showUpdatedTime)
     .build()
 
-fun ModulesMenu.toExt() = ModulesMenuExt(
+fun ModulesMenu.toExt() = ModulesMenuCompat(
     option = option,
     descending = descending,
     pinEnabled = pinEnabled,

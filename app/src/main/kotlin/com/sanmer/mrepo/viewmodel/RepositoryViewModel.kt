@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.datastore.repository.Option
-import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
+import com.sanmer.mrepo.datastore.repository.RepositoryMenuCompat
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.state.OnlineState
 import com.sanmer.mrepo.model.state.OnlineState.Companion.createState
@@ -136,6 +136,6 @@ class RepositoryViewModel @Inject constructor(
         }
     }
 
-    fun setRepositoryMenu(value: RepositoryMenuExt) =
+    fun setRepositoryMenu(value: RepositoryMenuCompat) =
         userPreferencesRepository.setRepositoryMenu(value)
 }

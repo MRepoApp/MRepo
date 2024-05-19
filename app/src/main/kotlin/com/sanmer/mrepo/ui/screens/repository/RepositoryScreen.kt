@@ -24,7 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
+import com.sanmer.mrepo.datastore.repository.RepositoryMenuCompat
 import com.sanmer.mrepo.ui.component.Loading
 import com.sanmer.mrepo.ui.component.PageIndicator
 import com.sanmer.mrepo.ui.component.SearchTopBar
@@ -94,7 +94,7 @@ private fun TopBar(
     onQueryChange: (String) -> Unit,
     onOpenSearch: () -> Unit,
     onCloseSearch: () -> Unit,
-    setMenu: (RepositoryMenuExt) -> Unit,
+    setMenu: (RepositoryMenuCompat) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     var query by remember { mutableStateOf("") }

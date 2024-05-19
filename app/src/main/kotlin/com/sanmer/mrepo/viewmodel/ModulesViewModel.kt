@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.sanmer.mrepo.compat.ProviderCompat
-import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
+import com.sanmer.mrepo.datastore.modules.ModulesMenuCompat
 import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.model.json.UpdateJson
 import com.sanmer.mrepo.model.local.LocalModule
@@ -171,7 +171,7 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
-    fun setModulesMenu(value: ModulesMenuExt) =
+    fun setModulesMenu(value: ModulesMenuCompat) =
         userPreferencesRepository.setModulesMenu(value)
 
     fun createModuleOps(module: LocalModule) = when (module.state) {

@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.datastore.repository.Option
-import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
+import com.sanmer.mrepo.datastore.repository.RepositoryMenuCompat
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.state.OnlineState
 import com.sanmer.mrepo.ui.component.MenuChip
@@ -42,7 +42,7 @@ import com.sanmer.mrepo.ui.utils.expandedShape
 
 @Composable
 fun RepositoryMenu(
-    setMenu: (RepositoryMenuExt) -> Unit
+    setMenu: (RepositoryMenuCompat) -> Unit
 ) {
     val userPreferences = LocalUserPreferences.current
     var open by rememberSaveable { mutableStateOf(false) }
@@ -68,8 +68,8 @@ fun RepositoryMenu(
 @Composable
 private fun BottomSheet(
     onClose: () -> Unit,
-    menu: RepositoryMenuExt,
-    setMenu: (RepositoryMenuExt) -> Unit
+    menu: RepositoryMenuCompat,
+    setMenu: (RepositoryMenuCompat) -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),

@@ -1,7 +1,7 @@
 package com.sanmer.mrepo.datastore.repository
 
 
-data class RepositoryMenuExt(
+data class RepositoryMenuCompat(
     val option: Option,
     val descending: Boolean,
     val pinInstalled: Boolean,
@@ -11,7 +11,7 @@ data class RepositoryMenuExt(
     val showUpdatedTime: Boolean
 ) {
     companion object {
-        fun default() = RepositoryMenuExt(
+        fun default() = RepositoryMenuCompat(
             option = Option.NAME,
             descending = false,
             pinInstalled = false,
@@ -23,7 +23,7 @@ data class RepositoryMenuExt(
     }
 }
 
-fun RepositoryMenuExt.toProto(): RepositoryMenu = RepositoryMenu.newBuilder()
+fun RepositoryMenuCompat.toProto(): RepositoryMenu = RepositoryMenu.newBuilder()
     .setOption(option)
     .setDescending(descending)
     .setPinInstalled(pinInstalled)
@@ -33,7 +33,7 @@ fun RepositoryMenuExt.toProto(): RepositoryMenu = RepositoryMenu.newBuilder()
     .setShowUpdatedTime(showUpdatedTime)
     .build()
 
-fun RepositoryMenu.toExt() = RepositoryMenuExt(
+fun RepositoryMenu.toExt() = RepositoryMenuCompat(
     option = option,
     descending = descending,
     pinInstalled = pinInstalled,

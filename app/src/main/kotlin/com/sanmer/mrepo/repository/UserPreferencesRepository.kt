@@ -3,8 +3,8 @@ package com.sanmer.mrepo.repository
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.UserPreferencesDataSource
 import com.sanmer.mrepo.datastore.WorkingMode
-import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
-import com.sanmer.mrepo.datastore.repository.RepositoryMenuExt
+import com.sanmer.mrepo.datastore.modules.ModulesMenuCompat
+import com.sanmer.mrepo.datastore.repository.RepositoryMenuCompat
 import com.sanmer.mrepo.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -43,11 +43,11 @@ class UserPreferencesRepository @Inject constructor(
         userPreferencesDataSource.setDownloadPath(value.absolutePath)
     }
 
-    fun setRepositoryMenu(value: RepositoryMenuExt) = applicationScope.launch {
+    fun setRepositoryMenu(value: RepositoryMenuCompat) = applicationScope.launch {
         userPreferencesDataSource.setRepositoryMenu(value)
     }
 
-    fun setModulesMenu(value: ModulesMenuExt) = applicationScope.launch {
+    fun setModulesMenu(value: ModulesMenuCompat) = applicationScope.launch {
         userPreferencesDataSource.setModulesMenu(value)
     }
 }

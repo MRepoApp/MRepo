@@ -25,7 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
-import com.sanmer.mrepo.datastore.modules.ModulesMenuExt
+import com.sanmer.mrepo.datastore.modules.ModulesMenuCompat
 import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.ui.component.MenuChip
 import com.sanmer.mrepo.ui.component.NavigationBarsSpacer
@@ -37,7 +37,7 @@ import com.sanmer.mrepo.ui.utils.expandedShape
 
 @Composable
 fun ModulesMenu(
-    setMenu: (ModulesMenuExt) -> Unit
+    setMenu: (ModulesMenuCompat) -> Unit
 ) {
     val userPreferences = LocalUserPreferences.current
     var open by rememberSaveable { mutableStateOf(false) }
@@ -63,8 +63,8 @@ fun ModulesMenu(
 @Composable
 private fun BottomSheet(
     onClose: () -> Unit,
-    menu: ModulesMenuExt,
-    setMenu: (ModulesMenuExt) -> Unit
+    menu: ModulesMenuCompat,
+    setMenu: (ModulesMenuCompat) -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
