@@ -70,6 +70,7 @@ square-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "sq
 square-moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "squareMoshi" }
 
 markwon-core = "io.noties.markwon:core:4.6.2"
+hiddenApiBypass = "org.lsposed.hiddenapibypass:hiddenapibypass:4.3"
 timber = "com.jakewharton.timber:timber:5.0.1"
 
 # Dependencies of the included build-logic

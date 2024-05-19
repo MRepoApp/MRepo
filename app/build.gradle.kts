@@ -153,10 +153,9 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.libsu.core)
-    implementation(libs.libsu.service)
-
     implementation(libs.rikka.shizuku.api)
     implementation(libs.rikka.shizuku.provider)
+    implementation(libs.hiddenApiBypass)
 
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.moshi)

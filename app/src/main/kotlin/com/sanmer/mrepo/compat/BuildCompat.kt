@@ -12,4 +12,7 @@ object BuildCompat {
 
     @get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
     val atLeastR get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
+    @get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.P)
+    val atLeastP get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 }
