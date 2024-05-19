@@ -17,7 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.compat.ProviderCompat
-import com.sanmer.mrepo.database.entity.toRepo
+import com.sanmer.mrepo.database.entity.Repo.Companion.toRepo
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.repository.LocalRepository

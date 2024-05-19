@@ -2,7 +2,6 @@ package com.sanmer.mrepo.repository
 
 import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.database.entity.copy
 import com.sanmer.mrepo.network.runRequest
 import com.sanmer.mrepo.stub.IRepoManager
 import kotlinx.coroutines.Dispatchers

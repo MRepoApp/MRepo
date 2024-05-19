@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.database.entity.toRepo
+import com.sanmer.mrepo.database.entity.Repo.Companion.toRepo
 import com.sanmer.mrepo.model.state.RepoState
 import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.ModulesRepository

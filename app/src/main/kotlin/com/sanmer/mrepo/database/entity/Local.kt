@@ -16,31 +16,31 @@ data class LocalModuleEntity(
     val state: String,
     val updateJson: String,
     val lastUpdated: Long
-)
+) {
+    constructor(original: LocalModule) : this(
+        id = original.id,
+        name = original.name,
+        version = original.version,
+        versionCode = original.versionCode,
+        author = original.author,
+        description = original.description,
+        state = original.state.name,
+        updateJson = original.updateJson,
+        lastUpdated = original.lastUpdated
+    )
 
-fun LocalModule.toEntity() = LocalModuleEntity(
-    id = id,
-    name = name,
-    version = version,
-    versionCode = versionCode,
-    author = author,
-    description = description,
-    state = state.name,
-    updateJson = updateJson,
-    lastUpdated = lastUpdated
-)
-
-fun LocalModuleEntity.toModule() = LocalModule(
-    id = id,
-    name = name,
-    version = version,
-    versionCode = versionCode,
-    author = author,
-    description = description,
-    updateJson = updateJson,
-    state = State.valueOf(state),
-    lastUpdated = lastUpdated
-)
+    fun toModule() = LocalModule(
+        id = id,
+        name = name,
+        version = version,
+        versionCode = versionCode,
+        author = author,
+        description = description,
+        updateJson = updateJson,
+        state = State.valueOf(state),
+        lastUpdated = lastUpdated
+    )
+}
 
 @Entity(tableName = "localModules_updatable")
 data class LocalModuleUpdatable(

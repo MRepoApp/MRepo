@@ -5,11 +5,11 @@ import com.sanmer.mrepo.database.dao.LocalDao
 import com.sanmer.mrepo.database.dao.OnlineDao
 import com.sanmer.mrepo.database.dao.RepoDao
 import com.sanmer.mrepo.database.dao.VersionDao
+import com.sanmer.mrepo.database.entity.LocalModuleEntity
 import com.sanmer.mrepo.database.entity.LocalModuleUpdatable
+import com.sanmer.mrepo.database.entity.OnlineModuleEntity
 import com.sanmer.mrepo.database.entity.Repo
-import com.sanmer.mrepo.database.entity.toEntity
-import com.sanmer.mrepo.database.entity.toItem
-import com.sanmer.mrepo.database.entity.toModule
+import com.sanmer.mrepo.database.entity.VersionItemEntity
 import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.utils.extensions.merge
@@ -36,11 +36,11 @@ class LocalRepository @Inject constructor(
     }
 
     suspend fun insertLocal(value: LocalModule) = withContext(Dispatchers.IO) {
-        localDao.insert(value.toEntity())
+        localDao.insert(LocalModuleEntity(value))
     }
 
     suspend fun insertLocal(list: List<LocalModule>) = withContext(Dispatchers.IO) {
-        localDao.insert(list.map { it.toEntity() })
+        localDao.insert(list.map { LocalModuleEntity(it) })
     }
 
     suspend fun deleteLocalAll() = withContext(Dispatchers.IO) {
@@ -115,7 +115,8 @@ class LocalRepository @Inject constructor(
     suspend fun insertOnline(list: List<OnlineModule>, repoUrl: String) = withContext(Dispatchers.IO) {
         val versions = list.map { module ->
             module.versions.map {
-                it.toEntity(
+                VersionItemEntity(
+                    original = it,
                     id = module.id,
                     repoUrl = repoUrl
                 )
@@ -123,7 +124,14 @@ class LocalRepository @Inject constructor(
         }.merge()
 
         versionDao.insert(versions)
-        onlineDao.insert(list.map { it.toEntity(repoUrl) })
+        onlineDao.insert(
+            list.map {
+                OnlineModuleEntity(
+                    original = it,
+                    repoUrl = repoUrl
+                )
+            }
+        )
     }
 
     suspend fun deleteOnlineByUrl(repoUrl: String) = withContext(Dispatchers.IO) {

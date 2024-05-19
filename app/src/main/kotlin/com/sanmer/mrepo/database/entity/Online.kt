@@ -15,45 +15,32 @@ data class OnlineModuleEntity(
     val author: String,
     val description: String,
     @Embedded val track: TrackJsonEntity
-)
-
-fun OnlineModule.toEntity(repoUrl: String) = OnlineModuleEntity(
-    id = id,
-    repoUrl = repoUrl,
-    name = name,
-    version = version,
-    versionCode = versionCode,
-    author = author,
-    description = description,
-    track = TrackJsonEntity(
-        type = track.type.name,
-        added = track.added,
-        license = track.license,
-        homepage = track.homepage,
-        source = track.source,
-        support = track.support,
-        donate = track.donate
+) {
+    constructor(
+        original: OnlineModule,
+        repoUrl: String
+    ) : this(
+        id = original.id,
+        repoUrl = repoUrl,
+        name = original.name,
+        version = original.version,
+        versionCode = original.versionCode,
+        author = original.author,
+        description = original.description,
+        track = TrackJsonEntity(original.track)
     )
-)
 
-fun OnlineModuleEntity.toModule() = OnlineModule(
-    id = id,
-    name = name,
-    version = version,
-    versionCode = versionCode,
-    author = author,
-    description = description,
-    track = TrackJson(
-        typeName = track.type,
-        added = track.added,
-        license = track.license,
-        homepage = track.homepage,
-        source = track.source,
-        support = track.support,
-        donate = track.donate
-    ),
-    versions = listOf()
-)
+    fun toModule() = OnlineModule(
+        id = id,
+        name = name,
+        version = version,
+        versionCode = versionCode,
+        author = author,
+        description = description,
+        track = track.toTrack(),
+        versions = listOf()
+    )
+}
 
 @Entity(tableName = "track")
 data class TrackJsonEntity(
@@ -64,4 +51,24 @@ data class TrackJsonEntity(
     val source: String,
     val support: String,
     val donate: String
-)
+) {
+    constructor(original: TrackJson) : this(
+        type = original.type.name,
+        added = original.added,
+        license = original.license,
+        homepage = original.homepage,
+        source = original.source,
+        support = original.support,
+        donate = original.donate
+    )
+
+    fun toTrack() = TrackJson(
+        typeName = type,
+        added = added,
+        license = license,
+        homepage = homepage,
+        source = source,
+        support = support,
+        donate = donate
+    )
+}

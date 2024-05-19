@@ -24,6 +24,19 @@ data class Repo(
     override fun hashCode(): Int {
         return url.hashCode()
     }
+
+    fun copy(modulesJson: ModulesJson) = copy(
+        name = modulesJson.name,
+        metadata = RepoMetadata(
+            version = modulesJson.metadata.version,
+            timestamp = modulesJson.metadata.timestamp,
+            size = modulesJson.modules.size
+        )
+    )
+
+    companion object {
+        fun String.toRepo() = Repo(url = this)
+    }
 }
 
 @Entity(tableName = "metadata")
@@ -40,14 +53,3 @@ data class RepoMetadata(
         )
     }
 }
-
-fun String.toRepo() = Repo(url = this)
-
-fun Repo.copy(modulesJson: ModulesJson) = copy(
-    name = modulesJson.name,
-    metadata = RepoMetadata(
-        version = modulesJson.metadata.version,
-        timestamp = modulesJson.metadata.timestamp,
-        size = modulesJson.modules.size
-    )
-)
