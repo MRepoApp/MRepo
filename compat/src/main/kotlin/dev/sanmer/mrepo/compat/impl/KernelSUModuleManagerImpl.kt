@@ -19,7 +19,6 @@ internal class KernelSUModuleManagerImpl(
                 callback.onFailure(id, it.out.joinToString())
             }
         }
-
     }
 
     override fun disable(id: String, callback: IModuleOpsCallback) {

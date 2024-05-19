@@ -37,42 +37,36 @@ internal abstract class BaseModuleManagerImpl(
         return _versionCode
     }
 
-    override fun getModules(): List<LocalModule> {
-        return modulesDir.listFiles().orEmpty()
-            .mapNotNull { moduleDir ->
-                runCatching {
-                    readProps(moduleDir)
-                        .toModule(
-                            state = readState(moduleDir),
-                            lastUpdated = readLastUpdated(moduleDir)
-                        )
-                }.getOrNull()
-            }
-    }
+    override fun getModules() = modulesDir.listFiles().orEmpty()
+        .mapNotNull { moduleDir ->
+            runCatching {
+                readProps(moduleDir)
+                    .toModule(
+                        state = readState(moduleDir),
+                        lastUpdated = readLastUpdated(moduleDir)
+                    )
+            }.getOrNull()
+        }
 
-    override fun getModuleById(id: String): LocalModule? {
-        return runCatching {
-            val moduleDir = modulesDir.resolve(id)
-            readProps(moduleDir)
-                .toModule(
-                    state = readState(moduleDir),
-                    lastUpdated = readLastUpdated(moduleDir)
-                )
-        }.getOrNull()
-    }
+    override fun getModuleById(id: String) = runCatching {
+        val moduleDir = modulesDir.resolve(id)
+        readProps(moduleDir)
+            .toModule(
+                state = readState(moduleDir),
+                lastUpdated = readLastUpdated(moduleDir)
+            )
+    }.getOrNull()
 
-    override fun getModuleInfo(zipPath: String): LocalModule? {
-        return runCatching {
-            val zipFile = File(zipPath)
-            val mDir = tmpDir.resolve("mrepo")
-            zipFile.unzip(mDir, PROP_FILE, true)
+    override fun getModuleInfo(zipPath: String) = runCatching {
+        val zipFile = File(zipPath)
+        val mDir = tmpDir.resolve("mrepo")
+        zipFile.unzip(mDir, PROP_FILE, true)
 
-            val module = readProps(mDir).toModule()
-            mDir.deleteRecursively()
+        val module = readProps(mDir).toModule()
+        mDir.deleteRecursively()
 
-            module
-        }.getOrNull()
-    }
+        module
+    }.getOrNull()
 
     private fun readProps(moduleDir: File): Map<String, String>? {
         return moduleDir.resolve(PROP_FILE)
