@@ -19,12 +19,12 @@
     <string name="setup_root_title">मूल</string>
     <string name="page_modules">भाग</string>
     <string name="menu_advanced_menu">उन्नत मेनू</string>
-    <string name="module_install">इंस्टाल करें</string>
+    <string name="module_install">स्थापित करें</string>
     <string name="repo_modules">%d मॉड्यूल्स</string>
     <string name="repo_update_at">यहां अपडेट किया गया: %s</string>
     <string name="menu_sort_option_updated">अद्यतन समय</string>
     <string name="about_app_version">वर्जन %1$s (%2$s)</string>
-    <string name="module_download">डाउनलोड करना</string>
+    <string name="module_download">अधिभारण</string>
     <string name="app_theme_dark_theme_auto">ऑटो</string>
     <string name="menu_show_icon">संकेत दिखाएं</string>
     <string name="license_fsf_libre">एफएसएफ स्वतंत्र</string>
@@ -67,4 +67,14 @@
     <string name="setup_root_desc">\'मेजिस्क\' अथवा \'कर्नल एस यू\' द्वारा \'मूल\' अनुमतियों की आवश्यकता</string>
     <string name="modules_empty">भाग अनुपलब्ध</string>
     <string name="module_version_author">%1$s के द्वारा %2$s</string>
+    <string name="module_update">अद्यतन करें</string>
+    <string name="settings_app">अनुप्रयोग</string>
+    <string name="settings_app_desc">स्वयं एमरेपो अनुप्रयोग का व्यवस्थापन</string>
+    <string name="settings_repo">कोष</string>
+    <string name="module_restore">पुनः स्थापित करें</string>
+    <string name="settings_root_access">मूल अनुमति: %s</string>
+    <string name="settings_root_provider">दाता: %s</string>
+    <string name="settings_root_granted">प्रदित्त</string>
+    <string name="settings_root_not_available">अनुपलब्ध</string>
+    <string name="settings_repo_desc">मेजिस्क के भागों के कोषों को व्यवस्थित करें</string>
 </resources>
