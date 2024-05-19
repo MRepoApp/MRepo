@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.IBinder
 import com.topjohnwu.superuser.ipc.RootService
-import dev.sanmer.mrepo.compat.BuildConfig
+import dev.sanmer.mrepo.compat.Const
 import dev.sanmer.mrepo.compat.impl.ServiceManagerImpl
 
 internal class SuService : RootService() {
@@ -15,7 +15,7 @@ internal class SuService : RootService() {
     companion object {
         val intent get() = Intent().apply {
             component = ComponentName(
-                BuildConfig.APPLICATION_ID,
+                Const.PACKAGE_NAME,
                 SuService::class.java.name
             )
         }
