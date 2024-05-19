@@ -2,7 +2,6 @@ package com.sanmer.mrepo.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -11,7 +10,6 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -62,18 +60,10 @@ class ModulesViewModel @Inject constructor(
 
     var isLoading by mutableStateOf(true)
         private set
-    var isRefreshing by mutableStateOf(false)
-        private set
-    private inline fun <T> T.refreshing(callback: T.() -> Unit) {
-        isRefreshing = true
-        callback()
-        isRefreshing = false
-    }
 
     private val versionItemCache = mutableStateMapOf<String, VersionItem?>()
 
     private val opsTasks = mutableStateListOf<String>()
-    val isOpsRunning get() = opsTasks.isNotEmpty()
     private val opsCallback = object : IModuleOpsCallback.Stub() {
         override fun onSuccess(id: String) {
             viewModelScope.launch {
@@ -175,73 +165,65 @@ class ModulesViewModel @Inject constructor(
         keyFlow.value = ""
     }
 
-    fun getLocalAll() {
+    private fun getLocalAll() {
         viewModelScope.launch {
-            refreshing {
-                modulesRepository.getLocalAll()
-            }
+            modulesRepository.getLocalAll()
         }
     }
 
     fun setModulesMenu(value: ModulesMenuExt) =
         userPreferencesRepository.setModulesMenu(value)
 
-    private fun createUiState(module: LocalModule) = when (module.state) {
-            State.ENABLE -> LocalUiState(
-                alpha = 1f,
-                decoration = TextDecoration.None,
-                toggle = {
-                    opsTasks.add(module.id)
-                    ProviderCompat.moduleManager
-                        .disable(module.id, opsCallback)
-                },
-                change = {
-                    opsTasks.add(module.id)
-                    ProviderCompat.moduleManager
-                        .remove(module.id, opsCallback)
-                }
-            )
+    fun createModuleOps(module: LocalModule) = when (module.state) {
+        State.ENABLE -> ModuleOps(
+            isOpsRunning = opsTasks.contains(module.id),
+            toggle = {
+                opsTasks.add(module.id)
+                ProviderCompat.moduleManager
+                    .disable(module.id, opsCallback)
+            },
+            change = {
+                opsTasks.add(module.id)
+                ProviderCompat.moduleManager
+                    .remove(module.id, opsCallback)
+            }
+        )
 
-            State.DISABLE -> LocalUiState(
-                alpha = 0.5f,
-                toggle = {
-                    opsTasks.add(module.id)
-                    ProviderCompat.moduleManager
-                        .enable(module.id, opsCallback)
-                },
-                change = {
-                    opsTasks.add(module.id)
-                    ProviderCompat.moduleManager
-                        .remove(module.id, opsCallback)
-                }
-            )
+        State.DISABLE -> ModuleOps(
+            isOpsRunning = opsTasks.contains(module.id),
+            toggle = {
+                opsTasks.add(module.id)
+                ProviderCompat.moduleManager
+                    .enable(module.id, opsCallback)
+            },
+            change = {
+                opsTasks.add(module.id)
+                ProviderCompat.moduleManager
+                    .remove(module.id, opsCallback)
+            }
+        )
 
-            State.REMOVE -> LocalUiState(
-                alpha = 0.5f,
-                decoration = TextDecoration.LineThrough,
-                change = {
-                    opsTasks.add(module.id)
-                    ProviderCompat.moduleManager
-                        .enable(module.id, opsCallback)
-                }
-            )
+        State.REMOVE -> ModuleOps(
+            isOpsRunning = opsTasks.contains(module.id),
+            toggle = {},
+            change = {
+                opsTasks.add(module.id)
+                ProviderCompat.moduleManager
+                    .enable(module.id, opsCallback)
+            }
+        )
 
-            State.UPDATE -> LocalUiState()
-        }
-
-    @Composable
-    fun rememberUiState(module: LocalModule): LocalUiState {
-        return remember(key1 = module.state, key2 = isRefreshing) {
-            createUiState(module)
-        }
+        State.UPDATE -> ModuleOps(
+            isOpsRunning = opsTasks.contains(module.id),
+            toggle = {},
+            change = {}
+        )
     }
 
     @Composable
     fun getVersionItem(module: LocalModule): VersionItem? {
         val item by remember {
-            derivedStateOf {
-                versionItemCache[module.id]
-            }
+            derivedStateOf { versionItemCache[module.id] }
         }
 
         LaunchedEffect(key1 = module) {
@@ -317,11 +299,9 @@ class ModulesViewModel @Inject constructor(
         return progress
     }
 
-    @Immutable
-    data class LocalUiState(
-        val alpha: Float = 1f,
-        val decoration: TextDecoration = TextDecoration.None,
-        val toggle: (Boolean) -> Unit = {},
-        val change: () -> Unit = {}
+    data class ModuleOps(
+        val isOpsRunning: Boolean,
+        val toggle: (Boolean) -> Unit,
+        val change: () -> Unit
     )
 }

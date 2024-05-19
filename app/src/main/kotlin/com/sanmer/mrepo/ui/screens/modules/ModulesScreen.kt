@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -32,13 +28,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,7 +59,6 @@ fun ModulesScreen(
     val context = LocalContext.current
 
     val list by viewModel.local.collectAsStateWithLifecycle()
-    val showRefreshIndicator = viewModel.isRefreshing || viewModel.isOpsRunning
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val listState = rememberLazyListState()
@@ -76,11 +69,6 @@ fun ModulesScreen(
             isScrollingUp && !viewModel.isSearch && viewModel.isProviderAlive
         }
     }
-
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = showRefreshIndicator,
-        onRefresh = { viewModel.getLocalAll() }
-    )
 
     val download: (LocalModule, VersionItem, Boolean) -> Unit = { module, item, install ->
         viewModel.downloader(context, module, item) {
@@ -131,12 +119,8 @@ fun ModulesScreen(
         },
         contentWindowInsets = WindowInsets.none
     ) { innerPadding ->
-        Box(modifier = Modifier
-            .padding(innerPadding)
-            .pullRefresh(
-                state = pullRefreshState,
-                enabled = !viewModel.isSearch
-            )
+        Box(
+            modifier = Modifier.padding(innerPadding)
         ) {
             if (viewModel.isLoading) {
                 Loading()
@@ -153,19 +137,10 @@ fun ModulesScreen(
                 list = list,
                 state = listState,
                 isProviderAlive = viewModel.isProviderAlive,
-                getUiState = { viewModel.rememberUiState(it) },
+                getModuleOps = viewModel::createModuleOps,
                 getVersionItem = { viewModel.getVersionItem(it) },
                 getProgress = { viewModel.getProgress(it) },
                 onDownload = download
-            )
-
-            PullRefreshIndicator(
-                modifier = Modifier.align(Alignment.TopCenter),
-                refreshing = showRefreshIndicator,
-                state = pullRefreshState,
-                backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
-                contentColor = MaterialTheme.colorScheme.primary,
-                scale = true
             )
         }
     }

@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.sanmer.mrepo.R
 import com.sanmer.mrepo.model.local.LocalModule
@@ -30,14 +32,14 @@ import com.sanmer.mrepo.model.local.State
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.ui.component.VersionItemBottomSheet
 import com.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
-import com.sanmer.mrepo.viewmodel.ModulesViewModel.LocalUiState
+import com.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
 fun ModulesList(
     list: List<LocalModule>,
     state: LazyListState,
     isProviderAlive: Boolean,
-    getUiState: @Composable (LocalModule) -> LocalUiState,
+    getModuleOps: (LocalModule) -> ModulesViewModel.ModuleOps,
     getVersionItem: @Composable (LocalModule) -> VersionItem?,
     getProgress: @Composable (VersionItem?) -> Float,
     onDownload: (LocalModule, VersionItem, Boolean) -> Unit
@@ -57,7 +59,7 @@ fun ModulesList(
             ModuleItem(
                 module = module,
                 isProviderAlive = isProviderAlive,
-                getUiState = getUiState,
+                getModuleOps = getModuleOps,
                 getVersionItem = getVersionItem,
                 getProgress = getProgress,
                 onDownload = onDownload
@@ -75,12 +77,15 @@ fun ModulesList(
 fun ModuleItem(
     module: LocalModule,
     isProviderAlive: Boolean,
-    getUiState: @Composable (LocalModule) -> LocalUiState,
+    getModuleOps: (LocalModule) -> ModulesViewModel.ModuleOps,
     getVersionItem: @Composable (LocalModule) -> VersionItem?,
     getProgress: @Composable (VersionItem?) -> Float,
     onDownload: (LocalModule, VersionItem, Boolean) -> Unit
 ) {
-    val uiState = getUiState(module)
+    val ops by remember(module.state) {
+        derivedStateOf { getModuleOps(module) }
+    }
+
     val item  = getVersionItem(module)
     val progress = getProgress(item)
 
@@ -98,19 +103,28 @@ fun ModuleItem(
     ModuleItem(
         module = module,
         progress = progress,
-        alpha = uiState.alpha,
-        decoration = uiState.decoration,
+        indeterminate = ops.isOpsRunning,
+        alpha = when (module.state) {
+            State.DISABLE, State.REMOVE -> 0.5f
+            else -> 1f
+        },
+        decoration = when (module.state) {
+            State.REMOVE -> TextDecoration.LineThrough
+            else -> TextDecoration.None
+        },
         switch = {
             Switch(
                 checked = module.state == State.ENABLE,
-                onCheckedChange = uiState.toggle,
+                onCheckedChange = ops.toggle,
                 enabled = isProviderAlive
             )
         },
-        indicator = when (module.state) {
-            State.REMOVE -> stateIndicator(R.drawable.trash)
-            State.UPDATE -> stateIndicator(R.drawable.device_mobile_down)
-            else -> null
+        indicator = {
+            when (module.state) {
+                State.REMOVE -> StateIndicator(R.drawable.trash)
+                State.UPDATE -> StateIndicator(R.drawable.device_mobile_down)
+                else -> {}
+            }
         },
         trailingButton = {
             if (item != null) {
@@ -125,7 +139,7 @@ fun ModuleItem(
             RemoveOrRestore(
                 module = module,
                 enabled = isProviderAlive,
-                onClick = uiState.change
+                onClick = ops.change
             )
         }
     )

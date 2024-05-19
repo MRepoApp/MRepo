@@ -42,14 +42,13 @@ import com.sanmer.mrepo.utils.extensions.toDate
 fun ModuleItem(
     module: LocalModule,
     progress: Float,
-    modifier: Modifier = Modifier,
+    indeterminate: Boolean = false,
     alpha: Float = 1f,
     decoration: TextDecoration = TextDecoration.None,
     switch: @Composable (() -> Unit?)? = null,
     indicator: @Composable (BoxScope.() -> Unit?)? = null,
     trailingButton: @Composable RowScope.() -> Unit,
 ) = Surface(
-    modifier = modifier,
     color = MaterialTheme.colorScheme.surface,
     tonalElevation = 1.dp,
     shape = RoundedCornerShape(20.dp)
@@ -115,8 +114,15 @@ fun ModuleItem(
                 color = MaterialTheme.colorScheme.outline
             )
 
-            if (progress != 0f) {
-                LinearProgressIndicator(
+            when {
+                indeterminate -> LinearProgressIndicator(
+                    strokeCap = StrokeCap.Round,
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .height(2.dp)
+                        .fillMaxWidth()
+                )
+                progress != 0f -> LinearProgressIndicator(
                     progress = { progress },
                     strokeCap = StrokeCap.Round,
                     modifier = Modifier
@@ -124,8 +130,7 @@ fun ModuleItem(
                         .height(2.dp)
                         .fillMaxWidth()
                 )
-            } else {
-                HorizontalDivider(
+                else -> HorizontalDivider(
                     thickness = 1.5.dp,
                     color = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.padding(top = 8.dp)
@@ -148,15 +153,13 @@ fun ModuleItem(
 }
 
 @Composable
-fun stateIndicator(
+fun StateIndicator(
     @DrawableRes icon: Int,
     color: Color = MaterialTheme.colorScheme.outline
-): @Composable BoxScope.() -> Unit = {
-    Image(
-        modifier = Modifier.requiredSize(150.dp),
-        painter = painterResource(id = icon),
-        contentDescription = null,
-        alpha = 0.1f,
-        colorFilter = ColorFilter.tint(color)
-    )
-}
+) = Image(
+    modifier = Modifier.requiredSize(150.dp),
+    painter = painterResource(id = icon),
+    contentDescription = null,
+    alpha = 0.1f,
+    colorFilter = ColorFilter.tint(color)
+)
