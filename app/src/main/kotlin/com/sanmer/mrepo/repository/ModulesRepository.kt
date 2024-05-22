@@ -1,6 +1,6 @@
 package com.sanmer.mrepo.repository
 
-import com.sanmer.mrepo.compat.ProviderCompat
+import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.network.runRequest
 import com.sanmer.mrepo.stub.IRepoManager
@@ -15,7 +15,7 @@ class ModulesRepository @Inject constructor(
     private val localRepository: LocalRepository,
 ) {
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
-        with(ProviderCompat.moduleManager.modules) {
+        with(Compat.moduleManager.modules) {
             localRepository.deleteLocalAll()
             localRepository.insertLocal(this)
             localRepository.clearUpdatableTag(map { it.id })
@@ -23,7 +23,7 @@ class ModulesRepository @Inject constructor(
     }
 
     suspend fun getLocal(id: String) = withContext(Dispatchers.IO) {
-        val module = ProviderCompat.moduleManager.getModuleById(id)
+        val module = Compat.moduleManager.getModuleById(id)
         localRepository.insertLocal(module)
     }
 

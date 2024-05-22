@@ -1,21 +1,18 @@
-package com.sanmer.mrepo.compat
+package com.sanmer.mrepo
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.datastore.WorkingMode
-import dev.sanmer.mrepo.compat.ShizukuProvider
-import dev.sanmer.mrepo.compat.SuProvider
+import dev.sanmer.mrepo.compat.ServiceManagerCompat
 import dev.sanmer.mrepo.compat.stub.IFileManager
 import dev.sanmer.mrepo.compat.stub.IModuleManager
 import dev.sanmer.mrepo.compat.stub.IServiceManager
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-object ProviderCompat {
+object Compat {
     private var mServiceOrNull: IServiceManager? = null
     private val mService get() = checkNotNull(mServiceOrNull) {
         "IServiceManager haven't been received"
@@ -37,15 +34,12 @@ object ProviderCompat {
         return alive
     }
 
-    suspend fun init(mode: WorkingMode) = withContext(Dispatchers.Main) {
-        if (isAlive) {
-            return@withContext true
-        }
-
-        try {
+    suspend fun init(mode: WorkingMode) = when {
+        isAlive -> true
+        else -> try {
             mServiceOrNull = when (mode) {
-                WorkingMode.MODE_SHIZUKU -> ShizukuProvider.launch()
-                WorkingMode.MODE_ROOT -> SuProvider.launch()
+                WorkingMode.MODE_SHIZUKU -> ServiceManagerCompat.fromShizuku()
+                WorkingMode.MODE_ROOT -> ServiceManagerCompat.fromLibSu()
                 else -> null
             }
 
@@ -57,7 +51,7 @@ object ProviderCompat {
         }
     }
 
-    fun <T> get(fallback: T, block: ProviderCompat.() -> T): T {
+    fun <T> get(fallback: T, block: Compat.() -> T): T {
         return when {
             isAlive -> block(this)
             else -> fallback

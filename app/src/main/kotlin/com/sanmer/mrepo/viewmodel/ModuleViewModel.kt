@@ -11,7 +11,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.compat.ProviderCompat
+import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.database.entity.Repo
 import com.sanmer.mrepo.database.entity.Repo.Companion.toRepo
 import com.sanmer.mrepo.model.json.UpdateJson
@@ -37,7 +37,7 @@ class ModuleViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val isProviderAlive get() = ProviderCompat.isAlive
+    val isProviderAlive get() = Compat.isAlive
 
     private val moduleId = getModuleId(savedStateHandle)
     var online: OnlineModule by mutableStateOf(OnlineModule.example())

@@ -8,14 +8,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.app.Event
 import com.sanmer.mrepo.compat.MediaStoreCompat.copyToDir
 import com.sanmer.mrepo.compat.MediaStoreCompat.getPathForUri
-import com.sanmer.mrepo.compat.ProviderCompat
-import com.sanmer.mrepo.repository.ModulesRepository
+import com.sanmer.mrepo.model.local.LocalModule
+import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.extensions.tmpDir
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sanmer.mrepo.compat.content.State
 import dev.sanmer.mrepo.compat.stub.IInstallCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -28,7 +30,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InstallViewModel @Inject constructor(
-    private val modulesRepository: ModulesRepository,
+    private val localRepository: LocalRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
     val logs = mutableListOf<String>()
@@ -57,7 +59,7 @@ class InstallViewModel @Inject constructor(
         val path = context.getPathForUri(uri)
         Timber.d("path = $path")
 
-        ProviderCompat.moduleManager
+        Compat.moduleManager
             .getModuleInfo(path)?.let {
                 Timber.d("module = $it")
                 install(path)
@@ -74,7 +76,7 @@ class InstallViewModel @Inject constructor(
             }
         }
 
-        ProviderCompat.moduleManager
+        Compat.moduleManager
             .getModuleInfo(tmpFile.path)?.let {
                 Timber.d("module = $it")
                 install(tmpFile.path)
@@ -101,9 +103,9 @@ class InstallViewModel @Inject constructor(
                 logs.add(msg)
             }
 
-            override fun onSuccess(id: String) {
+            override fun onSuccess(module: LocalModule?) {
                 event = Event.SUCCEEDED
-                getLocal(id)
+                module?.let(::insertLocal)
 
                 if (deleteZipFile) {
                     deleteBySu(zipPath)
@@ -115,18 +117,20 @@ class InstallViewModel @Inject constructor(
         }
 
         console.add("- Installing ${zipFile.name}")
-        ProviderCompat.moduleManager.install(zipPath, callback)
+        Compat.moduleManager.install(zipPath, callback)
     }
 
-    private fun getLocal(id: String) {
+    private fun insertLocal(module: LocalModule) {
         viewModelScope.launch {
-            modulesRepository.getLocal(id)
+            localRepository.insertLocal(
+                module.copy(state = State.UPDATE)
+            )
         }
     }
 
     private fun deleteBySu(zipPath: String) {
         runCatching {
-            ProviderCompat.fileManager.deleteOnExit(zipPath)
+            Compat.fileManager.deleteOnExit(zipPath)
         }.onFailure {
             Timber.e(it)
         }.onSuccess {

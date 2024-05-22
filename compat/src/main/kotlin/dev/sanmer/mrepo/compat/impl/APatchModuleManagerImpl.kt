@@ -65,7 +65,7 @@ internal class APatchModuleManagerImpl(
         val result = shell.newJob().add(cmd).to(stdout, stderr).exec()
         if (result.isSuccess) {
             val module = getModuleInfo(path)
-            callback.onSuccess(module?.id ?: "unknown")
+            callback.onSuccess(module)
         } else {
             callback.onFailure()
         }
