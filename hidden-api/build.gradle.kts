@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.pro.library)
+    alias(libs.plugins.self.library)
 }
 
 android {

@@ -2,10 +2,10 @@ import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    alias(libs.plugins.pro.application)
-    alias(libs.plugins.pro.compose)
-    alias(libs.plugins.pro.hilt)
-    alias(libs.plugins.pro.room)
+    alias(libs.plugins.self.application)
+    alias(libs.plugins.self.compose)
+    alias(libs.plugins.self.hilt)
+    alias(libs.plugins.self.room)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.protobuf)
