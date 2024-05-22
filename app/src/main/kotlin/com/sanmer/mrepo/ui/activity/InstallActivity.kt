@@ -13,7 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.sanmer.mrepo.compat.ProviderCompat
+import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.theme.AppTheme
@@ -49,11 +49,11 @@ class InstallActivity : ComponentActivity() {
             }
 
             LaunchedEffect(userPreferences) {
-                ProviderCompat.init(preferences.workingMode)
+                Compat.init(preferences.workingMode)
             }
 
-            LaunchedEffect(ProviderCompat.isAlive) {
-                if (ProviderCompat.isAlive) {
+            LaunchedEffect(Compat.isAlive) {
+                if (Compat.isAlive) {
                     initModule(intent)
                 }
             }

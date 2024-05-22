@@ -2,7 +2,7 @@ package com.sanmer.mrepo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.compat.ProviderCompat
+import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.datastore.DarkMode
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -16,9 +16,9 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
-    val isProviderAlive get() = ProviderCompat.isAlive
+    val isProviderAlive get() = Compat.isAlive
 
-    val version get() = ProviderCompat.get("") {
+    val version get() = Compat.get("") {
         with(moduleManager) { "$version (${versionCode})" }
     }
 

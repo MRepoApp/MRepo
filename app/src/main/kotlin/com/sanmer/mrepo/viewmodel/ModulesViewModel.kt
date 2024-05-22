@@ -13,7 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
-import com.sanmer.mrepo.compat.ProviderCompat
+import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.datastore.modules.ModulesMenuCompat
 import com.sanmer.mrepo.datastore.repository.Option
 import com.sanmer.mrepo.model.json.UpdateJson
@@ -45,7 +45,7 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
-    val isProviderAlive get() = ProviderCompat.isAlive
+    val isProviderAlive get() = Compat.isAlive
 
     private val modulesMenu get() = userPreferencesRepository.data
         .map { it.modulesMenu }
@@ -86,7 +86,7 @@ class ModulesViewModel @Inject constructor(
     }
 
     private fun providerObserver() {
-        ProviderCompat.isAliveFlow
+        Compat.isAliveFlow
             .onEach {
                 if (it) getLocalAll()
 
@@ -182,12 +182,12 @@ class ModulesViewModel @Inject constructor(
             isOpsRunning = opsTasks.contains(module.id),
             toggle = {
                 opsTasks.add(module.id)
-                ProviderCompat.moduleManager
+                Compat.moduleManager
                     .disable(module.id, opsCallback)
             },
             change = {
                 opsTasks.add(module.id)
-                ProviderCompat.moduleManager
+                Compat.moduleManager
                     .remove(module.id, opsCallback)
             }
         )
@@ -196,12 +196,12 @@ class ModulesViewModel @Inject constructor(
             isOpsRunning = opsTasks.contains(module.id),
             toggle = {
                 opsTasks.add(module.id)
-                ProviderCompat.moduleManager
+                Compat.moduleManager
                     .enable(module.id, opsCallback)
             },
             change = {
                 opsTasks.add(module.id)
-                ProviderCompat.moduleManager
+                Compat.moduleManager
                     .remove(module.id, opsCallback)
             }
         )
@@ -211,7 +211,7 @@ class ModulesViewModel @Inject constructor(
             toggle = {},
             change = {
                 opsTasks.add(module.id)
-                ProviderCompat.moduleManager
+                Compat.moduleManager
                     .enable(module.id, opsCallback)
             }
         )

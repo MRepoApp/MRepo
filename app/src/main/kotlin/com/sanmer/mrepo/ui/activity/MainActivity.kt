@@ -15,8 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.app.Const
-import com.sanmer.mrepo.compat.ProviderCompat
 import com.sanmer.mrepo.database.entity.Repo.Companion.toRepo
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.network.NetworkUtils
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                     localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
                 }
 
-                ProviderCompat.init(preferences.workingMode)
+                Compat.init(preferences.workingMode)
                 NetworkUtils.setEnableDoh(preferences.useDoh)
                 setInstallActivityEnabled(preferences.isRoot)
             }
