@@ -29,10 +29,14 @@ data class UserPreferencesCompat(
         deleteZipFile = original.deleteZipFile,
         useDoh = original.useDoh,
         downloadPath = original.downloadPath.ifEmpty{ Const.PUBLIC_DOWNLOADS.absolutePath }.let(::File),
-        repositoryMenu = original.repositoryMenuOrNull?.let(::RepositoryMenuCompat)
-            ?: RepositoryMenuCompat.default(),
-        modulesMenu = original.modulesMenuOrNull?.let(::ModulesMenuCompat)
-            ?: ModulesMenuCompat.default()
+        repositoryMenu = when {
+            original.hasRepositoryMenu() -> RepositoryMenuCompat(original.repositoryMenu)
+            else -> RepositoryMenuCompat.default()
+        },
+        modulesMenu = when {
+            original.hasModulesMenu() -> ModulesMenuCompat(original.modulesMenu)
+            else -> ModulesMenuCompat.default()
+        }
     )
 
     @Composable
@@ -48,7 +52,7 @@ data class UserPreferencesCompat(
         .setThemeColor(themeColor)
         .setDeleteZipFile(deleteZipFile)
         .setUseDoh(useDoh)
-        .setDownloadPath(downloadPath.absolutePath)
+        .setDownloadPath(downloadPath.path)
         .setRepositoryMenu(repositoryMenu.toProto())
         .setModulesMenu(modulesMenu.toProto())
         .build()
@@ -64,11 +68,5 @@ data class UserPreferencesCompat(
             repositoryMenu = RepositoryMenuCompat.default(),
             modulesMenu = ModulesMenuCompat.default()
         )
-
-        fun UserPreferences.new(
-            block: UserPreferencesKt.Dsl.() -> Unit
-        ) = UserPreferencesCompat(this)
-            .toProto()
-            .copy(block)
     }
 }

@@ -1,5 +1,4 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.self.application)
@@ -108,22 +107,6 @@ protobuf {
                 register("java") {
                     option("lite")
                 }
-                register("kotlin") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
-// Workaround for https://github.com/google/ksp/issues/1590
-androidComponents {
-    onVariants(selector().all()) { variant ->
-        afterEvaluate {
-            @Suppress("DEPRECATION")
-            val capName = variant.name.capitalize()
-            tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
-                setSource(tasks.getByName("generate${capName}Proto").outputs)
             }
         }
     }

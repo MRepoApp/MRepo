@@ -1,80 +1,79 @@
 package com.sanmer.mrepo.datastore
 
 import androidx.datastore.core.DataStore
-import com.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.new
 import com.sanmer.mrepo.datastore.modules.ModulesMenuCompat
 import com.sanmer.mrepo.datastore.repository.RepositoryMenuCompat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 class UserPreferencesDataSource @Inject constructor(
-    private val userPreferences: DataStore<UserPreferences>
+    private val userPreferences: DataStore<UserPreferencesCompat>
 ) {
-    val data get() = userPreferences.data.map { UserPreferencesCompat(it) }
+    val data get() = userPreferences.data
 
     suspend fun setWorkingMode(value: WorkingMode) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.new {
+            it.copy(
                 workingMode = value
-            }
+            )
         }
     }
 
     suspend fun setDarkTheme(value: DarkMode) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.new {
+            it.copy(
                 darkMode = value
-            }
+            )
         }
     }
 
     suspend fun setThemeColor(value: Int) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.new {
+            it.copy(
                 themeColor = value
-            }
+            )
         }
     }
 
     suspend fun setDeleteZipFile(value: Boolean) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.new {
+            it.copy(
                 deleteZipFile = value
-            }
+            )
         }
     }
 
     suspend fun setUseDoh(value: Boolean) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.new {
+            it.copy(
                 useDoh = value
-            }
+            )
         }
     }
 
-    suspend fun setDownloadPath(value: String) = withContext(Dispatchers.IO) {
+    suspend fun setDownloadPath(value: File) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.new {
+            it.copy(
                 downloadPath = value
-            }
+            )
         }
     }
 
     suspend fun setRepositoryMenu(value: RepositoryMenuCompat) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.new {
-                repositoryMenu = value.toProto()
-            }
+            it.copy(
+                repositoryMenu = value
+            )
         }
     }
 
     suspend fun setModulesMenu(value: ModulesMenuCompat) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
-            it.new {
-                modulesMenu = value.toProto()
-            }
+            it.copy(
+                modulesMenu = value
+            )
         }
     }
 }

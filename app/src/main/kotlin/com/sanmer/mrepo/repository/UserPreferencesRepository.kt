@@ -25,7 +25,7 @@ class UserPreferencesRepository @Inject constructor(
 
     suspend fun setUseDoh(value: Boolean) = userPreferencesDataSource.setUseDoh(value)
 
-    suspend fun setDownloadPath(value: File) = userPreferencesDataSource.setDownloadPath(value.absolutePath)
+    suspend fun setDownloadPath(value: File) = userPreferencesDataSource.setDownloadPath(value)
 
     suspend fun setRepositoryMenu(value: RepositoryMenuCompat) = userPreferencesDataSource.setRepositoryMenu(value)
 
