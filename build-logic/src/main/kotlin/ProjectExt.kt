@@ -1,6 +1,5 @@
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.extra
-import org.jetbrains.kotlin.konan.properties.hasProperty
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -17,16 +16,14 @@ val Project.releaseKeyStore: File get() = File(project.properties["keyStore"] as
 val Project.releaseKeyStorePassword: String get() = project.properties["keyStorePassword"] as String
 val Project.releaseKeyAlias: String get() = project.properties["keyAlias"] as String
 val Project.releaseKeyPassword: String get() = project.properties["keyPassword"] as String
-val Project.hasReleaseKeyStore: Boolean get() = run {
+val Project.hasReleaseKeyStore: Boolean get() {
     gradleSigningProperties(rootDir).apply {
-        if (!hasProperty("keyStore")) return@apply
-
         stringPropertyNames().forEach {
             project.extra[it] = getProperty(it)
         }
     }
 
-    project.hasProperty("keyStore")
+    return project.hasProperty("keyStore")
 }
 
 private fun gradleSigningProperties(rootDir: File): Properties {

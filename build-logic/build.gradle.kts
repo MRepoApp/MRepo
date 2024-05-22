@@ -4,34 +4,35 @@ plugins {
 
 dependencies {
     compileOnly(libs.android.gradle)
+    compileOnly(libs.compose.gradle)
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.ksp.gradle)
 }
 
 gradlePlugin {
     plugins {
-        register("proApplication") {
-            id = "pro.application"
+        register("self.application") {
+            id = "self.application"
             implementationClass = "ApplicationConventionPlugin"
         }
-
-        register("proLibrary") {
-            id = "pro.library"
+        
+        register("self.library") {
+            id = "self.library"
             implementationClass = "LibraryConventionPlugin"
         }
 
-        register("proCompose") {
-            id = "pro.compose"
+        register("self.compose") {
+            id = "self.compose"
             implementationClass = "ComposeConventionPlugin"
         }
 
-        register("proHilt") {
-            id = "pro.hilt"
+        register("self.hilt") {
+            id = "self.hilt"
             implementationClass = "HiltConventionPlugin"
         }
 
-        register("proRoom") {
-            id = "pro.room"
+        register("self.room") {
+            id = "self.room"
             implementationClass = "RoomConventionPlugin"
         }
     }
