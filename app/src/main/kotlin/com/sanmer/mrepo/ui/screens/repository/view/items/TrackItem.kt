@@ -118,7 +118,6 @@ private fun ValueItem(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-
             Text(
                 text = stringResource(id = R.string.view_module_type,
                     track.type.name.replace("_", " ")),
