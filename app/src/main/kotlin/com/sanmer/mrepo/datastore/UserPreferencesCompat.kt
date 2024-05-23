@@ -11,9 +11,6 @@ import java.io.File
 
 data class UserPreferencesCompat(
     val workingMode: WorkingMode,
-    val isRoot: Boolean = workingMode != WorkingMode.MODE_NON_ROOT,
-    val isNonRoot: Boolean = workingMode == WorkingMode.MODE_NON_ROOT,
-    val isSetup: Boolean = workingMode == WorkingMode.FIRST_SETUP,
     val darkMode: DarkMode,
     val themeColor: Int,
     val deleteZipFile: Boolean,
@@ -68,5 +65,17 @@ data class UserPreferencesCompat(
             repositoryMenu = RepositoryMenuCompat.default(),
             modulesMenu = ModulesMenuCompat.default()
         )
+
+        val WorkingMode.isRoot: Boolean get() {
+            return this == WorkingMode.MODE_ROOT ||this == WorkingMode.MODE_SHIZUKU
+        }
+
+        val WorkingMode.isNonRoot: Boolean get() {
+            return this == WorkingMode.MODE_NON_ROOT
+        }
+
+        val WorkingMode.isSetup: Boolean get() {
+            return this == WorkingMode.FIRST_SETUP
+        }
     }
 }

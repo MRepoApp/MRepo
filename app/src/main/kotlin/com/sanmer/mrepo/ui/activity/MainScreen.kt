@@ -20,6 +20,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
 import com.sanmer.mrepo.ui.navigation.MainScreen
 import com.sanmer.mrepo.ui.navigation.graphs.modulesScreen
 import com.sanmer.mrepo.ui.navigation.graphs.repositoryScreen
@@ -36,7 +37,7 @@ fun MainScreen() {
         bottomBar = {
             BottomNav(
                 navController = navController,
-                isRoot = userPreferences.isRoot
+                isRoot = userPreferences.workingMode.isRoot
             )
         }
     ) {

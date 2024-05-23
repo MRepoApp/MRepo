@@ -18,6 +18,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.BuildConfig
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isNonRoot
+import com.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.ui.component.SettingNormalItem
 import com.sanmer.mrepo.ui.component.TopAppBarTitle
@@ -53,11 +55,11 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             when {
-                userPreferences.isRoot -> RootItem(
+                userPreferences.workingMode.isRoot -> RootItem(
                     isAlive = viewModel.isProviderAlive,
                     version = viewModel.version
                 )
-                userPreferences.isNonRoot -> NonRootItem()
+                userPreferences.workingMode.isNonRoot -> NonRootItem()
             }
 
             SettingNormalItem(

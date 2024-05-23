@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.component.SettingSwitchItem
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
@@ -67,7 +68,7 @@ fun AppScreen(
                 desc = stringResource(id = R.string.settings_delete_zip_desc),
                 checked = userPreferences.deleteZipFile,
                 onChange = viewModel::setDeleteZipFile,
-                enabled = userPreferences.isRoot
+                enabled = userPreferences.workingMode.isRoot
             )
 
             SettingSwitchItem(

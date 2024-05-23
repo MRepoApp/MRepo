@@ -18,6 +18,8 @@ import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.database.entity.Repo.Companion.toRepo
+import com.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
+import com.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isSetup
 import com.sanmer.mrepo.datastore.WorkingMode
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.repository.LocalRepository
@@ -55,14 +57,14 @@ class MainActivity : ComponentActivity() {
             }
 
             LaunchedEffect(userPreferences) {
-                if (preferences.isSetup) {
+                if (preferences.workingMode.isSetup) {
                     Timber.d("add default repository")
                     localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
                 }
 
                 Compat.init(preferences.workingMode)
                 NetworkUtils.setEnableDoh(preferences.useDoh)
-                setInstallActivityEnabled(preferences.isRoot)
+                setInstallActivityEnabled(preferences.workingMode.isRoot)
             }
 
             CompositionLocalProvider(
@@ -73,7 +75,7 @@ class MainActivity : ComponentActivity() {
                     themeColor = preferences.themeColor
                 ) {
                     Crossfade(
-                        targetState = preferences.isSetup,
+                        targetState = preferences.workingMode.isSetup,
                         label = "MainActivity"
                     ) { isSetup ->
                         if (isSetup) {

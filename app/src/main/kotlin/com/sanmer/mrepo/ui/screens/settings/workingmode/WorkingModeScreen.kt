@@ -72,7 +72,7 @@ fun WorkingModeScreen(
             WorkingModeItem(
                 title = stringResource(id = R.string.setup_non_root_title),
                 desc = stringResource(id = R.string.setup_non_root_desc),
-                selected = userPreferences.isNonRoot,
+                selected = userPreferences.workingMode == WorkingMode.MODE_NON_ROOT,
                 onClick = { viewModel.setWorkingMode(WorkingMode.MODE_NON_ROOT) }
             )
         }
