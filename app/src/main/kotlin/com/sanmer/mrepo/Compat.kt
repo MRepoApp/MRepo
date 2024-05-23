@@ -7,6 +7,7 @@ import com.sanmer.mrepo.datastore.WorkingMode
 import dev.sanmer.mrepo.compat.ServiceManagerCompat
 import dev.sanmer.mrepo.compat.stub.IFileManager
 import dev.sanmer.mrepo.compat.stub.IModuleManager
+import dev.sanmer.mrepo.compat.stub.IPowerManager
 import dev.sanmer.mrepo.compat.stub.IServiceManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +27,7 @@ object Compat {
 
     val moduleManager: IModuleManager get() = mService.moduleManager
     val fileManager: IFileManager get() = mService.fileManager
+    val powerManager: IPowerManager get() = mService.powerManager
 
     private fun state(alive: Boolean): Boolean {
         isAlive = alive

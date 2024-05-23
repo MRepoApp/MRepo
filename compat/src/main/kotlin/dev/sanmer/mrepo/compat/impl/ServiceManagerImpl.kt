@@ -1,11 +1,14 @@
 package dev.sanmer.mrepo.compat.impl
 
+import android.content.Context
 import android.os.SELinux
+import android.os.ServiceManager
 import android.system.Os
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import dev.sanmer.mrepo.compat.stub.IFileManager
 import dev.sanmer.mrepo.compat.stub.IModuleManager
+import dev.sanmer.mrepo.compat.stub.IPowerManager
 import dev.sanmer.mrepo.compat.stub.IServiceManager
 import kotlin.system.exitProcess
 
@@ -36,6 +39,14 @@ internal class ServiceManagerImpl : IServiceManager.Stub() {
         FileManagerImpl()
     }
 
+    private val powerManager by lazy {
+        PowerManagerImpl(
+            android.os.IPowerManager.Stub.asInterface(
+                ServiceManager.getService(Context.POWER_SERVICE)
+            )
+        )
+    }
+
     override fun getUid(): Int {
         return Os.getuid()
     }
@@ -48,6 +59,10 @@ internal class ServiceManagerImpl : IServiceManager.Stub() {
         return SELinux.getContext()
     }
 
+    override fun currentPlatform(): String {
+        return platform.name
+    }
+
     override fun getModuleManager(): IModuleManager {
         return moduleManager
     }
@@ -56,8 +71,8 @@ internal class ServiceManagerImpl : IServiceManager.Stub() {
         return fileManager
     }
 
-    override fun currentPlatform(): String {
-        return platform.name
+    override fun getPowerManager(): IPowerManager {
+        return powerManager
     }
 
     override fun destroy() {

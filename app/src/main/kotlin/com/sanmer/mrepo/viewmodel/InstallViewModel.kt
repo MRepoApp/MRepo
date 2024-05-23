@@ -18,6 +18,7 @@ import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.extensions.tmpDir
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.compat.content.State
+import dev.sanmer.mrepo.compat.delegate.PowerManagerDelegate
 import dev.sanmer.mrepo.compat.stub.IInstallCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -42,6 +43,12 @@ class InstallViewModel @Inject constructor(
 
     init {
         Timber.d("InstallViewModel init")
+    }
+
+    fun reboot() {
+        PowerManagerDelegate(Compat.powerManager).apply {
+            reboot()
+        }
     }
 
     suspend fun writeLogsTo(context: Context, uri: Uri) = withContext(Dispatchers.IO) {

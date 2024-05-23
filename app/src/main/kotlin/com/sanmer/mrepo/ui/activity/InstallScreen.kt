@@ -53,7 +53,6 @@ import com.sanmer.mrepo.app.Event.Companion.isLoading
 import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.ui.component.NavigateUpTopBar
 import com.sanmer.mrepo.ui.utils.isScrollingUp
-import com.sanmer.mrepo.utils.Utils
 import com.sanmer.mrepo.viewmodel.InstallViewModel
 import kotlinx.coroutines.launch
 
@@ -142,7 +141,9 @@ fun InstallScreen(
                     targetScale = 0.8f
                 )
             ) {
-                FloatingButton()
+                FloatingButton(
+                    reboot = viewModel::reboot
+                )
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -214,8 +215,10 @@ private fun TopBar(
 )
 
 @Composable
-private fun FloatingButton() = FloatingActionButton(
-    onClick = { Utils.reboot() }
+private fun FloatingButton(
+    reboot: () -> Unit,
+) = FloatingActionButton(
+    onClick = reboot
 ) {
     Icon(
         painter = painterResource(id = R.drawable.reload),
