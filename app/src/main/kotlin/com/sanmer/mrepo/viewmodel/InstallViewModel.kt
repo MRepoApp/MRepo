@@ -62,7 +62,15 @@ class InstallViewModel @Inject constructor(
         }
     }
 
-    suspend fun loadData(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
+    suspend fun loadModule(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
+        val userPreferences = userPreferencesRepository.data.first()
+
+        if (!Compat.init(userPreferences.workingMode)) {
+            event = Event.FAILED
+            console.add("- Service is not available")
+            return@withContext
+        }
+
         val path = context.getPathForUri(uri)
         Timber.d("path = $path")
 
@@ -92,7 +100,7 @@ class InstallViewModel @Inject constructor(
             }
 
         event = Event.FAILED
-        console.add("- Unknown file: path = $path, uri = $uri")
+        console.add("- Zip parsing failed")
     }
 
     private suspend fun install(zipPath: String) = withContext(Dispatchers.IO) {

@@ -9,11 +9,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.sanmer.mrepo.Compat
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.theme.AppTheme
@@ -27,7 +25,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class InstallActivity : ComponentActivity() {
     @Inject lateinit var userPreferencesRepository: UserPreferencesRepository
-    private val viewModule: InstallViewModel by viewModels()
+    private val viewModel: InstallViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("InstallActivity onCreate")
@@ -36,6 +34,8 @@ class InstallActivity : ComponentActivity() {
 
         if (intent.data == null) {
             finish()
+        } else {
+            initModule(intent)
         }
 
         setContent {
@@ -46,16 +46,6 @@ class InstallActivity : ComponentActivity() {
                 return@setContent
             } else {
                 checkNotNull(userPreferences)
-            }
-
-            LaunchedEffect(userPreferences) {
-                Compat.init(preferences.workingMode)
-            }
-
-            LaunchedEffect(Compat.isAlive) {
-                if (Compat.isAlive) {
-                    initModule(intent)
-                }
             }
 
             CompositionLocalProvider(
@@ -77,12 +67,13 @@ class InstallActivity : ComponentActivity() {
         super.onDestroy()
     }
 
-    private fun initModule(intent: Intent) = lifecycleScope.launch {
-        val zipUri = checkNotNull(intent.data)
-        viewModule.loadData(
-            context = applicationContext,
-            uri = zipUri
-        )
+    private fun initModule(intent: Intent) {
+        lifecycleScope.launch {
+            viewModel.loadModule(
+                context = applicationContext,
+                uri = checkNotNull(intent.data)
+            )
+        }
     }
 
     companion object {
