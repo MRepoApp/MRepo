@@ -1,9 +1,11 @@
 package dev.sanmer.mrepo.compat.impl
 
+import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import com.topjohnwu.superuser.ShellUtils
 import dev.sanmer.mrepo.compat.content.LocalModule
 import dev.sanmer.mrepo.compat.content.State
+import dev.sanmer.mrepo.compat.stub.IInstallCallback
 import dev.sanmer.mrepo.compat.stub.IModuleManager
 import java.io.File
 import java.util.zip.ZipFile
@@ -33,38 +35,37 @@ internal abstract class BaseModuleManagerImpl(
         return mVersionCode
     }
 
-    override fun getModules() = modulesDir.listFiles().orEmpty()
-        .mapNotNull { moduleDir ->
-            runCatching {
-                readProps(moduleDir)
-                    ?.toModule(
-                        state = readState(moduleDir),
-                        lastUpdated = readLastUpdated(moduleDir)
-                    )
-            }.getOrNull()
+    override fun getModules() = modulesDir.listFiles()
+        .orEmpty()
+        .mapNotNull { dir ->
+            readProps(dir)
+                ?.toModule(
+                    state = readState(dir),
+                    lastUpdated = readLastUpdated(dir)
+                )
         }
 
-    override fun getModuleById(id: String) = runCatching {
-        val moduleDir = modulesDir.resolve(id)
-        readProps(moduleDir)
+    override fun getModuleById(id: String): LocalModule? {
+        val dir = modulesDir.resolve(id)
+
+        return readProps(dir)
             ?.toModule(
-                state = readState(moduleDir),
-                lastUpdated = readLastUpdated(moduleDir)
+                state = readState(dir),
+                lastUpdated = readLastUpdated(dir)
             )
-    }.getOrNull()
+    }
 
-    override fun getModuleInfo(zipPath: String) = runCatching {
+    override fun getModuleInfo(zipPath: String): LocalModule? {
         val zipFile = ZipFile(zipPath)
-        val entry = zipFile.getEntry(PROP_FILE) ?: return@runCatching null
+        val entry = zipFile.getEntry(PROP_FILE) ?: return null
 
-        zipFile.getInputStream(entry).use {
+        return zipFile.getInputStream(entry).use {
             it.bufferedReader()
                 .readText()
                 .let(::readProps)
-
-        }.toModule()
-
-    }.getOrNull()
+                .toModule()
+        }
+    }
 
     private fun readProps(props: String) = props.lines()
         .associate { line ->
@@ -127,6 +128,28 @@ internal abstract class BaseModuleManagerImpl(
     )
 
     private fun String.exec() = ShellUtils.fastCmd(shell, this)
+
+    internal fun install(cmd: String, path: String, callback: IInstallCallback) {
+        val stdout = object : CallbackList<String?>() {
+            override fun onAddElement(msg: String?) {
+                msg?.let(callback::onStdout)
+            }
+        }
+
+        val stderr = object : CallbackList<String?>() {
+            override fun onAddElement(msg: String?) {
+                msg?.let(callback::onStderr)
+            }
+        }
+
+        val result = shell.newJob().add(cmd).to(stdout, stderr).exec()
+        if (result.isSuccess) {
+            val module = getModuleInfo(path)
+            callback.onSuccess(module)
+        } else {
+            callback.onFailure()
+        }
+    }
 
     internal fun String.submit(cb: Shell.ResultCallback) = shell
         .newJob().add(this).to(ArrayList(), null)

@@ -1,6 +1,5 @@
 package dev.sanmer.mrepo.compat.impl
 
-import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import dev.sanmer.mrepo.compat.stub.IInstallCallback
 import dev.sanmer.mrepo.compat.stub.IModuleOpsCallback
@@ -51,26 +50,10 @@ internal class MagiskModuleManagerImpl(
     }
 
     override fun install(path: String, callback: IInstallCallback) {
-        val cmd = "magisk --install-module '${path}'"
-
-        val stdout = object : CallbackList<String?>() {
-            override fun onAddElement(msg: String?) {
-                msg?.let(callback::onStdout)
-            }
-        }
-
-        val stderr = object : CallbackList<String?>() {
-            override fun onAddElement(msg: String?) {
-                msg?.let(callback::onStderr)
-            }
-        }
-
-        val result = shell.newJob().add(cmd).to(stdout, stderr).exec()
-        if (result.isSuccess) {
-            val module = getModuleInfo(path)
-            callback.onSuccess(module)
-        } else {
-            callback.onFailure()
-        }
+        install(
+            cmd = "magisk --install-module '${path}'",
+            path = path,
+            callback = callback
+        )
     }
 }

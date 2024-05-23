@@ -4,18 +4,12 @@ import dev.sanmer.mrepo.compat.stub.IFileManager
 import java.io.File
 
 internal class FileManagerImpl : IFileManager.Stub() {
-    override fun deleteOnExit(path: String): Boolean {
-        val file = File(path)
-        if (!file.exists()) return false
-
-        if (file.isFile) {
-            return file.delete()
+    override fun deleteOnExit(path: String) = with(File(path)) {
+        when {
+            !exists() -> false
+            isFile -> delete()
+            isDirectory -> deleteRecursively()
+            else -> false
         }
-
-        if (file.isDirectory) {
-            return file.deleteRecursively()
-        }
-
-        return false
     }
 }

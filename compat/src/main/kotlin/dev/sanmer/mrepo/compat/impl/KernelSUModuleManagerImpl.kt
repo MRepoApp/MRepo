@@ -1,6 +1,5 @@
 package dev.sanmer.mrepo.compat.impl
 
-import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import dev.sanmer.mrepo.compat.stub.IInstallCallback
 import dev.sanmer.mrepo.compat.stub.IModuleOpsCallback
@@ -48,26 +47,10 @@ internal class KernelSUModuleManagerImpl(
     }
 
     override fun install(path: String, callback: IInstallCallback) {
-        val cmd = "ksud module install '${path}'"
-
-        val stdout = object : CallbackList<String?>() {
-            override fun onAddElement(msg: String?) {
-                msg?.let(callback::onStdout)
-            }
-        }
-
-        val stderr = object : CallbackList<String?>() {
-            override fun onAddElement(msg: String?) {
-                msg?.let(callback::onStderr)
-            }
-        }
-
-        val result = shell.newJob().add(cmd).to(stdout, stderr).exec()
-        if (result.isSuccess) {
-            val module = getModuleInfo(path)
-            callback.onSuccess(module)
-        } else {
-            callback.onFailure()
-        }
+        install(
+            cmd = "ksud module install '${path}'",
+            path = path,
+            callback = callback
+        )
     }
 }
