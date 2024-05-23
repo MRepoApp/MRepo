@@ -6,10 +6,6 @@
     <string name="settings_root_granted">Acordat</string>
     <string name="settings_root_not_available">Indisponibil</string>
     <string name="settings_root_none">Nimic</string>
-    <string name="settings_menu_reboot">Repornire</string>
-    <string name="settings_menu_reboot_recovery">Repornire în recuperare</string>
-    <string name="settings_menu_reboot_download">Repornire în Download</string>
-    <string name="settings_menu_reboot_edl">Repornire în EDL</string>
     <string name="module_version_author">%1$s de %2$s</string>
     <string name="module_remove">Elimină</string>
     <string name="module_restore">Restabilește</string>
@@ -37,8 +33,6 @@
     <string name="repo_options_update">Actualizare</string>
     <string name="setup_mode">Mod de funcționare</string>
     <string name="settings_non_root_desc">Funcționalitatea este limitată</string>
-    <string name="settings_menu_reboot_userspace">Repornire rapidă</string>
-    <string name="settings_menu_reboot_bootloader">Repornire în Bootloader</string>
     <string name="module_download">Descarcă</string>
     <string name="search_placeholder">Căutare…</string>
     <string name="view_module_page_versions">Versiuni</string>

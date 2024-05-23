@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.shizuku.Shizuku
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -25,6 +26,12 @@ object ServiceManagerCompat {
     private const val TIMEOUT_MILLIS = 15_000L
 
     private val context by lazy { ContextDelegate.getContext() }
+
+    init {
+        if (BuildCompat.atLeastP) {
+            HiddenApiBypass.addHiddenApiExemptions("")
+        }
+    }
 
     interface IProvider {
         val name: String
@@ -89,7 +96,9 @@ object ServiceManagerCompat {
     private class ShizukuProvider : IProvider {
         override val name = "Shizuku"
 
-        override fun isAvailable() = Shizuku.pingBinder()
+        override fun isAvailable(): Boolean {
+            return Shizuku.pingBinder() && Shizuku.getUid() == 0
+        }
 
         override suspend fun isAuthorized() = when {
             isGranted -> true

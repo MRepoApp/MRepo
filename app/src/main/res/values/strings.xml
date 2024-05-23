@@ -79,13 +79,6 @@
     <string name="settings_root_none">None</string>
     <!-- Non Root Item -->
     <string name="settings_non_root_desc">Functionality is limited</string>
-    <!-- Menu -->
-    <string name="settings_menu_reboot">Reboot</string>
-    <string name="settings_menu_reboot_userspace">Soft Reboot</string>
-    <string name="settings_menu_reboot_recovery">Reboot to Recovery</string>
-    <string name="settings_menu_reboot_bootloader">Reboot to Bootloader</string>
-    <string name="settings_menu_reboot_download">Reboot to Download</string>
-    <string name="settings_menu_reboot_edl">Reboot to EDL</string>
     <!-- App -->
     <string name="settings_app_theme">App Theme</string>
     <string name="settings_app_theme_desc">Change color scheme and night mode</string>

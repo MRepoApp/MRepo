@@ -50,7 +50,6 @@ import com.sanmer.mrepo.app.Event.Companion.isLoading
 import com.sanmer.mrepo.app.Event.Companion.isSucceeded
 import com.sanmer.mrepo.model.online.VersionItem
 import com.sanmer.mrepo.network.compose.requestString
-import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.ui.utils.expandedShape
 import kotlinx.coroutines.launch
 
@@ -87,30 +86,27 @@ fun VersionItemBottomSheet(
             }
         }
     ) {
-        val userPreferences = LocalUserPreferences.current
-        val enableInstall by remember {
-            derivedStateOf {
-                userPreferences.isRoot && isProviderAlive
+        when {
+            hasChangelog -> {
+                ButtonRow(
+                    isUpdate = isUpdate,
+                    enableInstall = isProviderAlive,
+                    state = state,
+                    onDownload = onDownload,
+                    onClose = onClose
+                )
+                ChangelogItem(url = item.changelog)
             }
-        }
 
-        if (hasChangelog) {
-            ButtonRow(
-                isUpdate = isUpdate,
-                enableInstall = enableInstall,
-                state = state,
-                onDownload = onDownload,
-                onClose = onClose
-            )
-            ChangelogItem(url = item.changelog)
-        } else {
-            ButtonColumn(
-                isUpdate = isUpdate,
-                enableInstall = enableInstall,
-                state = state,
-                downloader = onDownload,
-                onClose = onClose
-            )
+            else -> {
+                ButtonColumn(
+                    isUpdate = isUpdate,
+                    enableInstall = isProviderAlive,
+                    state = state,
+                    downloader = onDownload,
+                    onClose = onClose
+                )
+            }
         }
 
         NavigationBarsSpacer()

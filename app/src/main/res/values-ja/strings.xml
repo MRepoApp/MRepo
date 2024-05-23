@@ -16,7 +16,6 @@
     <string name="setup_non_root_title">非 Root</string>
     <string name="license_osi_approved">OSI Approved</string>
     <string name="license_fsf_libre">FSF Libre</string>
-    <string name="settings_menu_reboot">再起動</string>
     <string name="module_install">インストール</string>
     <string name="module_download">ダウンロード</string>
     <string name="modules_empty">モジュールが見つかりません</string>
@@ -34,11 +33,6 @@
     <string name="app_theme_dark_theme_light">ライト</string>
     <string name="message_download_success">ダウンロード成功</string>
     <string name="message_loading">読み込み中…</string>
-    <string name="settings_menu_reboot_recovery">Recovery へ再起動</string>
-    <string name="settings_menu_reboot_edl">EDL へ再起動</string>
-    <string name="settings_menu_reboot_download">Download へ再起動</string>
-    <string name="settings_menu_reboot_bootloader">Bootloader へ再起動</string>
-    <string name="settings_menu_reboot_userspace">ソフトリブート</string>
     <string name="settings_app_theme_desc">カラースキームとナイトモードの変更</string>
     <string name="settings_repo_desc">Magisk モジュールリポジトリを管理</string>
     <string name="app_theme_palette">テーマパレット</string>

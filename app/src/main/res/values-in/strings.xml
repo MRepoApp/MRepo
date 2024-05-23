@@ -38,12 +38,6 @@
     <string name="settings_root_not_available">Tidak tersedia</string>
     <string name="settings_root_none">Tidak ada</string>
     <string name="settings_non_root_desc">Fungsionalitas terbatas</string>
-    <string name="settings_menu_reboot">Reboot</string>
-    <string name="settings_menu_reboot_userspace">Soft Reboot</string>
-    <string name="settings_menu_reboot_recovery">Reboot ke Recovery</string>
-    <string name="settings_menu_reboot_bootloader">Reboot ke Bootloader</string>
-    <string name="settings_menu_reboot_download">Reboot ke Download</string>
-    <string name="settings_menu_reboot_edl">Reboot ke EDL</string>
     <string name="settings_app_theme">Tema Aplikasi</string>
     <string name="settings_app_theme_desc">Mengubah skema warna dan mode malam</string>
     <string name="settings_download_path">Jalur Download</string>

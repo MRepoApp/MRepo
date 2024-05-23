@@ -13,6 +13,7 @@ androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.8.0"
 androidxNavigation = "2.7.7"
 androidxRoom = "2.6.1"
+hiddenApiRefine = "4.4.0"
 hilt = "2.51.1"
 kotlin = "2.0.0"
 kotlinxCoroutines = "1.8.1"
@@ -56,6 +57,9 @@ libsu-core = { group = "com.github.topjohnwu.libsu", name = "core", version.ref 
 libsu-service = { group = "com.github.topjohnwu.libsu", name = "service", version.ref = "libsu" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+rikka-refine-annotation = { module = "dev.rikka.tools.refine:annotation", version.ref = "hiddenApiRefine" }
+rikka-refine-compiler = { module = "dev.rikka.tools.refine:annotation-processor", version.ref = "hiddenApiRefine" }
+rikka-refine-runtime = { module = "dev.rikka.tools.refine:runtime", version.ref = "hiddenApiRefine" }
 rikka-shizuku-api = { module = "dev.rikka.shizuku:api", version.ref = "shizuku" }
 rikka-shizuku-provider = { module = "dev.rikka.shizuku:provider", version.ref = "shizuku" }
 square-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "squareRetrofit" }
@@ -84,6 +88,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+rikka-refine = { id = "dev.rikka.tools.refine", version.ref = "hiddenApiRefine" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 
 # Plugins defined by this project

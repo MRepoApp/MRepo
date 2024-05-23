@@ -18,12 +18,6 @@
     <string name="settings_root_not_available">غير متاح</string>
     <string name="module_version_author">%1$sبواسطة%2$s</string>
     <string name="license_fsf_libre">FSF الحر</string>
-    <string name="settings_menu_reboot">إعادة تشغيل</string>
-    <string name="settings_menu_reboot_userspace">اعادة تشغيل النظام</string>
-    <string name="settings_menu_reboot_recovery">اعادة التشغيل الى وضع الإسترداد</string>
-    <string name="settings_menu_reboot_bootloader">اعادة التشغيل الى محمل الإقلاع</string>
-    <string name="settings_menu_reboot_download">اعادة التشغيل الى وضع التنزيل</string>
-    <string name="settings_menu_reboot_edl">اعادة التشغيل الى وضع EDL</string>
     <string name="module_remove">إزالة</string>
     <string name="module_restore">استرجاع</string>
     <string name="module_install">تثبيت</string>

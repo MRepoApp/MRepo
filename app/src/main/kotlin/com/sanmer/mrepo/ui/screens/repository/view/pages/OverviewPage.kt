@@ -30,7 +30,6 @@ import com.sanmer.mrepo.model.local.LocalModule
 import com.sanmer.mrepo.model.local.versionDisplay
 import com.sanmer.mrepo.model.online.OnlineModule
 import com.sanmer.mrepo.model.online.VersionItem
-import com.sanmer.mrepo.ui.providable.LocalUserPreferences
 import com.sanmer.mrepo.utils.extensions.toDateTime
 
 @Composable
@@ -100,8 +99,6 @@ private fun CloudItem(
         .fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp)
 ) {
-    val userPreferences = LocalUserPreferences.current
-
     Text(
         text = stringResource(id = R.string.view_module_cloud),
         style = MaterialTheme.typography.titleSmall,
@@ -120,7 +117,7 @@ private fun CloudItem(
         )
 
         ElevatedAssistChip(
-            enabled = userPreferences.isRoot && isProviderAlive,
+            enabled = isProviderAlive,
             onClick = { onInstall(item) },
             label = { Text(text = stringResource(id = R.string.module_install)) },
             leadingIcon = {

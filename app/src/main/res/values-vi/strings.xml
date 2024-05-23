@@ -51,11 +51,6 @@
     <string name="settings_root_not_available">Không có sẵn</string>
     <string name="settings_root_none">Không có</string>
     <string name="settings_non_root_desc">Chức năng bị hạn chế</string>
-    <string name="settings_menu_reboot">Khởi động lại</string>
-    <string name="settings_menu_reboot_userspace">Khởi động lại mềm</string>
-    <string name="settings_menu_reboot_bootloader">Khởi động lại vào Bootloader</string>
-    <string name="settings_menu_reboot_recovery">Khởi động lại vào Recovery</string>
-    <string name="settings_menu_reboot_edl">Khởi động lại vào EDL</string>
     <string name="settings_app_theme">Chủ đề ứng dụng</string>
     <string name="settings_delete_zip">Xóa tệp Zip</string>
     <string name="settings_delete_zip_desc">Xóa zip của mô-đun sau khi cài đặt thành công, việc này sẽ được thực thi bởi Superuser</string>
@@ -98,7 +93,6 @@
     <string name="install_logs_saved">Đã lưu nhật ký</string>
     <string name="view_module_provided">Được cung cấp bởi %s</string>
     <string name="modules_empty">Không tìm thấy mô-đun nào</string>
-    <string name="settings_menu_reboot_download">Khởi động lại vào Tải xuống</string>
     <string name="view_module_last_updated">Cập nhật mới nhất</string>
     <string name="settings_doh_desc">Cách giải quyết ngộ độc DNS ở một số quốc gia</string>
     <string name="install_flashing">Đang flash</string>

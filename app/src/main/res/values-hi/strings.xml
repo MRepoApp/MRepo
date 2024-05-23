@@ -79,15 +79,11 @@
     <string name="settings_repo_desc">मेजिस्क के भागों के कोषों को व्यवस्थित करें</string>
     <string name="settings_doh">\'एच टी टी पी एस\' के ऊपर \'डी एन एस\'</string>
     <string name="settings_delete_zip_desc">संस्थापन सफल होने के पश्चात संपीडित भाग (माॅडयूल) को हटाएं, यह उच्चतम शक्ति उपयोगकर्ता (सुपरयुजर) द्वारा संचालित होगा</string>
-    <string name="settings_menu_reboot_userspace">आभासी रूप से पुनरारम्भ करें</string>
-    <string name="settings_menu_reboot_recovery">उपचारिका हेतु पुनरारम्भ करें</string>
-    <string name="settings_menu_reboot_download">अभिधारण हेतु पुनरारम्भ करें</string>
     <string name="repo_add_dialog_add">नया मिलाएं</string>
     <string name="about_desc2">%s के द्वारा ❤️ से निर्मित</string>
     <string name="dialog_cancel">रद्द करें</string>
     <string name="settings_download_path">अभिधारण पथ</string>
     <string name="app_theme_palette">रंगपट्टिका का रूप</string>
-    <string name="settings_menu_reboot_edl">इ डी एल हेतु पुनरारम्भ करें</string>
     <string name="settings_app_theme">अनुप्रयोग का रूप (विषय)</string>
     <string name="settings_app_theme_desc">रात्रि स्थिति एवं रंगरूप बदले</string>
     <string name="settings_delete_zip">संपीडित सञ्चिका हटाएं</string>
@@ -99,11 +95,9 @@
     <string name="repo_incompatible">असंगत</string>
     <string name="repo_options_delete">हटाएं</string>
     <string name="settings_root_none">रिक्त</string>
-    <string name="settings_menu_reboot">पुनरारम्भ करें</string>
     <string name="repo_options_update">अद्यतन</string>
     <string name="repo_add_dialog_title">नया कोष मिलाएं</string>
     <string name="unknown_error">अज्ञात त्रुटि</string>
     <string name="settings_non_root_desc">कार्यक्षमता सीमित है</string>
     <string name="repo_delete_dialog_desc">क्या आप वास्तव में %s हटाना चाहते हैं?</string>
-    <string name="settings_menu_reboot_bootloader">संस्थापिका हेतु पुनरारम्भ करें</string>
 </resources>

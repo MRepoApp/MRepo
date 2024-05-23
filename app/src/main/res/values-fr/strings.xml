@@ -17,12 +17,6 @@
     <string name="settings_root_not_available">Non disponible</string>
     <string name="settings_root_none">Aucun</string>
     <string name="settings_non_root_desc">Le fonctionnement est limité</string>
-    <string name="settings_menu_reboot">Redémarrer</string>
-    <string name="settings_menu_reboot_userspace">Rédémarrer en espace utilisateur</string>
-    <string name="settings_menu_reboot_recovery">Redémarrer en mode de récupération</string>
-    <string name="settings_menu_reboot_bootloader">Redémarrer en mode amorçage</string>
-    <string name="settings_menu_reboot_download">Redémarrer en mode téléchargement</string>
-    <string name="settings_menu_reboot_edl">Redémarrer en mode EDL</string>
     <string name="module_version_author">%1$s par %2$s</string>
     <string name="module_remove">Supprimer</string>
     <string name="module_restore">Restaurer</string>
