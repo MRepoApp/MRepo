@@ -18,7 +18,7 @@ class ApplicationConventionPlugin : Plugin<Project> {
             buildToolsVersion = "34.0.0"
 
             defaultConfig {
-                minSdk = 29
+                minSdk = 26
                 targetSdk = compileSdk
             }
 
