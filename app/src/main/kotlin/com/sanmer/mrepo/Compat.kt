@@ -29,11 +29,11 @@ object Compat {
     val fileManager: IFileManager get() = mService.fileManager
     val powerManager: IPowerManager get() = mService.powerManager
 
-    private fun state(alive: Boolean): Boolean {
-        isAlive = alive
-        _isAliveFlow.value = alive
+    private fun state(): Boolean {
+        isAlive = mServiceOrNull != null
+        _isAliveFlow.value = isAlive
 
-        return alive
+        return isAlive
     }
 
     suspend fun init(mode: WorkingMode) = when {
@@ -45,11 +45,12 @@ object Compat {
                 else -> null
             }
 
-            state(true)
+            state()
         } catch (e: Exception) {
             Timber.e(e)
 
-            state(false)
+            mServiceOrNull = null
+            state()
         }
     }
 
