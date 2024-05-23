@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings_app_theme_desc">Cambia la combinación de colores y el modo nocturno</string>
-    <string name="settings_menu_reboot_bootloader">Reiniciar a Bootloader</string>
-    <string name="settings_menu_reboot_edl">Reiniciar a EDL</string>
     <string name="module_version_author">%1$s por %2$s</string>
     <string name="module_remove">Eliminar</string>
     <string name="module_restore">Restaurar</string>
@@ -14,14 +12,10 @@
     <string name="view_module_page_versions">Versiones</string>
     <string name="view_module_provided">Proporcionado por %s</string>
     <string name="settings_app_theme">Temas de la App</string>
-    <string name="settings_menu_reboot_download">Reiniciar a Download</string>
     <string name="settings_app">App</string>
     <string name="settings_download_path">Ruta de descarga</string>
     <string name="settings_repo">Repositorio</string>
     <string name="settings_repo_desc">Gestionar los repositorios de módulos Magisk</string>
-    <string name="settings_menu_reboot">Reiniciar</string>
-    <string name="settings_menu_reboot_userspace">Reinicio suave</string>
-    <string name="settings_menu_reboot_recovery">Reiniciar a Recovery</string>
     <string name="module_download">Descargar</string>
     <string name="setup_root_title">Root</string>
     <string name="setup_non_root_title">Sin Root</string>

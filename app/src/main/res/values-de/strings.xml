@@ -44,12 +44,6 @@
     <string name="settings_root_not_available">Nicht verfügbar</string>
     <string name="settings_root_none">Keiner</string>
     <string name="settings_non_root_desc">Funktionalität eingeschränkt</string>
-    <string name="settings_menu_reboot">Neustart</string>
-    <string name="settings_menu_reboot_userspace">Neustart (schnell)</string>
-    <string name="settings_menu_reboot_recovery">Neustart ins Recovery</string>
-    <string name="settings_menu_reboot_bootloader">Neustart in den Bootloader</string>
-    <string name="settings_menu_reboot_download">Neustart in den Download-Modus</string>
-    <string name="settings_menu_reboot_edl">Neustart in den EDL-Modus</string>
     <string name="settings_app_theme">App Design</string>
     <string name="settings_app_theme_desc">Farben und Nacht-Modus ändern</string>
     <string name="settings_download_path">Download Pfad</string>

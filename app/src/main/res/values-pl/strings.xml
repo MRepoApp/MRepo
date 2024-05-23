@@ -6,7 +6,6 @@
     <string name="view_module_version">Wersja</string>
     <string name="view_module_version_dialog_desc">Chcesz zainstalować czy pobrać tę wersję modułu\?</string>
     <string name="settings_app_desc">Ustawienia aplikacji MRepo</string>
-    <string name="settings_menu_reboot_recovery">Restartuj do Recovery</string>
     <string name="settings_delete_zip">Usuwaj plik zip</string>
     <string name="settings_delete_zip_desc">Usuwa plik zip modułu (za pomocą roota) po pomyślnej instalacji</string>
     <string name="app_theme_palette">Paleta barw</string>
@@ -43,11 +42,6 @@
     <string name="settings_root_not_available">Niedostępny</string>
     <string name="settings_root_none">Brak</string>
     <string name="settings_non_root_desc">Funkcjonalność jest ograniczona</string>
-    <string name="settings_menu_reboot">Restartuj</string>
-    <string name="settings_menu_reboot_userspace">Szybki restart</string>
-    <string name="settings_menu_reboot_bootloader">Restartuj do Bootloadera</string>
-    <string name="settings_menu_reboot_download">Restartuj do trybu Download</string>
-    <string name="settings_menu_reboot_edl">Restartuj do trybu EDL</string>
     <string name="settings_app_theme">Motyw aplikacji</string>
     <string name="settings_app_theme_desc">Zmień paletę barw i kolor tła motywu</string>
     <string name="app_theme_dark_theme">Tło aplikacji</string>

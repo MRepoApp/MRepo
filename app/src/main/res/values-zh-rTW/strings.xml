@@ -20,12 +20,6 @@
     <string name="settings_root_not_available">不可用</string>
     <string name="settings_root_none">無</string>
     <string name="settings_non_root_desc">功能受到限制</string>
-    <string name="settings_menu_reboot">重新啟動</string>
-    <string name="settings_menu_reboot_userspace">軟重啟</string>
-    <string name="settings_menu_reboot_recovery">重啟到 Recovery</string>
-    <string name="settings_menu_reboot_bootloader">重啟到 BootLoader</string>
-    <string name="settings_menu_reboot_download">重啟到 Download</string>
-    <string name="settings_menu_reboot_edl">重啟到 EDL</string>
     <string name="module_version_author">%1$s，作者 %2$s</string>
     <string name="module_remove">移除</string>
     <string name="module_restore">還原</string>

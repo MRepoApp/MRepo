@@ -78,13 +78,6 @@
     <string name="settings_root_none">无</string>
     <!-- Non Root Item -->
     <string name="settings_non_root_desc">功能受到限制</string>
-    <!-- Menu -->
-    <string name="settings_menu_reboot">重启</string>
-    <string name="settings_menu_reboot_userspace">软重启</string>
-    <string name="settings_menu_reboot_recovery">重启到 Recovery</string>
-    <string name="settings_menu_reboot_bootloader">重启到 BootLoader</string>
-    <string name="settings_menu_reboot_download">重启到 Download</string>
-    <string name="settings_menu_reboot_edl">重启到 EDL</string>
     <!-- App -->
     <string name="settings_app_theme">主题</string>
     <string name="settings_app_theme_desc">更改主题配色和深色模式</string>

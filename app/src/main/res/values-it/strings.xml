@@ -54,17 +54,12 @@
     <string name="settings_root_granted">Concesso</string>
     <string name="settings_root_not_available">Non disponibile</string>
     <string name="settings_root_none">Nessuno</string>
-    <string name="settings_menu_reboot">Riavvia</string>
-    <string name="settings_menu_reboot_userspace">Riavvio leggero</string>
     <string name="setup_non_root_desc">Non richiede permessi di root, è disponibile solo la funzione per scaricare i moduli</string>
     <string name="install_logs_save_failed">Impossibile salvare: %s</string>
     <string name="repository_empty">La repository è vuota</string>
     <string name="view_module_update_notify">Notifica</string>
     <string name="view_module_type">Tipo: %s</string>
     <string name="settings_app_desc">Impostazioni di MRepo</string>
-    <string name="settings_menu_reboot_bootloader">Riavvia in Bootloader</string>
-    <string name="settings_menu_reboot_download">Riavvia per scaricare</string>
-    <string name="settings_menu_reboot_edl">Riavvia in EDL</string>
     <string name="settings_app_theme">Tema App</string>
     <string name="settings_download_path">Percorso per i Download</string>
     <string name="settings_delete_zip">Elimina File Zip</string>
@@ -104,6 +99,5 @@
     <string name="settings_delete_zip_desc">Elimina lo zip del modulo una volta completata l\'installazione, questa operazione verrà eseguita da Superuser</string>
     <string name="about_desc1">Fornire e gestire repository di moduli per Magisk e KernelSU.</string>
     <string name="notification_name_download">Servizio di Download</string>
-    <string name="settings_menu_reboot_recovery">Riavvia in Recovery</string>
     <string name="settings_app_theme_desc">Cambia la combinazione di colori e la modalità notturna</string>
 </resources>
