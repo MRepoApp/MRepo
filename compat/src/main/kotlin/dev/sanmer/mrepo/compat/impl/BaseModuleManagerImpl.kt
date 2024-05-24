@@ -38,21 +38,12 @@ internal abstract class BaseModuleManagerImpl(
     override fun getModules() = modulesDir.listFiles()
         .orEmpty()
         .mapNotNull { dir ->
-            readProps(dir)
-                ?.toModule(
-                    state = readState(dir),
-                    lastUpdated = readLastUpdated(dir)
-                )
+            readProps(dir)?.toModule(dir)
         }
 
     override fun getModuleById(id: String): LocalModule? {
         val dir = modulesDir.resolve(id)
-
-        return readProps(dir)
-            ?.toModule(
-                state = readState(dir),
-                lastUpdated = readLastUpdated(dir)
-            )
+        return readProps(dir)?.toModule(dir)
     }
 
     override fun getModuleInfo(zipPath: String): LocalModule? {
@@ -113,19 +104,33 @@ internal abstract class BaseModuleManagerImpl(
     }
 
     private fun Map<String, String>.toModule(
+        dir: File
+    ) = toModule(
+        path = dir.name,
+        state = readState(dir),
+        lastUpdated = readLastUpdated(dir)
+    )
+
+    private fun Map<String, String>.toModule(
+        path: String = "unknown",
         state: State = State.ENABLE,
         lastUpdated: Long = 0L
     ) = LocalModule(
-        id = getOrDefault("id", "unknown"),
-        name = getOrDefault("name", "unknown"),
+        id = getOrDefault("id", path),
+        name = getOrDefault("name", path),
         version = getOrDefault("version", ""),
-        versionCode = getOrDefault("versionCode", "-1").toInt(),
+        versionCode = getOrDefault("versionCode", "-1").toIntOr(-1),
         author = getOrDefault("author", ""),
         description = getOrDefault("description", ""),
         updateJson = getOrDefault("updateJson", ""),
         state = state,
         lastUpdated = lastUpdated
     )
+
+    private fun String.toIntOr(defaultValue: Int) =
+        runCatching {
+            toInt()
+        }.getOrDefault(defaultValue)
 
     private fun String.exec() = ShellUtils.fastCmd(shell, this)
 
