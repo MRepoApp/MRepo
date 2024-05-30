@@ -21,28 +21,22 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 object ServiceManagerCompat {
-    internal const val VERSION_CODE = 1
-
     private const val TIMEOUT_MILLIS = 15_000L
-
-    private val context by lazy { ContextDelegate.getContext() }
 
     fun setHiddenApiExemptions() = when {
         BuildCompat.atLeastP -> HiddenApiBypass.addHiddenApiExemptions("")
         else -> true
     }
 
-    interface IProvider {
+    internal interface IProvider {
         val name: String
-        fun isAvailable(): Boolean
+        suspend fun isAvailable(): Boolean
         suspend fun isAuthorized(): Boolean
         fun bind(connection: ServiceConnection)
         fun unbind(connection: ServiceConnection)
     }
 
-    private suspend fun get(
-        provider: IProvider
-    ) = withTimeout(TIMEOUT_MILLIS) {
+    private suspend fun get(provider: IProvider) = withTimeout(TIMEOUT_MILLIS) {
         suspendCancellableCoroutine { continuation ->
             val connection = object : ServiceConnection {
                 override fun onServiceConnected(name: ComponentName, binder: IBinder) {
@@ -70,7 +64,7 @@ object ServiceManagerCompat {
         }
     }
 
-    suspend fun from(provider: IProvider): IServiceManager = withContext(Dispatchers.Main) {
+    private suspend fun from(provider: IProvider): IServiceManager = withContext(Dispatchers.Main) {
         when {
             !provider.isAvailable() -> throw IllegalStateException("${provider.name} not available")
             !provider.isAuthorized() -> throw IllegalStateException("${provider.name} not authorized")
@@ -78,24 +72,12 @@ object ServiceManagerCompat {
         }
     }
 
-    private class ShizukuService : Shizuku.UserServiceArgs(
-        ComponentName(
-            context.packageName,
-            ServiceManagerImpl::class.java.name
-        )
-    ) {
-        init {
-            daemon(false)
-            debuggable(false)
-            version(VERSION_CODE)
-            processNameSuffix("shizuku")
-        }
-    }
-
-    private class ShizukuProvider : IProvider {
+    private class ShizukuProvider(
+        private val context: Context
+    ) : IProvider {
         override val name = "Shizuku"
 
-        override fun isAvailable(): Boolean {
+        override suspend fun isAvailable(): Boolean {
             return Shizuku.pingBinder() && Shizuku.getUid() == 0
         }
 
@@ -121,46 +103,47 @@ object ServiceManagerCompat {
         }
 
         override fun bind(connection: ServiceConnection) {
-            Shizuku.bindUserService(ShizukuService(), connection)
+            Shizuku.bindUserService(service, connection)
         }
 
         override fun unbind(connection: ServiceConnection) {
-            Shizuku.unbindUserService(ShizukuService(), connection, true)
+            Shizuku.unbindUserService(service, connection, true)
         }
 
         private val isGranted get() = Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
-    }
 
-    suspend fun fromShizuku() = from(ShizukuProvider())
-
-    private class SuService : RootService() {
-        override fun onBind(intent: Intent): IBinder {
-            return ServiceManagerImpl()
+        private val service by lazy {
+            Shizuku.UserServiceArgs(
+                ComponentName(
+                    context.packageName,
+                    ServiceManagerImpl::class.java.name
+                )
+            ).apply {
+                daemon(false)
+                debuggable(false)
+                processNameSuffix("shizuku")
+            }
         }
 
         companion object {
-            val intent get() = Intent().apply {
-                component = ComponentName(
-                    context.packageName,
-                    SuService::class.java.name
+            private val provider by lazy {
+                ShizukuProvider(
+                    ContextDelegate.getContext()
                 )
             }
+
+            fun get(): IProvider = provider
         }
     }
 
-    private class LibSuProvider : IProvider {
+    suspend fun fromShizuku() = from(ShizukuProvider.get())
+
+    private class LibSuProvider(
+        private val context: Context
+    ) : IProvider {
         override val name = "LibSu"
 
-        init {
-            Shell.enableVerboseLogging = true
-            Shell.setDefaultBuilder(
-                Shell.Builder.create()
-                    .setInitializers(SuShellInitializer::class.java)
-                    .setTimeout(10)
-            )
-        }
-
-        override fun isAvailable() = true
+        override suspend fun isAvailable() = true
 
         override suspend fun isAuthorized() = suspendCancellableCoroutine { continuation ->
             Shell.EXECUTOR.submit {
@@ -175,17 +158,51 @@ object ServiceManagerCompat {
         }
 
         override fun bind(connection: ServiceConnection) {
-            RootService.bind(SuService.intent, connection)
+            RootService.bind(service, connection)
         }
 
         override fun unbind(connection: ServiceConnection) {
-            RootService.stop(SuService.intent)
+            RootService.stop(service)
+        }
+
+        private val service by lazy {
+            Intent().apply {
+                component = ComponentName(
+                    context.packageName,
+                    Service::class.java.name
+                )
+            }
+        }
+
+        init {
+            Shell.enableVerboseLogging = true
+            Shell.setDefaultBuilder(
+                Shell.Builder.create()
+                    .setInitializers(SuShellInitializer::class.java)
+                    .setTimeout(10)
+            )
         }
 
         private class SuShellInitializer : Shell.Initializer() {
             override fun onInit(context: Context, shell: Shell) = shell.isRoot
         }
+
+        private class Service : RootService() {
+            override fun onBind(intent: Intent): IBinder {
+                return ServiceManagerImpl()
+            }
+        }
+
+        companion object {
+            private val provider by lazy {
+                LibSuProvider(
+                    ContextDelegate.getContext()
+                )
+            }
+
+            fun get(): IProvider = provider
+        }
     }
 
-    suspend fun fromLibSu() = from(LibSuProvider())
+    suspend fun fromLibSu() = from(LibSuProvider.get())
 }
