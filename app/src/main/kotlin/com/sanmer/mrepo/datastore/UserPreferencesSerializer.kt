@@ -12,12 +12,12 @@ class UserPreferencesSerializer @Inject constructor() : Serializer<UserPreferenc
 
     override suspend fun readFrom(input: InputStream) =
         try {
-            UserPreferences.parseFrom(input).let(::UserPreferencesCompat)
+            UserPreferencesCompat.from(input)
         } catch (e: InvalidProtocolBufferException) {
             throw CorruptionException("cannot read proto", e)
         }
 
     override suspend fun writeTo(t: UserPreferencesCompat, output: OutputStream) {
-        t.toProto().writeTo(output)
+        t.writeTo(output)
     }
 }

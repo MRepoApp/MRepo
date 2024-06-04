@@ -2,13 +2,17 @@ package com.sanmer.mrepo.datastore
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.compat.BuildCompat
 import com.sanmer.mrepo.datastore.modules.ModulesMenuCompat
 import com.sanmer.mrepo.datastore.repository.RepositoryMenuCompat
 import com.sanmer.mrepo.ui.theme.Colors
 import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 
+@Immutable
 data class UserPreferencesCompat(
     val workingMode: WorkingMode,
     val darkMode: DarkMode,
@@ -43,7 +47,7 @@ data class UserPreferencesCompat(
         else -> isSystemInDarkTheme()
     }
 
-    fun toProto(): UserPreferences = UserPreferences.newBuilder()
+    fun writeTo(output: OutputStream) = UserPreferences.newBuilder()
         .setWorkingMode(workingMode)
         .setDarkMode(darkMode)
         .setThemeColor(themeColor)
@@ -53,8 +57,13 @@ data class UserPreferencesCompat(
         .setRepositoryMenu(repositoryMenu.toProto())
         .setModulesMenu(modulesMenu.toProto())
         .build()
+        .writeTo(output)
 
     companion object {
+        fun from(input: InputStream) = UserPreferencesCompat(
+            UserPreferences.parseFrom(input)
+        )
+
         fun default() = UserPreferencesCompat(
             workingMode = WorkingMode.FIRST_SETUP,
             darkMode = DarkMode.FOLLOW_SYSTEM,
