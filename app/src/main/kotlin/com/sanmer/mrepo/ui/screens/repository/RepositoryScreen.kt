@@ -109,10 +109,7 @@ private fun TopBar(
             onQueryChange(it)
             query = it
         },
-        onClose = {
-            onCloseSearch()
-            query = ""
-        },
+        onClose = onCloseSearch,
         title = { TopAppBarTitle(text = stringResource(id = R.string.page_repository)) },
         scrollBehavior = scrollBehavior,
         actions = {
