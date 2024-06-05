@@ -55,7 +55,7 @@ private fun OpenDocumentTreeDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    val new = Const.PUBLIC_DOWNLOADS.resolve(name)
+                    val new = File(Const.PUBLIC_DOWNLOADS, name.trim())
                     onConfirm(new)
                     onClose()
                 },

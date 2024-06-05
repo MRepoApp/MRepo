@@ -10,12 +10,13 @@ import android.os.Parcelable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
-import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.sanmer.mrepo.R
+import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.compat.BuildCompat
+import com.sanmer.mrepo.compat.MediaStoreCompat.createUriForDownload
 import com.sanmer.mrepo.compat.PermissionCompat
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -37,7 +38,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
-import java.io.FileNotFoundException
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -82,24 +83,17 @@ class DownloadService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         lifecycleScope.launch {
             val item = intent?.taskItemOrNull ?: return@launch
-            val downloadPath = userPreferencesRepository.data
-                .first().downloadPath
-                .let {
-                    if (!it.exists()) it.mkdirs()
-                    DocumentFile.fromFile(it)
-                }
-
-            val df = downloadPath.createFile("*/*", item.filename)
-            if (df == null) {
-                onDownloadFailed(item, "Failed to create file")
-                return@launch
-            }
+            val userPreferences = userPreferencesRepository.data.first()
+            val downloadPath = userPreferences.downloadPath
+            val file = File(downloadPath, item.filename)
 
             val output = try {
-                checkNotNull(
-                    contentResolver.openOutputStream(df.uri)
+                val uri = createUriForDownload(
+                    path = file.toRelativeString(Const.PUBLIC_DOWNLOADS),
+                    mimeType = "android/zip"
                 )
-            } catch (e: FileNotFoundException) {
+                checkNotNull(contentResolver.openOutputStream(uri))
+            } catch (e: Throwable) {
                 onDownloadFailed(item, e.message)
                 return@launch
             }
