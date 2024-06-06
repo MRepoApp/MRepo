@@ -16,7 +16,7 @@ import com.sanmer.mrepo.R
 import com.sanmer.mrepo.app.Const
 import com.sanmer.mrepo.app.utils.NotificationUtils
 import com.sanmer.mrepo.compat.BuildCompat
-import com.sanmer.mrepo.compat.MediaStoreCompat.createUriForDownload
+import com.sanmer.mrepo.compat.MediaStoreCompat.createDownloadUri
 import com.sanmer.mrepo.compat.PermissionCompat
 import com.sanmer.mrepo.network.NetworkUtils
 import com.sanmer.mrepo.repository.UserPreferencesRepository
@@ -88,7 +88,7 @@ class DownloadService : LifecycleService() {
             val file = File(downloadPath, item.filename)
 
             val output = try {
-                val uri = createUriForDownload(
+                val uri = createDownloadUri(
                     path = file.toRelativeString(Const.PUBLIC_DOWNLOADS),
                     mimeType = "android/zip"
                 )

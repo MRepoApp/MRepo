@@ -1,5 +1,6 @@
 package com.sanmer.mrepo.compat
 
+import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
@@ -19,34 +20,78 @@ object MediaStoreCompat {
     @RequiresApi(Build.VERSION_CODES.R)
     fun Context.createMediaStoreUri(
         file: File,
-        collection: Uri = MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+        collection: Uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL),
         mimeType: String
     ): Uri {
         val entry = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
             put(MediaStore.MediaColumns.RELATIVE_PATH, file.parent)
             put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
-            put(MediaStore.MediaColumns.IS_PENDING, 0)
         }
 
-        return contentResolver.insert(collection, entry) ?: throw IOException("Can't insert $file")
+        return contentResolver.insert(collection, entry) ?: throw IOException("Cannot insert $file")
     }
 
-    fun Context.createUriForDownload(
+    private fun createDownloadUri(
+        path: String
+    ) = Environment.getExternalStoragePublicDirectory(
+        Environment.DIRECTORY_DOWNLOADS
+    ).let {
+        val file = File(it, path)
+        file.parentFile?.apply { if (!exists()) mkdirs() }
+        file.toUri()
+    }
+
+    fun Context.createDownloadUri(
         path: String,
         mimeType: String
     ) = when {
-        BuildCompat.atLeastR -> createMediaStoreUri(
-            file = File(Environment.DIRECTORY_DOWNLOADS, path),
-            mimeType = mimeType
-        )
-        else -> {
-            val downloadsPath = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS
+        BuildCompat.atLeastR -> runCatching {
+            createMediaStoreUri(
+                file = File(Environment.DIRECTORY_DOWNLOADS, path),
+                mimeType = mimeType
             )
-            val file = File(downloadsPath, path)
-            file.parentFile?.apply { if (!exists()) mkdirs() }
-            file.toUri()
+        }.getOrElse {
+            createDownloadUri(path)
+        }
+        else -> createDownloadUri(path)
+    }
+
+    private fun ContentResolver.queryString(uri: Uri, columnName: String): String? {
+        query(
+            uri,
+            arrayOf(columnName),
+            null,
+            null,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getString(
+                    cursor.getColumnIndexOrThrow(columnName)
+                )
+            }
+        }
+
+        return null
+    }
+
+    fun Context.getOwnerPackageNameForUri(uri: Uri): String? {
+        require(uri.scheme == "content") { "Uri lacks 'content' scheme: $uri" }
+
+        return when {
+            uri.authority == MediaStore.AUTHORITY -> {
+                contentResolver.queryString(
+                    uri = uri,
+                    columnName = MediaStore.MediaColumns.OWNER_PACKAGE_NAME
+                )
+            }
+            else -> {
+                uri.authority?.let {
+                    packageManager.resolveContentProvider(
+                        it, 0
+                    )?.packageName
+                }
+            }
         }
     }
 
@@ -57,21 +102,10 @@ object MediaStoreCompat {
 
         require(uri.scheme == "content") { "Uri lacks 'content' scheme: $uri" }
 
-        contentResolver.query(
-            uri,
-            arrayOf(MediaStore.MediaColumns.DISPLAY_NAME),
-            null,
-            null,
-            null
-        )?.use { cursor ->
-            if (cursor.moveToFirst()) {
-                return cursor.getString(
-                    cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
-                )
-            }
-        }
-
-        return uri.toString()
+        return contentResolver.queryString(
+            uri = uri,
+            columnName = MediaStore.MediaColumns.DISPLAY_NAME
+        ) ?: uri.toString()
     }
 
     fun Context.getPathForUri(uri: Uri): String {
@@ -90,8 +124,6 @@ object MediaStoreCompat {
 
         return uri.toString()
     }
-
-    fun Context.getFileForUri(uri: Uri) = File(getPathForUri(uri))
 
     fun getDocumentUri(context: Context, uri: Uri): Uri {
         return when {
