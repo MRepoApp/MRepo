@@ -14,6 +14,8 @@ updates:
       time: "21:00"
     labels: [ "dependencies" ]
     registries: "*"
+    ignore:
+      - dependency-name: "self.*"
     groups:
       kotlin-ksp:
         patterns:
