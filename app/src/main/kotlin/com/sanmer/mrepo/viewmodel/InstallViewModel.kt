@@ -17,9 +17,8 @@ import com.sanmer.mrepo.repository.LocalRepository
 import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.utils.extensions.tmpDir
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sanmer.mrepo.compat.content.State
-import dev.sanmer.mrepo.compat.delegate.PowerManagerDelegate
-import dev.sanmer.mrepo.compat.stub.IInstallCallback
+import dev.sanmer.mrepo.content.State
+import dev.sanmer.mrepo.stub.IInstallCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -34,6 +33,8 @@ class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
+    private val mm by lazy { Compat.getModuleManager() }
+
     val logs = mutableListOf<String>()
     val console = mutableStateListOf<String>()
     var event by mutableStateOf(Event.LOADING)
@@ -46,9 +47,8 @@ class InstallViewModel @Inject constructor(
     }
 
     fun reboot() {
-        PowerManagerDelegate(Compat.powerManager).apply {
-            reboot()
-        }
+        val powerManager = Compat.getPowerManager()
+        powerManager.reboot()
     }
 
     suspend fun writeLogsTo(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
@@ -74,13 +74,12 @@ class InstallViewModel @Inject constructor(
         val path = context.getPathForUri(uri)
         Timber.d("path = $path")
 
-        Compat.moduleManager
-            .getModuleInfo(path)?.let {
-                Timber.d("module = $it")
-                install(path)
+        mm.getModuleInfo(path)?.let {
+            Timber.d("module = $it")
+            install(path)
 
-                return@withContext
-            }
+            return@withContext
+        }
 
         console.add("- Copying zip to temp directory")
         val tmpFile = context.copyToDir(uri, context.tmpDir)
@@ -91,13 +90,12 @@ class InstallViewModel @Inject constructor(
             }
         }
 
-        Compat.moduleManager
-            .getModuleInfo(tmpFile.path)?.let {
-                Timber.d("module = $it")
-                install(tmpFile.path)
+        mm.getModuleInfo(tmpFile.path)?.let {
+            Timber.d("module = $it")
+            install(tmpFile.path)
 
-                return@withContext
-            }
+            return@withContext
+        }
 
         event = Event.FAILED
         console.add("- Zip parsing failed")
@@ -132,7 +130,7 @@ class InstallViewModel @Inject constructor(
         }
 
         console.add("- Installing ${zipFile.name}")
-        Compat.moduleManager.install(zipPath, callback)
+        mm.install(zipPath, callback)
     }
 
     private fun insertLocal(module: LocalModule) {
@@ -145,7 +143,8 @@ class InstallViewModel @Inject constructor(
 
     private fun deleteBySu(zipPath: String) {
         runCatching {
-            Compat.fileManager.deleteOnExit(zipPath)
+            val fileManager = Compat.getFileManager()
+            fileManager.deleteOnExit(zipPath)
         }.onFailure {
             Timber.e(it)
         }.onSuccess {

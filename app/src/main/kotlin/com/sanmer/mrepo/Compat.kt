@@ -4,11 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.sanmer.mrepo.datastore.WorkingMode
-import dev.sanmer.mrepo.compat.ServiceManagerCompat
-import dev.sanmer.mrepo.compat.stub.IFileManager
-import dev.sanmer.mrepo.compat.stub.IModuleManager
-import dev.sanmer.mrepo.compat.stub.IPowerManager
-import dev.sanmer.mrepo.compat.stub.IServiceManager
+import dev.sanmer.mrepo.ManagerService.Companion.managerService
+import dev.sanmer.mrepo.stub.IFileManager
+import dev.sanmer.mrepo.stub.IModuleManager
+import dev.sanmer.mrepo.stub.IPowerManager
+import dev.sanmer.su.IServiceManager
+import dev.sanmer.su.ServiceManagerCompat
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
@@ -24,10 +25,6 @@ object Compat {
 
     private val _isAliveFlow = MutableStateFlow(false)
     val isAliveFlow get() = _isAliveFlow.asStateFlow()
-
-    val moduleManager: IModuleManager get() = mService.moduleManager
-    val fileManager: IFileManager get() = mService.fileManager
-    val powerManager: IPowerManager get() = mService.powerManager
 
     private fun state(): Boolean {
         isAlive = mServiceOrNull != null
@@ -60,4 +57,8 @@ object Compat {
             else -> fallback
         }
     }
+
+    fun getModuleManager(): IModuleManager = mService.managerService.moduleManager
+    fun getFileManager(): IFileManager = mService.managerService.fileManager
+    fun getPowerManager(): IPowerManager = mService.managerService.powerManager
 }

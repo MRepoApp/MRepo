@@ -26,7 +26,7 @@ import com.sanmer.mrepo.repository.UserPreferencesRepository
 import com.sanmer.mrepo.service.DownloadService
 import com.sanmer.mrepo.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sanmer.mrepo.compat.stub.IModuleOpsCallback
+import dev.sanmer.mrepo.stub.IModuleOpsCallback
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -45,6 +45,7 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
+    private val mm by lazy { Compat.getModuleManager() }
     val isProviderAlive get() = Compat.isAlive
 
     private val modulesMenu get() = userPreferencesRepository.data
@@ -182,13 +183,11 @@ class ModulesViewModel @Inject constructor(
             isOpsRunning = opsTasks.contains(module.id),
             toggle = {
                 opsTasks.add(module.id)
-                Compat.moduleManager
-                    .disable(module.id, opsCallback)
+                mm.disable(module.id, opsCallback)
             },
             change = {
                 opsTasks.add(module.id)
-                Compat.moduleManager
-                    .remove(module.id, opsCallback)
+                mm.remove(module.id, opsCallback)
             }
         )
 
@@ -196,13 +195,11 @@ class ModulesViewModel @Inject constructor(
             isOpsRunning = opsTasks.contains(module.id),
             toggle = {
                 opsTasks.add(module.id)
-                Compat.moduleManager
-                    .enable(module.id, opsCallback)
+                mm.enable(module.id, opsCallback)
             },
             change = {
                 opsTasks.add(module.id)
-                Compat.moduleManager
-                    .remove(module.id, opsCallback)
+                mm.remove(module.id, opsCallback)
             }
         )
 
@@ -211,8 +208,7 @@ class ModulesViewModel @Inject constructor(
             toggle = {},
             change = {
                 opsTasks.add(module.id)
-                Compat.moduleManager
-                    .enable(module.id, opsCallback)
+                mm.enable(module.id, opsCallback)
             }
         )
 

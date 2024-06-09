@@ -113,8 +113,7 @@ protobuf {
 }
 
 dependencies {
-    compileOnly(projects.hiddenApi)
-    implementation(projects.compat)
+    implementation(projects.core)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

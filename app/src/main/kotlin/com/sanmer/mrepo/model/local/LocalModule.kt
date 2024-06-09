@@ -1,7 +1,7 @@
 package com.sanmer.mrepo.model.local
 
 import com.sanmer.mrepo.utils.Utils
-import dev.sanmer.mrepo.compat.content.LocalModule
+import dev.sanmer.mrepo.content.LocalModule
 
 typealias LocalModule = LocalModule
 
