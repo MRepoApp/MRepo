@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class ModulesRepository @Inject constructor(
     private val localRepository: LocalRepository,
 ) {
-    private val mm by lazy { Compat.getModuleManager() }
+    private val mm get() = Compat.moduleManager
 
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
         with(mm.modules) {

@@ -12,8 +12,4 @@ android {
 }
 
 dependencies {
-    api(libs.sanmer.su)
-
-    implementation(libs.androidx.annotation)
-    implementation(libs.kotlinx.coroutines.android)
 }

@@ -1,3 +1,3 @@
 package dev.sanmer.mrepo.content;
 
-parcelable LocalModule;
+parcelable Module;

@@ -1,8 +1,6 @@
 package dev.sanmer.mrepo.impl
 
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 internal object Shell {
     private const val TAG = "Shell"
@@ -27,45 +25,36 @@ internal object Shell {
             }
         }
     } catch (e: Throwable) {
-        Log.e(TAG, "exec<$this>", e)
+        Log.e(TAG, Log.getStackTraceString(e))
         Result.failure(e)
     }
 
-    suspend fun String.submit() =
-        withContext(Dispatchers.IO) { exec() }
-
-    suspend fun String.submit(
+    fun String.exec(
         stdout: (String) -> Unit,
         stderr: (String) -> Unit
-    ) = withContext(Dispatchers.IO) {
-        try {
-            Log.d(TAG, "submit: ${this@submit}")
-            val process = ProcessBuilder("sh", "-c", this@submit).start()
-            val output = process.inputStream.bufferedReader()
-            val error = process.errorStream.bufferedReader()
+    ) = try {
+        Log.d(TAG, "submit: ${this@exec}")
+        val process = ProcessBuilder("sh", "-c", this@exec).start()
+        val output = process.inputStream.bufferedReader()
+        val error = process.errorStream.bufferedReader()
 
-            withContext(Dispatchers.IO) {
-                output.forEachLine {
-                    Log.d(TAG, "output: $it")
-                    stdout(it)
-                }
-            }
-
-            withContext(Dispatchers.IO) {
-                error.forEachLine {
-                    Log.d(TAG, "stderr: $it")
-                    stderr(it)
-                }
-            }
-
-            when {
-                process.waitFor().ok() -> Result.success(true)
-                else -> Result.failure(RuntimeException())
-            }
-        } catch (e: Throwable) {
-            Log.e(TAG, "submit<${this@submit}>", e)
-            Result.failure(e)
+        output.forEachLine {
+            Log.d(TAG, "output: $it")
+            stdout(it)
         }
+
+        error.forEachLine {
+            Log.d(TAG, "stderr: $it")
+            stderr(it)
+        }
+
+        when {
+            process.waitFor().ok() -> Result.success(true)
+            else -> Result.failure(RuntimeException())
+        }
+    } catch (e: Throwable) {
+        Log.e(TAG, Log.getStackTraceString(e))
+        Result.failure(e)
     }
 
     private fun Int.ok() = this == 0

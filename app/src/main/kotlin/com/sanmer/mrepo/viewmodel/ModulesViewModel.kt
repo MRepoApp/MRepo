@@ -45,7 +45,7 @@ class ModulesViewModel @Inject constructor(
     private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
-    private val mm by lazy { Compat.getModuleManager() }
+    private val mm get() = Compat.moduleManager
     val isProviderAlive get() = Compat.isAlive
 
     private val modulesMenu get() = userPreferencesRepository.data

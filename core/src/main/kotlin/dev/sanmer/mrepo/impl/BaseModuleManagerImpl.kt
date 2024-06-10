@@ -1,19 +1,14 @@
 package dev.sanmer.mrepo.impl
 
-import dev.sanmer.mrepo.content.LocalModule
+import dev.sanmer.mrepo.content.Module
 import dev.sanmer.mrepo.content.State
 import dev.sanmer.mrepo.impl.Shell.exec
-import dev.sanmer.mrepo.impl.Shell.submit
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import java.io.File
 import java.util.zip.ZipFile
 
-internal abstract class BaseModuleManagerImpl(
-    private val managerScope: CoroutineScope
-) : IModuleManager.Stub() {
+internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
     internal val modulesDir = File(MODULES_PATH)
 
     private val mVersion by lazy {
@@ -39,13 +34,13 @@ internal abstract class BaseModuleManagerImpl(
             readProps(dir)?.toModule(dir)
         }
 
-    override fun getModuleById(id: String): LocalModule? {
+    override fun getModuleById(id: String): Module? {
         val dir = modulesDir.resolve(id)
         return readProps(dir)?.toModule(dir)
     }
 
-    override fun getModuleInfo(zipPath: String): LocalModule? {
-        val zipFile = ZipFile(zipPath)
+    override fun getModuleInfo(path: String): Module? {
+        val zipFile = ZipFile(path)
         val entry = zipFile.getEntry(PROP_FILE) ?: return null
 
         return zipFile.getInputStream(entry).use {
@@ -54,6 +49,19 @@ internal abstract class BaseModuleManagerImpl(
                 .let(::readProps)
                 .toModule()
         }
+    }
+
+    override fun deleteOnExit(path: String) = with(File(path)) {
+        when {
+            !exists() -> false
+            isFile -> delete()
+            isDirectory -> deleteRecursively()
+            else -> false
+        }
+    }
+
+    override fun reboot() {
+        "svc power reboot || reboot".exec()
     }
 
     private fun readProps(props: String) = props.lines()
@@ -113,7 +121,7 @@ internal abstract class BaseModuleManagerImpl(
         path: String = "unknown",
         state: State = State.ENABLE,
         lastUpdated: Long = 0L
-    ) = LocalModule(
+    ) = Module(
         id = getOrDefault("id", path),
         name = getOrDefault("name", path),
         version = getOrDefault("version", ""),
@@ -130,21 +138,24 @@ internal abstract class BaseModuleManagerImpl(
             toInt()
         }.getOrDefault(defaultValue)
 
-    internal fun install(cmd: String, path: String, callback: IInstallCallback) {
-        managerScope.launch {
-            val result = cmd.submit(
-                stdout = callback::onStdout,
-                stderr = callback::onStderr
-            )
+    internal fun install(cmd: String, path: String, callback: IInstallCallback?) {
+        if (callback == null) {
+            cmd.exec()
+            return
+        }
 
-            when {
-                result.isSuccess -> {
-                    val module = getModuleInfo(path)
-                    callback.onSuccess(module)
-                }
-                else -> {
-                    callback.onFailure()
-                }
+        val result = cmd.exec(
+            stdout = callback::onStdout,
+            stderr = callback::onStderr
+        )
+
+        when {
+            result.isSuccess -> {
+                val module = getModuleInfo(path)
+                callback.onSuccess(module)
+            }
+            else -> {
+                callback.onFailure()
             }
         }
     }

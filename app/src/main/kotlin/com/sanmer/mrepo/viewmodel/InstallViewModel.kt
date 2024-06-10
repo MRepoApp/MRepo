@@ -33,7 +33,7 @@ class InstallViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
 ) : ViewModel() {
-    private val mm by lazy { Compat.getModuleManager() }
+    private val mm get() = Compat.moduleManager
 
     val logs = mutableListOf<String>()
     val console = mutableStateListOf<String>()
@@ -46,10 +46,7 @@ class InstallViewModel @Inject constructor(
         Timber.d("InstallViewModel init")
     }
 
-    fun reboot() {
-        val powerManager = Compat.getPowerManager()
-        powerManager.reboot()
-    }
+    fun reboot() = mm.reboot()
 
     suspend fun writeLogsTo(context: Context, uri: Uri) = withContext(Dispatchers.IO) {
         runCatching {
@@ -143,8 +140,7 @@ class InstallViewModel @Inject constructor(
 
     private fun deleteBySu(zipPath: String) {
         runCatching {
-            val fileManager = Compat.getFileManager()
-            fileManager.deleteOnExit(zipPath)
+            mm.deleteOnExit(zipPath)
         }.onFailure {
             Timber.e(it)
         }.onSuccess {

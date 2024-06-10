@@ -3,16 +3,14 @@ package dev.sanmer.mrepo.impl
 import dev.sanmer.mrepo.Platform
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleOpsCallback
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import java.io.File
 
-internal class MagiskModuleManagerImpl(
-    private val managerScope: CoroutineScope
-) : BaseModuleManagerImpl(managerScope) {
-    override fun getPlatform() = Platform.Magisk.name
+internal class MagiskModuleManagerImpl : BaseModuleManagerImpl() {
+    override fun getPlatform(): String {
+        return Platform.Magisk.name
+    }
 
-    override fun enable(id: String, callback: IModuleOpsCallback) {
+    override fun enable(id: String, callback: IModuleOpsCallback?) {
         moduleOps(
             tags = listOf(
                 Tag("remove", FileOp.Delete),
@@ -23,7 +21,7 @@ internal class MagiskModuleManagerImpl(
         )
     }
 
-    override fun disable(id: String, callback: IModuleOpsCallback) {
+    override fun disable(id: String, callback: IModuleOpsCallback?) {
         moduleOps(
             tags = listOf(
                 Tag("remove", FileOp.Delete),
@@ -34,7 +32,7 @@ internal class MagiskModuleManagerImpl(
         )
     }
 
-    override fun remove(id: String, callback: IModuleOpsCallback) {
+    override fun remove(id: String, callback: IModuleOpsCallback?) {
         moduleOps(
             tags = listOf(
                 Tag("disable", FileOp.Delete),
@@ -45,7 +43,7 @@ internal class MagiskModuleManagerImpl(
         )
     }
 
-    override fun install(path: String, callback: IInstallCallback) {
+    override fun install(path: String, callback: IInstallCallback?) {
         install(
             cmd = "magisk --install-module '${path}'",
             path = path,
@@ -53,30 +51,25 @@ internal class MagiskModuleManagerImpl(
         )
     }
 
-    private fun moduleOps(
-        tags: List<Tag>,
-        id: String,
-        callback: IModuleOpsCallback
-    ) {
-        managerScope.launch {
-            val moduleDir = File(modulesDir, id)
-            if (!moduleDir.exists()) {
-                return@launch callback.onFailure(id, null)
-            }
+    private fun moduleOps(tags: List<Tag>, id: String, callback: IModuleOpsCallback?) {
+        val moduleDir = File(modulesDir, id)
+        if (!moduleDir.exists()) {
+            callback?.onFailure(id, null)
+            return
+        }
 
-            runCatching {
-                tags.forEach {
-                    val tag = File(moduleDir, it.name)
-                    when (it.op) {
-                        FileOp.Delete -> if (tag.exists()) tag.delete()
-                        FileOp.Create -> tag.createNewFile()
-                    }
+        runCatching {
+            tags.forEach {
+                val tag = File(moduleDir, it.name)
+                when (it.op) {
+                    FileOp.Delete -> if (tag.exists()) tag.delete()
+                    FileOp.Create -> tag.createNewFile()
                 }
-            }.onSuccess {
-                callback.onSuccess(id)
-            }.onFailure {
-                callback.onFailure(id, it.message)
             }
+        }.onSuccess {
+            callback?.onSuccess(id)
+        }.onFailure {
+            callback?.onFailure(id, it.message)
         }
     }
 

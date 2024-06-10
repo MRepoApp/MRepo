@@ -1,19 +1,17 @@
 package dev.sanmer.mrepo.impl
 
 import dev.sanmer.mrepo.Platform
-import dev.sanmer.mrepo.impl.Shell.submit
+import dev.sanmer.mrepo.impl.Shell.exec
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleOpsCallback
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import java.io.File
 
-internal class KernelSUModuleManagerImpl(
-    private val managerScope: CoroutineScope
-) : BaseModuleManagerImpl(managerScope) {
-    override fun getPlatform() = Platform.KernelSU.name
+internal class KernelSUModuleManagerImpl : BaseModuleManagerImpl() {
+    override fun getPlatform(): String {
+        return Platform.KernelSU.name
+    }
 
-    override fun enable(id: String, callback: IModuleOpsCallback) {
+    override fun enable(id: String, callback: IModuleOpsCallback?) {
         moduleOps(
             cmd = "ksud module enable $id",
             id = id,
@@ -21,7 +19,7 @@ internal class KernelSUModuleManagerImpl(
         )
     }
 
-    override fun disable(id: String, callback: IModuleOpsCallback) {
+    override fun disable(id: String, callback: IModuleOpsCallback?) {
         moduleOps(
             cmd = "ksud module disable $id",
             id = id,
@@ -29,7 +27,7 @@ internal class KernelSUModuleManagerImpl(
         )
     }
 
-    override fun remove(id: String, callback: IModuleOpsCallback) {
+    override fun remove(id: String, callback: IModuleOpsCallback?) {
         moduleOps(
             cmd = "ksud module uninstall $id",
             id = id,
@@ -37,7 +35,7 @@ internal class KernelSUModuleManagerImpl(
         )
     }
 
-    override fun install(path: String, callback: IInstallCallback) {
+    override fun install(path: String, callback: IInstallCallback?) {
         install(
             cmd = "ksud module install '${path}'",
             path = path,
@@ -45,18 +43,17 @@ internal class KernelSUModuleManagerImpl(
         )
     }
 
-    private fun moduleOps(cmd: String, id: String, callback: IModuleOpsCallback) {
-        managerScope.launch {
-            val moduleDir = File(modulesDir, id)
-            if (!moduleDir.exists()) {
-                return@launch callback.onFailure(id, null)
-            }
+    private fun moduleOps(cmd: String, id: String, callback: IModuleOpsCallback?) {
+        val moduleDir = File(modulesDir, id)
+        if (!moduleDir.exists()) {
+            callback?.onFailure(id, null)
+            return
+        }
 
-            cmd.submit().onSuccess {
-                callback.onSuccess(id)
-            }.onFailure {
-                callback.onFailure(id, it.message)
-            }
+        cmd.exec().onSuccess {
+            callback?.onSuccess(id)
+        }.onFailure {
+            callback?.onFailure(id, it.message)
         }
     }
 }

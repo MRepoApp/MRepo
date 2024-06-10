@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class LocalModule(
+data class Module(
     val id: String,
     val name: String,
     val version: String,
@@ -14,6 +14,4 @@ data class LocalModule(
     val updateJson: String,
     val state: State,
     val lastUpdated: Long
-) : Parcelable {
-    companion object
-}
+) : Parcelable
