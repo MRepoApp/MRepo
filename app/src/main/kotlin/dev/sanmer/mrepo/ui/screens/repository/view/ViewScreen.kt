@@ -10,12 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import dev.sanmer.mrepo.model.online.VersionItem
-import dev.sanmer.mrepo.ui.activity.InstallActivity
 import dev.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import dev.sanmer.mrepo.ui.screens.repository.view.pages.AboutPage
 import dev.sanmer.mrepo.ui.screens.repository.view.pages.OverviewPage
@@ -28,21 +24,8 @@ fun ViewScreen(
     navController: NavController,
     viewModel: ModuleViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-
     val scrollBehavior = CollapsingTopAppBarDefaults.scrollBehavior()
     val pagerState = rememberPagerState { if (viewModel.isEmptyAbout) 2 else 3 }
-
-    val download: (VersionItem, Boolean) -> Unit = { item, install ->
-        viewModel.downloader(context, item) {
-            if (install) {
-                InstallActivity.start(
-                    context = context,
-                    uri = it.toUri()
-                )
-            }
-        }
-    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -77,14 +60,16 @@ fun ViewScreen(
                         notifyUpdates = viewModel.notifyUpdates,
                         isProviderAlive = viewModel.isProviderAlive,
                         setUpdatesTag = viewModel::setUpdatesTag,
-                        onInstall = { download(it, true) },
+                        onInstall = { context, item ->
+                            viewModel.downloader(context, item, true)
+                        }
                     )
                     1 -> VersionsPage(
                         versions = viewModel.versions,
                         localVersionCode = viewModel.localVersionCode,
                         isProviderAlive = viewModel.isProviderAlive,
-                        getProgress = { viewModel.getProgress(it) },
-                        onDownload = download
+                        getProgress = viewModel::getProgress,
+                        onDownload = viewModel::downloader
                     )
                     2 -> AboutPage(
                         online = viewModel.online

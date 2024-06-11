@@ -1,5 +1,6 @@
 package dev.sanmer.mrepo.ui.screens.repository.view.pages
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,48 +23,55 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.ui.component.LabelItem
 import dev.sanmer.mrepo.ui.component.VersionItemBottomSheet
 import dev.sanmer.mrepo.utils.extensions.toDate
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun VersionsPage(
     versions: List<Pair<RepoEntity, VersionItem>>,
     localVersionCode: Int,
     isProviderAlive: Boolean,
-    getProgress: @Composable (VersionItem) -> Float,
-    onDownload: (VersionItem, Boolean) -> Unit
-) = LazyColumn(
-    modifier = Modifier.fillMaxSize()
+    getProgress: (VersionItem) -> Flow<Float>,
+    onDownload: (Context, VersionItem, Boolean) -> Unit
 ) {
-    items(
-        items = versions,
-        key = { it.first.url + it.second.versionCode }
-    ) { (repo, item) ->
-        VersionItem(
-            item = item,
-            repo = repo,
-            localVersionCode = localVersionCode,
-            isProviderAlive = isProviderAlive,
-            onDownload = { onDownload(item, it) }
-        )
+    val context = LocalContext.current
 
-        val progress = getProgress(item)
-        if (progress != 0f) {
-            LinearProgressIndicator(
-                progress = { progress },
-                strokeCap = StrokeCap.Round,
-                modifier = Modifier
-                    .height(2.dp)
-                    .fillMaxWidth()
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(
+            items = versions,
+            key = { it.first.url + it.second.versionCode }
+        ) { (repo, item) ->
+            VersionItem(
+                item = item,
+                repo = repo,
+                localVersionCode = localVersionCode,
+                isProviderAlive = isProviderAlive,
+                onDownload = { onDownload(context, item, it) }
             )
-        } else {
-            HorizontalDivider(thickness = 0.9.dp)
+
+            val progress by getProgress(item).collectAsStateWithLifecycle(initialValue = 0f)
+            if (progress != 0f) {
+                LinearProgressIndicator(
+                    progress = { progress },
+                    strokeCap = StrokeCap.Round,
+                    modifier = Modifier
+                        .height(2.dp)
+                        .fillMaxWidth()
+                )
+            } else {
+                HorizontalDivider(thickness = 0.9.dp)
+            }
         }
     }
 }

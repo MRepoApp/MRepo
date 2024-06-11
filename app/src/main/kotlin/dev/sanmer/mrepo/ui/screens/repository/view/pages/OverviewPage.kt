@@ -1,5 +1,6 @@
 package dev.sanmer.mrepo.ui.screens.repository.view.pages
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -43,7 +45,7 @@ fun OverviewPage(
     isProviderAlive: Boolean,
     notifyUpdates: Boolean,
     setUpdatesTag: (Boolean) -> Unit,
-    onInstall: (VersionItem) -> Unit
+    onInstall: (Context, VersionItem) -> Unit
 ) = Column(
     modifier = Modifier
         .fillMaxSize()
@@ -95,13 +97,15 @@ fun OverviewPage(
 private fun CloudItem(
     item: VersionItem,
     isProviderAlive: Boolean,
-    onInstall: (VersionItem) -> Unit
+    onInstall: (Context, VersionItem) -> Unit
 ) = Column(
     modifier = Modifier
         .padding(all = 16.dp)
         .fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp)
 ) {
+    val context = LocalContext.current
+
     Text(
         text = stringResource(id = R.string.view_module_cloud),
         style = MaterialTheme.typography.titleSmall,
@@ -121,7 +125,7 @@ private fun CloudItem(
 
         ElevatedAssistChip(
             enabled = isProviderAlive,
-            onClick = { onInstall(item) },
+            onClick = { onInstall(context, item) },
             label = { Text(text = stringResource(id = R.string.module_install)) },
             leadingIcon = {
                 Icon(

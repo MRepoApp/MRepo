@@ -1,7 +1,6 @@
 package dev.sanmer.mrepo.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -9,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
@@ -23,6 +21,7 @@ import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.service.DownloadService
+import dev.sanmer.mrepo.ui.activity.InstallActivity
 import dev.sanmer.mrepo.ui.navigation.graphs.RepositoryScreen
 import dev.sanmer.mrepo.utils.Utils
 import kotlinx.coroutines.flow.first
@@ -85,7 +84,7 @@ class ModuleViewModel @Inject constructor(
             val repo = localRepository.getRepoByUrl(it.repoUrl)
 
             val item = repo to it
-            val track =  repo to localRepository.getOnlineByIdAndUrl(
+            val track = repo to localRepository.getOnlineByIdAndUrl(
                 id = online.id,
                 repoUrl = it.repoUrl
             ).track
@@ -111,7 +110,7 @@ class ModuleViewModel @Inject constructor(
     fun downloader(
         context: Context,
         item: VersionItem,
-        onSuccess: (File) -> Unit
+        install: Boolean
     ) {
         viewModelScope.launch {
             val downloadPath = userPreferencesRepository.data
@@ -135,7 +134,12 @@ class ModuleViewModel @Inject constructor(
             val listener = object : DownloadService.IDownloadListener {
                 override fun getProgress(value: Float) {}
                 override fun onSuccess() {
-                    onSuccess(downloadPath.resolve(filename))
+                    if (install) {
+                        InstallActivity.start(
+                            context = context,
+                            file = File(downloadPath, filename)
+                        )
+                    }
                 }
 
                 override fun onFailure(e: Throwable) {
@@ -151,13 +155,8 @@ class ModuleViewModel @Inject constructor(
         }
     }
 
-    @Composable
-    fun getProgress(item: VersionItem): Float {
-        val progress by DownloadService.getProgressByKey(item.toString())
-            .collectAsStateWithLifecycle(initialValue = 0f)
-
-        return progress
-    }
+    fun getProgress(item: VersionItem) =
+        DownloadService.getProgressByKey(item.toString())
 
     companion object {
         fun putModuleId(module: OnlineModule) =
