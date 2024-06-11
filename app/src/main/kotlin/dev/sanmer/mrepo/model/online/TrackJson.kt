@@ -5,7 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class TrackJson(
-    @Json(name = "type") val typeName: String,
+    @Json(name = "type")
+    val typeName: String,
     val added: Float,
     val license: String = "",
     val homepage: String = "",
@@ -13,16 +14,18 @@ data class TrackJson(
     val support: String = "",
     val donate: String = ""
 ) {
-    val type = TrackType.valueOf(typeName)
-    val hasLicense get() = license.isNotBlank()
-            && license.uppercase() != "UNKNOWN"
-}
+    val type = Type.valueOf(typeName)
 
-enum class TrackType {
-    UNKNOWN,
-    ONLINE_JSON,
-    ONLINE_ZIP,
-    GIT,
-    LOCAL_JSON,
-    LOCAL_ZIP,
+    val hasLicense by lazy {
+        license.isNotBlank() && license.uppercase() != "UNKNOWN"
+    }
+
+    enum class Type {
+        UNKNOWN,
+        ONLINE_JSON,
+        ONLINE_ZIP,
+        GIT,
+        LOCAL_JSON,
+        LOCAL_ZIP,
+    }
 }

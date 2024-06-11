@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.model.state.RepoState
+import dev.sanmer.mrepo.viewmodel.RepositoriesViewModel.RepoState
 
 @Composable
 fun RepositoriesList(

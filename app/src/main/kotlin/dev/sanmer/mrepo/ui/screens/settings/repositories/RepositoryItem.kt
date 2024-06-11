@@ -40,12 +40,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.model.state.RepoState
 import dev.sanmer.mrepo.ui.component.LabelItem
 import dev.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import dev.sanmer.mrepo.ui.utils.expandedShape
 import dev.sanmer.mrepo.utils.extensions.shareText
 import dev.sanmer.mrepo.utils.extensions.toDateTime
+import dev.sanmer.mrepo.viewmodel.RepositoriesViewModel.RepoState
 
 @Composable
 fun RepositoryItem(
@@ -60,7 +60,6 @@ fun RepositoryItem(
     onClick = { toggle(!repo.enable) },
 ) {
     val (alpha, textDecoration) = when {
-        !repo.compatible -> 0.5f to TextDecoration.LineThrough
         !repo.enable -> 0.5f to TextDecoration.None
         else -> 1f to TextDecoration.None
     }
@@ -119,18 +118,10 @@ fun RepositoryItem(
                 )
             }
 
-            if (repo.compatible) {
-                LabelItem(
-                    text = stringResource(id = R.string.repo_modules, repo.size),
-                    upperCase = false
-                )
-            } else {
-                LabelItem(
-                    text = stringResource(id = R.string.repo_incompatible),
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.onError
-                )
-            }
+            LabelItem(
+                text = stringResource(id = R.string.repo_modules, repo.size),
+                upperCase = false
+            )
         }
 
         Row(

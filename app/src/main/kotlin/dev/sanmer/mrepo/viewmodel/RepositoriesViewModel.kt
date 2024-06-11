@@ -1,15 +1,16 @@
 package dev.sanmer.mrepo.viewmodel
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.sanmer.mrepo.database.entity.Repo.Companion.toRepo
-import dev.sanmer.mrepo.model.state.RepoState
+import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.ModulesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -85,5 +86,32 @@ class RepositoriesViewModel @Inject constructor(
         refreshing {
             modulesRepository.getRepoAll(onlyEnable = false)
         }
+    }
+
+    @Immutable
+    data class RepoState(
+        val url: String,
+        val name: String,
+        val enable: Boolean,
+        val timestamp: Float,
+        val size: Int
+    ) {
+        constructor(repo: RepoEntity) : this(
+            url = repo.url,
+            name = repo.name,
+            enable = repo.enable,
+            timestamp = repo.metadata.timestamp,
+            size = repo.metadata.size
+        )
+
+        fun toRepo() = RepoEntity(
+            url = url,
+            name = name,
+            enable = enable,
+            metadata = RepoEntity.Metadata(
+                timestamp = timestamp,
+                size = size
+            )
+        )
     }
 }

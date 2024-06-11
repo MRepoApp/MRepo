@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.local.State
 
-@Entity(tableName = "localModules")
+@Entity(tableName = "local")
 data class LocalModuleEntity(
     @PrimaryKey val id: String,
     val name: String,
@@ -40,10 +40,10 @@ data class LocalModuleEntity(
         state = State.valueOf(state),
         lastUpdated = lastUpdated
     )
-}
 
-@Entity(tableName = "localModules_updatable")
-data class LocalModuleUpdatable(
-    @PrimaryKey val id: String,
-    val updatable: Boolean
-)
+    @Entity(tableName = "local_updatable")
+    data class Updatable(
+        @PrimaryKey val id: String,
+        val updatable: Boolean
+    )
+}

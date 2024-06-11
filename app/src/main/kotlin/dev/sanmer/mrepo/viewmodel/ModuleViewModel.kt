@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import dev.sanmer.mrepo.Compat
-import dev.sanmer.mrepo.database.entity.Repo
-import dev.sanmer.mrepo.database.entity.Repo.Companion.toRepo
+import dev.sanmer.mrepo.database.entity.RepoEntity
+import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
 import dev.sanmer.mrepo.model.json.UpdateJson
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.online.OnlineModule
@@ -63,8 +63,8 @@ class ModuleViewModel @Inject constructor(
         versions.count { it.second.versionCode > localVersionCode }
     }
 
-    val versions = mutableStateListOf<Pair<Repo, VersionItem>>()
-    val tracks = mutableStateListOf<Pair<Repo, TrackJson>>()
+    val versions = mutableStateListOf<Pair<RepoEntity, VersionItem>>()
+    val tracks = mutableStateListOf<Pair<RepoEntity, TrackJson>>()
 
     init {
         Timber.d("ModuleViewModel init: $moduleId")

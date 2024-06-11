@@ -13,5 +13,7 @@ data class VersionItem(
     val zipUrl: String,
     val changelog: String
 ) {
-    val versionDisplay get() = Utils.getVersionDisplay(version, versionCode)
+    val versionDisplay by lazy {
+        Utils.getVersionDisplay(version, versionCode)
+    }
 }

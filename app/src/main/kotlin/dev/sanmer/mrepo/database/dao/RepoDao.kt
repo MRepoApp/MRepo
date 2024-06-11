@@ -5,23 +5,23 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import dev.sanmer.mrepo.database.entity.Repo
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RepoDao {
-    @Query("SELECT * FROM repos")
-    fun getAllAsFlow(): Flow<List<Repo>>
+    @Query("SELECT * FROM repo")
+    fun getAllAsFlow(): Flow<List<RepoEntity>>
 
-    @Query("SELECT * FROM repos")
-    suspend fun getAll(): List<Repo>
+    @Query("SELECT * FROM repo")
+    suspend fun getAll(): List<RepoEntity>
 
-    @Query("SELECT * FROM repos WHERE url = :url LIMIT 1")
-    suspend fun getByUrl(url: String): Repo
+    @Query("SELECT * FROM repo WHERE url = :url LIMIT 1")
+    suspend fun getByUrl(url: String): RepoEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(value: Repo)
+    suspend fun insert(value: RepoEntity)
 
     @Delete
-    suspend fun delete(value: Repo)
+    suspend fun delete(value: RepoEntity)
 }

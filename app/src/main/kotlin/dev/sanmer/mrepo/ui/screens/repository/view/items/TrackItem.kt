@@ -31,7 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.database.entity.Repo
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.model.online.TrackJson
 import dev.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import dev.sanmer.mrepo.ui.utils.expandedShape
@@ -39,7 +39,7 @@ import dev.sanmer.mrepo.utils.extensions.toDateTime
 
 @Composable
 fun TrackItem(
-    tracks: List<Pair<Repo, TrackJson>>
+    tracks: List<Pair<RepoEntity, TrackJson>>
 ) = Box {
     var open by rememberSaveable { mutableStateOf(false) }
 
@@ -86,7 +86,7 @@ fun TrackItem(
 
 @Composable
 private fun ValueItem(
-    repo: Repo,
+    repo: RepoEntity,
     track: TrackJson
 ) = Surface(
     modifier = Modifier.fillMaxWidth(),

@@ -3,7 +3,10 @@ package dev.sanmer.mrepo.database.entity
 import androidx.room.Entity
 import dev.sanmer.mrepo.model.online.VersionItem
 
-@Entity(tableName = "versions", primaryKeys = ["id", "repoUrl", "versionCode"])
+@Entity(
+    tableName = "version",
+    primaryKeys = ["id", "repoUrl", "versionCode"]
+)
 data class VersionItemEntity(
     val id: String,
     val repoUrl: String,

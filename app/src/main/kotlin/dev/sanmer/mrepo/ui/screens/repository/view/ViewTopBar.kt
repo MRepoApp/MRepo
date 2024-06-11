@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.database.entity.Repo
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.model.online.TrackJson
 import dev.sanmer.mrepo.ui.component.CollapsingTopAppBar
@@ -39,7 +39,7 @@ import dev.sanmer.mrepo.utils.extensions.openUrl
 @Composable
 fun ViewTopBar(
     online: OnlineModule,
-    tracks: List<Pair<Repo, TrackJson>>,
+    tracks: List<Pair<RepoEntity, TrackJson>>,
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
 ) = CollapsingTopAppBar(
@@ -74,7 +74,7 @@ fun ViewTopBar(
 @Composable
 private fun topBarContent(
     module: OnlineModule,
-    tracks: List<Pair<Repo, TrackJson>>
+    tracks: List<Pair<RepoEntity, TrackJson>>
 ) : @Composable ColumnScope.() -> Unit = {
     val userPreferences = LocalUserPreferences.current
     val repositoryMenu = userPreferences.repositoryMenu

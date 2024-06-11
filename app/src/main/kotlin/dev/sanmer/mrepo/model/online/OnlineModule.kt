@@ -14,7 +14,9 @@ data class OnlineModule(
     val track: TrackJson,
     val versions: List<VersionItem>,
 ) {
-    val versionDisplay get() = Utils.getVersionDisplay(version, versionCode)
+    val versionDisplay by lazy {
+        Utils.getVersionDisplay(version, versionCode)
+    }
 
     override fun equals(other: Any?): Boolean {
         return when (other) {

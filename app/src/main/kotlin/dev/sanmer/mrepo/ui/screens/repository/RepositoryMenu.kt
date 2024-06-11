@@ -31,7 +31,6 @@ import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.datastore.Option
 import dev.sanmer.mrepo.datastore.RepositoryMenuCompat
 import dev.sanmer.mrepo.model.online.OnlineModule
-import dev.sanmer.mrepo.model.state.OnlineState
 import dev.sanmer.mrepo.ui.component.MenuChip
 import dev.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import dev.sanmer.mrepo.ui.component.Segment
@@ -39,6 +38,7 @@ import dev.sanmer.mrepo.ui.component.SegmentedButtons
 import dev.sanmer.mrepo.ui.component.SegmentedButtonsDefaults
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.ui.utils.expandedShape
+import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
 
 val options = listOf(
     Option.Name to R.string.menu_sort_option_name,

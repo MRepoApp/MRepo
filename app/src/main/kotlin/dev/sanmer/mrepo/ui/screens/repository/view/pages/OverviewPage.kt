@@ -20,6 +20,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -158,9 +161,13 @@ private fun LocalItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        val versionDisplay by remember {
+            derivedStateOf { local.versionDisplay }
+        }
+
         ValueItem(
             key = stringResource(id = R.string.view_module_version),
-            value = local.versionDisplay,
+            value = versionDisplay,
             modifier = Modifier.weight(1f)
         )
 

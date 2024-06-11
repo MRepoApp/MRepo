@@ -4,32 +4,31 @@ import androidx.room.Dao
 import androidx.room.Query
 import dev.sanmer.mrepo.database.entity.OnlineModuleEntity
 import dev.sanmer.mrepo.database.entity.VersionItemEntity
-import dev.sanmer.mrepo.model.online.ModulesJson
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface JoinDao {
     @Query(
-        "SELECT m.* " +
-        "FROM onlineModules m " +
-        "JOIN repos r ON m.repoUrl = r.url " +
-        "WHERE r.enable = 1 AND r.version = :version"
+        "SELECT * " +
+        "FROM online JOIN repo " +
+        "ON online.repoUrl = repo.url " +
+        "WHERE repo.enable = 1"
     )
-    fun getOnlineAllAsFlow(version: Int = ModulesJson.CURRENT_VERSION): Flow<List<OnlineModuleEntity>>
+    fun getOnlineAllAsFlow(): Flow<List<OnlineModuleEntity>>
 
     @Query(
-        "SELECT m.* " +
-        "FROM onlineModules m " +
-        "JOIN repos r ON m.repoUrl = r.url " +
-        "WHERE m.id = :id AND m.repoUrl = :repoUrl AND r.enable = 1 AND r.version = :version LIMIT 1"
+        "SELECT online.* " +
+        "FROM online JOIN repo " +
+        "ON online.repoUrl = repo.url " +
+        "WHERE online.id = :id AND online.repoUrl = :repoUrl AND repo.enable = 1 LIMIT 1"
     )
-    suspend fun getOnlineByIdAndUrl(id: String, repoUrl: String, version: Int = ModulesJson.CURRENT_VERSION): OnlineModuleEntity
+    suspend fun getOnlineByIdAndUrl(id: String, repoUrl: String): OnlineModuleEntity
 
     @Query(
-        "SELECT v.* " +
-        "FROM versions v " +
-        "JOIN repos r ON v.repoUrl = r.url " +
-        "WHERE v.id = :id AND r.enable = 1 AND r.version = :version ORDER BY v.versionCode DESC"
+        "SELECT version.* " +
+        "FROM version JOIN repo " +
+        "ON version.repoUrl = repo.url " +
+        "WHERE version.id = :id AND repo.enable = 1 ORDER BY version.versionCode DESC"
     )
-    suspend fun getVersionById(id: String, version: Int = ModulesJson.CURRENT_VERSION): List<VersionItemEntity>
+    suspend fun getVersionById(id: String): List<VersionItemEntity>
 }

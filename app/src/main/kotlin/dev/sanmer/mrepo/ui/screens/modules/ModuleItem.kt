@@ -20,6 +20,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -56,6 +59,10 @@ fun ModuleItem(
     val userPreferences = LocalUserPreferences.current
     val menu = userPreferences.modulesMenu
 
+    val versionDisplay by remember {
+        derivedStateOf { module.versionDisplay }
+    }
+
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
@@ -83,8 +90,7 @@ fun ModuleItem(
                     )
 
                     Text(
-                        text = stringResource(id = R.string.module_version_author,
-                            module.versionDisplay, module.author),
+                        text = stringResource(id = R.string.module_version_author, versionDisplay, module.author),
                         style = MaterialTheme.typography.bodySmall,
                         textDecoration = decoration,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -92,8 +98,7 @@ fun ModuleItem(
 
                     if (module.lastUpdated != 0L && menu.showUpdatedTime) {
                         Text(
-                            text = stringResource(id = R.string.module_update_at,
-                                module.lastUpdated.toDate()),
+                            text = stringResource(id = R.string.module_update_at, module.lastUpdated.toDate()),
                             style = MaterialTheme.typography.bodySmall,
                             textDecoration = decoration,
                             color = MaterialTheme.colorScheme.outline

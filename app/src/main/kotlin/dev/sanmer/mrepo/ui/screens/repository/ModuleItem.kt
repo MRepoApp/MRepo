@@ -22,11 +22,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.model.online.OnlineModule
-import dev.sanmer.mrepo.model.state.OnlineState
 import dev.sanmer.mrepo.ui.component.LabelItem
 import dev.sanmer.mrepo.ui.component.Logo
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.utils.extensions.toDate
+import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
 
 @Composable
 fun ModuleItem(

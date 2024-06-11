@@ -5,18 +5,16 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import dev.sanmer.mrepo.model.online.ModulesJson
 
-@Entity(tableName = "repos")
-data class Repo(
+@Entity(tableName = "repo")
+data class RepoEntity(
     @PrimaryKey val url: String,
     val name: String = url,
     val enable: Boolean = true,
-    @Embedded val metadata: RepoMetadata = RepoMetadata.default()
+    @Embedded val metadata: Metadata = Metadata.default()
 ) {
-    val isCompatible get() = metadata.version == ModulesJson.CURRENT_VERSION
-
     override fun equals(other: Any?): Boolean {
         return when (other) {
-            is Repo -> url == other.url
+            is RepoEntity -> url == other.url
             else -> false
         }
     }
@@ -27,29 +25,25 @@ data class Repo(
 
     fun copy(modulesJson: ModulesJson) = copy(
         name = modulesJson.name,
-        metadata = RepoMetadata(
-            version = modulesJson.metadata.version,
+        metadata = Metadata(
             timestamp = modulesJson.metadata.timestamp,
             size = modulesJson.modules.size
         )
     )
 
-    companion object {
-        fun String.toRepo() = Repo(url = this)
+    data class Metadata(
+        val timestamp: Float,
+        val size: Int
+    ) {
+        companion object {
+            fun default() = Metadata(
+                timestamp = 0f,
+                size = 0
+            )
+        }
     }
-}
 
-@Entity(tableName = "metadata")
-data class RepoMetadata(
-    val version: Int,
-    val timestamp: Float,
-    val size: Int
-) {
     companion object {
-        fun default() = RepoMetadata(
-            version = ModulesJson.CURRENT_VERSION,
-            timestamp = 0f,
-            size = 0
-        )
+        fun String.toRepo() = RepoEntity(url = this)
     }
 }

@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.database.entity.Repo
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.ui.component.LabelItem
 import dev.sanmer.mrepo.ui.component.VersionItemBottomSheet
@@ -33,7 +33,7 @@ import dev.sanmer.mrepo.utils.extensions.toDate
 
 @Composable
 fun VersionsPage(
-    versions: List<Pair<Repo, VersionItem>>,
+    versions: List<Pair<RepoEntity, VersionItem>>,
     localVersionCode: Int,
     isProviderAlive: Boolean,
     getProgress: @Composable (VersionItem) -> Float,
@@ -71,7 +71,7 @@ fun VersionsPage(
 @Composable
 private fun VersionItem(
     item: VersionItem,
-    repo: Repo,
+    repo: RepoEntity,
     localVersionCode: Int,
     isProviderAlive: Boolean,
     onDownload: (Boolean) -> Unit

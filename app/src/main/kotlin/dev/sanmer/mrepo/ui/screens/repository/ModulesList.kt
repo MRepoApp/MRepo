@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.model.online.OnlineModule
-import dev.sanmer.mrepo.model.state.OnlineState
 import dev.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
 import dev.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import dev.sanmer.mrepo.viewmodel.ModuleViewModel
+import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
 
 @Composable
 fun ModulesList(

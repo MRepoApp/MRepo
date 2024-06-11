@@ -6,15 +6,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dev.sanmer.mrepo.database.entity.LocalModuleEntity
-import dev.sanmer.mrepo.database.entity.LocalModuleUpdatable
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LocalDao {
-    @Query("SELECT * FROM localModules")
+    @Query("SELECT * FROM local")
     fun getAllAsFlow(): Flow<List<LocalModuleEntity>>
 
-    @Query("SELECT * FROM localModules WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM local WHERE id = :id LIMIT 1")
     suspend fun getByIdOrNull(id: String): LocalModuleEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -23,18 +22,18 @@ interface LocalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(list: List<LocalModuleEntity>)
 
-    @Query("DELETE FROM localModules")
+    @Query("DELETE FROM local")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM localModules_updatable")
-    suspend fun getUpdatableTagAll(): List<LocalModuleUpdatable>
+    @Query("SELECT * FROM local_updatable")
+    suspend fun getUpdatableTagAll(): List<LocalModuleEntity.Updatable>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUpdatableTag(value: LocalModuleUpdatable)
+    suspend fun insertUpdatableTag(value: LocalModuleEntity.Updatable)
 
-    @Query("SELECT * FROM localModules_updatable WHERE id = :id LIMIT 1")
-    suspend fun hasUpdatableTagOrNull(id: String): LocalModuleUpdatable?
+    @Query("SELECT * FROM local_updatable WHERE id = :id LIMIT 1")
+    suspend fun hasUpdatableTagOrNull(id: String): LocalModuleEntity.Updatable?
 
     @Delete
-    suspend fun deleteUpdatableTag(values: List<LocalModuleUpdatable>)
+    suspend fun deleteUpdatableTag(values: List<LocalModuleEntity.Updatable>)
 }

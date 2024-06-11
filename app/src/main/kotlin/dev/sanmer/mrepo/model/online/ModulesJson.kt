@@ -5,23 +5,17 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ModulesJson(
     val name: String,
-    val metadata: ModulesJsonMetadata = ModulesJsonMetadata.default(),
+    val metadata: Metadata = Metadata.default(),
     val modules: List<OnlineModule>
 ) {
-    companion object {
-        const val CURRENT_VERSION = 1
-    }
-}
-
-@JsonClass(generateAdapter = true)
-data class ModulesJsonMetadata(
-    val version: Int,
-    val timestamp: Float
-) {
-    companion object {
-        fun default() = ModulesJsonMetadata(
-            version = 0,
-            timestamp = 0f
-        )
+    @JsonClass(generateAdapter = true)
+    data class Metadata(
+        val timestamp: Float
+    ) {
+        companion object {
+            fun default() = Metadata(
+                timestamp = 0f
+            )
+        }
     }
 }

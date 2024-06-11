@@ -11,6 +11,6 @@ interface VersionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(list: List<VersionItemEntity>)
 
-    @Query("DELETE from versions WHERE repoUrl = :repoUrl")
+    @Query("DELETE FROM version WHERE repoUrl = :repoUrl")
     suspend fun deleteByUrl(repoUrl: String)
 }

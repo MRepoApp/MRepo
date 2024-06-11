@@ -1,5 +1,6 @@
 package dev.sanmer.mrepo.viewmodel
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,11 +9,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.datastore.Option
 import dev.sanmer.mrepo.datastore.RepositoryMenuCompat
+import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.online.OnlineModule
-import dev.sanmer.mrepo.model.state.OnlineState
-import dev.sanmer.mrepo.model.state.OnlineState.Companion.createState
 import dev.sanmer.mrepo.repository.LocalRepository
-import dev.sanmer.mrepo.repository.ModulesRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,7 +25,6 @@ import javax.inject.Inject
 @HiltViewModel
 class RepositoryViewModel @Inject constructor(
     private val localRepository: LocalRepository,
-    private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
     private val repositoryMenu get() = userPreferencesRepository.data
@@ -133,6 +131,44 @@ class RepositoryViewModel @Inject constructor(
     fun setRepositoryMenu(value: RepositoryMenuCompat) {
         viewModelScope.launch {
             userPreferencesRepository.setRepositoryMenu(value)
+        }
+    }
+
+    private fun OnlineModule.createState(
+        local: LocalModule?,
+        hasUpdatableTag: Boolean,
+    ): OnlineState {
+        val installed = local != null && local.id == id
+                && local.author == author
+
+        val updatable = if (installed && hasUpdatableTag) {
+            local!!.versionCode < versionCode
+        } else {
+            false
+        }
+
+        return OnlineState(
+            installed = installed,
+            updatable = updatable,
+            hasLicense = track.license.isNotBlank(),
+            lastUpdated = versions.firstOrNull()?.timestamp ?: 1.47333965E9f
+        )
+    }
+
+    @Immutable
+    data class OnlineState(
+        val installed: Boolean,
+        val updatable: Boolean,
+        val hasLicense: Boolean,
+        val lastUpdated: Float
+    ) {
+        companion object {
+            fun example() = OnlineState(
+                installed = true,
+                updatable = false,
+                hasLicense = true,
+                lastUpdated = 1.66064064E9f
+            )
         }
     }
 }

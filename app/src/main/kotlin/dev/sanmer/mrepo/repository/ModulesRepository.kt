@@ -1,7 +1,7 @@
 package dev.sanmer.mrepo.repository
 
 import dev.sanmer.mrepo.Compat
-import dev.sanmer.mrepo.database.entity.Repo
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.network.runRequest
 import dev.sanmer.mrepo.stub.IRepoManager
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ class ModulesRepository @Inject constructor(
             getRepo(it)
         }
 
-    suspend fun getRepo(repo: Repo) = withContext(Dispatchers.IO) {
+    suspend fun getRepo(repo: RepoEntity) = withContext(Dispatchers.IO) {
         runRequest {
             val api = IRepoManager.build(repo.url)
             return@runRequest api.modules.execute()

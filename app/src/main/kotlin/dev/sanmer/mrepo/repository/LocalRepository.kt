@@ -6,9 +6,8 @@ import dev.sanmer.mrepo.database.dao.OnlineDao
 import dev.sanmer.mrepo.database.dao.RepoDao
 import dev.sanmer.mrepo.database.dao.VersionDao
 import dev.sanmer.mrepo.database.entity.LocalModuleEntity
-import dev.sanmer.mrepo.database.entity.LocalModuleUpdatable
 import dev.sanmer.mrepo.database.entity.OnlineModuleEntity
-import dev.sanmer.mrepo.database.entity.Repo
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.database.entity.VersionItemEntity
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.online.OnlineModule
@@ -49,7 +48,7 @@ class LocalRepository @Inject constructor(
 
     suspend fun insertUpdatableTag(id: String, updatable: Boolean) = withContext(Dispatchers.IO) {
         localDao.insertUpdatableTag(
-            LocalModuleUpdatable(
+            LocalModuleEntity.Updatable(
                 id = id,
                 updatable = updatable
             )
@@ -75,11 +74,11 @@ class LocalRepository @Inject constructor(
         repoDao.getByUrl(url)
     }
 
-    suspend fun insertRepo(value: Repo) = withContext(Dispatchers.IO) {
+    suspend fun insertRepo(value: RepoEntity) = withContext(Dispatchers.IO) {
         repoDao.insert(value)
     }
 
-    suspend fun deleteRepo(value: Repo) = withContext(Dispatchers.IO) {
+    suspend fun deleteRepo(value: RepoEntity) = withContext(Dispatchers.IO) {
         repoDao.delete(value)
     }
 
@@ -87,17 +86,15 @@ class LocalRepository @Inject constructor(
         val values = mutableListOf<OnlineModule>()
         list.forEach { entity ->
             val new = entity.toModule()
-
-            if (new in values) {
+            if (values.contains(new)) {
                 val old = values.first { it.id == new.id }
                 if (new.versionCode > old.versionCode) {
                     values.remove(old)
                     values.add(new.copy(versions = old.versions))
                 }
             } else {
-                values.add(
-                    new.copy(versions = getVersionById(new.id))
-                )
+                val versions = getVersionById(new.id)
+                values.add(new.copy(versions = versions))
             }
         }
 
@@ -113,6 +110,13 @@ class LocalRepository @Inject constructor(
     }
 
     suspend fun insertOnline(list: List<OnlineModule>, repoUrl: String) = withContext(Dispatchers.IO) {
+        val modules = list.map {
+            OnlineModuleEntity(
+                original = it,
+                repoUrl = repoUrl
+            )
+        }
+
         val versions = list.map { module ->
             module.versions.map {
                 VersionItemEntity(
@@ -124,14 +128,7 @@ class LocalRepository @Inject constructor(
         }.merge()
 
         versionDao.insert(versions)
-        onlineDao.insert(
-            list.map {
-                OnlineModuleEntity(
-                    original = it,
-                    repoUrl = repoUrl
-                )
-            }
-        )
+        onlineDao.insert(modules)
     }
 
     suspend fun deleteOnlineByUrl(repoUrl: String) = withContext(Dispatchers.IO) {
