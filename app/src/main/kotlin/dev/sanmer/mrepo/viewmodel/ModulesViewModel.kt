@@ -105,7 +105,7 @@ class ModulesViewModel @Inject constructor(
                 comparator(menu.option, menu.descending)
             ).let { v ->
                 if (menu.pinEnabled) {
-                    v.sortedByDescending { it.state == State.ENABLE }
+                    v.sortedByDescending { it.state == State.Enable }
                 } else {
                     v
                 }
@@ -179,7 +179,7 @@ class ModulesViewModel @Inject constructor(
     }
 
     fun createModuleOps(module: LocalModule) = when (module.state) {
-        State.ENABLE -> ModuleOps(
+        State.Enable -> ModuleOps(
             isOpsRunning = opsTasks.contains(module.id),
             toggle = {
                 opsTasks.add(module.id)
@@ -191,7 +191,7 @@ class ModulesViewModel @Inject constructor(
             }
         )
 
-        State.DISABLE -> ModuleOps(
+        State.Disable -> ModuleOps(
             isOpsRunning = opsTasks.contains(module.id),
             toggle = {
                 opsTasks.add(module.id)
@@ -203,7 +203,7 @@ class ModulesViewModel @Inject constructor(
             }
         )
 
-        State.REMOVE -> ModuleOps(
+        State.Remove -> ModuleOps(
             isOpsRunning = opsTasks.contains(module.id),
             toggle = {},
             change = {
@@ -212,7 +212,7 @@ class ModulesViewModel @Inject constructor(
             }
         )
 
-        State.UPDATE -> ModuleOps(
+        State.Update -> ModuleOps(
             isOpsRunning = opsTasks.contains(module.id),
             toggle = {},
             change = {}

@@ -84,18 +84,18 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
 
     private fun readState(moduleDir: File): State {
         moduleDir.resolve("remove").apply {
-            if (exists()) return State.REMOVE
+            if (exists()) return State.Remove
         }
 
         moduleDir.resolve("disable").apply {
-            if (exists()) return State.DISABLE
+            if (exists()) return State.Disable
         }
 
         moduleDir.resolve("update").apply {
-            if (exists()) return State.UPDATE
+            if (exists()) return State.Update
         }
 
-        return State.ENABLE
+        return State.Enable
     }
 
     private fun readLastUpdated(moduleDir: File): Long {
@@ -119,7 +119,7 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
 
     private fun Map<String, String>.toModule(
         path: String = "unknown",
-        state: State = State.ENABLE,
+        state: State = State.Enable,
         lastUpdated: Long = 0L
     ) = Module(
         id = getOrDefault("id", path),

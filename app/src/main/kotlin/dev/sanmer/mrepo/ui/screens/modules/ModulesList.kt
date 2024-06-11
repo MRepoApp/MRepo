@@ -105,24 +105,24 @@ fun ModuleItem(
         progress = progress,
         indeterminate = ops.isOpsRunning,
         alpha = when (module.state) {
-            State.DISABLE, State.REMOVE -> 0.5f
+            State.Disable, State.Remove -> 0.5f
             else -> 1f
         },
         decoration = when (module.state) {
-            State.REMOVE -> TextDecoration.LineThrough
+            State.Remove -> TextDecoration.LineThrough
             else -> TextDecoration.None
         },
         switch = {
             Switch(
-                checked = module.state == State.ENABLE,
+                checked = module.state == State.Enable,
                 onCheckedChange = ops.toggle,
                 enabled = isProviderAlive
             )
         },
         indicator = {
             when (module.state) {
-                State.REMOVE -> StateIndicator(R.drawable.trash)
-                State.UPDATE -> StateIndicator(R.drawable.device_mobile_down)
+                State.Remove -> StateIndicator(R.drawable.trash)
+                State.Update -> StateIndicator(R.drawable.device_mobile_down)
                 else -> {}
             }
         },
@@ -178,7 +178,7 @@ private fun RemoveOrRestore(
 ) {
     Icon(
         modifier = Modifier.size(20.dp),
-        painter = painterResource(id = if (module.state == State.REMOVE) {
+        painter = painterResource(id = if (module.state == State.Remove) {
             R.drawable.rotate
         } else {
             R.drawable.trash
@@ -188,7 +188,7 @@ private fun RemoveOrRestore(
 
     Spacer(modifier = Modifier.width(6.dp))
     Text(
-        text = stringResource(id = if (module.state == State.REMOVE) {
+        text = stringResource(id = if (module.state == State.Remove) {
             R.string.module_restore
         } else {
             R.string.module_remove

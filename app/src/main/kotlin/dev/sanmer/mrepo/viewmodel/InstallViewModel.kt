@@ -135,7 +135,7 @@ class InstallViewModel @Inject constructor(
     private fun insertLocal(module: LocalModule) {
         viewModelScope.launch {
             localRepository.insertLocal(
-                module.copy(state = State.UPDATE)
+                module.copy(state = State.Update)
             )
         }
     }
