@@ -10,16 +10,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.ui.theme.AppTheme
 import dev.sanmer.mrepo.utils.extensions.tmpDir
 import dev.sanmer.mrepo.viewmodel.InstallViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -85,5 +87,7 @@ class InstallActivity : ComponentActivity() {
 
             context.startActivity(intent)
         }
+
+        fun start(context: Context, file: File) = start(context, file.toUri())
     }
 }

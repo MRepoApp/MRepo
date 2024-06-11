@@ -33,14 +33,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.datastore.ModulesMenuCompat
-import dev.sanmer.mrepo.model.local.LocalModule
-import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.ui.activity.InstallActivity
 import dev.sanmer.mrepo.ui.component.Loading
 import dev.sanmer.mrepo.ui.component.PageIndicator
@@ -56,8 +53,6 @@ fun ModulesScreen(
     navController: NavController,
     viewModel: ModulesViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-
     val list by viewModel.local.collectAsStateWithLifecycle()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -67,17 +62,6 @@ fun ModulesScreen(
     val showFab by remember {
         derivedStateOf {
             isScrollingUp && !viewModel.isSearch && viewModel.isProviderAlive
-        }
-    }
-
-    val download: (LocalModule, VersionItem, Boolean) -> Unit = { module, item, install ->
-        viewModel.downloader(context, module, item) {
-            if (install) {
-                InstallActivity.start(
-                    context = context,
-                    uri = it.toUri()
-                )
-            }
         }
     }
 
@@ -138,9 +122,9 @@ fun ModulesScreen(
                 state = listState,
                 isProviderAlive = viewModel.isProviderAlive,
                 getModuleOps = viewModel::createModuleOps,
-                getVersionItem = { viewModel.getVersionItem(it) },
-                getProgress = { viewModel.getProgress(it) },
-                onDownload = download
+                getVersionItem = viewModel::getVersionItem,
+                getProgress = viewModel::getProgress,
+                onDownload = viewModel::downloader
             )
         }
     }

@@ -1,17 +1,12 @@
 package dev.sanmer.mrepo.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
@@ -26,6 +21,7 @@ import dev.sanmer.mrepo.repository.ModulesRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.service.DownloadService
 import dev.sanmer.mrepo.stub.IModuleOpsCallback
+import dev.sanmer.mrepo.ui.activity.InstallActivity
 import dev.sanmer.mrepo.utils.Utils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -62,7 +58,7 @@ class ModulesViewModel @Inject constructor(
     var isLoading by mutableStateOf(true)
         private set
 
-    private val versionItemCache = mutableStateMapOf<String, VersionItem?>()
+    private val versionItems = mutableStateMapOf<String, VersionItem?>()
 
     private val opsTasks = mutableStateListOf<String>()
     private val opsCallback = object : IModuleOpsCallback.Stub() {
@@ -101,7 +97,7 @@ class ModulesViewModel @Inject constructor(
         ) { list, menu ->
             if (list.isEmpty()) return@combine
 
-            cacheFlow.value  = list.sortedWith(
+            cacheFlow.value = list.sortedWith(
                 comparator(menu.option, menu.descending)
             ).let { v ->
                 if (menu.pinEnabled) {
@@ -219,20 +215,15 @@ class ModulesViewModel @Inject constructor(
         )
     }
 
-    @Composable
     fun getVersionItem(module: LocalModule): VersionItem? {
-        val item by remember {
-            derivedStateOf { versionItemCache[module.id] }
-        }
-
-        LaunchedEffect(module) {
-            if (!localRepository.hasUpdatableTag(module.id)) {
-                versionItemCache.remove(module.id)
-                return@LaunchedEffect
+        viewModelScope.launch {
+            if (versionItems.containsKey(module.id)) {
+                return@launch
             }
 
-            if (versionItemCache.containsKey(module.id)) {
-                return@LaunchedEffect
+            if (!localRepository.hasUpdatableTag(module.id)) {
+                versionItems.remove(module.id)
+                return@launch
             }
 
             val versionItem = if (module.updateJson.isNotBlank()) {
@@ -241,21 +232,21 @@ class ModulesViewModel @Inject constructor(
                 localRepository.getVersionById(module.id).firstOrNull()
             }
 
-            versionItemCache[module.id] = versionItem
+            versionItems[module.id] = versionItem
         }
 
-        return item
+        return versionItems[module.id]
     }
 
     fun downloader(
         context: Context,
         module: LocalModule,
         item: VersionItem,
-        onSuccess: (File) -> Unit
+        install: Boolean
     ) {
         viewModelScope.launch {
-            val downloadPath = userPreferencesRepository.data
-                .first().downloadPath
+            val userPreferences = userPreferencesRepository.data.first()
+            val downloadPath = userPreferences.downloadPath
 
             val filename = Utils.getFilename(
                 name = module.name,
@@ -275,7 +266,12 @@ class ModulesViewModel @Inject constructor(
             val listener = object : DownloadService.IDownloadListener {
                 override fun getProgress(value: Float) {}
                 override fun onSuccess() {
-                    onSuccess(downloadPath.resolve(filename))
+                    if (install) {
+                        InstallActivity.start(
+                            context = context,
+                            file = File(downloadPath, filename)
+                        )
+                    }
                 }
 
                 override fun onFailure(e: Throwable) {
@@ -291,13 +287,8 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
-    @Composable
-    fun getProgress(item: VersionItem?): Float {
-        val progress by DownloadService.getProgressByKey(item.toString())
-            .collectAsStateWithLifecycle(initialValue = 0f)
-
-        return progress
-    }
+    fun getProgress(item: VersionItem?) =
+        DownloadService.getProgressByKey(item.toString())
 
     data class ModuleOps(
         val isOpsRunning: Boolean,

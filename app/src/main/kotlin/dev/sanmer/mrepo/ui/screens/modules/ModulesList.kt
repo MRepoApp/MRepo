@@ -1,5 +1,6 @@
 package dev.sanmer.mrepo.ui.screens.modules
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,10 +23,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.local.State
@@ -33,6 +36,7 @@ import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.ui.component.VersionItemBottomSheet
 import dev.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
 import dev.sanmer.mrepo.viewmodel.ModulesViewModel
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun ModulesList(
@@ -40,9 +44,9 @@ fun ModulesList(
     state: LazyListState,
     isProviderAlive: Boolean,
     getModuleOps: (LocalModule) -> ModulesViewModel.ModuleOps,
-    getVersionItem: @Composable (LocalModule) -> VersionItem?,
-    getProgress: @Composable (VersionItem?) -> Float,
-    onDownload: (LocalModule, VersionItem, Boolean) -> Unit
+    getVersionItem: (LocalModule) -> VersionItem?,
+    getProgress: (VersionItem?) -> Flow<Float>,
+    onDownload: (Context, LocalModule, VersionItem, Boolean) -> Unit
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -78,25 +82,28 @@ fun ModuleItem(
     module: LocalModule,
     isProviderAlive: Boolean,
     getModuleOps: (LocalModule) -> ModulesViewModel.ModuleOps,
-    getVersionItem: @Composable (LocalModule) -> VersionItem?,
-    getProgress: @Composable (VersionItem?) -> Float,
-    onDownload: (LocalModule, VersionItem, Boolean) -> Unit
+    getVersionItem: (LocalModule) -> VersionItem?,
+    getProgress: (VersionItem?) -> Flow<Float>,
+    onDownload: (Context, LocalModule, VersionItem, Boolean) -> Unit
 ) {
+    val context = LocalContext.current
     val ops by remember(module.state) {
         derivedStateOf { getModuleOps(module) }
     }
+    val item by remember {
+        derivedStateOf { getVersionItem(module) }
+    }
 
-    val item  = getVersionItem(module)
-    val progress = getProgress(item)
+    val progress by getProgress(item).collectAsStateWithLifecycle(initialValue = 0f)
 
     var open by remember { mutableStateOf(false) }
     if (open && item != null) {
         VersionItemBottomSheet(
             isUpdate = true,
-            item = item,
+            item = item!!,
             isProviderAlive = isProviderAlive,
             onClose = { open = false },
-            onDownload = { onDownload(module, item, it) }
+            onDownload = { onDownload(context, module, item!!, it) }
         )
     }
 
@@ -127,9 +134,9 @@ fun ModuleItem(
             }
         },
         trailingButton = {
-            if (item != null) {
+            item?.let {
                 UpdateButton(
-                    enabled = item.versionCode > module.versionCode,
+                    enabled = it.versionCode > module.versionCode,
                     onClick = { open = true }
                 )
 
