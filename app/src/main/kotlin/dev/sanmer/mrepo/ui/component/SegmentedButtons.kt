@@ -165,7 +165,7 @@ object SegmentedButtonsDefaults {
     @Composable
     fun border(
         width: Dp = 1.dp,
-        color: Color =  MaterialTheme.colorScheme.outline
+        color: Color = MaterialTheme.colorScheme.outline
     ) = BorderStroke(
         width = width,
         color = color
@@ -197,7 +197,7 @@ object SegmentedButtonsDefaults {
                 brush = border.brush,
                 start = Offset(center.x, 0f),
                 end = Offset(center.x, size.height),
-                strokeWidth  = size.width
+                strokeWidth = size.width
             )
         }
     }

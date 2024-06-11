@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.ModulesRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sanmer.mrepo.database.entity.RepoEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -32,7 +32,7 @@ class RepositoriesViewModel @Inject constructor(
     var progress by mutableStateOf(false)
         private set
     private inline fun <T> T.refreshing(callback: T.() -> Unit) {
-        progress  = true
+        progress = true
         callback()
         progress = false
     }
