@@ -15,7 +15,7 @@ val isDevVersion get() = exec("git tag --contains HEAD").isEmpty()
 val verNameSuffix get() = if (isDevVersion) ".dev" else ""
 
 android {
-    namespace = "com.sanmer.mrepo"
+    namespace = "dev.sanmer.mrepo"
 
     defaultConfig {
         applicationId = namespace
