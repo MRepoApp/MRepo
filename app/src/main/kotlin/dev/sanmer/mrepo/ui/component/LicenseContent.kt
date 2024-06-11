@@ -19,10 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,43 +30,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.app.Const
-import dev.sanmer.mrepo.app.Event.Companion.isFailed
-import dev.sanmer.mrepo.app.Event.Companion.isLoading
-import dev.sanmer.mrepo.app.Event.Companion.isSucceeded
+import dev.sanmer.mrepo.compat.NetworkCompat.Compose.requestJson
 import dev.sanmer.mrepo.model.json.License
-import dev.sanmer.mrepo.network.compose.requestJson
-import timber.log.Timber
 
 @Composable
 fun LicenseContent(
     licenseId: String,
     modifier: Modifier = Modifier
 ) {
-    var license: License? by remember { mutableStateOf(null) }
-    var message: String? by remember { mutableStateOf(null) }
-    val event = requestJson<License>(
-        url = Const.SPDX_URL.format(licenseId),
-        onSuccess = { license = it },
-        onFailure = {
-            message = it.message
-            Timber.e(it, "getLicense: $licenseId")
-        }
-    )
+    val result = requestJson<License>(Const.SPDX_URL.format(licenseId))
 
     Crossfade(
-        targetState = event,
+        targetState = result,
         label = "LicenseContent"
     ) {
         when {
-            it.isLoading -> Loading(
+            it == null -> Loading(
                 minHeight = 200.dp
             )
-            it.isSucceeded -> ViewLicense(
-                license = checkNotNull(license),
+            it.isSuccess -> ViewLicense(
+                license = it.getOrThrow(),
                 modifier = modifier
             )
-            it.isFailed -> Failed(
-                message = message,
+            else -> Failed(
+                message = it.exceptionOrNull()?.message,
                 minHeight = 200.dp
             )
         }

@@ -225,19 +225,20 @@ class ModulesViewModel @Inject constructor(
             derivedStateOf { versionItemCache[module.id] }
         }
 
-        LaunchedEffect(key1 = module) {
+        LaunchedEffect(module) {
             if (!localRepository.hasUpdatableTag(module.id)) {
                 versionItemCache.remove(module.id)
                 return@LaunchedEffect
             }
 
-            if (versionItemCache.containsKey(module.id)) return@LaunchedEffect
+            if (versionItemCache.containsKey(module.id)) {
+                return@LaunchedEffect
+            }
 
             val versionItem = if (module.updateJson.isNotBlank()) {
-                UpdateJson.loadToVersionItem(module.updateJson)
+                UpdateJson.load(module.updateJson)
             } else {
-                localRepository.getVersionById(module.id)
-                    .firstOrNull()
+                localRepository.getVersionById(module.id).firstOrNull()
             }
 
             versionItemCache[module.id] = versionItem

@@ -12,6 +12,7 @@ import dev.sanmer.mrepo.datastore.RepositoryMenuCompat
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.repository.LocalRepository
+import dev.sanmer.mrepo.repository.ModulesRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RepositoryViewModel @Inject constructor(
     private val localRepository: LocalRepository,
+    private val modulesRepository: ModulesRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
     private val repositoryMenu get() = userPreferencesRepository.data
@@ -43,8 +45,15 @@ class RepositoryViewModel @Inject constructor(
 
     init {
         Timber.d("RepositoryViewModel init")
+        loadRepoData()
         dataObserver()
         keyObserver()
+    }
+
+    private fun loadRepoData() {
+        viewModelScope.launch {
+            modulesRepository.getRepoAll()
+        }
     }
 
     private fun dataObserver() {

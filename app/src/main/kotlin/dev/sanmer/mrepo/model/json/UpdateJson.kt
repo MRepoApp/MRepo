@@ -1,10 +1,10 @@
 package dev.sanmer.mrepo.model.json
 
-import dev.sanmer.mrepo.model.online.VersionItem
-import dev.sanmer.mrepo.network.NetworkUtils
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
+import dev.sanmer.mrepo.compat.NetworkCompat
+import dev.sanmer.mrepo.model.online.VersionItem
 
 @JsonClass(generateAdapter = true)
 data class UpdateJson(
@@ -14,11 +14,11 @@ data class UpdateJson(
     val changelog: String
 ) {
     fun toItemOrNull(timestamp: Float): VersionItem? {
-        if (!NetworkUtils.isUrl(zipUrl)) return null
+        if (!NetworkCompat.isUrl(zipUrl)) return null
 
         val changelog = when {
-            !NetworkUtils.isUrl(changelog) -> ""
-            NetworkUtils.isBlobUrl(changelog) -> ""
+            !NetworkCompat.isUrl(changelog) -> ""
+            NetworkCompat.isBlobUrl(changelog) -> ""
             else -> changelog
         }
 
@@ -32,10 +32,10 @@ data class UpdateJson(
     }
 
     companion object {
-        suspend fun loadToVersionItem(url: String): VersionItem? {
-            if (!NetworkUtils.isUrl(url)) return null
+        suspend fun load(url: String): VersionItem? {
+            if (!NetworkCompat.isUrl(url)) return null
 
-            val result = NetworkUtils.request(url) { body, headers ->
+            val result = NetworkCompat.request(url) { body, headers ->
                 val adapter = Moshi.Builder()
                     .build()
                     .adapter<UpdateJson>()
@@ -43,17 +43,17 @@ data class UpdateJson(
                 adapter.fromJson(body.string()) to headers
             }
 
-            if (result.isSuccess) {
-                val (json, headers) = result.getOrThrow()
-                if (json != null) {
-                    val t = headers.getInstant("Last-Modified")?.toEpochMilli()
-                    val timestamp = (t ?: System.currentTimeMillis()) / 1000f
-
-                    return json.toItemOrNull(timestamp)
+            return when {
+                result.isSuccess -> {
+                    val (json, headers) = result.getOrThrow()
+                    json?.let {
+                        val lastModified = headers.getInstant("Last-Modified")?.toEpochMilli()
+                        val timestamp = (lastModified ?: System.currentTimeMillis()) / 1000f
+                        json.toItemOrNull(timestamp)
+                    }
                 }
+                else -> null
             }
-
-            return null
         }
     }
 }

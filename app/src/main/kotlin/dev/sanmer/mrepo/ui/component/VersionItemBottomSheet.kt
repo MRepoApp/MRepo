@@ -1,14 +1,8 @@
 package dev.sanmer.mrepo.ui.component
 
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,10 +29,8 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -46,10 +38,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.app.Event.Companion.isLoading
-import dev.sanmer.mrepo.app.Event.Companion.isSucceeded
+import dev.sanmer.mrepo.compat.NetworkCompat.Compose.requestString
 import dev.sanmer.mrepo.model.online.VersionItem
-import dev.sanmer.mrepo.network.compose.requestString
 import dev.sanmer.mrepo.ui.utils.expandedShape
 import kotlinx.coroutines.launch
 
@@ -182,31 +172,18 @@ private fun ColumnScope.ButtonRow(
 
 @Composable
 private fun ChangelogItem(url: String) {
-    var changelog by remember { mutableStateOf("") }
-    val event = requestString(
-        url = url,
-        onSuccess = { changelog = it }
-    )
+    val result = requestString(url)
 
-    Box(
-        modifier = Modifier
-            .animateContentSize(spring(stiffness = Spring.StiffnessLow))
+    Crossfade(
+        targetState = result,
+        label = "ChangelogItem"
     ) {
-        AnimatedVisibility(
-            visible = event.isLoading,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Loading(minHeight = 200.dp)
-        }
-
-        AnimatedVisibility(
-            visible = event.isSucceeded,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            MarkdownText(
-                text = changelog,
+        when {
+            it == null -> Loading(
+                minHeight = 200.dp
+            )
+            it.isSuccess -> MarkdownText(
+                text = it.getOrThrow(),
                 color = AlertDialogDefaults.textContentColor,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier

@@ -1,11 +1,11 @@
 package dev.sanmer.mrepo
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import dev.sanmer.mrepo.app.utils.NotificationUtils
-import dev.sanmer.mrepo.network.NetworkUtils
+import dev.sanmer.mrepo.compat.NetworkCompat
 import dev.sanmer.mrepo.utils.timber.DebugTree
 import dev.sanmer.mrepo.utils.timber.ReleaseTree
-import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 @HiltAndroidApp
@@ -22,6 +22,6 @@ class App : Application() {
         super.onCreate()
 
         NotificationUtils.init(this)
-        NetworkUtils.setCacheDir(cacheDir)
+        NetworkCompat.setCacheDir(cacheDir)
     }
 }

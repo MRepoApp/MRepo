@@ -11,6 +11,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
 import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
@@ -24,7 +25,6 @@ import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.service.DownloadService
 import dev.sanmer.mrepo.ui.navigation.graphs.RepositoryScreen
 import dev.sanmer.mrepo.utils.Utils
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -95,7 +95,7 @@ class ModuleViewModel @Inject constructor(
         }
 
         if (installed) {
-            UpdateJson.loadToVersionItem(local!!.updateJson)?.let {
+            UpdateJson.load(local!!.updateJson)?.let {
                 versions.add(0, "Update Json".toRepo() to it)
             }
         }

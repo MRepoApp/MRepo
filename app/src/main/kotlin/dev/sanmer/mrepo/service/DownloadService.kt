@@ -12,16 +12,16 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.app.Const
 import dev.sanmer.mrepo.app.utils.NotificationUtils
 import dev.sanmer.mrepo.compat.BuildCompat
 import dev.sanmer.mrepo.compat.MediaStoreCompat.createDownloadUri
+import dev.sanmer.mrepo.compat.NetworkCompat
 import dev.sanmer.mrepo.compat.PermissionCompat
-import dev.sanmer.mrepo.network.NetworkUtils
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.utils.extensions.parcelable
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -122,7 +122,7 @@ class DownloadService : LifecycleService() {
             }
 
             tasks.add(item)
-            NetworkUtils.downloader(
+            NetworkCompat.download(
                 url = item.url,
                 output = output,
                 onProgress = {
