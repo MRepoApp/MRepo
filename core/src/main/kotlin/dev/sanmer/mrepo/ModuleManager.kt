@@ -10,20 +10,12 @@ import dev.sanmer.mrepo.stub.IModuleManager
 import dev.sanmer.mrepo.stub.IModuleOpsCallback
 
 class ModuleManager : IModuleManager.Stub() {
-    private val platform by lazy {
-        when {
-            "which magisk".exec().isSuccess -> Platform.Magisk
-            "which ksud".exec().isSuccess -> Platform.KernelSU
-            "which apd".exec().isSuccess -> Platform.APatch
-            else -> throw IllegalArgumentException("Unsupported platform")
-        }
-    }
-
     private val original by lazy {
-        when (platform) {
-            Platform.Magisk -> MagiskModuleManagerImpl()
-            Platform.KernelSU -> KernelSUModuleManagerImpl()
-            Platform.APatch -> APatchModuleManagerImpl()
+        when {
+            "which magisk".exec().isSuccess -> MagiskModuleManagerImpl()
+            "which ksud".exec().isSuccess -> KernelSUModuleManagerImpl()
+            "which apd".exec().isSuccess -> APatchModuleManagerImpl()
+            else -> throw IllegalArgumentException("Unsupported platform")
         }
     }
 
