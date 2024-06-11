@@ -1,0 +1,1 @@
+-keepclassmembers class dev.sanmer.mrepo.ModuleManager { public <init>(); }

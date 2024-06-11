@@ -14,6 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          submodules: 'recursive'
           fetch-depth: 0
 
       - name: Set up signing key
@@ -38,6 +39,10 @@ jobs:
         with:
           validate-wrappers: true
           gradle-home-cache-cleanup: true
+
+      - name: Build dependencies
+        working-directory: compat
+        run: ./gradlew publishToMavenLocal
 
       - name: Build with Gradle
         run: ./gradlew assembleRelease

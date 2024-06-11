@@ -1,14 +1,4 @@
--verbose
--dontpreverify
--optimizationpasses 5
--dontskipnonpubliclibraryclasses
-
--dontwarn org.conscrypt.**
--dontwarn kotlinx.serialization.**
+-repackageclasses dev.sanmer.mrepo
 
 # Keep DataStore fields
--keepclassmembers class * extends com.google.protobuf.GeneratedMessageLite* {
-   <fields>;
-}
-
--repackageclasses com.sanmer.mrepo
+-keepclassmembers class * extends com.google.protobuf.GeneratedMessageLite* { <fields>; }

@@ -14,8 +14,10 @@ import javax.inject.Singleton
 class ModulesRepository @Inject constructor(
     private val localRepository: LocalRepository,
 ) {
+    private val mm get() = Compat.moduleManager
+
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
-        with(Compat.moduleManager.modules) {
+        with(mm.modules) {
             localRepository.deleteLocalAll()
             localRepository.insertLocal(this)
             localRepository.clearUpdatableTag(map { it.id })
@@ -23,7 +25,7 @@ class ModulesRepository @Inject constructor(
     }
 
     suspend fun getLocal(id: String) = withContext(Dispatchers.IO) {
-        val module = Compat.moduleManager.getModuleById(id)
+        val module = mm.getModuleById(id)
         localRepository.insertLocal(module)
     }
 

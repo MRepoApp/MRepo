@@ -16,10 +16,11 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
+    private val mm get() = Compat.moduleManager
     val isProviderAlive get() = Compat.isAlive
 
     val version get() = Compat.get("") {
-        with(moduleManager) { "$version (${versionCode})" }
+        with(mm) { "$version (${versionCode})" }
     }
 
     init {
