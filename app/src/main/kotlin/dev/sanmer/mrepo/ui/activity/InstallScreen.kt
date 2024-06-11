@@ -47,13 +47,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.app.Event
-import dev.sanmer.mrepo.app.Event.Companion.isFinished
-import dev.sanmer.mrepo.app.Event.Companion.isLoading
-import dev.sanmer.mrepo.app.Event.Companion.isSucceeded
 import dev.sanmer.mrepo.ui.component.NavigateUpTopBar
 import dev.sanmer.mrepo.ui.utils.isScrollingUp
 import dev.sanmer.mrepo.viewmodel.InstallViewModel
+import dev.sanmer.mrepo.viewmodel.InstallViewModel.Event
+import dev.sanmer.mrepo.viewmodel.InstallViewModel.Event.Companion.isFinished
+import dev.sanmer.mrepo.viewmodel.InstallViewModel.Event.Companion.isInstalling
+import dev.sanmer.mrepo.viewmodel.InstallViewModel.Event.Companion.isSucceeded
 import kotlinx.coroutines.launch
 
 @Composable
@@ -78,7 +78,7 @@ fun InstallScreen(
     }
 
     BackHandler(
-        enabled = viewModel.event.isLoading,
+        enabled = viewModel.event.isInstalling,
         onBack = {}
     )
 
@@ -114,8 +114,7 @@ fun InstallScreen(
             .onKeyEvent {
                 when (it.key) {
                     Key.VolumeUp,
-                    Key.VolumeDown -> viewModel.event.isLoading
-
+                    Key.VolumeDown -> viewModel.event.isInstalling
                     else -> false
                 }
             }
@@ -194,8 +193,8 @@ private fun TopBar(
 ) = NavigateUpTopBar(
     title = stringResource(id = R.string.install_screen_title),
     subtitle = stringResource(id = when (event) {
-        Event.LOADING -> R.string.install_flashing
-        Event.FAILED -> R.string.install_failure
+        Event.Installing -> R.string.install_flashing
+        Event.Failed -> R.string.install_failure
         else -> R.string.install_done
     }),
     scrollBehavior = scrollBehavior,

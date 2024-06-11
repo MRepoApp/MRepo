@@ -8,17 +8,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
-import dev.sanmer.mrepo.app.Event
 import dev.sanmer.mrepo.compat.MediaStoreCompat.copyToDir
 import dev.sanmer.mrepo.compat.MediaStoreCompat.getPathForUri
+import dev.sanmer.mrepo.content.State
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
-import dev.sanmer.mrepo.utils.extensions.tmpDir
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sanmer.mrepo.content.State
 import dev.sanmer.mrepo.stub.IInstallCallback
+import dev.sanmer.mrepo.utils.extensions.tmpDir
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -35,12 +34,14 @@ class InstallViewModel @Inject constructor(
 ) : ViewModel() {
     private val mm get() = Compat.moduleManager
 
-    val logs = mutableListOf<String>()
+    private val logs = mutableListOf<String>()
     val console = mutableStateListOf<String>()
-    var event by mutableStateOf(Event.LOADING)
+    var event by mutableStateOf(Event.Installing)
         private set
 
-    val logfile get() = "Install_${LocalDateTime.now()}.log"
+    val logfile by lazy {
+        "Install_${LocalDateTime.now()}.log"
+    }
 
     init {
         Timber.d("InstallViewModel init")
@@ -63,7 +64,7 @@ class InstallViewModel @Inject constructor(
         val userPreferences = userPreferencesRepository.data.first()
 
         if (!Compat.init(userPreferences.workingMode)) {
-            event = Event.FAILED
+            event = Event.Failed
             console.add("- Service is not available")
             return@withContext
         }
@@ -94,7 +95,7 @@ class InstallViewModel @Inject constructor(
             return@withContext
         }
 
-        event = Event.FAILED
+        event = Event.Failed
         console.add("- Zip parsing failed")
     }
 
@@ -114,15 +115,16 @@ class InstallViewModel @Inject constructor(
             }
 
             override fun onSuccess(module: LocalModule?) {
-                event = Event.SUCCEEDED
+                event = Event.Succeeded
                 module?.let(::insertLocal)
 
                 if (deleteZipFile) {
                     deleteBySu(zipPath)
                 }
             }
+
             override fun onFailure() {
-                event = Event.FAILED
+                event = Event.Failed
             }
         }
 
@@ -145,6 +147,19 @@ class InstallViewModel @Inject constructor(
             Timber.e(it)
         }.onSuccess {
             Timber.d("deleteOnExit: $it")
+        }
+    }
+
+    enum class Event {
+        Installing,
+        Succeeded,
+        Failed;
+
+        companion object {
+            val Event.isInstalling get() = this == Installing
+            val Event.isSucceeded get() = this == Succeeded
+            val Event.isFailed get() = this == Failed
+            val Event.isFinished get() = isSucceeded || isFailed
         }
     }
 }
