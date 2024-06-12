@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,8 +45,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.ui.animate.slideInTopToBottom
-import dev.sanmer.mrepo.ui.animate.slideOutBottomToTop
 import dev.sanmer.mrepo.ui.component.Loading
 import dev.sanmer.mrepo.ui.component.NavigateUpTopBar
 import dev.sanmer.mrepo.ui.component.PageIndicator
@@ -78,11 +80,11 @@ fun RepositoriesScreen(
     var add by remember { mutableStateOf(false) }
     if (add) AddDialog(
         onClose = { add = false },
-        onAdd = {
-            repoUrl = it
-            viewModel.insert(it) { e ->
+        onAdd = { url ->
+            repoUrl = url
+            viewModel.insert(url) {
                 failure = true
-                message = e.stackTraceToString()
+                message = it.stackTraceToString()
             }
         }
     )
@@ -130,15 +132,18 @@ fun RepositoriesScreen(
             RepositoriesList(
                 list = list,
                 state = listSate,
-                update = viewModel::update,
+                insert = viewModel::insert,
                 delete = viewModel::delete,
-                getUpdate = viewModel::getUpdate
+                update = { repo ->
+                    viewModel.update(repo) {
+                        failure = true
+                        message = it.stackTraceToString()
+                    }
+                }
             )
 
             AnimatedVisibility(
-                visible = viewModel.progress,
-                enter = slideInTopToBottom(),
-                exit = slideOutBottomToTop()
+                visible = viewModel.progress
             ) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
@@ -199,6 +204,32 @@ private fun AddDialog(
         )
     }
 }
+
+@Composable
+private fun FailureDialog(
+    name: String,
+    message: String,
+    onClose: () -> Unit
+) = AlertDialog(
+    shape = RoundedCornerShape(20.dp),
+    onDismissRequest = onClose,
+    title = { Text(text = name) },
+    text = {
+        Text(
+            text = message,
+            modifier = Modifier
+                .requiredHeightIn(max = 280.dp)
+                .verticalScroll(rememberScrollState())
+        )
+    },
+    confirmButton = {
+        TextButton(
+            onClick = onClose
+        ) {
+            Text(text = stringResource(id = R.string.dialog_ok))
+        }
+    }
+)
 
 @Composable
 private fun TopBar(

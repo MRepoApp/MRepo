@@ -3,13 +3,10 @@ package dev.sanmer.mrepo.ui.screens.settings.repositories
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,9 +25,9 @@ import dev.sanmer.mrepo.viewmodel.RepositoriesViewModel.RepoState
 fun RepositoriesList(
     list: List<RepoState>,
     state: LazyListState,
-    update: (RepoState) -> Unit,
+    insert: (RepoState) -> Unit,
     delete: (RepoState) -> Unit,
-    getUpdate: (RepoState, (Throwable) -> Unit) -> Unit
+    update: (RepoState) -> Unit
 ) = LazyColumn(
     state = state,
     modifier = Modifier.fillMaxSize(),
@@ -43,8 +40,8 @@ fun RepositoriesList(
     ) { repo ->
         RepositoryItem(
             repo = repo,
-            toggle = { update(it) },
-            onUpdate = getUpdate,
+            toggle = { insert(it) },
+            onUpdate = update,
             onDelete = delete,
         )
     }
@@ -54,7 +51,7 @@ fun RepositoriesList(
 private fun RepositoryItem(
     repo: RepoState,
     toggle: (RepoState) -> Unit,
-    onUpdate: (RepoState, (Throwable) -> Unit) -> Unit,
+    onUpdate: (RepoState) -> Unit,
     onDelete: (RepoState) -> Unit,
 ) {
     var delete by remember { mutableStateOf(false) }
@@ -64,28 +61,10 @@ private fun RepositoryItem(
         onConfirm = { onDelete(repo) }
     )
 
-    var failure by remember { mutableStateOf(false) }
-    var message: String by remember { mutableStateOf("") }
-    if (failure) FailureDialog(
-        name = repo.name,
-        message = message,
-        onClose = {
-            failure = false
-            message = ""
-        }
-    )
-
     RepositoryItem(
         repo = repo,
-        toggle = {
-            toggle(repo.copy(enable = it))
-        },
-        update = {
-            onUpdate(repo) {
-                failure = true
-                message = it.stackTraceToString()
-            }
-        },
+        toggle = { toggle(repo.copy(enable = it)) },
+        update = { onUpdate(repo) },
         delete = { delete = true }
     )
 }
@@ -117,32 +96,6 @@ private fun DeleteDialog(
             onClick = onClose
         ) {
             Text(text = stringResource(id = R.string.dialog_cancel))
-        }
-    }
-)
-
-@Composable
-fun FailureDialog(
-    name: String,
-    message: String,
-    onClose: () -> Unit
-) = AlertDialog(
-    shape = RoundedCornerShape(20.dp),
-    onDismissRequest = onClose,
-    title = { Text(text = name) },
-    text = {
-        Text(
-            text = message,
-            modifier = Modifier
-                .requiredHeightIn(max = 280.dp)
-                .verticalScroll(rememberScrollState())
-        )
-    },
-    confirmButton = {
-        TextButton(
-            onClick = onClose
-        ) {
-            Text(text = stringResource(id = R.string.dialog_ok))
         }
     }
 )

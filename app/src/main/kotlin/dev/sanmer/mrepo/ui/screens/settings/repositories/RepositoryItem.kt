@@ -2,7 +2,6 @@ package dev.sanmer.mrepo.ui.screens.settings.repositories
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,12 +36,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.ui.component.LabelItem
-import dev.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import dev.sanmer.mrepo.ui.utils.expandedShape
 import dev.sanmer.mrepo.utils.extensions.shareText
 import dev.sanmer.mrepo.utils.extensions.toDateTime
@@ -59,11 +57,6 @@ fun RepositoryItem(
     tonalElevation = 1.dp,
     onClick = { toggle(!repo.enable) },
 ) {
-    val (alpha, textDecoration) = when {
-        !repo.enable -> 0.5f to TextDecoration.None
-        else -> 1f to TextDecoration.None
-    }
-
     Column(
         modifier = Modifier
             .padding(all = 15.dp)
@@ -72,32 +65,22 @@ fun RepositoryItem(
         Row(
             verticalAlignment = Alignment.Top
         ) {
-            Crossfade(
-                targetState = repo.enable,
-                label = "RepositoryItem"
-            ) {
-                if (it) {
-                    Icon(
-                        modifier = Modifier.size(32.dp),
-                        painter = painterResource(id = R.drawable.circle_check_filled),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
+            Icon(
+                modifier = Modifier.size(32.dp),
+                painter = painterResource(id = if (repo.enable) {
+                    R.drawable.circle_check_filled
                 } else {
-                    Icon(
-                        modifier = Modifier.size(32.dp),
-                        painter = painterResource(id = R.drawable.circle_x_filled),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
-            }
+                    R.drawable.circle_x_filled
+                }),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .alpha(alpha),
+                    .alpha(if (repo.enable) 1f else 0.5f),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
@@ -105,16 +88,13 @@ fun RepositoryItem(
                     style = MaterialTheme.typography.titleSmall
                         .copy(fontWeight = FontWeight.Bold),
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    textDecoration = textDecoration
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Text(
-                    text = stringResource(id = R.string.module_update_at,
-                        repo.timestamp.toDateTime()),
+                    text = stringResource(id = R.string.module_update_at, repo.timestamp.toDateTime()),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outline,
-                    textDecoration = textDecoration
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
 
@@ -163,7 +143,7 @@ private fun BottomSheet(
     onDismissRequest = onClose,
     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     shape = BottomSheetDefaults.expandedShape(15.dp),
-    windowInsets = WindowInsets(0)
+    windowInsets = WindowInsets.navigationBars
 ) {
     val context = LocalContext.current
 
@@ -230,8 +210,6 @@ private fun BottomSheet(
             )
         }
     }
-
-    NavigationBarsSpacer()
 }
 
 @Composable
@@ -260,7 +238,7 @@ private fun ButtonItem(
         onClick = onClick,
     ) {
         Icon(
-            modifier = Modifier.size(22.dp),
+            modifier = Modifier.size(20.dp),
             painter = painterResource(id = icon),
             contentDescription = null
         )

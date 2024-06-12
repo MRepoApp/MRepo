@@ -56,35 +56,51 @@ class RepositoriesViewModel @Inject constructor(
     fun insert(
         url: String,
         onFailure: (Throwable) -> Unit
-    ) = viewModelScope.launch {
-        refreshing {
-            modulesRepository.getRepo(url.toRepo())
-                .onFailure(onFailure)
+    ) {
+        viewModelScope.launch {
+            refreshing {
+                modulesRepository.getRepo(url.toRepo())
+                    .onFailure {
+                        Timber.e(it, "insert: $url")
+                        onFailure(it)
+                    }
+            }
         }
     }
 
-    fun update(repo: RepoState) = viewModelScope.launch {
-        localRepository.insertRepo(repo.toRepo())
+    fun insert(repo: RepoState) {
+        viewModelScope.launch {
+            localRepository.insertRepo(repo.toRepo())
+        }
     }
 
-    fun delete(repo: RepoState) = viewModelScope.launch {
-        localRepository.deleteRepo(repo.toRepo())
-        localRepository.deleteOnlineByUrl(repo.url)
+    fun delete(repo: RepoState) {
+        viewModelScope.launch {
+            localRepository.deleteRepo(repo.toRepo())
+            localRepository.deleteOnlineByUrl(repo.url)
+        }
     }
 
-    fun getUpdate(
+    fun update(
         repo: RepoState,
         onFailure: (Throwable) -> Unit
-    ) = viewModelScope.launch {
-        refreshing {
-            modulesRepository.getRepo(repo.toRepo())
-                .onFailure(onFailure)
+    ) {
+        viewModelScope.launch {
+            refreshing {
+                modulesRepository.getRepo(repo.toRepo())
+                    .onFailure {
+                        Timber.e(it, "update: ${repo.url}")
+                        onFailure(it)
+                    }
+            }
         }
     }
 
-    fun getRepoAll() = viewModelScope.launch {
-        refreshing {
-            modulesRepository.getRepoAll(onlyEnable = false)
+    fun getRepoAll() {
+        viewModelScope.launch {
+            refreshing {
+                modulesRepository.getRepoAll(onlyEnable = false)
+            }
         }
     }
 
