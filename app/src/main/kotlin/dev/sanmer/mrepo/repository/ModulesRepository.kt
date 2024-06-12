@@ -38,7 +38,7 @@ class ModulesRepository @Inject constructor(
 
     suspend fun getRepo(repo: RepoEntity) = runRequest {
         val api = IRepoManager.build(repo.url)
-        return@runRequest api.modules.execute()
+        api.modules.execute()
     }.onSuccess { modulesJson ->
         localRepository.insertRepo(repo.copy(modulesJson))
         localRepository.deleteOnlineByUrl(repo.url)

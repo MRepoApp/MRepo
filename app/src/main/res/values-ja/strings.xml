@@ -56,8 +56,6 @@
     <string name="repo_delete_dialog_desc">本当に %s を削除しますか？</string>
     <string name="view_module_update_notify">通知</string>
     <string name="view_module_update_ignore">無視</string>
-    <string name="settings_doh">DNS over HTTPS</string>
-    <string name="settings_doh_desc">一部の国での DNS ポイズニングを回避します</string>
     <string name="install_logs_saved">ログを保存しました</string>
     <string name="install_logs_save_failed">保存に失敗しました: %s</string>
     <string name="install_screen_title">インストール</string>
@@ -80,7 +78,6 @@
     <string name="settings_about">このアプリについて</string>
     <string name="repo_modules">%d モジュール</string>
     <string name="repo_update_at">最終更新: %s</string>
-    <string name="repo_incompatible">互換性なし</string>
     <string name="about_app_version">バージョン %1$s (%2$s)</string>
     <string name="module_update">更新</string>
     <string name="menu_sort_mode">並べ替え</string>

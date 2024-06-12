@@ -67,7 +67,6 @@
     <string name="menu_pin_enabled">Encabezar activados</string>
     <string name="menu_show_updated">Mostrar tiempo de actualización</string>
     <string name="settings_app_desc">Configuraciones de MRepo</string>
-    <string name="repo_incompatible">Incompatible</string>
     <string name="about_app_version">Versión %1$s (%2$s)</string>
     <string name="menu_show_icon">Mostrar icono</string>
     <string name="menu_show_license">Mostrar licencia</string>
@@ -89,8 +88,6 @@
     <string name="menu_sort_option_name">Nombre</string>
     <string name="menu_sort_option_updated">Tiempo de actualización</string>
     <string name="page_repository">Repositorio</string>
-    <string name="settings_doh">DNS sobre HTTPS</string>
-    <string name="settings_doh_desc">Solución al envenenamiento de DNS en algunos países</string>
     <string name="view_module_update_notify">Notifícame</string>
     <string name="view_module_update_ignore">Ignorar</string>
     <string name="install_screen_title">Instalación</string>

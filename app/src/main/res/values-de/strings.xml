@@ -59,7 +59,6 @@
     <string name="app_theme_dark_theme_dark">Dunkel</string>
     <string name="repo_modules">%d Module</string>
     <string name="repo_update_at">Aktualisiert am: %s</string>
-    <string name="repo_incompatible">Inkompatibel</string>
     <string name="repo_options_delete">Löschen</string>
     <string name="repo_add_dialog_title">Repository hinzufügen</string>
     <string name="repo_add_dialog_add">Hinzufügen</string>
@@ -92,8 +91,6 @@
     <string name="install_screen_title">Installation</string>
     <string name="install_logs_saved">Logs gespeichert</string>
     <string name="install_logs_save_failed">Fehler beim Speichern: %s</string>
-    <string name="settings_doh">DNS über HTTPS</string>
-    <string name="settings_doh_desc">Problemumgehung für DNS-Poisoning in einigen Ländern</string>
     <string name="view_module_update_notify">Benachrichtigen</string>
     <string name="view_module_update_ignore">Ignorieren</string>
     <string name="module_update">Update</string>

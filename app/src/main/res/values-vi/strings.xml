@@ -54,14 +54,12 @@
     <string name="settings_app_theme">Chủ đề ứng dụng</string>
     <string name="settings_delete_zip">Xóa tệp Zip</string>
     <string name="settings_delete_zip_desc">Xóa zip của mô-đun sau khi cài đặt thành công, việc này sẽ được thực thi bởi Superuser</string>
-    <string name="settings_doh">DNS qua HTTPS</string>
     <string name="app_theme_palette">Bảng chủ đề</string>
     <string name="app_theme_dark_theme">Chủ đề tối</string>
     <string name="app_theme_dark_theme_auto">Tự động</string>
     <string name="app_theme_dark_theme_light">Sáng</string>
     <string name="app_theme_dark_theme_dark">Tối</string>
     <string name="repo_modules">%d mô-đun</string>
-    <string name="repo_incompatible">Không tương thích</string>
     <string name="repo_options_update">Cập nhật</string>
     <string name="repo_options_delete">Xóa bỏ</string>
     <string name="repo_update_at">Đã cập nhật lúc: %s</string>
@@ -94,7 +92,6 @@
     <string name="view_module_provided">Được cung cấp bởi %s</string>
     <string name="modules_empty">Không tìm thấy mô-đun nào</string>
     <string name="view_module_last_updated">Cập nhật mới nhất</string>
-    <string name="settings_doh_desc">Cách giải quyết ngộ độc DNS ở một số quốc gia</string>
     <string name="install_flashing">Đang flash</string>
     <string name="setup_shizuku_desc">Yêu cầu sự cho phép của Sui hoặc Shizuku (root)</string>
     <string name="settings_download_path">Đường dẫn tải xuống</string>

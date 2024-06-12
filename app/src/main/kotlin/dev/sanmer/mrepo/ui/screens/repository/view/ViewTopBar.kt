@@ -2,7 +2,6 @@ package dev.sanmer.mrepo.ui.screens.repository.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -51,10 +50,12 @@ fun ViewTopBar(
             overflow = TextOverflow.Ellipsis
         )
     },
-    content = topBarContent(
-        module = online,
-        tracks = tracks
-    ),
+    content = {
+        TopBarContent(
+            module = online,
+            tracks = tracks
+        )
+    },
     navigationIcon = {
         IconButton(
             onClick = { navController.popBackStack() }
@@ -72,10 +73,10 @@ fun ViewTopBar(
 )
 
 @Composable
-private fun topBarContent(
+private fun TopBarContent(
     module: OnlineModule,
     tracks: List<Pair<RepoEntity, TrackJson>>
-) : @Composable ColumnScope.() -> Unit = {
+) {
     val userPreferences = LocalUserPreferences.current
     val repositoryMenu = userPreferences.repositoryMenu
 

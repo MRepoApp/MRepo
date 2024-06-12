@@ -8,10 +8,17 @@ import dev.sanmer.mrepo.model.online.ModulesJson
 @Entity(tableName = "repo")
 data class RepoEntity(
     @PrimaryKey val url: String,
-    val name: String = url,
-    val enable: Boolean = true,
-    @Embedded val metadata: Metadata = Metadata.default()
+    val name: String,
+    val enable: Boolean,
+    @Embedded val metadata: Metadata
 ) {
+    constructor(url: String) : this(
+        url = url,
+        name = url,
+        enable = true,
+        metadata = Metadata.default()
+    )
+
     override fun equals(other: Any?): Boolean {
         return when (other) {
             is RepoEntity -> url == other.url

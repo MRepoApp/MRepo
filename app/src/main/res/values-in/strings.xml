@@ -86,15 +86,12 @@
     <string name="module_new">Baru</string>
     <string name="menu_pin_installed">Pin Yang Terpasang</string>
     <string name="menu_show_license">Tampilkan Lisensi</string>
-    <string name="repo_incompatible">Tidak kompatibel</string>
     <string name="menu_sort_option_updated">Waktu Terbaru</string>
     <string name="menu_show_updated">Tampilkan Waktu Pembaruan</string>
     <string name="install_logs_saved">Log tersimpan</string>
     <string name="install_logs_save_failed">Gagal untuk menyimpan: %s</string>
     <string name="install_screen_title">Pemasangan</string>
     <string name="module_update">Perbarui</string>
-    <string name="settings_doh">DNS melalui HTTPS</string>
-    <string name="settings_doh_desc">Mengatasi masalah DNS di beberapa negara</string>
     <string name="view_module_update_ignore">Abaikan</string>
     <string name="view_module_update_notify">Beritahu</string>
     <string name="setup_root_desc">Membutuhkan izin Root yang diberikan oleh Magisk atau KernelSU</string>

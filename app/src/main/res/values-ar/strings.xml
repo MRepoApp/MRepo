@@ -82,7 +82,6 @@
     <string name="view_module_added">مضاف في : %s</string>
     <string name="view_module_last_updated">المحدثه مؤخرا</string>
     <string name="repo_update_at">محدث في: %s</string>
-    <string name="repo_incompatible">غير متوافق</string>
     <string name="menu_advanced_menu">القائمة المتقدمة</string>
     <string name="menu_sort_mode">وضع الفرز</string>
     <string name="menu_sort_option_name">الاسم</string>
@@ -98,6 +97,4 @@
     <string name="install_logs_saved">تم حفظ السجلات</string>
     <string name="view_module_update_ignore">تجاهل</string>
     <string name="module_update">تحديث</string>
-    <string name="settings_doh">DNS عبر HTTPS</string>
-    <string name="settings_doh_desc">الحل البديل لتسمم DNS في بعض الدول</string>
 </resources>

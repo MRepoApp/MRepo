@@ -68,13 +68,10 @@
     <string name="notification_name_download">下載服務</string>
     <string name="unknown_error">未知錯誤</string>
     <string name="view_module_cloud">雲端</string>
-    <string name="settings_doh">DoH (DNS over HTTPS)</string>
-    <string name="settings_doh_desc">解決某些地區的 DNS 污染問題</string>
     <string name="view_module_update_ignore">忽略</string>
     <string name="menu_show_updated">顯示更新時間</string>
     <string name="menu_show_icon">顯示圖示</string>
     <string name="module_new">新增</string>
-    <string name="repo_incompatible">不相容</string>
     <string name="install_logs_save_failed">保存失敗：%s</string>
     <string name="view_module_support">支援</string>
     <string name="view_module_type">類型：%s</string>

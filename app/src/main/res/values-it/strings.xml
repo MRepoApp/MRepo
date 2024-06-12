@@ -63,8 +63,6 @@
     <string name="settings_app_theme">Tema App</string>
     <string name="settings_download_path">Percorso per i Download</string>
     <string name="settings_delete_zip">Elimina File Zip</string>
-    <string name="settings_doh">DNS over HTTPS</string>
-    <string name="settings_doh_desc">Soluzione alternativa Avvelenamento DNS in alcune nazioni</string>
     <string name="app_theme_palette">Tavolozza dei Temi</string>
     <string name="app_theme_dark_theme">Tema scuro</string>
     <string name="app_theme_dark_theme_auto">Automatico</string>
@@ -72,7 +70,6 @@
     <string name="app_theme_dark_theme_dark">Scuro</string>
     <string name="repo_modules">%d moduli</string>
     <string name="repo_update_at">Aggiornato il : %s</string>
-    <string name="repo_incompatible">Incompatibile</string>
     <string name="repo_options_update">Aggiorna</string>
     <string name="repo_options_delete">Elimina</string>
     <string name="repo_delete_dialog_desc">Sei sicuro di voler eliminare %s?</string>

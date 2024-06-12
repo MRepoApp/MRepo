@@ -84,15 +84,12 @@
     <string name="menu_show_icon">Pokaż ikonę</string>
     <string name="menu_show_license">Pokaż licencję</string>
     <string name="repo_update_at">Zaktualizowano: %s</string>
-    <string name="repo_incompatible">Niekompatybilne</string>
     <string name="menu_advanced_menu">Menu zaawansowane</string>
     <string name="menu_sort_mode">Tryb sortowania</string>
     <string name="module_new">Nowy</string>
     <string name="install_logs_saved">Zapisano logi</string>
     <string name="install_logs_save_failed">Zapis nie powiódł się: %s</string>
     <string name="install_screen_title">Instalacja</string>
-    <string name="settings_doh_desc">Ominięcie zatruwania DNS w niektórych krajach</string>
-    <string name="settings_doh">DNS przez HTTPS</string>
     <string name="module_update">Aktualizuj</string>
     <string name="view_module_update_notify">Powiadom</string>
     <string name="view_module_update_ignore">Ignoruj</string>

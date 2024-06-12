@@ -83,22 +83,22 @@ class LocalRepository @Inject constructor(
     }
 
     fun getOnlineAllAsFlow() = joinDao.getOnlineAllAsFlow().map { list ->
-        val values = mutableListOf<OnlineModule>()
+        val modules = mutableListOf<OnlineModule>()
         list.forEach { entity ->
             val new = entity.toModule()
-            if (values.contains(new)) {
-                val old = values.first { it.id == new.id }
+            if (modules.contains(new)) {
+                val old = modules.first { it.id == new.id }
                 if (new.versionCode > old.versionCode) {
-                    values.remove(old)
-                    values.add(new.copy(versions = old.versions))
+                    modules.remove(old)
+                    modules.add(new.copy(versions = old.versions))
                 }
             } else {
                 val versions = getVersionById(new.id)
-                values.add(new.copy(versions = versions))
+                modules.add(new.copy(versions = versions))
             }
         }
 
-        return@map values
+        modules
     }
 
     suspend fun getOnlineByIdAndUrl(id: String, repoUrl: String) = withContext(Dispatchers.IO) {
