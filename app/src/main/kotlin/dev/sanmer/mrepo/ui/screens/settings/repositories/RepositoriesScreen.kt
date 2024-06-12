@@ -63,12 +63,12 @@ fun RepositoriesScreen(
     val listSate = rememberLazyListState()
     val showFab by listSate.isScrollingUp()
 
-    var repoUrl by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     var message: String by remember { mutableStateOf("") }
 
     var failure by remember { mutableStateOf(false) }
     if (failure) FailureDialog(
-        name = repoUrl,
+        name = name,
         message = message,
         onClose = {
             failure = false
@@ -80,10 +80,10 @@ fun RepositoriesScreen(
     if (add) AddDialog(
         onClose = { add = false },
         onAdd = { url ->
-            repoUrl = url
             viewModel.insert(url) {
-                failure = true
+                name = url
                 message = it.stackTraceToString()
+                failure = true
             }
         }
     )
@@ -135,8 +135,9 @@ fun RepositoriesScreen(
                 delete = viewModel::delete,
                 update = { repo ->
                     viewModel.update(repo) {
-                        failure = true
+                        name = repo.name
                         message = it.stackTraceToString()
+                        failure = true
                     }
                 }
             )
