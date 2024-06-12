@@ -67,7 +67,7 @@ class DownloadService : LifecycleService() {
     }
 
     override fun onCreate() {
-        Timber.d("DownloadService onCreate")
+        Timber.d("onCreate")
         super.onCreate()
 
         setForeground()
@@ -76,7 +76,7 @@ class DownloadService : LifecycleService() {
     override fun onDestroy() {
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
 
-        Timber.d("DownloadService onDestroy")
+        Timber.d("onDestroy")
         super.onDestroy()
     }
 
@@ -268,7 +268,7 @@ class DownloadService : LifecycleService() {
                     listeners[task] = listener
                     context.startService(intent)
                 } else {
-                    Timber.w("permissions: $state")
+                    Timber.w("notGranted: $state")
                 }
             }
         }

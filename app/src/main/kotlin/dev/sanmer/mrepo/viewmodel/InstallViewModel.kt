@@ -145,8 +145,6 @@ class InstallViewModel @Inject constructor(
             mm.deleteOnExit(zipPath)
         }.onFailure {
             Timber.e(it)
-        }.onSuccess {
-            Timber.d("deleteOnExit: $it")
         }
     }
 

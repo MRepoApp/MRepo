@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(userPreferences) {
                 if (preferences.workingMode.isSetup) {
-                    Timber.d("add default repository")
+                    Timber.d("add demo repository")
                     localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
                 }
 

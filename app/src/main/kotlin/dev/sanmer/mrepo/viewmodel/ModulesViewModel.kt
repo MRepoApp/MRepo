@@ -71,7 +71,7 @@ class ModulesViewModel @Inject constructor(
 
         override fun onFailure(id: String, msg: String?) {
             opsTasks.remove(id)
-            Timber.w("$id: $msg")
+            Timber.w("onFailure<$id>: $msg")
         }
     }
 
