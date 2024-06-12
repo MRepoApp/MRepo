@@ -37,7 +37,6 @@ import dev.sanmer.mrepo.app.Const
 import dev.sanmer.mrepo.ui.component.HtmlText
 import dev.sanmer.mrepo.ui.component.Logo
 import dev.sanmer.mrepo.ui.component.NavigateUpTopBar
-import dev.sanmer.mrepo.ui.utils.none
 import dev.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
@@ -55,7 +54,7 @@ fun AboutScreen(
                 navController = navController
             )
         },
-        contentWindowInsets = WindowInsets.none
+        contentWindowInsets = WindowInsets(0.dp)
     ) { innerPadding ->
         Column(
             modifier = Modifier

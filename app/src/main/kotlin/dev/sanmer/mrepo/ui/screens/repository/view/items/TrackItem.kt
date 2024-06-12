@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.model.online.TrackJson
-import dev.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import dev.sanmer.mrepo.ui.utils.expandedShape
 import dev.sanmer.mrepo.utils.extensions.toDateTime
 
@@ -52,7 +52,7 @@ fun TrackItem(
         ModalBottomSheet(
             onDismissRequest = { open = false },
             shape = BottomSheetDefaults.expandedShape(15.dp),
-            windowInsets = WindowInsets(0)
+            windowInsets = WindowInsets.navigationBars
         ) {
             Text(
                 text = stringResource(id = R.string.view_module_view_track),
@@ -74,10 +74,6 @@ fun TrackItem(
                         repo = repo,
                         track = track
                     )
-                }
-
-                item {
-                    NavigationBarsSpacer()
                 }
             }
         }

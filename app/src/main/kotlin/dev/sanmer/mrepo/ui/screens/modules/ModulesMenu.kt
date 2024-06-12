@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.BottomSheetDefaults
@@ -28,7 +29,6 @@ import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.datastore.ModulesMenuCompat
 import dev.sanmer.mrepo.datastore.Option
 import dev.sanmer.mrepo.ui.component.MenuChip
-import dev.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import dev.sanmer.mrepo.ui.component.Segment
 import dev.sanmer.mrepo.ui.component.SegmentedButtons
 import dev.sanmer.mrepo.ui.component.SegmentedButtonsDefaults
@@ -74,7 +74,7 @@ private fun BottomSheet(
     onDismissRequest = onClose,
     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     shape = BottomSheetDefaults.expandedShape(15.dp),
-    windowInsets = WindowInsets(0)
+    windowInsets = WindowInsets.navigationBars
 ) {
     Text(
         text = stringResource(id = R.string.menu_advanced_menu),
@@ -137,6 +137,4 @@ private fun BottomSheet(
             )
         }
     }
-
-    NavigationBarsSpacer()
 }

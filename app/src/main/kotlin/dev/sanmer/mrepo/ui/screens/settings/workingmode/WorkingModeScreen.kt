@@ -24,7 +24,6 @@ import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.datastore.WorkingMode
 import dev.sanmer.mrepo.ui.component.NavigateUpTopBar
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
-import dev.sanmer.mrepo.ui.utils.none
 import dev.sanmer.mrepo.viewmodel.SettingsViewModel
 
 @Composable
@@ -43,7 +42,7 @@ fun WorkingModeScreen(
                 navController = navController
             )
         },
-        contentWindowInsets = WindowInsets.none
+        contentWindowInsets = WindowInsets(0.dp)
     ) { innerPadding ->
         Column(
             modifier = Modifier

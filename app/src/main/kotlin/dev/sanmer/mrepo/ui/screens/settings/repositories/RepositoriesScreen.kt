@@ -50,7 +50,6 @@ import dev.sanmer.mrepo.ui.component.NavigateUpTopBar
 import dev.sanmer.mrepo.ui.component.PageIndicator
 import dev.sanmer.mrepo.ui.component.TextFieldDialog
 import dev.sanmer.mrepo.ui.utils.isScrollingUp
-import dev.sanmer.mrepo.ui.utils.none
 import dev.sanmer.mrepo.viewmodel.RepositoriesViewModel
 
 @Composable
@@ -113,7 +112,7 @@ fun RepositoriesScreen(
                 FloatingButton { add = true }
             }
         },
-        contentWindowInsets = WindowInsets.none
+        contentWindowInsets = WindowInsets(0.dp)
     ) { innerPadding ->
         Box(
             modifier = Modifier.padding(innerPadding)

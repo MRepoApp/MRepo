@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.BuildConfig
@@ -28,7 +29,6 @@ import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.ui.screens.settings.items.NonRootItem
 import dev.sanmer.mrepo.ui.screens.settings.items.RootItem
 import dev.sanmer.mrepo.ui.utils.navigateSingleTopTo
-import dev.sanmer.mrepo.ui.utils.none
 import dev.sanmer.mrepo.viewmodel.SettingsViewModel
 
 @Composable
@@ -46,7 +46,7 @@ fun SettingsScreen(
                 scrollBehavior = scrollBehavior
             )
         },
-        contentWindowInsets = WindowInsets.none
+        contentWindowInsets = WindowInsets(0.dp)
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -66,18 +66,14 @@ fun SettingsScreen(
                 icon = R.drawable.launcher_outline,
                 title = stringResource(id = R.string.settings_app),
                 desc = stringResource(id = R.string.settings_app_desc),
-                onClick = {
-                    navController.navigateSingleTopTo(SettingsScreen.App.route)
-                }
+                onClick = { navController.navigateSingleTopTo(SettingsScreen.App.route) }
             )
 
             SettingNormalItem(
                 icon = R.drawable.git_pull_request,
                 title = stringResource(id = R.string.settings_repo),
                 desc = stringResource(id = R.string.settings_repo_desc),
-                onClick = {
-                    navController.navigateSingleTopTo(SettingsScreen.Repositories.route)
-                }
+                onClick = { navController.navigateSingleTopTo(SettingsScreen.Repositories.route) }
             )
 
             SettingNormalItem(
@@ -89,18 +85,14 @@ fun SettingsScreen(
                     WorkingMode.None -> R.string.setup_non_root_title
                     else -> R.string.settings_root_none
                 }),
-                onClick = {
-                    navController.navigateSingleTopTo(SettingsScreen.WorkingMode.route)
-                }
+                onClick = { navController.navigateSingleTopTo(SettingsScreen.WorkingMode.route) }
             )
 
             SettingNormalItem(
                 icon = R.drawable.award,
                 title = stringResource(id = R.string.settings_about),
                 desc = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
-                onClick = {
-                    navController.navigateSingleTopTo(SettingsScreen.About.route)
-                }
+                onClick = { navController.navigateSingleTopTo(SettingsScreen.About.route) }
             )
         }
     }
@@ -110,8 +102,6 @@ fun SettingsScreen(
 private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior
 ) = TopAppBar(
-    title = {
-        TopAppBarTitle(text = stringResource(id = R.string.page_settings))
-    },
+    title = { TopAppBarTitle(text = stringResource(id = R.string.page_settings)) },
     scrollBehavior = scrollBehavior
 )

@@ -33,6 +33,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -44,7 +45,6 @@ import dev.sanmer.mrepo.ui.component.PageIndicator
 import dev.sanmer.mrepo.ui.component.SearchTopBar
 import dev.sanmer.mrepo.ui.component.TopAppBarTitle
 import dev.sanmer.mrepo.ui.utils.isScrollingUp
-import dev.sanmer.mrepo.ui.utils.none
 import dev.sanmer.mrepo.viewmodel.ModulesViewModel
 
 @Composable
@@ -101,7 +101,7 @@ fun ModulesScreen(
                 FloatingButton()
             }
         },
-        contentWindowInsets = WindowInsets.none
+        contentWindowInsets = WindowInsets(0.dp)
     ) { innerPadding ->
         Box(
             modifier = Modifier.padding(innerPadding)

@@ -10,13 +10,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import dev.sanmer.mrepo.ui.screens.repository.view.pages.AboutPage
 import dev.sanmer.mrepo.ui.screens.repository.view.pages.OverviewPage
 import dev.sanmer.mrepo.ui.screens.repository.view.pages.VersionsPage
-import dev.sanmer.mrepo.ui.utils.none
 import dev.sanmer.mrepo.viewmodel.ModuleViewModel
 
 @Composable
@@ -37,7 +37,7 @@ fun ViewScreen(
                 navController = navController
             )
         },
-        contentWindowInsets = WindowInsets.none
+        contentWindowInsets = WindowInsets(0.dp)
     ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)

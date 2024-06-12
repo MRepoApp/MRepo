@@ -2,6 +2,7 @@ package dev.sanmer.mrepo.ui.screens.repository.view.items
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.ui.component.LicenseContent
-import dev.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import dev.sanmer.mrepo.ui.utils.expandedShape
 
 @Composable
@@ -36,7 +36,7 @@ fun LicenseItem(
         ModalBottomSheet(
             onDismissRequest = { open = false },
             shape = BottomSheetDefaults.expandedShape(15.dp),
-            windowInsets = WindowInsets(0)
+            windowInsets = WindowInsets.navigationBars
         ) {
             Text(
                 text = stringResource(id = R.string.license_title),
@@ -50,8 +50,6 @@ fun LicenseItem(
                     .padding(top = 16.dp)
                     .padding(horizontal = 16.dp)
             )
-
-            NavigationBarsSpacer()
         }
     }
 }

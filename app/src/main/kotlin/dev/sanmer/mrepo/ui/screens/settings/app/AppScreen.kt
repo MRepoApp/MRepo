@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.R
@@ -22,7 +23,6 @@ import dev.sanmer.mrepo.ui.component.SettingSwitchItem
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.ui.screens.settings.app.items.AppThemeItem
 import dev.sanmer.mrepo.ui.screens.settings.app.items.DownloadPathItem
-import dev.sanmer.mrepo.ui.utils.none
 import dev.sanmer.mrepo.viewmodel.SettingsViewModel
 
 @Composable
@@ -41,7 +41,7 @@ fun AppScreen(
                 navController = navController
             )
         },
-        contentWindowInsets = WindowInsets.none
+        contentWindowInsets = WindowInsets(0.dp)
     ) { innerPadding ->
         Column(
             modifier = Modifier

@@ -1,6 +1,7 @@
 package dev.sanmer.mrepo.ui.screens.settings.app.items
 
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.datastore.DarkMode
-import dev.sanmer.mrepo.ui.component.NavigationBarsSpacer
 import dev.sanmer.mrepo.ui.component.SettingNormalItem
 import dev.sanmer.mrepo.ui.utils.expandedShape
 
@@ -63,7 +63,7 @@ private fun BottomSheet(
     onDismissRequest = onClose,
     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     shape = BottomSheetDefaults.expandedShape(15.dp),
-    windowInsets = WindowInsets(0)
+    windowInsets = WindowInsets.navigationBars
 ) {
     Text(
         text = stringResource(id = R.string.settings_app_theme),
@@ -83,8 +83,6 @@ private fun BottomSheet(
         darkMode = darkMode,
         onChange = onDarkModeChange
     )
-
-    NavigationBarsSpacer()
 }
 
 @Composable
