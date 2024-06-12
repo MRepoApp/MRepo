@@ -62,8 +62,7 @@ fun TrackItem(
 
             LazyColumn(
                 modifier = Modifier
-                    .padding(top = 16.dp)
-                    .padding(horizontal = 16.dp),
+                    .padding(all = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(
