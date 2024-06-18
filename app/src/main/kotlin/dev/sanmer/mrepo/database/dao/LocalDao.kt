@@ -13,6 +13,9 @@ interface LocalDao {
     @Query("SELECT * FROM local")
     fun getAllAsFlow(): Flow<List<LocalModuleEntity>>
 
+    @Query("SELECT * FROM local")
+    fun getAll(): List<LocalModuleEntity>
+
     @Query("SELECT * FROM local WHERE id = :id LIMIT 1")
     suspend fun getByIdOrNull(id: String): LocalModuleEntity?
 
@@ -21,6 +24,9 @@ interface LocalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(list: List<LocalModuleEntity>)
+
+    @Delete
+    suspend fun delete(list: List<LocalModuleEntity>)
 
     @Query("DELETE FROM local")
     suspend fun deleteAll()

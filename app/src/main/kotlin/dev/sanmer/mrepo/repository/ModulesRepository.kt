@@ -17,10 +17,14 @@ class ModulesRepository @Inject constructor(
     private val mm get() = Compat.moduleManager
 
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
-        with(mm.modules) {
-            localRepository.deleteLocalAll()
-            localRepository.insertLocal(this)
-            localRepository.clearUpdatableTag(map { it.id })
+        runCatching {
+            val modules = mm.modules
+            localRepository.insertLocal(modules)
+
+            val locals = localRepository.getLocalAll()
+            val removed = locals.filter { !modules.contains(it) }
+            localRepository.deleteLocal(removed)
+            localRepository.clearUpdatableTag(removed)
         }
     }
 

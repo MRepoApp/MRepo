@@ -30,6 +30,10 @@ class LocalRepository @Inject constructor(
         list.map { it.toModule() }
     }
 
+    suspend fun getLocalAll() = withContext(Dispatchers.IO) {
+        localDao.getAll().map { it.toModule() }
+    }
+
     suspend fun getLocalByIdOrNull(id: String) = withContext(Dispatchers.IO) {
         localDao.getByIdOrNull(id)?.toModule()
     }
@@ -40,6 +44,10 @@ class LocalRepository @Inject constructor(
 
     suspend fun insertLocal(list: List<LocalModule>) = withContext(Dispatchers.IO) {
         localDao.insert(list.map { LocalModuleEntity(it) })
+    }
+
+    suspend fun deleteLocal(list: List<LocalModule>) = withContext(Dispatchers.IO) {
+        localDao.delete(list.map { LocalModuleEntity(it) })
     }
 
     suspend fun deleteLocalAll() = withContext(Dispatchers.IO) {
@@ -59,9 +67,15 @@ class LocalRepository @Inject constructor(
         localDao.hasUpdatableTagOrNull(id)?.updatable ?: true
     }
 
-    suspend fun clearUpdatableTag(new: List<String>) = withContext(Dispatchers.IO) {
-        val removed = localDao.getUpdatableTagAll().filter { it.id !in new }
-        localDao.deleteUpdatableTag(removed)
+    suspend fun clearUpdatableTag(removed: List<LocalModule>) = withContext(Dispatchers.IO) {
+        localDao.deleteUpdatableTag(
+            removed.map {
+                LocalModuleEntity.Updatable(
+                    id = it.id,
+                    updatable = false
+                )
+            }
+        )
     }
 
     fun getRepoAllAsFlow() = repoDao.getAllAsFlow()

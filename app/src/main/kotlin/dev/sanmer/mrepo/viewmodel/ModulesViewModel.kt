@@ -95,8 +95,6 @@ class ModulesViewModel @Inject constructor(
             localRepository.getLocalAllAsFlow(),
             modulesMenu
         ) { list, menu ->
-            if (list.isEmpty()) return@combine
-
             cacheFlow.value = list.sortedWith(
                 comparator(menu.option, menu.descending)
             ).let { v ->
