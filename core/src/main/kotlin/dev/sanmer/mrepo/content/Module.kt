@@ -14,4 +14,15 @@ data class Module(
     val updateJson: String,
     val state: State,
     val lastUpdated: Long
-) : Parcelable
+) : Parcelable {
+    override fun equals(other: Any?): Boolean {
+        return when (other) {
+            is Module -> id == other.id
+            else -> false
+        }
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
