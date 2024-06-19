@@ -14,12 +14,12 @@ class ApplicationConventionPlugin : Plugin<Project> {
         apply(plugin = "org.jetbrains.kotlin.android")
 
         extensions.configure<ApplicationExtension> {
-            compileSdk = 34
-            buildToolsVersion = "34.0.0"
+            compileSdk = 35
+            buildToolsVersion = "35.0.0"
 
             defaultConfig {
                 minSdk = 26
-                targetSdk = compileSdk
+                targetSdk = 34
             }
 
             compileOptions {
