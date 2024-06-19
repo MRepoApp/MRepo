@@ -16,7 +16,6 @@ import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
 import dev.sanmer.mrepo.model.json.UpdateJson
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.online.OnlineModule
-import dev.sanmer.mrepo.model.online.TrackJson
 import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
@@ -45,9 +44,9 @@ class ModuleViewModel @Inject constructor(
         versions.firstOrNull()?.second
     }
 
-    val isEmptyAbout get() = online.track.homepage.isBlank()
-            && online.track.source.isBlank()
-            && online.track.support.isBlank()
+    val isEmptyAbout get() = online.metadata.homepage.isBlank()
+            && online.metadata.source.isBlank()
+            && online.metadata.support.isBlank()
 
     var local: LocalModule? by mutableStateOf(null)
         private set
@@ -63,7 +62,6 @@ class ModuleViewModel @Inject constructor(
     }
 
     val versions = mutableStateListOf<Pair<RepoEntity, VersionItem>>()
-    val tracks = mutableStateListOf<Pair<RepoEntity, TrackJson>>()
 
     init {
         Timber.d("ModuleViewModel init: $moduleId")
@@ -75,23 +73,16 @@ class ModuleViewModel @Inject constructor(
             online = it
         }
 
-        localRepository.getLocalByIdOrNull(moduleId)?.let {
-            local = it
-            notifyUpdates = localRepository.hasUpdatableTag(moduleId)
+        localRepository.getLocalWithUpdatableOrNull(moduleId)?.let { (module, update) ->
+            local = module
+            notifyUpdates = update
         }
 
-        localRepository.getVersionById(moduleId).forEach {
-            val repo = localRepository.getRepoByUrl(it.repoUrl)
-
-            val item = repo to it
-            val track = repo to localRepository.getOnlineByIdAndUrl(
-                id = online.id,
-                repoUrl = it.repoUrl
-            ).track
-
-            versions.add(item)
-            if (track !in tracks) tracks.add(track)
-        }
+        versions.addAll(
+            localRepository.getVersionByIdWithRepo(moduleId).flatMap { entry ->
+                entry.value.map { entry.key to it }
+            }.sortedByDescending { it.second.versionCode }
+        )
 
         if (installed) {
             UpdateJson.load(local!!.updateJson)?.let {
@@ -103,7 +94,7 @@ class ModuleViewModel @Inject constructor(
     fun setUpdatesTag(updatable: Boolean) {
         viewModelScope.launch {
             notifyUpdates = updatable
-            localRepository.insertUpdatableTag(moduleId, updatable)
+            localRepository.insertLocalUpdatable(moduleId, updatable)
         }
     }
 
@@ -113,8 +104,8 @@ class ModuleViewModel @Inject constructor(
         install: Boolean
     ) {
         viewModelScope.launch {
-            val downloadPath = userPreferencesRepository.data
-                .first().downloadPath
+            val userPreferences = userPreferencesRepository.data.first()
+            val downloadPath = userPreferences.downloadPath
 
             val filename = Utils.getFilename(
                 name = online.name,
@@ -128,7 +119,7 @@ class ModuleViewModel @Inject constructor(
                 url = item.zipUrl,
                 filename = filename,
                 title = online.name,
-                desc = item.versionDisplay
+                desc = item.version
             )
 
             val listener = object : DownloadService.IDownloadListener {

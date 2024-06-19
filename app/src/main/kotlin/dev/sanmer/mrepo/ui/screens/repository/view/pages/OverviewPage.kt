@@ -119,7 +119,7 @@ private fun CloudItem(
     ) {
         ValueItem(
             key = stringResource(id = R.string.view_module_version),
-            value = item.versionDisplay,
+            value = item.version,
             modifier = Modifier.weight(1f)
         )
 
@@ -139,7 +139,7 @@ private fun CloudItem(
 
     ValueItem(
         key = stringResource(id = R.string.view_module_last_updated),
-        value = item.timestamp.toDateTime()
+        value = item.timestamp.toDateTime().toString()
     )
 }
 
@@ -204,7 +204,7 @@ private fun LocalItem(
     if (local.lastUpdated != 0L) {
         ValueItem(
             key = stringResource(id = R.string.view_module_last_updated),
-            value = local.lastUpdated.toDateTime()
+            value = local.lastUpdated.toDateTime().toString()
         )
     }
 }

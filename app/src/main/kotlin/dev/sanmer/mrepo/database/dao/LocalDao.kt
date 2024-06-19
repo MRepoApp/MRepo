@@ -16,9 +16,6 @@ interface LocalDao {
     @Query("SELECT * FROM local")
     fun getAll(): List<LocalModuleEntity>
 
-    @Query("SELECT * FROM local WHERE id = :id LIMIT 1")
-    suspend fun getByIdOrNull(id: String): LocalModuleEntity?
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: LocalModuleEntity)
 
@@ -31,15 +28,12 @@ interface LocalDao {
     @Query("DELETE FROM local")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM local_updatable")
-    suspend fun getUpdatableTagAll(): List<LocalModuleEntity.Updatable>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUpdatableTag(value: LocalModuleEntity.Updatable)
+    suspend fun insertUpdatable(value: LocalModuleEntity.Updatable)
 
-    @Query("SELECT * FROM local_updatable WHERE id = :id LIMIT 1")
-    suspend fun hasUpdatableTagOrNull(id: String): LocalModuleEntity.Updatable?
+    @Query("SELECT * FROM local_updatable WHERE id = :id")
+    suspend fun getUpdatableOrNull(id: String): LocalModuleEntity.Updatable?
 
     @Delete
-    suspend fun deleteUpdatableTag(values: List<LocalModuleEntity.Updatable>)
+    suspend fun deleteUpdatable(values: List<LocalModuleEntity.Updatable>)
 }

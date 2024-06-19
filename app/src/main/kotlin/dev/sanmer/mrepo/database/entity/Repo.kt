@@ -2,52 +2,46 @@ package dev.sanmer.mrepo.database.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import dev.sanmer.mrepo.model.online.ModulesJson
 
-@Entity(tableName = "repo")
+@Entity(
+    tableName = "repo",
+    primaryKeys = ["url"]
+)
 data class RepoEntity(
-    @PrimaryKey val url: String,
+    val url: String,
+    val disable: Boolean,
+    val size: Int,
     val name: String,
-    val enable: Boolean,
+    val timestamp: Long,
     @Embedded val metadata: Metadata
 ) {
     constructor(url: String) : this(
         url = url,
+        disable = false,
+        size = 0,
         name = url,
-        enable = true,
-        metadata = Metadata.default()
+        timestamp = 0L,
+        metadata = Metadata()
     )
 
-    override fun equals(other: Any?): Boolean {
-        return when (other) {
-            is RepoEntity -> url == other.url
-            else -> false
-        }
-    }
-
-    override fun hashCode(): Int {
-        return url.hashCode()
-    }
-
     fun copy(modulesJson: ModulesJson) = copy(
+        size = modulesJson.modules.size,
         name = modulesJson.name,
-        metadata = Metadata(
-            timestamp = modulesJson.metadata.timestamp,
-            size = modulesJson.modules.size
-        )
+        timestamp = modulesJson.timestamp,
+        metadata = Metadata(modulesJson.metadata)
     )
 
     data class Metadata(
-        val timestamp: Float,
-        val size: Int
+        val homepage: String = "",
+        val donate: String = "",
+        val support: String = ""
     ) {
-        companion object {
-            fun default() = Metadata(
-                timestamp = 0f,
-                size = 0
-            )
-        }
+        constructor(original: ModulesJson.Metadata) : this(
+            homepage = original.homepage,
+            donate = original.donate,
+            support = original.support
+        )
     }
 
     companion object {

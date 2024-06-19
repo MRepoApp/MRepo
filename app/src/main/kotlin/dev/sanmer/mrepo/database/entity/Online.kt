@@ -1,61 +1,60 @@
 package dev.sanmer.mrepo.database.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import dev.sanmer.mrepo.model.online.OnlineModule
-import dev.sanmer.mrepo.model.online.TrackJson
+import dev.sanmer.mrepo.model.online.VersionItem
 
 @Entity(
     tableName = "online",
-    primaryKeys = ["id", "repoUrl"]
+    primaryKeys = ["id", "repo_url"]
 )
 data class OnlineModuleEntity(
-    val id: String,
+    @ColumnInfo(name = "repo_url")
     val repoUrl: String,
+    val id: String,
     val name: String,
     val version: String,
+    @ColumnInfo(name = "version_code")
     val versionCode: Int,
     val author: String,
     val description: String,
-    @Embedded val track: Track
+    @Embedded val metadata: Metadata
 ) {
     constructor(
-        original: OnlineModule,
-        repoUrl: String
+        repoUrl: String,
+        original: OnlineModule
     ) : this(
-        id = original.id,
         repoUrl = repoUrl,
+        id = original.id,
         name = original.name,
         version = original.version,
         versionCode = original.versionCode,
         author = original.author,
         description = original.description,
-        track = Track(original.track)
+        metadata = Metadata(original.metadata)
     )
 
-    fun toModule() = OnlineModule(
+    fun toJson(versions: List<VersionItem> = emptyList()) = OnlineModule(
         id = id,
         name = name,
         version = version,
         versionCode = versionCode,
         author = author,
         description = description,
-        track = track.toTrack(),
-        versions = listOf()
+        metadata = metadata.toJson(),
+        versions = versions
     )
 
-    data class Track(
-        val type: String,
-        val added: Float,
-        val license: String,
-        val homepage: String,
-        val source: String,
-        val support: String,
-        val donate: String
+    data class Metadata(
+        val license: String = "",
+        val homepage: String = "",
+        val source: String = "",
+        val donate: String = "",
+        val support: String = ""
     ) {
-        constructor(original: TrackJson) : this(
-            type = original.type.name,
-            added = original.added,
+        constructor(original: OnlineModule.Metadata) : this(
             license = original.license,
             homepage = original.homepage,
             source = original.source,
@@ -63,9 +62,7 @@ data class OnlineModuleEntity(
             donate = original.donate
         )
 
-        fun toTrack() = TrackJson(
-            typeName = type,
-            added = added,
+        fun toJson() = OnlineModule.Metadata(
             license = license,
             homepage = homepage,
             source = source,

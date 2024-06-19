@@ -16,9 +16,6 @@ interface RepoDao {
     @Query("SELECT * FROM repo")
     suspend fun getAll(): List<RepoEntity>
 
-    @Query("SELECT * FROM repo WHERE url = :url LIMIT 1")
-    suspend fun getByUrl(url: String): RepoEntity
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(value: RepoEntity)
 

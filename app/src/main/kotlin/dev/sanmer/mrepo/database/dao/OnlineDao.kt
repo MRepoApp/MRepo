@@ -14,6 +14,6 @@ interface OnlineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(list: List<OnlineModuleEntity>)
 
-    @Query("DELETE FROM online WHERE repoUrl = :repoUrl")
+    @Query("DELETE FROM online WHERE repo_url = :repoUrl")
     suspend fun deleteByUrl(repoUrl: String)
 }

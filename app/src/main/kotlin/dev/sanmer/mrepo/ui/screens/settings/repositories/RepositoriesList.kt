@@ -19,15 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.viewmodel.RepositoriesViewModel.RepoState
+import dev.sanmer.mrepo.database.entity.RepoEntity
 
 @Composable
 fun RepositoriesList(
-    list: List<RepoState>,
+    list: List<RepoEntity>,
     state: LazyListState,
-    insert: (RepoState) -> Unit,
-    delete: (RepoState) -> Unit,
-    update: (RepoState) -> Unit
+    insert: (RepoEntity) -> Unit,
+    delete: (RepoEntity) -> Unit,
+    update: (RepoEntity) -> Unit
 ) = LazyColumn(
     state = state,
     modifier = Modifier.fillMaxSize(),
@@ -49,10 +49,10 @@ fun RepositoriesList(
 
 @Composable
 private fun RepositoryItem(
-    repo: RepoState,
-    toggle: (RepoState) -> Unit,
-    onUpdate: (RepoState) -> Unit,
-    onDelete: (RepoState) -> Unit,
+    repo: RepoEntity,
+    toggle: (RepoEntity) -> Unit,
+    onUpdate: (RepoEntity) -> Unit,
+    onDelete: (RepoEntity) -> Unit,
 ) {
     var delete by remember { mutableStateOf(false) }
     if (delete) DeleteDialog(
@@ -63,7 +63,7 @@ private fun RepositoryItem(
 
     RepositoryItem(
         repo = repo,
-        toggle = { toggle(repo.copy(enable = it)) },
+        toggle = { toggle(repo.copy(disable = it)) },
         update = { onUpdate(repo) },
         delete = { delete = true }
     )
@@ -71,7 +71,7 @@ private fun RepositoryItem(
 
 @Composable
 private fun DeleteDialog(
-    repo: RepoState,
+    repo: RepoEntity,
     onClose: () -> Unit,
     onConfirm: () -> Unit
 ) = AlertDialog(

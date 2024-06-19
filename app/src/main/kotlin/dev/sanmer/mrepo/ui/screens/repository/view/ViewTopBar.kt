@@ -23,22 +23,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.model.online.OnlineModule
-import dev.sanmer.mrepo.model.online.TrackJson
 import dev.sanmer.mrepo.ui.component.CollapsingTopAppBar
 import dev.sanmer.mrepo.ui.component.CollapsingTopAppBarDefaults
 import dev.sanmer.mrepo.ui.component.Logo
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.ui.screens.repository.view.items.LicenseItem
 import dev.sanmer.mrepo.ui.screens.repository.view.items.TagItem
-import dev.sanmer.mrepo.ui.screens.repository.view.items.TrackItem
 import dev.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
 fun ViewTopBar(
     online: OnlineModule,
-    tracks: List<Pair<RepoEntity, TrackJson>>,
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
 ) = CollapsingTopAppBar(
@@ -52,8 +48,7 @@ fun ViewTopBar(
     },
     content = {
         TopBarContent(
-            module = online,
-            tracks = tracks
+            module = online
         )
     },
     navigationIcon = {
@@ -74,15 +69,14 @@ fun ViewTopBar(
 
 @Composable
 private fun TopBarContent(
-    module: OnlineModule,
-    tracks: List<Pair<RepoEntity, TrackJson>>
+    module: OnlineModule
 ) {
     val userPreferences = LocalUserPreferences.current
     val repositoryMenu = userPreferences.repositoryMenu
 
     val context = LocalContext.current
-    val hasLicense = module.track.hasLicense
-    val hasDonate = module.track.donate.isNotBlank()
+    val hasLicense = module.metadata.license.isNotBlank()
+    val hasDonate = module.metadata.donate.isNotBlank()
 
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -122,7 +116,7 @@ private fun TopBarContent(
                     append("ID = ${module.id}")
                     if (hasLicense) {
                         append(", ")
-                        append("License = ${module.track.license}")
+                        append("License = ${module.metadata.license}")
                     }
                 },
                 style = MaterialTheme.typography.labelSmall,
@@ -138,20 +132,16 @@ private fun TopBarContent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        TrackItem(
-            tracks = tracks
-        )
-
         if (hasLicense) {
             LicenseItem(
-                licenseId = module.track.license
+                licenseId = module.metadata.license
             )
         }
 
         if (hasDonate) {
             TagItem(
                 icon = R.drawable.currency_dollar,
-                onClick = { context.openUrl(module.track.donate) }
+                onClick = { context.openUrl(module.metadata.donate) }
             )
         }
     }

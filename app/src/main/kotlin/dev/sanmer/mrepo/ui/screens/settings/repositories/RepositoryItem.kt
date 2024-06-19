@@ -39,15 +39,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
+import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.ui.component.LabelItem
 import dev.sanmer.mrepo.ui.utils.expandedShape
 import dev.sanmer.mrepo.utils.extensions.shareText
 import dev.sanmer.mrepo.utils.extensions.toDateTime
-import dev.sanmer.mrepo.viewmodel.RepositoriesViewModel.RepoState
 
 @Composable
 fun RepositoryItem(
-    repo: RepoState,
+    repo: RepoEntity,
     toggle: (Boolean) -> Unit,
     update: () -> Unit,
     delete: () -> Unit,
@@ -55,7 +55,7 @@ fun RepositoryItem(
     shape = RoundedCornerShape(15.dp),
     color = MaterialTheme.colorScheme.surface,
     tonalElevation = 1.dp,
-    onClick = { toggle(!repo.enable) },
+    onClick = { toggle(!repo.disable) },
 ) {
     Column(
         modifier = Modifier
@@ -67,10 +67,10 @@ fun RepositoryItem(
         ) {
             Icon(
                 modifier = Modifier.size(32.dp),
-                painter = painterResource(id = if (repo.enable) {
-                    R.drawable.circle_check_filled
-                } else {
+                painter = painterResource(id = if (repo.disable) {
                     R.drawable.circle_x_filled
+                } else {
+                    R.drawable.circle_check_filled
                 }),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary
@@ -80,7 +80,7 @@ fun RepositoryItem(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .alpha(if (repo.enable) 1f else 0.5f),
+                    .alpha(if (repo.disable) 0.5f else 1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
@@ -136,7 +136,7 @@ fun RepositoryItem(
 
 @Composable
 private fun BottomSheet(
-    repo: RepoState,
+    repo: RepoEntity,
     onDelete: () -> Unit,
     onClose: () ->  Unit
 ) = ModalBottomSheet(
@@ -169,8 +169,7 @@ private fun BottomSheet(
                 )
 
                 Text(
-                    text = stringResource(id = R.string.module_update_at,
-                        repo.timestamp.toDateTime()),
+                    text = stringResource(id = R.string.module_update_at, repo.timestamp.toDateTime()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline
                 )

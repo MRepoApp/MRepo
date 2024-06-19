@@ -18,39 +18,46 @@ class ModulesRepository @Inject constructor(
 
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
         runCatching {
-            val modules = mm.modules
-            localRepository.insertLocal(modules)
-
+            mm.modules.toList()
+        }.onSuccess { modules ->
+            val moduleIds = modules.map { it.id }
             val locals = localRepository.getLocalAll()
-            val removed = locals.filter { !modules.contains(it) }
+            val removed = locals.filter { !moduleIds.contains(it.id) }
+
             localRepository.deleteLocal(removed)
-            localRepository.clearUpdatableTag(removed)
+            localRepository.deleteLocalUpdatable(removed)
+            localRepository.insertLocal(modules)
+        }.onFailure {
+            Timber.e(it, "getLocalAll")
         }
     }
 
     suspend fun getLocal(id: String) = withContext(Dispatchers.IO) {
-        val module = mm.getModuleById(id)
-        localRepository.insertLocal(module)
+        runCatching {
+            mm.getModuleById(id)
+        }.onSuccess {
+            localRepository.insertLocal(it)
+        }.onFailure {
+            Timber.e(it, "getLocal: $id")
+        }
     }
 
     suspend fun getRepoAll(onlyEnable: Boolean = true) =
         localRepository.getRepoAll().filter {
-            if (onlyEnable) it.enable else true
+            if (onlyEnable) !it.disable else true
         }.map {
             getRepo(it)
         }
 
-    suspend fun getRepo(repo: RepoEntity) = runRequest {
-        val api = IRepoManager.build(repo.url)
-        api.modules.execute()
-    }.onSuccess { modulesJson ->
-        localRepository.insertRepo(repo.copy(modulesJson))
-        localRepository.deleteOnlineByUrl(repo.url)
-        localRepository.insertOnline(
-            list = modulesJson.modules,
-            repoUrl = repo.url
-        )
-    }.onFailure {
-        Timber.e(it, "getRepo: ${repo.url}")
-    }
+    suspend fun getRepo(repo: RepoEntity) =
+        runRequest {
+            val api = IRepoManager.build(repo.url)
+            api.modules.execute()
+        }.onSuccess { modulesJson ->
+            localRepository.insertRepo(repo.copy(modulesJson))
+            localRepository.deleteOnlineByUrl(repo.url)
+            localRepository.insertOnline(repoUrl = repo.url, list = modulesJson.modules)
+        }.onFailure {
+            Timber.e(it, "getRepo: ${repo.url}")
+        }
 }

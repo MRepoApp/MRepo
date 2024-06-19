@@ -109,7 +109,7 @@ private fun VersionItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = item.versionDisplay,
+                    text = item.version,
                     style = MaterialTheme.typography.bodyMedium
                 )
 
@@ -130,7 +130,7 @@ private fun VersionItem(
         }
 
         Text(
-            text = item.timestamp.toDate(),
+            text = item.timestamp.toDate().toString(),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.outline
         )

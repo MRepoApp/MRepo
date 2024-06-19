@@ -11,7 +11,6 @@ import dev.sanmer.mrepo.database.entity.RepoEntity
 import dev.sanmer.mrepo.database.entity.VersionItemEntity
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.online.OnlineModule
-import dev.sanmer.mrepo.utils.extensions.merge
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -26,16 +25,30 @@ class LocalRepository @Inject constructor(
     private val localDao: LocalDao,
     private val joinDao: JoinDao
 ) {
-    fun getLocalAllAsFlow() = localDao.getAllAsFlow().map { list ->
-        list.map { it.toModule() }
+    fun getLocalAllAsFlow() = localDao.getAllAsFlow().map { data ->
+        data.map { it.toModule() }
     }
+
+    fun getLocalWithUpdatableAllAsFlow() = joinDao.getLocalWithUpdatableAll()
+        .map { entries ->
+            entries.map {
+                val module = it.key.toModule()
+                val updatable = it.value?.updatable ?: true
+                module to updatable
+            }
+        }
 
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
         localDao.getAll().map { it.toModule() }
     }
 
-    suspend fun getLocalByIdOrNull(id: String) = withContext(Dispatchers.IO) {
-        localDao.getByIdOrNull(id)?.toModule()
+    suspend fun getLocalWithUpdatableOrNull(id: String) = withContext(Dispatchers.IO) {
+        joinDao.getLocalWithUpdatable(id)
+            .map {
+                val module = it.key.toModule()
+                val updatable = it.value?.updatable ?: true
+                module to updatable
+            }.firstOrNull()
     }
 
     suspend fun insertLocal(value: LocalModule) = withContext(Dispatchers.IO) {
@@ -54,26 +67,20 @@ class LocalRepository @Inject constructor(
         localDao.deleteAll()
     }
 
-    suspend fun insertUpdatableTag(id: String, updatable: Boolean) = withContext(Dispatchers.IO) {
-        localDao.insertUpdatableTag(
-            LocalModuleEntity.Updatable(
-                id = id,
-                updatable = updatable
-            )
+    suspend fun insertLocalUpdatable(id: String, updatable: Boolean) = withContext(Dispatchers.IO) {
+        localDao.insertUpdatable(
+            LocalModuleEntity.Updatable(id = id, updatable = updatable)
         )
     }
 
-    suspend fun hasUpdatableTag(id: String) = withContext(Dispatchers.IO) {
-        localDao.hasUpdatableTagOrNull(id)?.updatable ?: true
+    suspend fun isLocalUpdatable(id: String) = withContext(Dispatchers.IO) {
+        localDao.getUpdatableOrNull(id)?.updatable ?: true
     }
 
-    suspend fun clearUpdatableTag(removed: List<LocalModule>) = withContext(Dispatchers.IO) {
-        localDao.deleteUpdatableTag(
+    suspend fun deleteLocalUpdatable(removed: List<LocalModule>) = withContext(Dispatchers.IO) {
+        localDao.deleteUpdatable(
             removed.map {
-                LocalModuleEntity.Updatable(
-                    id = it.id,
-                    updatable = false
-                )
+                LocalModuleEntity.Updatable(id = it.id, updatable = false)
             }
         )
     }
@@ -84,10 +91,6 @@ class LocalRepository @Inject constructor(
         repoDao.getAll()
     }
 
-    suspend fun getRepoByUrl(url: String) = withContext(Dispatchers.IO) {
-        repoDao.getByUrl(url)
-    }
-
     suspend fun insertRepo(value: RepoEntity) = withContext(Dispatchers.IO) {
         repoDao.insert(value)
     }
@@ -96,50 +99,27 @@ class LocalRepository @Inject constructor(
         repoDao.delete(value)
     }
 
-    fun getOnlineAllAsFlow() = joinDao.getOnlineAllAsFlow().map { list ->
-        val modules = mutableListOf<OnlineModule>()
-        list.forEach { entity ->
-            val new = entity.toModule()
-            if (modules.contains(new)) {
-                val old = modules.first { it.id == new.id }
-                if (new.versionCode > old.versionCode) {
-                    modules.remove(old)
-                    modules.add(new.copy(versions = old.versions))
-                }
-            } else {
-                val versions = getVersionById(new.id)
-                modules.add(new.copy(versions = versions))
-            }
+    fun getOnlineAllAsFlow() = joinDao.getOnlineAllAsFlow().map { entries ->
+        entries.map { (module, versions) ->
+            module.toJson(
+                versions = versions.map { it.toJson() }
+            )
         }
-
-        modules
-    }
-
-    suspend fun getOnlineByIdAndUrl(id: String, repoUrl: String) = withContext(Dispatchers.IO) {
-        joinDao.getOnlineByIdAndUrl(id, repoUrl).toModule()
     }
 
     suspend fun getOnlineAllById(id: String) = withContext(Dispatchers.IO) {
-        onlineDao.getAllById(id).map { it.toModule() }
+        onlineDao.getAllById(id).map { it.toJson() }
     }
 
-    suspend fun insertOnline(list: List<OnlineModule>, repoUrl: String) = withContext(Dispatchers.IO) {
+    suspend fun insertOnline(repoUrl: String, list: List<OnlineModule>) = withContext(Dispatchers.IO) {
         val modules = list.map {
-            OnlineModuleEntity(
-                original = it,
-                repoUrl = repoUrl
-            )
+            OnlineModuleEntity(repoUrl = repoUrl, original = it)
         }
-
         val versions = list.map { module ->
             module.versions.map {
-                VersionItemEntity(
-                    original = it,
-                    id = module.id,
-                    repoUrl = repoUrl
-                )
+                VersionItemEntity(repoUrl = repoUrl, id = module.id, original = it)
             }
-        }.merge()
+        }.flatten()
 
         versionDao.insert(versions)
         onlineDao.insert(modules)
@@ -151,6 +131,14 @@ class LocalRepository @Inject constructor(
     }
 
     suspend fun getVersionById(id: String) = withContext(Dispatchers.IO) {
-        joinDao.getVersionById(id).map { it.toItem() }
+        joinDao.getVersionWithRepo(id).values.flatMap { versions ->
+            versions.map { it.toJson() }
+        }
+    }
+
+    suspend fun getVersionByIdWithRepo(id: String) = withContext(Dispatchers.IO) {
+        joinDao.getVersionWithRepo(id).mapValues { entry ->
+            entry.value.map { it.toJson() }
+        }
     }
 }
