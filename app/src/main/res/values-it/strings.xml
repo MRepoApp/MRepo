@@ -36,9 +36,7 @@
     <string name="view_module_homepage">Homepage</string>
     <string name="view_module_source">Codice Sorgente</string>
     <string name="view_module_support">Supporto</string>
-    <string name="view_module_view_track">Visualizza Traccia</string>
     <string name="modules_empty">Nessun modulo trovato</string>
-    <string name="view_module_added">Aggiunto il: %s</string>
     <string name="module_version_author">%1$s di %2$s</string>
     <string name="module_remove">Rimuovi</string>
     <string name="module_restore">Ripristina</string>
@@ -58,7 +56,6 @@
     <string name="install_logs_save_failed">Impossibile salvare: %s</string>
     <string name="repository_empty">La repository è vuota</string>
     <string name="view_module_update_notify">Notifica</string>
-    <string name="view_module_type">Tipo: %s</string>
     <string name="settings_app_desc">Impostazioni di MRepo</string>
     <string name="settings_app_theme">Tema App</string>
     <string name="settings_download_path">Percorso per i Download</string>
@@ -74,10 +71,8 @@
     <string name="repo_options_delete">Elimina</string>
     <string name="repo_delete_dialog_desc">Sei sicuro di voler eliminare %s?</string>
     <string name="repo_add_dialog_title">Aggiungi repository</string>
-    <string name="repo_add_dialog_add">Aggiungi</string>
     <string name="about_app_version">Versione %1$s (%2$s)</string>
     <string name="about_desc2">Realizzato con il ❤️ da %s</string>
-    <string name="dialog_attention">Attenzione</string>
     <string name="dialog_cancel">Cancella</string>
     <string name="dialog_ok">OK</string>
     <string name="menu_advanced_menu">Menù Avanzato</string>

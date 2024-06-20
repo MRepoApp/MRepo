@@ -38,7 +38,7 @@ import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.utils.extensions.toDateTime
 
 @Composable
-fun OverviewPage(
+internal fun OverviewPage(
     online: OnlineModule,
     item: VersionItem?,
     local: LocalModule?,
@@ -63,6 +63,7 @@ fun OverviewPage(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
+
         Text(
             text = online.description,
             style = MaterialTheme.typography.bodyMedium,

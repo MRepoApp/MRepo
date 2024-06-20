@@ -44,8 +44,6 @@
     <string name="repo_options_delete">Supprimer</string>
     <string name="repo_delete_dialog_desc">Êtes-vous sûr de supprimer %s \?</string>
     <string name="repo_add_dialog_title">ajouter dépôt</string>
-    <string name="repo_add_dialog_add">Ajouter</string>
-    <string name="dialog_attention">Attention</string>
     <string name="dialog_cancel">Annuler</string>
     <string name="dialog_ok">OK</string>
     <string name="message_download_success">téléchargement réussi</string>
@@ -71,5 +69,4 @@
     <string name="view_module_homepage">Page d\'accueil</string>
     <string name="view_module_source">Code source</string>
     <string name="view_module_support">Support</string>
-    <string name="view_module_added">Ajouté à : %s</string>
 </resources>

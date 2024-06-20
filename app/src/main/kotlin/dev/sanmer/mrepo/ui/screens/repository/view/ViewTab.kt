@@ -19,7 +19,9 @@ import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +37,7 @@ import dev.sanmer.mrepo.ui.component.Tab
 import kotlinx.coroutines.launch
 
 @Composable
-fun ViewTab(
+internal fun ViewTab(
     state: PagerState,
     updatableSize: Int,
     hasAbout: Boolean,
@@ -43,17 +45,20 @@ fun ViewTab(
 ) {
     val scope = rememberCoroutineScope()
 
-    val pages = if (hasAbout) {
-        listOf(
-            R.string.view_module_page_overview,
-            R.string.view_module_page_versions,
-            R.string.view_module_page_about
-        )
-    } else {
-        listOf(
-            R.string.view_module_page_overview,
-            R.string.view_module_page_versions
-        )
+    val pages by remember(hasAbout) {
+        derivedStateOf {
+            when {
+                hasAbout -> listOf(
+                    R.string.view_module_page_overview,
+                    R.string.view_module_page_versions,
+                    R.string.view_module_page_about
+                )
+                else -> listOf(
+                    R.string.view_module_page_overview,
+                    R.string.view_module_page_versions
+                )
+            }
+        }
     }
 
     TabRow(

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 
 @Composable
-fun WorkingModeItem(
+internal fun WorkingModeItem(
     title: String,
     desc: String,
     modifier: Modifier = Modifier,

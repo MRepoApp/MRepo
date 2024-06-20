@@ -41,7 +41,7 @@ private val options = listOf(
 )
 
 @Composable
-fun ModulesMenu(
+internal fun ModulesMenu(
     setMenu: (ModulesMenuCompat) -> Unit
 ) {
     val userPreferences = LocalUserPreferences.current

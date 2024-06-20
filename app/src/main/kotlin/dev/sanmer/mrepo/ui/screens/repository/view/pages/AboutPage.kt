@@ -29,7 +29,7 @@ import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
-fun AboutPage(
+internal fun AboutPage(
     online: OnlineModule
 ) = Column(
     modifier = Modifier

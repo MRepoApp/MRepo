@@ -46,7 +46,7 @@ private val options = listOf(
 )
 
 @Composable
-fun RepositoryMenu(
+internal fun RepositoryMenu(
     setMenu: (RepositoryMenuCompat) -> Unit
 ) {
     val userPreferences = LocalUserPreferences.current

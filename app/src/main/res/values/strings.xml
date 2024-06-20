@@ -51,9 +51,6 @@
     <string name="view_module_homepage">Homepage</string>
     <string name="view_module_source">Source code</string>
     <string name="view_module_support">Support</string>
-    <string name="view_module_view_track">View Track</string>
-    <string name="view_module_type">Type: %s</string>
-    <string name="view_module_added">Added at: %s</string>
 
     <!-- Modules -->
     <string name="modules_empty">No modules found</string>
@@ -96,16 +93,14 @@
     <string name="repo_update_at">Updated at: %s</string>
     <string name="repo_options_update">Update</string>
     <string name="repo_options_delete">Delete</string>
-    <string name="repo_delete_dialog_desc">Are you sure to delete %s?</string>
+    <string name="repo_delete_dialog_desc">Do you want to delete this repo?</string>
     <string name="repo_add_dialog_title">Add Repository</string>
-    <string name="repo_add_dialog_add">Add</string>
     <!-- About -->
     <string name="about_app_version">Version %1$s (%2$s)</string>
-    <string name="about_desc1">Provide modules repositories and Manage modules for Magisk and KernelSU.</string>
+    <string name="about_desc1">Provide modules repositories and manage modules for Magisk and KernelSU.</string>
     <string name="about_desc2">Made with ❤️ by %s</string>
 
     <!-- Dialog -->
-    <string name="dialog_attention">Attention</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_ok">OK</string>
 

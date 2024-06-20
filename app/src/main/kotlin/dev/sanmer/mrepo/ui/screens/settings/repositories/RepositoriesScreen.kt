@@ -160,7 +160,6 @@ private fun AddDialog(
     onAdd: (String) -> Unit
 ) {
     var domain by remember { mutableStateOf("") }
-
     val onDone: () -> Unit = {
         onAdd("https://${domain}/")
         onClose()

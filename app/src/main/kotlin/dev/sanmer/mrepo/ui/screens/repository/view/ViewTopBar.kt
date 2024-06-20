@@ -14,6 +14,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,7 +36,7 @@ import dev.sanmer.mrepo.ui.screens.repository.view.items.TagItem
 import dev.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
-fun ViewTopBar(
+internal fun ViewTopBar(
     online: OnlineModule,
     scrollBehavior: TopAppBarScrollBehavior,
     navController: NavController
@@ -71,12 +74,16 @@ fun ViewTopBar(
 private fun TopBarContent(
     module: OnlineModule
 ) {
+    val context = LocalContext.current
     val userPreferences = LocalUserPreferences.current
     val repositoryMenu = userPreferences.repositoryMenu
 
-    val context = LocalContext.current
-    val hasLicense = module.metadata.license.isNotBlank()
-    val hasDonate = module.metadata.donate.isNotBlank()
+    val hasLicense by remember {
+        derivedStateOf { module.metadata.license.isNotBlank() }
+    }
+    val hasDonate by remember {
+        derivedStateOf { module.metadata.donate.isNotBlank() }
+    }
 
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),

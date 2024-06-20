@@ -44,8 +44,6 @@
     <string name="repo_options_delete">Șterge</string>
     <string name="repo_delete_dialog_desc">Sigur ștergi %s\?</string>
     <string name="repo_add_dialog_title">Adaugă un depozit</string>
-    <string name="repo_add_dialog_add">Adaugă</string>
-    <string name="dialog_attention">Atenție</string>
     <string name="dialog_cancel">Anulează</string>
     <string name="dialog_ok">OK</string>
     <string name="message_download_success">Descărcare reușită</string>
@@ -67,7 +65,6 @@
     <string name="about_app_version">Versiunea %1$s (%2$s)</string>
     <string name="about_desc1">Gestionează module și furnizează depozite de module pentru Magisk și KernelSU.</string>
     <string name="about_desc2">Făcut cu ❤️ de %s</string>
-    <string name="view_module_added">Adăugat la: %s</string>
     <string name="menu_pin_installed">Fixare instalate</string>
     <string name="menu_show_icon">Afișare pictogramă</string>
     <string name="menu_show_license">Afișare licență</string>
@@ -85,8 +82,6 @@
     <string name="view_module_source">Cod sursă</string>
     <string name="view_module_homepage">Pagina web</string>
     <string name="view_module_support">Suport</string>
-    <string name="view_module_view_track">Vizualizare cale</string>
-    <string name="view_module_type">Tip: %s</string>
     <string name="menu_sort_option_updated">Data actualizării</string>
     <string name="view_module_update_notify">Notifică</string>
     <string name="view_module_update_ignore">Ignoră</string>

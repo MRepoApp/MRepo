@@ -22,16 +22,10 @@ import dev.sanmer.mrepo.ui.component.LicenseContent
 import dev.sanmer.mrepo.ui.utils.expandedShape
 
 @Composable
-fun LicenseItem(
+internal fun LicenseItem(
     licenseId: String
 ) = Box {
     var open by rememberSaveable { mutableStateOf(false) }
-
-    TagItem(
-        icon = R.drawable.file_certificate,
-        onClick = { open = true }
-    )
-
     if (open) {
         ModalBottomSheet(
             onDismissRequest = { open = false },
@@ -52,4 +46,9 @@ fun LicenseItem(
             )
         }
     }
+
+    TagItem(
+        icon = R.drawable.file_certificate,
+        onClick = { open = true }
+    )
 }

@@ -42,7 +42,7 @@ import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.utils.extensions.toDate
 
 @Composable
-fun ModuleItem(
+internal fun ModuleItem(
     module: LocalModule,
     progress: Float,
     indeterminate: Boolean = false,

@@ -41,8 +41,6 @@
     <string name="repo_options_delete">حذف</string>
     <string name="repo_modules">"%d  إضافات"</string>
     <string name="repo_add_dialog_title">اضافة مستودع</string>
-    <string name="repo_add_dialog_add">اضافة</string>
-    <string name="dialog_attention">ملاحظة</string>
     <string name="dialog_cancel">إلغاء</string>
     <string name="dialog_ok">حسناً</string>
     <string name="message_download_success">تم التنزيل بنجاح</string>
@@ -77,9 +75,6 @@
     <string name="view_module_homepage">الصفحة الرئيسية</string>
     <string name="view_module_source">الرمز المصدري</string>
     <string name="view_module_support">الدعم</string>
-    <string name="view_module_view_track">عرض المسار</string>
-    <string name="view_module_type">النوع: %s</string>
-    <string name="view_module_added">مضاف في : %s</string>
     <string name="view_module_last_updated">المحدثه مؤخرا</string>
     <string name="repo_update_at">محدث في: %s</string>
     <string name="menu_advanced_menu">القائمة المتقدمة</string>

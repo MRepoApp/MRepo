@@ -44,8 +44,6 @@
     <string name="repo_options_delete">Eliminar</string>
     <string name="repo_delete_dialog_desc">¿Estás seguro de eliminarlo %s\?</string>
     <string name="repo_add_dialog_title">Agregar repositorio</string>
-    <string name="repo_add_dialog_add">Agregar</string>
-    <string name="dialog_attention">Atención</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_ok">OK</string>
     <string name="message_download_success">Descarga con éxito</string>
@@ -58,9 +56,6 @@
     <string name="view_module_homepage">Página de inicio</string>
     <string name="view_module_source">Código fuente</string>
     <string name="view_module_support">Soporte</string>
-    <string name="view_module_view_track">Ver origen</string>
-    <string name="view_module_type">Tipo: %s</string>
-    <string name="view_module_added">Añadido: %s</string>
     <string name="settings_about">Acerca de…</string>
     <string name="about_desc2">Hecho con ❤️ por %s</string>
     <string name="menu_descending">Descendente</string>

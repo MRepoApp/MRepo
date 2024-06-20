@@ -41,7 +41,7 @@ import dev.sanmer.mrepo.utils.extensions.shareText
 import dev.sanmer.mrepo.utils.extensions.toDateTime
 
 @Composable
-fun RepositoryItem(
+internal fun RepositoryItem(
     repo: RepoEntity,
     toggle: (Boolean) -> Unit,
     onUpdate: () -> Unit,

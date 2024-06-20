@@ -36,7 +36,7 @@ import dev.sanmer.mrepo.utils.extensions.toDate
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun VersionsPage(
+internal fun VersionsPage(
     versions: List<Pair<RepoEntity, VersionItem>>,
     localVersionCode: Int,
     isProviderAlive: Boolean,

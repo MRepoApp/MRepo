@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 
 @Composable
-fun NonRootItem() = Surface(
+internal fun NonRootItem() = Surface(
     modifier = Modifier.padding(all = 18.dp),
     shape = RoundedCornerShape(15.dp),
     color = MaterialTheme.colorScheme.secondaryContainer

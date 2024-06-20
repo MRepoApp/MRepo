@@ -22,7 +22,7 @@ import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.database.entity.online.RepoEntity
 
 @Composable
-fun RepositoriesList(
+internal fun RepositoriesList(
     list: List<RepoEntity>,
     state: LazyListState,
     insert: (RepoEntity) -> Unit,
