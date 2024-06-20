@@ -40,7 +40,7 @@ fun RepositoriesList(
     ) { repo ->
         RepositoryItem(
             repo = repo,
-            toggle = { insert(it) },
+            onToggle = { insert(it) },
             onUpdate = update,
             onDelete = delete,
         )
@@ -50,7 +50,7 @@ fun RepositoriesList(
 @Composable
 private fun RepositoryItem(
     repo: RepoEntity,
-    toggle: (RepoEntity) -> Unit,
+    onToggle: (RepoEntity) -> Unit,
     onUpdate: (RepoEntity) -> Unit,
     onDelete: (RepoEntity) -> Unit,
 ) {
@@ -63,9 +63,9 @@ private fun RepositoryItem(
 
     RepositoryItem(
         repo = repo,
-        toggle = { toggle(repo.copy(disable = it)) },
-        update = { onUpdate(repo) },
-        delete = { delete = true }
+        toggle = { onToggle(repo.copy(disable = it)) },
+        onUpdate = { onUpdate(repo) },
+        onDelete = { delete = true }
     )
 }
 
@@ -77,10 +77,8 @@ private fun DeleteDialog(
 ) = AlertDialog(
     shape = RoundedCornerShape(20.dp),
     onDismissRequest = onClose,
-    title = { Text(text = stringResource(id = R.string.dialog_attention)) },
-    text = {
-        Text(text = stringResource(id = R.string.repo_delete_dialog_desc, repo.name))
-    },
+    title = { Text(text = repo.name) },
+    text = { Text(text = stringResource(id = R.string.repo_delete_dialog_desc)) },
     confirmButton = {
         TextButton(
             onClick = {
@@ -88,7 +86,7 @@ private fun DeleteDialog(
                 onClose()
             }
         ) {
-            Text(text = stringResource(id = R.string.repo_options_delete))
+            Text(text = stringResource(id = R.string.dialog_ok))
         }
     },
     dismissButton = {

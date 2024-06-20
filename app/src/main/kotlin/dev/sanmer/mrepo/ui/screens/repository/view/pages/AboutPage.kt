@@ -39,7 +39,7 @@ fun AboutPage(
     ValueItem(
         key = stringResource(id = R.string.view_module_homepage),
         value = online.metadata.homepage,
-        icon = R.drawable.world_www
+        icon = R.drawable.home
     )
 
     ValueItem(

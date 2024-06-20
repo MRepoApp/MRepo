@@ -175,7 +175,7 @@ private fun AddDialog(
                 onClick = onDone,
                 enabled = domain.isNotBlank()
             ) {
-                Text(text = stringResource(id = R.string.repo_add_dialog_add))
+                Text(text = stringResource(id = R.string.dialog_ok))
             }
         },
         dismissButton = {
