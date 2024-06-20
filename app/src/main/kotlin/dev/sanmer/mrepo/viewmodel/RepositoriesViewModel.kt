@@ -6,8 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sanmer.mrepo.database.entity.RepoEntity
-import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
+import dev.sanmer.mrepo.database.entity.online.RepoEntity
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.ModulesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,7 +56,7 @@ class RepositoriesViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             refreshing {
-                modulesRepository.getRepo(url.toRepo())
+                modulesRepository.getRepo(url)
                     .onFailure {
                         Timber.e(it, "insert: $url")
                         onFailure(it)
@@ -75,7 +74,6 @@ class RepositoriesViewModel @Inject constructor(
     fun delete(repo: RepoEntity) {
         viewModelScope.launch {
             localRepository.deleteRepo(repo)
-            localRepository.deleteOnlineByUrl(repo.url)
         }
     }
 

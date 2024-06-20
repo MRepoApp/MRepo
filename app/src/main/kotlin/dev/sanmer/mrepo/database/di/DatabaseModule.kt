@@ -1,17 +1,12 @@
 package dev.sanmer.mrepo.database.di
 
 import android.content.Context
-import dev.sanmer.mrepo.database.AppDatabase
-import dev.sanmer.mrepo.database.dao.JoinDao
-import dev.sanmer.mrepo.database.dao.LocalDao
-import dev.sanmer.mrepo.database.dao.OnlineDao
-import dev.sanmer.mrepo.database.dao.RepoDao
-import dev.sanmer.mrepo.database.dao.VersionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.sanmer.mrepo.database.AppDatabase
 import javax.inject.Singleton
 
 @Module
@@ -21,25 +16,13 @@ object DatabaseModule {
     @Singleton
     fun providesAppDatabase(
         @ApplicationContext context: Context
-    ): AppDatabase = AppDatabase.build(context)
+    ) = AppDatabase.build(context)
 
     @Provides
     @Singleton
-    fun providesRepoDao(db: AppDatabase): RepoDao = db.repoDao()
+    fun providesRepoDao(db: AppDatabase) = db.repoDao()
 
     @Provides
     @Singleton
-    fun providesOnlineDao(db: AppDatabase): OnlineDao = db.onlineDao()
-
-    @Provides
-    @Singleton
-    fun providesVersionDao(db: AppDatabase): VersionDao = db.versionDao()
-
-    @Provides
-    @Singleton
-    fun providesLocalDao(db: AppDatabase): LocalDao = db.localDao()
-
-    @Provides
-    @Singleton
-    fun providesJoinDao(db: AppDatabase): JoinDao = db.joinDao()
+    fun providesLocalDao(db: AppDatabase) = db.localDao()
 }

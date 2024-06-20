@@ -1,4 +1,4 @@
-package dev.sanmer.mrepo.database.entity
+package dev.sanmer.mrepo.database.entity.online
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -42,9 +42,5 @@ data class RepoEntity(
             donate = original.donate,
             support = original.support
         )
-    }
-
-    companion object {
-        fun String.toRepo() = RepoEntity(url = this)
     }
 }

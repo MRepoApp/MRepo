@@ -11,8 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
-import dev.sanmer.mrepo.database.entity.RepoEntity
-import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
+import dev.sanmer.mrepo.database.entity.online.RepoEntity
 import dev.sanmer.mrepo.model.json.UpdateJson
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.online.OnlineModule
@@ -69,24 +68,22 @@ class ModuleViewModel @Inject constructor(
     }
 
     private fun loadData() = viewModelScope.launch {
-        localRepository.getOnlineAllById(moduleId).first().let {
-            online = it
-        }
+        online = localRepository.getOnlineById(moduleId).maxBy { it.versionCode }
 
-        localRepository.getLocalWithUpdatableOrNull(moduleId)?.let { (module, update) ->
+        localRepository.getLocalAndUpdatableById(moduleId)?.let { (module, update) ->
             local = module
             notifyUpdates = update
         }
 
         versions.addAll(
-            localRepository.getVersionByIdWithRepo(moduleId).flatMap { entry ->
+            localRepository.getVersionAndRepoById(moduleId).flatMap { entry ->
                 entry.value.map { entry.key to it }
             }.sortedByDescending { it.second.versionCode }
         )
 
         if (installed) {
             UpdateJson.load(local!!.updateJson)?.let {
-                versions.add(0, "Update Json".toRepo() to it)
+                versions.add(0, RepoEntity("Update Json") to it)
             }
         }
     }
@@ -94,7 +91,7 @@ class ModuleViewModel @Inject constructor(
     fun setUpdatesTag(updatable: Boolean) {
         viewModelScope.launch {
             notifyUpdates = updatable
-            localRepository.insertLocalUpdatable(moduleId, updatable)
+            localRepository.insertUpdatable(moduleId, updatable)
         }
     }
 

@@ -59,7 +59,7 @@ class RepositoryViewModel @Inject constructor(
     private fun dataObserver() {
         combine(
             localRepository.getOnlineAllAsFlow(),
-            localRepository.getLocalWithUpdatableAllAsFlow(),
+            localRepository.getLocalAndUpdatableAllAsFlow(),
             repositoryMenu
         ) { online, local, menu ->
             cacheFlow.value = online.map {

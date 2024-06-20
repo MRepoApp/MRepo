@@ -2,7 +2,7 @@ package dev.sanmer.mrepo.repository
 
 import dev.sanmer.mrepo.Compat
 import dev.sanmer.mrepo.compat.NetworkCompat.runRequest
-import dev.sanmer.mrepo.database.entity.RepoEntity
+import dev.sanmer.mrepo.database.entity.online.RepoEntity
 import dev.sanmer.mrepo.stub.IRepoManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,13 +20,7 @@ class ModulesRepository @Inject constructor(
         runCatching {
             mm.modules.toList()
         }.onSuccess { modules ->
-            val moduleIds = modules.map { it.id }
-            val locals = localRepository.getLocalAll()
-            val removed = locals.filter { !moduleIds.contains(it.id) }
-
-            localRepository.deleteLocal(removed)
-            localRepository.deleteLocalUpdatable(removed)
-            localRepository.insertLocal(modules)
+            localRepository.updateLocal(modules)
         }.onFailure {
             Timber.e(it, "getLocalAll")
         }
@@ -53,11 +47,11 @@ class ModulesRepository @Inject constructor(
         runRequest {
             val api = IRepoManager.build(repo.url)
             api.modules.execute()
-        }.onSuccess { modulesJson ->
-            localRepository.insertRepo(repo.copy(modulesJson))
-            localRepository.deleteOnlineByUrl(repo.url)
-            localRepository.insertOnline(repoUrl = repo.url, list = modulesJson.modules)
+        }.onSuccess {
+            localRepository.updateRepo(repo, it)
         }.onFailure {
             Timber.e(it, "getRepo: ${repo.url}")
         }
+
+    suspend fun getRepo(repoUrl: String) = getRepo(RepoEntity(repoUrl))
 }

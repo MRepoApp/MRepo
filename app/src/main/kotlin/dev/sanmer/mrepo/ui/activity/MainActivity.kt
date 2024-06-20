@@ -18,7 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanmer.mrepo.Compat
 import dev.sanmer.mrepo.app.Const
-import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
 import dev.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
 import dev.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isSetup
 import dev.sanmer.mrepo.datastore.WorkingMode
@@ -58,7 +57,7 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(userPreferences) {
                 if (preferences.workingMode.isSetup) {
                     Timber.d("add demo repository")
-                    localRepository.insertRepo(Const.DEMO_REPO_URL.toRepo())
+                    localRepository.insertRepo(Const.DEMO_REPO_URL)
                 }
 
                 Compat.init(preferences.workingMode)

@@ -1,4 +1,4 @@
-package dev.sanmer.mrepo.database.entity
+package dev.sanmer.mrepo.database.entity.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

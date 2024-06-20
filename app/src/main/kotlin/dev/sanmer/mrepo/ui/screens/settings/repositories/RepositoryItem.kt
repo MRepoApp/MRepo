@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.database.entity.RepoEntity
+import dev.sanmer.mrepo.database.entity.online.RepoEntity
 import dev.sanmer.mrepo.ui.component.LabelItem
 import dev.sanmer.mrepo.ui.utils.expandedShape
 import dev.sanmer.mrepo.utils.extensions.shareText

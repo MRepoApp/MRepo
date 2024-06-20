@@ -215,7 +215,7 @@ class ModulesViewModel @Inject constructor(
 
     fun getVersionItem(module: LocalModule): VersionItem? {
         viewModelScope.launch {
-            if (!localRepository.isLocalUpdatable(module.id)) {
+            if (!localRepository.isUpdatable(module.id)) {
                 versionItems.remove(module.id)
                 return@launch
             }

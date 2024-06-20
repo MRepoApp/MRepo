@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.database.entity.RepoEntity
+import dev.sanmer.mrepo.database.entity.online.RepoEntity
 import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.ui.component.LabelItem
 import dev.sanmer.mrepo.ui.component.VersionItemBottomSheet
