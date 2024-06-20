@@ -1,5 +1,6 @@
 package dev.sanmer.mrepo.ui.screens.settings.about
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +18,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -60,10 +60,11 @@ fun AboutScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .verticalScroll(rememberScrollState())
+                .padding(all = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
             Logo(
                 icon = R.drawable.launcher_outline,
                 modifier = Modifier.size(65.dp),
@@ -72,82 +73,93 @@ fun AboutScreen(
                 fraction = 0.7f
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = stringResource(id = R.string.app_name),
-                style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                text = stringResource(id = R.string.about_app_version,
-                    BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 5.dp)
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            FilledTonalButton(
-                onClick = { context.openUrl(Const.GITHUB_URL) }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.github),
-                    contentDescription = null
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    style = MaterialTheme.typography.titleLarge
                 )
-                Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                Text(text = stringResource(id = R.string.about_github))
+
+                Text(
+                    text = stringResource(
+                        id = R.string.about_app_version,
+                        BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 5.dp)
+                )
             }
 
-            Row(
-                modifier = Modifier.padding(top = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 FilledTonalButton(
-                    onClick = { context.openUrl(Const.TRANSLATE_URL) }
+                    onClick = { context.openUrl(Const.GITHUB_URL) }
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.weblate),
-                        contentDescription = null,
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                    Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                    Text(text = stringResource(id = R.string.about_weblate))
-                }
-
-                FilledTonalButton(
-                    onClick = { context.openUrl(Const.TELEGRAM_URL) }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.telegram),
+                        painter = painterResource(id = R.drawable.github),
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                    Text(text = stringResource(id = R.string.about_telegram))
+                    Text(text = stringResource(id = R.string.about_github))
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    FilledTonalButton(
+                        onClick = { context.openUrl(Const.TRANSLATE_URL) }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.weblate),
+                            contentDescription = null,
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                        Text(text = stringResource(id = R.string.about_weblate))
+                    }
+
+                    FilledTonalButton(
+                        onClick = { context.openUrl(Const.TELEGRAM_URL) }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.telegram),
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                        Text(text = stringResource(id = R.string.about_telegram))
+                    }
                 }
             }
 
-            OutlinedCard(
-                modifier = Modifier.padding(vertical = 30.dp, horizontal = 20.dp),
-                shape = RoundedCornerShape(15.dp)
+            Column(
+                modifier = Modifier
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = RoundedCornerShape(15.dp)
+                    )
+                    .fillMaxWidth()
+                    .padding(all = 15.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 15.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.about_desc1),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    HtmlText(
-                        text = stringResource(id = R.string.about_desc2,
-                            "<a href=\"${Const.MY_GITHUB_URL}\">Sanmer</a>"),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                Text(
+                    text = stringResource(id = R.string.about_desc1),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.height(15.dp))
+
+                HtmlText(
+                    text = stringResource(id = R.string.about_desc2,
+                        "<a href=\"${Const.MY_GITHUB_URL}\">Sanmer</a>"),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
