@@ -42,7 +42,7 @@
     <string name="app_theme_dark_theme_dark">Întunecată</string>
     <string name="repo_modules">%d module</string>
     <string name="repo_options_delete">Șterge</string>
-    <string name="repo_delete_dialog_desc">Sigur ștergi %s\?</string>
+    <string name="repo_delete_dialog_desc">Sigur ștergi %s?</string>
     <string name="repo_add_dialog_title">Adaugă un depozit</string>
     <string name="dialog_cancel">Anulează</string>
     <string name="dialog_ok">OK</string>
