@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.protobuf)
 }
 
-val baseVersionName = "2.4.10"
+val baseVersionName = "2.5.0-beta01"
 val isDevVersion get() = exec("git tag --contains HEAD").isEmpty()
 val verNameSuffix get() = if (isDevVersion) ".dev" else ""
 
@@ -92,8 +92,9 @@ android {
 
     applicationVariants.configureEach {
         outputs.configureEach {
-            (this as? ApkVariantOutputImpl)?.outputFileName =
-                "MRepo-${versionName}-${versionCode}-${name}.apk"
+            if (this is ApkVariantOutputImpl) {
+                outputFileName = "MRepo-${versionName}-${versionCode}-${name}.apk"
+            }
         }
     }
 }
