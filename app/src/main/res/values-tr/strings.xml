@@ -50,7 +50,7 @@
     <string name="repo_options_update">Güncelle</string>
     <string name="repo_options_delete">Sil</string>
     <string name="repo_add_dialog_title">Repo ekle</string>
-    <string name="repo_delete_dialog_desc">%s silmek istediğinizden emin misiniz\?</string>
+    <string name="repo_delete_dialog_desc">%s silmek istediğinizden emin misiniz?</string>
     <string name="about_app_version">Sürüm %1$s (%2$s)</string>
     <string name="about_desc1">Magisk ve KernelSU için modül repoları sağlayın ve modülleri yönetin.</string>
     <string name="about_desc2">%s tarafından ❤️ ile yapılmıştır</string>
