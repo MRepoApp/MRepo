@@ -22,7 +22,7 @@
     <string name="repo_update_at">Atualizado em: %s</string>
     <string name="repo_options_update">Atualizar</string>
     <string name="repo_options_delete">Excluir</string>
-    <string name="repo_delete_dialog_desc">Deseja excluir %s?</string>
+    <string name="repo_delete_dialog_desc">Deseja excluir este repositório?</string>
     <string name="repo_add_dialog_title">Adicionar repositório</string>
     <string name="license_osi_approved">Aprovado pelo OSI</string>
     <string name="license_fsf_libre">FSF Livre</string>
