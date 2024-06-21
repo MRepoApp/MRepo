@@ -60,7 +60,7 @@
     <string name="repo_options_update">Cập nhật</string>
     <string name="repo_options_delete">Xóa bỏ</string>
     <string name="repo_update_at">Đã cập nhật lúc: %s</string>
-    <string name="repo_delete_dialog_desc">Bạn có chắc chắn xóa %s không\?</string>
+    <string name="repo_delete_dialog_desc">Bạn có chắc chắn xóa %s không?</string>
     <string name="repo_add_dialog_title">Thêm kho lưu trữ</string>
     <string name="about_app_version">Phiên bản %1$s (%2$s)</string>
     <string name="about_desc1">Cung cấp kho mô-đun và Quản lý mô-đun cho Magisk và KernelSU.</string>
