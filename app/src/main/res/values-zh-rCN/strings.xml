@@ -7,7 +7,6 @@
     <string name="setup_shizuku_desc">需要由 Sui 或 Shizuku (root) 提供权限</string>
     <string name="setup_non_root_title">免 Root</string>
     <string name="setup_non_root_desc">不需要 Root 权限，只有模块下载功能可用</string>
-
     <!-- Install -->
     <string name="install_screen_title">安装</string>
     <string name="install_flashing">正在刷入</string>
@@ -15,17 +14,14 @@
     <string name="install_failure">失败</string>
     <string name="install_logs_saved">日志已保存</string>
     <string name="install_logs_save_failed">保存失败: %s</string>
-
     <!-- License -->
     <string name="license_title">查看许可证</string>
     <string name="license_osi_approved">OSI 获批</string>
     <string name="license_fsf_libre">自由软件</string>
-
     <!-- Page -->
     <string name="page_repository">存储库</string>
     <string name="page_modules">模块</string>
     <string name="page_settings">设置</string>
-
     <!-- Repository -->
     <string name="repository_empty">存储库为空</string>
     <string name="module_installed">已安装</string>
@@ -51,7 +47,6 @@
     <string name="view_module_homepage">主页</string>
     <string name="view_module_source">源码</string>
     <string name="view_module_support">支持</string>
-
     <!-- Modules -->
     <string name="modules_empty">没找到任何模块</string>
     <string name="module_version_author">%1$s, 作者 %2$s</string>
@@ -60,7 +55,6 @@
     <string name="module_install">安装</string>
     <string name="module_download">下载</string>
     <string name="module_update">更新</string>
-
     <!-- Settings-->
     <string name="settings_app">应用</string>
     <string name="settings_app_desc">关于 MRepo 应用本身的设置</string>
@@ -98,11 +92,9 @@
     <string name="about_app_version">版本 %1$s (%2$s)</string>
     <string name="about_desc1">为 Magisk 和 KernelSU 提供模块存储库以及模块管理.</string>
     <string name="about_desc2">由 %s 用 ❤️ 制作</string>
-
     <!-- Dialog-->
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">确定</string>
-
     <!-- Menu -->
     <string name="menu_advanced_menu">高级菜单</string>
     <string name="menu_sort_mode">排序模式</string>
@@ -111,19 +103,14 @@
     <string name="menu_descending">降序</string>
     <string name="menu_pin_enabled">置顶已启用</string>
     <string name="menu_show_updated">显示更新时间</string>
-
     <!-- Message -->
     <string name="message_download_success">下载成功</string>
     <string name="message_loading">加载中…</string>
-
     <!-- Notification -->
     <string name="notification_name_download">下载服务</string>
-
     <!-- Search -->
     <string name="search_empty">空列表</string>
     <string name="search_placeholder">搜索…</string>
-
     <!-- Other -->
     <string name="unknown_error">未知错误</string>
-
 </resources>
