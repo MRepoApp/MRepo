@@ -24,7 +24,6 @@
     <string name="repo_options_delete">Excluir</string>
     <string name="repo_delete_dialog_desc">Deseja excluir %s?</string>
     <string name="repo_add_dialog_title">Adicionar repositório</string>
-    <string name="repo_add_dialog_add">Adicionar</string>
     <string name="license_osi_approved">Aprovado pelo OSI</string>
     <string name="license_fsf_libre">FSF Livre</string>
     <string name="page_modules">Módulos</string>
@@ -52,9 +51,6 @@
     <string name="view_module_homepage">Pagina inicial</string>
     <string name="view_module_source">Código fonte</string>
     <string name="view_module_support">Apoio</string>
-    <string name="view_module_view_track">Ver trilha</string>
-    <string name="view_module_type">Tipo: %s</string>
-    <string name="view_module_added">Adicionado em: %s</string>
     <string name="modules_empty">Nenhum módulo encontrado</string>
     <string name="module_version_author">%1$s por %2$s</string>
     <string name="module_remove">Excluir</string>
@@ -81,7 +77,6 @@
     <string name="about_app_version">Versão %1$s (%2$s)</string>
     <string name="about_desc1">Fornece repositórios de módulos e gerencia módulos para Magisk e KernelSU.</string>
     <string name="about_desc2">Feito com ❤️ por %s</string>
-    <string name="dialog_attention">Atenção</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_ok">OK</string>
     <string name="menu_advanced_menu">Menu avançado</string>
