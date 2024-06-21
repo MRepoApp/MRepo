@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -65,7 +66,7 @@ private val modes = listOf(
 )
 
 @Composable
-fun DarkModeItem(
+internal fun DarkModeItem(
     darkMode: DarkMode,
     onChange: (DarkMode) -> Unit
 ) = LazyRow(
@@ -78,10 +79,9 @@ fun DarkModeItem(
     ) {
         DarkModeItem(
             item = it,
-            darkMode = darkMode
-        ) { value ->
-            onChange(value)
-        }
+            darkMode = darkMode,
+            onChange = onChange,
+        )
     }
 }
 
@@ -89,21 +89,21 @@ fun DarkModeItem(
 private fun DarkModeItem(
     item: DarkModeItem,
     darkMode: DarkMode,
-    onClick: (DarkMode) -> Unit
+    onChange: (DarkMode) -> Unit
 ) {
-    val selected = item.value == darkMode
+    val selected by remember { derivedStateOf { item.value == darkMode } }
 
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .clickable(
-                onClick = { onClick(item.value) },
+                onClick = { onChange(item.value) },
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             )
             .background(color = MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp)),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Row(
             modifier = Modifier.padding(all = 12.dp),
             verticalAlignment = Alignment.CenterVertically,

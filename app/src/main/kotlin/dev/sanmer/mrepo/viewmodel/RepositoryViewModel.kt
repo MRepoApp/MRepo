@@ -59,13 +59,11 @@ class RepositoryViewModel @Inject constructor(
     private fun dataObserver() {
         combine(
             localRepository.getOnlineAllAsFlow(),
+            localRepository.getLocalAndUpdatableAllAsFlow(),
             repositoryMenu
-        ) { list, menu ->
-            cacheFlow.value = list.map {
-                it.createState(
-                    local = localRepository.getLocalByIdOrNull(it.id),
-                    hasUpdatableTag = localRepository.hasUpdatableTag(it.id)
-                ) to it
+        ) { online, local, menu ->
+            cacheFlow.value = online.map {
+                createOnlineState(it, local)
             }.sortedWith(
                 comparator(menu.option, menu.descending)
             ).let { v ->
@@ -143,25 +141,26 @@ class RepositoryViewModel @Inject constructor(
         }
     }
 
-    private fun OnlineModule.createState(
-        local: LocalModule?,
-        hasUpdatableTag: Boolean,
-    ): OnlineState {
-        val installed = local != null && local.id == id
-                && local.author == author
+    private suspend fun createOnlineState(
+        online: OnlineModule,
+        locals: List<Pair<LocalModule, Boolean>>
+    ): Pair<OnlineState, OnlineModule> {
+        var installed = false
+        var updatable = false
 
-        val updatable = if (installed && hasUpdatableTag) {
-            local!!.versionCode < versionCode
-        } else {
-            false
+        locals.firstOrNull { it.first.id == online.id }?.let { (local, isUpdatable) ->
+            installed = local.author == online.author
+            updatable = (local.versionCode < online.versionCode) && isUpdatable
         }
 
-        return OnlineState(
+        val state = OnlineState(
             installed = installed,
             updatable = updatable,
-            hasLicense = track.license.isNotBlank(),
-            lastUpdated = versions.firstOrNull()?.timestamp ?: 1.47333965E9f
+            hasLicense = online.metadata.license.isNotBlank(),
+            lastUpdated = online.versions.firstOrNull()?.timestamp ?: 0L
         )
+
+        return state to online
     }
 
     @Immutable
@@ -169,14 +168,14 @@ class RepositoryViewModel @Inject constructor(
         val installed: Boolean,
         val updatable: Boolean,
         val hasLicense: Boolean,
-        val lastUpdated: Float
+        val lastUpdated: Long
     ) {
         companion object {
             fun example() = OnlineState(
                 installed = true,
                 updatable = false,
                 hasLicense = true,
-                lastUpdated = 1.66064064E9f
+                lastUpdated = 1660640640000L
             )
         }
     }

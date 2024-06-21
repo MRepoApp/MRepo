@@ -2,7 +2,6 @@ package dev.sanmer.mrepo.ui.navigation.graphs
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -40,7 +39,7 @@ fun NavGraphBuilder.settingsScreen(
 
     composable(
         route = SettingsScreen.Repositories.route,
-        enterTransition = { scaleIn() + fadeIn() },
+        enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }
     ) {
         RepositoriesScreen(
@@ -50,7 +49,7 @@ fun NavGraphBuilder.settingsScreen(
 
     composable(
         route = SettingsScreen.App.route,
-        enterTransition = { scaleIn() + fadeIn() },
+        enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }
     ) {
         AppScreen(
@@ -60,7 +59,7 @@ fun NavGraphBuilder.settingsScreen(
 
     composable(
         route = SettingsScreen.WorkingMode.route,
-        enterTransition = { scaleIn() + fadeIn() },
+        enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }
     ) {
         WorkingModeScreen(
@@ -70,7 +69,7 @@ fun NavGraphBuilder.settingsScreen(
 
     composable(
         route = SettingsScreen.About.route,
-        enterTransition = { scaleIn() + fadeIn() },
+        enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }
     ) {
         AboutScreen(

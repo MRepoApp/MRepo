@@ -1,28 +1,32 @@
-package dev.sanmer.mrepo.database.entity
+package dev.sanmer.mrepo.database.entity.online
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import dev.sanmer.mrepo.model.online.VersionItem
 
 @Entity(
     tableName = "version",
-    primaryKeys = ["id", "repoUrl", "versionCode"]
+    primaryKeys = ["id", "repo_url", "version_code"]
 )
 data class VersionItemEntity(
-    val id: String,
+    @ColumnInfo(name = "repo_url")
     val repoUrl: String,
-    val timestamp: Float,
+    val id: String,
+    val timestamp: Long,
     val version: String,
+    @ColumnInfo(name = "version_code")
     val versionCode: Int,
+    @ColumnInfo(name = "zip_url")
     val zipUrl: String,
     val changelog: String
 ) {
     constructor(
-        original: VersionItem,
+        repoUrl: String,
         id: String,
-        repoUrl: String
+        original: VersionItem,
     ) : this(
-        id = id,
         repoUrl= repoUrl,
+        id = id,
         timestamp = original.timestamp,
         version = original.version,
         versionCode = original.versionCode,
@@ -30,7 +34,7 @@ data class VersionItemEntity(
         changelog = original.changelog
     )
 
-    fun toItem() = VersionItem(
+    fun toJson() = VersionItem(
         repoUrl= repoUrl,
         timestamp = timestamp,
         version = version,

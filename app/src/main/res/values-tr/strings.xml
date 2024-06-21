@@ -51,11 +51,9 @@
     <string name="repo_options_delete">Sil</string>
     <string name="repo_add_dialog_title">Repo ekle</string>
     <string name="repo_delete_dialog_desc">%s silmek istediğinizden emin misiniz\?</string>
-    <string name="repo_add_dialog_add">Ekle</string>
     <string name="about_app_version">Sürüm %1$s (%2$s)</string>
     <string name="about_desc1">Magisk ve KernelSU için modül repoları sağlayın ve modülleri yönetin.</string>
     <string name="about_desc2">%s tarafından ❤️ ile yapılmıştır</string>
-    <string name="dialog_attention">Dikkat</string>
     <string name="dialog_cancel">İptal</string>
     <string name="dialog_ok">Tamam</string>
     <string name="message_download_success">İndirme başarılı</string>
@@ -72,9 +70,6 @@
     <string name="view_module_homepage">Anaysayfa</string>
     <string name="view_module_source">Kaynak kodu</string>
     <string name="view_module_support">Destek</string>
-    <string name="view_module_view_track">İzi görüntüle</string>
-    <string name="view_module_type">Tip: %s</string>
-    <string name="view_module_added">%s tarihinde eklendi</string>
     <string name="menu_pin_installed">Yüklenenleri sabitle</string>
     <string name="menu_pin_updatable">Güncellenebilir olanları sabitle</string>
     <string name="menu_show_icon">Simge göster</string>

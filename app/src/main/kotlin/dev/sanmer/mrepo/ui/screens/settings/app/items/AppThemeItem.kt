@@ -23,7 +23,7 @@ import dev.sanmer.mrepo.ui.component.SettingNormalItem
 import dev.sanmer.mrepo.ui.utils.expandedShape
 
 @Composable
-fun AppThemeItem(
+internal fun AppThemeItem(
     themeColor: Int,
     darkMode: DarkMode,
     isDarkMode: Boolean,
@@ -31,6 +31,16 @@ fun AppThemeItem(
     onDarkModeChange: (DarkMode) -> Unit
 ) {
     var open by rememberSaveable { mutableStateOf(false) }
+    if (open) {
+        BottomSheet(
+            onClose = { open = false },
+            themeColor = themeColor,
+            darkMode = darkMode,
+            isDarkMode = isDarkMode,
+            onThemeColorChange = onThemeColorChange,
+            onDarkModeChange = onDarkModeChange
+        )
+    }
 
     SettingNormalItem(
         icon = R.drawable.color_swatch,
@@ -38,17 +48,6 @@ fun AppThemeItem(
         desc = stringResource(id = R.string.settings_app_theme_desc),
         onClick = { open = true }
     )
-
-    if (open) {
-        BottomSheet(
-            onClose = { open = false },
-            themeColor = themeColor,
-            darkMode = darkMode,
-            isDarkMode = isDarkMode,
-            onThemeColorChange =onThemeColorChange,
-            onDarkModeChange = onDarkModeChange
-        )
-    }
 }
 
 @Composable

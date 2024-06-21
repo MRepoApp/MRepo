@@ -100,9 +100,9 @@ class InstallViewModel @Inject constructor(
     }
 
     private suspend fun install(zipPath: String) = withContext(Dispatchers.IO) {
+        val userPreferences = userPreferencesRepository.data.first()
+        val deleteZipFile = userPreferences.deleteZipFile
         val zipFile = File(zipPath)
-        val deleteZipFile = userPreferencesRepository
-            .data.first().deleteZipFile
 
         val callback = object : IInstallCallback.Stub() {
             override fun onStdout(msg: String) {

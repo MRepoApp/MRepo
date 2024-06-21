@@ -2,7 +2,6 @@ package dev.sanmer.mrepo.ui.screens.settings.app.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,35 +30,31 @@ import dev.sanmer.mrepo.compat.BuildCompat
 import dev.sanmer.mrepo.ui.theme.Colors
 
 @Composable
-fun ThemePaletteItem(
+internal fun ThemePaletteItem(
     themeColor: Int,
     isDarkMode: Boolean,
     onChange: (Int) -> Unit
+) = FlowRow(
+    modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+    horizontalArrangement = Arrangement.spacedBy(8.dp)
 ) {
-    FlowRow(
-        modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        if (BuildCompat.atLeastS) {
-            ThemeColorItem(
-                id = Colors.Dynamic.id,
-                themeColor = themeColor,
-                isDarkMode = isDarkMode
-            ) {
-                onChange(it)
-            }
-        }
+    if (BuildCompat.atLeastS) {
+        ThemeColorItem(
+            id = Colors.Dynamic.id,
+            themeColor = themeColor,
+            isDarkMode = isDarkMode,
+            onChange = onChange
+        )
+    }
 
-        Colors.getColorIds().forEach {
-            ThemeColorItem(
-                id = it,
-                themeColor = themeColor,
-                isDarkMode = isDarkMode
-            ) { value ->
-                onChange(value)
-            }
-        }
+    Colors.colorIds.forEach {
+        ThemeColorItem(
+            id = it,
+            themeColor = themeColor,
+            isDarkMode = isDarkMode,
+            onChange = onChange
+        )
     }
 }
 
@@ -66,19 +63,24 @@ private fun ThemeColorItem(
     id: Int,
     themeColor: Int,
     isDarkMode: Boolean,
-    onClick: (Int) -> Unit
+    onChange: (Int) -> Unit
 ) {
+    val selected by remember { derivedStateOf { id == themeColor } }
     val color = Colors.getColor(id)
-    val colorScheme = if (isDarkMode) color.darkColorScheme else color.lightColorScheme
-    val selected = id == themeColor
+    val colorScheme by remember {
+        derivedStateOf {
+            when {
+                isDarkMode -> color.darkColorScheme
+                else -> color.lightColorScheme
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .clickable(
-                onClick = { onClick(id) },
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
+                onClick = { onChange(id) }
             )
             .background(
                 color = colorScheme.surfaceColorAtElevation(3.dp)

@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TagItem(
+internal fun TagItem(
     @DrawableRes icon: Int,
     onClick: () -> Unit
 ) = FilledTonalIconButton(

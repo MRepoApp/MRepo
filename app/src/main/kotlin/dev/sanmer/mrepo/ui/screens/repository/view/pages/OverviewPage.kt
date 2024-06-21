@@ -38,7 +38,7 @@ import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.utils.extensions.toDateTime
 
 @Composable
-fun OverviewPage(
+internal fun OverviewPage(
     online: OnlineModule,
     item: VersionItem?,
     local: LocalModule?,
@@ -63,6 +63,7 @@ fun OverviewPage(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
+
         Text(
             text = online.description,
             style = MaterialTheme.typography.bodyMedium,
@@ -119,7 +120,7 @@ private fun CloudItem(
     ) {
         ValueItem(
             key = stringResource(id = R.string.view_module_version),
-            value = item.versionDisplay,
+            value = item.version,
             modifier = Modifier.weight(1f)
         )
 
@@ -139,7 +140,7 @@ private fun CloudItem(
 
     ValueItem(
         key = stringResource(id = R.string.view_module_last_updated),
-        value = item.timestamp.toDateTime()
+        value = item.timestamp.toDateTime().toString()
     )
 }
 
@@ -204,7 +205,7 @@ private fun LocalItem(
     if (local.lastUpdated != 0L) {
         ValueItem(
             key = stringResource(id = R.string.view_module_last_updated),
-            value = local.lastUpdated.toDateTime()
+            value = local.lastUpdated.toDateTime().toString()
         )
     }
 }

@@ -1,20 +1,26 @@
-package dev.sanmer.mrepo.database.entity
+package dev.sanmer.mrepo.database.entity.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.local.State
 
-@Entity(tableName = "local")
+@Entity(
+    tableName = "local",
+    primaryKeys = ["id"]
+)
 data class LocalModuleEntity(
-    @PrimaryKey val id: String,
+    val id: String,
     val name: String,
     val version: String,
+    @ColumnInfo(name = "version_code")
     val versionCode: Int,
     val author: String,
     val description: String,
     val state: String,
+    @ColumnInfo(name = "update_json")
     val updateJson: String,
+    @ColumnInfo(name = "last_updated")
     val lastUpdated: Long
 ) {
     constructor(original: LocalModule) : this(
@@ -41,9 +47,12 @@ data class LocalModuleEntity(
         lastUpdated = lastUpdated
     )
 
-    @Entity(tableName = "local_updatable")
+    @Entity(
+        tableName = "local_updatable",
+        primaryKeys = ["id"]
+    )
     data class Updatable(
-        @PrimaryKey val id: String,
+        val id: String,
         val updatable: Boolean
     )
 }

@@ -23,8 +23,6 @@
     <string name="module_restore">復元</string>
     <string name="settings_repo">リポジトリ</string>
     <string name="app_theme_dark_theme_auto">自動</string>
-    <string name="dialog_attention">注意</string>
-    <string name="repo_add_dialog_add">追加</string>
     <string name="settings_non_root_desc">機能が制限されています</string>
     <string name="settings_download_path">ダウンロード場所</string>
     <string name="app_theme_dark_theme">ダークテーマ</string>
@@ -71,8 +69,6 @@
     <string name="view_module_homepage">ホームページ</string>
     <string name="view_module_source">ソースコード</string>
     <string name="view_module_support">サポート</string>
-    <string name="view_module_type">タイプ: %s</string>
-    <string name="view_module_added">追加日: %s</string>
     <string name="module_version_author">%1$s — %2$s</string>
     <string name="settings_root_none">なし</string>
     <string name="settings_about">このアプリについて</string>

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
 
 @Composable
-fun RootItem(
+internal fun RootItem(
     isAlive: Boolean,
     version: String
 ) = Surface(
@@ -66,7 +66,8 @@ fun RootItem(
 
             Text(
                 text = if (isAlive) {
-                    stringResource(id = R.string.settings_root_provider, version)
+                    stringResource(id = R.string.settings_root_provider,
+                        version)
                 } else {
                     stringResource(id = R.string.settings_root_provider,
                         stringResource(id = R.string.settings_root_not_available))

@@ -1,17 +1,19 @@
 package dev.sanmer.mrepo.model.online
 
-import dev.sanmer.mrepo.utils.Utils
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import dev.sanmer.mrepo.utils.Utils
 
 @JsonClass(generateAdapter = true)
 data class OnlineModule(
     val id: String,
     val name: String,
     val version: String,
+    @Json(name = "version_code")
     val versionCode: Int,
     val author: String,
     val description: String,
-    val track: TrackJson,
+    val metadata: Metadata = Metadata(),
     val versions: List<VersionItem>,
 ) {
     val versionDisplay by lazy {
@@ -29,6 +31,15 @@ data class OnlineModule(
         return id.hashCode()
     }
 
+    @JsonClass(generateAdapter = true)
+    data class Metadata(
+        val license: String = "",
+        val homepage: String = "",
+        val source: String = "",
+        val donate: String = "",
+        val support: String = ""
+    )
+
     companion object {
         fun example() = OnlineModule(
             id = "online_example",
@@ -37,9 +48,7 @@ data class OnlineModule(
             versionCode = 1703,
             author = "Sanmer",
             description = "This is an example!",
-            track = TrackJson(
-                typeName = "ONLINE_JSON",
-                added = 0f,
+            metadata = Metadata(
                 license = "GPL-3.0"
             ),
             versions = emptyList()

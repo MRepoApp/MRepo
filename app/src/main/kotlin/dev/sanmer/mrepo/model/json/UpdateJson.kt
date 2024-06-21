@@ -5,6 +5,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import dev.sanmer.mrepo.compat.NetworkCompat
 import dev.sanmer.mrepo.model.online.VersionItem
+import dev.sanmer.mrepo.utils.Utils
 
 @JsonClass(generateAdapter = true)
 data class UpdateJson(
@@ -13,7 +14,7 @@ data class UpdateJson(
     val zipUrl: String,
     val changelog: String
 ) {
-    fun toItemOrNull(timestamp: Float): VersionItem? {
+    fun toItemOrNull(timestamp: Long): VersionItem? {
         if (!NetworkCompat.isUrl(zipUrl)) return null
 
         val changelog = when {
@@ -24,7 +25,7 @@ data class UpdateJson(
 
         return VersionItem(
             timestamp = timestamp,
-            version = version,
+            version = Utils.getVersionDisplay(version, versionCode),
             versionCode = versionCode,
             zipUrl = zipUrl,
             changelog = changelog
@@ -48,7 +49,7 @@ data class UpdateJson(
                     val (json, headers) = result.getOrThrow()
                     json?.let {
                         val lastModified = headers.getInstant("Last-Modified")?.toEpochMilli()
-                        val timestamp = (lastModified ?: System.currentTimeMillis()) / 1000f
+                        val timestamp = lastModified ?: System.currentTimeMillis()
                         json.toItemOrNull(timestamp)
                     }
                 }

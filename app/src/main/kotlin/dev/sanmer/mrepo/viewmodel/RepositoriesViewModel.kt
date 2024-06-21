@@ -1,14 +1,12 @@
 package dev.sanmer.mrepo.viewmodel
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sanmer.mrepo.database.entity.RepoEntity
-import dev.sanmer.mrepo.database.entity.RepoEntity.Companion.toRepo
+import dev.sanmer.mrepo.database.entity.online.RepoEntity
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.ModulesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +22,7 @@ class RepositoriesViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val modulesRepository: ModulesRepository
 ) : ViewModel() {
-    private val reposFlow = MutableStateFlow(listOf<RepoState>())
+    private val reposFlow = MutableStateFlow(listOf<RepoEntity>())
     val repos get() = reposFlow.asStateFlow()
 
     var isLoading by mutableStateOf(true)
@@ -45,8 +43,7 @@ class RepositoriesViewModel @Inject constructor(
     private fun dataObserver() {
         localRepository.getRepoAllAsFlow()
             .onEach { list ->
-                reposFlow.value = list.map { RepoState(it) }
-                    .sortedBy { it.name }
+                reposFlow.value = list.sortedBy { it.name }
 
                 isLoading = false
 
@@ -59,7 +56,7 @@ class RepositoriesViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             refreshing {
-                modulesRepository.getRepo(url.toRepo())
+                modulesRepository.getRepo(url)
                     .onFailure {
                         Timber.e(it, "insert: $url")
                         onFailure(it)
@@ -68,26 +65,25 @@ class RepositoriesViewModel @Inject constructor(
         }
     }
 
-    fun insert(repo: RepoState) {
+    fun insert(repo: RepoEntity) {
         viewModelScope.launch {
-            localRepository.insertRepo(repo.toRepo())
+            localRepository.insertRepo(repo)
         }
     }
 
-    fun delete(repo: RepoState) {
+    fun delete(repo: RepoEntity) {
         viewModelScope.launch {
-            localRepository.deleteRepo(repo.toRepo())
-            localRepository.deleteOnlineByUrl(repo.url)
+            localRepository.deleteRepo(repo)
         }
     }
 
     fun update(
-        repo: RepoState,
+        repo: RepoEntity,
         onFailure: (Throwable) -> Unit
     ) {
         viewModelScope.launch {
             refreshing {
-                modulesRepository.getRepo(repo.toRepo())
+                modulesRepository.getRepo(repo)
                     .onFailure {
                         Timber.e(it, "update: ${repo.url}")
                         onFailure(it)
@@ -102,32 +98,5 @@ class RepositoriesViewModel @Inject constructor(
                 modulesRepository.getRepoAll(onlyEnable = false)
             }
         }
-    }
-
-    @Immutable
-    data class RepoState(
-        val url: String,
-        val name: String,
-        val enable: Boolean,
-        val timestamp: Float,
-        val size: Int
-    ) {
-        constructor(repo: RepoEntity) : this(
-            url = repo.url,
-            name = repo.name,
-            enable = repo.enable,
-            timestamp = repo.metadata.timestamp,
-            size = repo.metadata.size
-        )
-
-        fun toRepo() = RepoEntity(
-            url = url,
-            name = name,
-            enable = enable,
-            metadata = RepoEntity.Metadata(
-                timestamp = timestamp,
-                size = size
-            )
-        )
     }
 }

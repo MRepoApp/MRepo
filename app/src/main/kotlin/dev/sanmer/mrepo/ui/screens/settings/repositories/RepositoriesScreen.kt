@@ -160,7 +160,6 @@ private fun AddDialog(
     onAdd: (String) -> Unit
 ) {
     var domain by remember { mutableStateOf("") }
-
     val onDone: () -> Unit = {
         onAdd("https://${domain}/")
         onClose()
@@ -175,7 +174,7 @@ private fun AddDialog(
                 onClick = onDone,
                 enabled = domain.isNotBlank()
             ) {
-                Text(text = stringResource(id = R.string.repo_add_dialog_add))
+                Text(text = stringResource(id = R.string.dialog_ok))
             }
         },
         dismissButton = {

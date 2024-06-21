@@ -56,11 +56,9 @@
     <string name="repo_options_delete">刪除</string>
     <string name="repo_delete_dialog_desc">你確定要刪除 %s？</string>
     <string name="repo_add_dialog_title">新增儲存庫</string>
-    <string name="repo_add_dialog_add">新增</string>
     <string name="about_app_version">版本 %1$s (%2$s)</string>
     <string name="about_desc1">為 Magisk 和 KernelSU 提供模組儲存庫以及模組管理。</string>
     <string name="about_desc2">由 %s 用 ❤️ 製作</string>
-    <string name="dialog_attention">注意</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">確定</string>
     <string name="message_download_success">下載成功</string>
@@ -74,12 +72,9 @@
     <string name="module_new">新增</string>
     <string name="install_logs_save_failed">保存失敗：%s</string>
     <string name="view_module_support">支援</string>
-    <string name="view_module_type">類型：%s</string>
-    <string name="view_module_view_track">檢視追蹤資料</string>
     <string name="menu_show_license">顯示授權</string>
     <string name="view_module_homepage">主頁面</string>
     <string name="view_module_source">原始碼</string>
-    <string name="view_module_added">新增於：%s</string>
     <string name="module_update">更新</string>
     <string name="menu_sort_mode">排序模式</string>
     <string name="menu_sort_option_name">名稱</string>

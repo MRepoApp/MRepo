@@ -32,10 +32,7 @@
     <string name="module_install">Installieren</string>
     <string name="view_module_homepage">Webseite</string>
     <string name="view_module_support">Unterstützen</string>
-    <string name="view_module_type">Typ: %s</string>
-    <string name="view_module_added">Hinzugefügt am: %s</string>
     <string name="module_version_author">%1$s von %2$s</string>
-    <string name="view_module_view_track">Track ansehen</string>
     <string name="settings_app_desc">Einstellungen der MRepo App selbst</string>
     <string name="settings_repo_desc">Magisk Modul Repositories anpassen</string>
     <string name="settings_about">Über</string>
@@ -61,9 +58,7 @@
     <string name="repo_update_at">Aktualisiert am: %s</string>
     <string name="repo_options_delete">Löschen</string>
     <string name="repo_add_dialog_title">Repository hinzufügen</string>
-    <string name="repo_add_dialog_add">Hinzufügen</string>
     <string name="about_desc1">Füge Modul Repositories hinzu und manage Module für Magisk und KernelSU.</string>
-    <string name="dialog_attention">Achtung</string>
     <string name="dialog_cancel">Abbrechen</string>
     <string name="menu_advanced_menu">Erweitertes Menü</string>
     <string name="menu_sort_option_updated">Zuletzt geupdated</string>

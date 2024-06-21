@@ -32,7 +32,6 @@
     <string name="view_module_homepage">Trang chủ</string>
     <string name="view_module_source">Mã nguồn</string>
     <string name="view_module_support">Ủng hộ</string>
-    <string name="view_module_type">Loại: %s</string>
     <string name="module_remove">Loại bỏ</string>
     <string name="module_restore">Khôi phục</string>
     <string name="module_install">Cài đặt</string>
@@ -40,8 +39,6 @@
     <string name="module_update">Cập nhật</string>
     <string name="settings_app">Ứng dụng</string>
     <string name="module_version_author">%1$s bởi %2$s</string>
-    <string name="view_module_added">Đã thêm lúc: %s</string>
-    <string name="view_module_view_track">Hiển thị theo dõi</string>
     <string name="settings_repo">Kho lưu trữ</string>
     <string name="settings_repo_desc">Quản lý kho mô-đun Magisk</string>
     <string name="settings_about">Về</string>
@@ -65,11 +62,9 @@
     <string name="repo_update_at">Đã cập nhật lúc: %s</string>
     <string name="repo_delete_dialog_desc">Bạn có chắc chắn xóa %s không\?</string>
     <string name="repo_add_dialog_title">Thêm kho lưu trữ</string>
-    <string name="repo_add_dialog_add">Thêm</string>
     <string name="about_app_version">Phiên bản %1$s (%2$s)</string>
     <string name="about_desc1">Cung cấp kho mô-đun và Quản lý mô-đun cho Magisk và KernelSU.</string>
     <string name="about_desc2">Được làm với ❤️ bởi %s</string>
-    <string name="dialog_attention">Chú ý</string>
     <string name="dialog_cancel">Hủy bỏ</string>
     <string name="dialog_ok">OK</string>
     <string name="menu_advanced_menu">Thực đơn nâng cao</string>

@@ -19,12 +19,12 @@ import dev.sanmer.mrepo.ui.component.TextFieldDialog
 import java.io.File
 
 @Composable
-fun DownloadPathItem(
+internal fun DownloadPathItem(
     downloadPath: File,
     onChange: (File) -> Unit
 ) {
     var edit by remember { mutableStateOf(false) }
-    if (edit) OpenDocumentTreeDialog(
+    if (edit) EditDialog(
         path = downloadPath,
         onClose = { edit = false },
         onConfirm = { if (it != downloadPath) onChange(it) }
@@ -39,7 +39,7 @@ fun DownloadPathItem(
 }
 
 @Composable
-private fun OpenDocumentTreeDialog(
+private fun EditDialog(
     path : File,
     onClose: () -> Unit,
     onConfirm: (File) -> Unit

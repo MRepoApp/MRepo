@@ -2,7 +2,6 @@ package dev.sanmer.mrepo.ui.navigation.graphs
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -37,7 +36,7 @@ fun NavGraphBuilder.repositoryScreen(
     composable(
         route = RepositoryScreen.View.route,
         arguments = listOf(navArgument("moduleId") { type = NavType.StringType }),
-        enterTransition = { scaleIn() + fadeIn() },
+        enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }
     ) {
         ViewScreen(

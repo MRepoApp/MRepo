@@ -77,18 +77,20 @@ sealed class Colors(
     )
 
     companion object {
-        private val mColors get() = listOf(
-            Pourville,
-            SoleilLevant,
-            Jeufosse,
-            PoppyField,
-            AlmondBlossom,
-            PlainAuvers,
-            WildRoses
-        )
+        val colors by lazy {
+            listOf(
+                Pourville,
+                SoleilLevant,
+                Jeufosse,
+                PoppyField,
+                AlmondBlossom,
+                PlainAuvers,
+                WildRoses
+            )
+        }
 
-        fun getColorIds(): List<Int> {
-            return mColors.map { it.id }
+        val colorIds by lazy {
+            colors.map { it.id }
         }
 
         @Composable
@@ -98,7 +100,7 @@ sealed class Colors(
             return if (BuildCompat.atLeastS && id == Dynamic.id) {
                 Dynamic(context)
             } else {
-                mColors[id]
+                colors[id]
             }
         }
     }

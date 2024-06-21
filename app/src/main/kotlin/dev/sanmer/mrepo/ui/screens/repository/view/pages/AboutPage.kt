@@ -29,7 +29,7 @@ import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.utils.extensions.openUrl
 
 @Composable
-fun AboutPage(
+internal fun AboutPage(
     online: OnlineModule
 ) = Column(
     modifier = Modifier
@@ -38,19 +38,19 @@ fun AboutPage(
 ) {
     ValueItem(
         key = stringResource(id = R.string.view_module_homepage),
-        value = online.track.homepage,
-        icon = R.drawable.world_www
+        value = online.metadata.homepage,
+        icon = R.drawable.home
     )
 
     ValueItem(
         key = stringResource(id = R.string.view_module_source),
-        value = online.track.source,
+        value = online.metadata.source,
         icon = R.drawable.brand_git
     )
 
     ValueItem(
         key = stringResource(id = R.string.view_module_support),
-        value = online.track.support,
+        value = online.metadata.support,
         icon = R.drawable.heart_handshake
     )
 }

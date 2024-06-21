@@ -19,15 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.viewmodel.RepositoriesViewModel.RepoState
+import dev.sanmer.mrepo.database.entity.online.RepoEntity
 
 @Composable
-fun RepositoriesList(
-    list: List<RepoState>,
+internal fun RepositoriesList(
+    list: List<RepoEntity>,
     state: LazyListState,
-    insert: (RepoState) -> Unit,
-    delete: (RepoState) -> Unit,
-    update: (RepoState) -> Unit
+    insert: (RepoEntity) -> Unit,
+    delete: (RepoEntity) -> Unit,
+    update: (RepoEntity) -> Unit
 ) = LazyColumn(
     state = state,
     modifier = Modifier.fillMaxSize(),
@@ -40,7 +40,7 @@ fun RepositoriesList(
     ) { repo ->
         RepositoryItem(
             repo = repo,
-            toggle = { insert(it) },
+            onToggle = { insert(it) },
             onUpdate = update,
             onDelete = delete,
         )
@@ -49,10 +49,10 @@ fun RepositoriesList(
 
 @Composable
 private fun RepositoryItem(
-    repo: RepoState,
-    toggle: (RepoState) -> Unit,
-    onUpdate: (RepoState) -> Unit,
-    onDelete: (RepoState) -> Unit,
+    repo: RepoEntity,
+    onToggle: (RepoEntity) -> Unit,
+    onUpdate: (RepoEntity) -> Unit,
+    onDelete: (RepoEntity) -> Unit,
 ) {
     var delete by remember { mutableStateOf(false) }
     if (delete) DeleteDialog(
@@ -63,24 +63,22 @@ private fun RepositoryItem(
 
     RepositoryItem(
         repo = repo,
-        toggle = { toggle(repo.copy(enable = it)) },
-        update = { onUpdate(repo) },
-        delete = { delete = true }
+        toggle = { onToggle(repo.copy(disable = it)) },
+        onUpdate = { onUpdate(repo) },
+        onDelete = { delete = true }
     )
 }
 
 @Composable
 private fun DeleteDialog(
-    repo: RepoState,
+    repo: RepoEntity,
     onClose: () -> Unit,
     onConfirm: () -> Unit
 ) = AlertDialog(
     shape = RoundedCornerShape(20.dp),
     onDismissRequest = onClose,
-    title = { Text(text = stringResource(id = R.string.dialog_attention)) },
-    text = {
-        Text(text = stringResource(id = R.string.repo_delete_dialog_desc, repo.name))
-    },
+    title = { Text(text = repo.name) },
+    text = { Text(text = stringResource(id = R.string.repo_delete_dialog_desc)) },
     confirmButton = {
         TextButton(
             onClick = {
@@ -88,7 +86,7 @@ private fun DeleteDialog(
                 onClose()
             }
         ) {
-            Text(text = stringResource(id = R.string.repo_options_delete))
+            Text(text = stringResource(id = R.string.dialog_ok))
         }
     },
     dismissButton = {

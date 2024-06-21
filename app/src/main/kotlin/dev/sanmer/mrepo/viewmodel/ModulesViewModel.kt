@@ -215,19 +215,19 @@ class ModulesViewModel @Inject constructor(
 
     fun getVersionItem(module: LocalModule): VersionItem? {
         viewModelScope.launch {
-            if (versionItems.containsKey(module.id)) {
+            if (!localRepository.isUpdatable(module.id)) {
+                versionItems.remove(module.id)
                 return@launch
             }
 
-            if (!localRepository.hasUpdatableTag(module.id)) {
-                versionItems.remove(module.id)
+            if (versionItems.containsKey(module.id)) {
                 return@launch
             }
 
             val versionItem = if (module.updateJson.isNotBlank()) {
                 UpdateJson.load(module.updateJson)
             } else {
-                localRepository.getVersionById(module.id).firstOrNull()
+                localRepository.getVersionById(module.id).maxByOrNull { it.versionCode }
             }
 
             versionItems[module.id] = versionItem
@@ -258,7 +258,7 @@ class ModulesViewModel @Inject constructor(
                 url = item.zipUrl,
                 filename = filename,
                 title = module.name,
-                desc = item.versionDisplay
+                desc = item.version
             )
 
             val listener = object : DownloadService.IDownloadListener {

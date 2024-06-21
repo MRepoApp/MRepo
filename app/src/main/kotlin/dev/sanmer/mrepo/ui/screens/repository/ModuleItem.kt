@@ -29,7 +29,7 @@ import dev.sanmer.mrepo.utils.extensions.toDate
 import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
 
 @Composable
-fun ModuleItem(
+internal fun ModuleItem(
     module: OnlineModule,
     state: OnlineState,
     modifier: Modifier = Modifier,
@@ -43,8 +43,6 @@ fun ModuleItem(
 ) {
     val userPreferences = LocalUserPreferences.current
     val menu = userPreferences.repositoryMenu
-    val hasLabel = (state.hasLicense && menu.showLicense)
-            || state.installed
 
     Row(
         modifier = Modifier.padding(all = 10.dp),
@@ -73,12 +71,14 @@ fun ModuleItem(
             )
 
             Spacer(modifier = Modifier.height(2.dp))
+
             Text(
                 text = module.author,
                 style = MaterialTheme.typography.bodyMedium.copy(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
+
             Text(
                 text = module.versionDisplay,
                 style = MaterialTheme.typography.bodySmall,
@@ -88,36 +88,30 @@ fun ModuleItem(
             if (menu.showUpdatedTime) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = stringResource(
-                        id = R.string.module_update_at,
-                        state.lastUpdated.toDate()
-                    ),
+                    text = stringResource(id = R.string.module_update_at, state.lastUpdated.toDate()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline
                 )
             }
 
-            if (hasLabel) {
-                Row(
-                    modifier = Modifier.padding(top = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    if (menu.showLicense && module.track.hasLicense) {
-                        LabelItem(text = module.track.license)
-                    }
+            Row(
+                modifier = Modifier.padding(top = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                if (menu.showLicense) {
+                    LabelItem(text = module.metadata.license)
+                }
 
-                    when {
-                        state.updatable ->
-                            LabelItem(
-                                text = stringResource(id = R.string.module_new),
-                                containerColor = MaterialTheme.colorScheme.error,
-                                contentColor = MaterialTheme.colorScheme.onError
-                            )
-
-                        state.installed ->
-                            LabelItem(text = stringResource(id = R.string.module_installed))
-                    }
+                when {
+                    state.updatable -> LabelItem(
+                        text = stringResource(id = R.string.module_new),
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    )
+                    state.installed -> LabelItem(
+                        text = stringResource(id = R.string.module_installed)
+                    )
                 }
             }
         }

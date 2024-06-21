@@ -2,7 +2,7 @@ package dev.sanmer.mrepo.repository
 
 import dev.sanmer.mrepo.Compat
 import dev.sanmer.mrepo.compat.NetworkCompat.runRequest
-import dev.sanmer.mrepo.database.entity.RepoEntity
+import dev.sanmer.mrepo.database.entity.online.RepoEntity
 import dev.sanmer.mrepo.stub.IRepoManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,39 +18,40 @@ class ModulesRepository @Inject constructor(
 
     suspend fun getLocalAll() = withContext(Dispatchers.IO) {
         runCatching {
-            val modules = mm.modules
-            localRepository.insertLocal(modules)
-
-            val locals = localRepository.getLocalAll()
-            val removed = locals.filter { !modules.contains(it) }
-            localRepository.deleteLocal(removed)
-            localRepository.clearUpdatableTag(removed)
+            mm.modules.toList()
+        }.onSuccess { modules ->
+            localRepository.updateLocal(modules)
+        }.onFailure {
+            Timber.e(it, "getLocalAll")
         }
     }
 
     suspend fun getLocal(id: String) = withContext(Dispatchers.IO) {
-        val module = mm.getModuleById(id)
-        localRepository.insertLocal(module)
+        runCatching {
+            mm.getModuleById(id)
+        }.onSuccess {
+            localRepository.insertLocal(it)
+        }.onFailure {
+            Timber.e(it, "getLocal: $id")
+        }
     }
 
     suspend fun getRepoAll(onlyEnable: Boolean = true) =
         localRepository.getRepoAll().filter {
-            if (onlyEnable) it.enable else true
+            if (onlyEnable) !it.disable else true
         }.map {
             getRepo(it)
         }
 
-    suspend fun getRepo(repo: RepoEntity) = runRequest {
-        val api = IRepoManager.build(repo.url)
-        api.modules.execute()
-    }.onSuccess { modulesJson ->
-        localRepository.insertRepo(repo.copy(modulesJson))
-        localRepository.deleteOnlineByUrl(repo.url)
-        localRepository.insertOnline(
-            list = modulesJson.modules,
-            repoUrl = repo.url
-        )
-    }.onFailure {
-        Timber.e(it, "getRepo: ${repo.url}")
-    }
+    suspend fun getRepo(repo: RepoEntity) =
+        runRequest {
+            val api = IRepoManager.build(repo.url)
+            api.modules.execute()
+        }.onSuccess {
+            localRepository.updateRepo(repo, it)
+        }.onFailure {
+            Timber.e(it, "getRepo: ${repo.url}")
+        }
+
+    suspend fun getRepo(repoUrl: String) = getRepo(RepoEntity(repoUrl))
 }

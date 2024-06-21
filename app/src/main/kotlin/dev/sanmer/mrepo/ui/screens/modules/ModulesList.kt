@@ -39,7 +39,7 @@ import dev.sanmer.mrepo.viewmodel.ModulesViewModel
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun ModulesList(
+internal fun ModulesList(
     list: List<LocalModule>,
     state: LazyListState,
     isProviderAlive: Boolean,

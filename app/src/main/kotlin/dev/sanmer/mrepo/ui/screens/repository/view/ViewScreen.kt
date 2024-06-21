@@ -32,7 +32,6 @@ fun ViewScreen(
         topBar = {
             ViewTopBar(
                 online = viewModel.online,
-                tracks = viewModel.tracks,
                 scrollBehavior = scrollBehavior,
                 navController = navController
             )

@@ -51,9 +51,6 @@
     <string name="view_module_homepage">主页</string>
     <string name="view_module_source">源码</string>
     <string name="view_module_support">支持</string>
-    <string name="view_module_view_track">追踪信息</string>
-    <string name="view_module_type">类型: %s</string>
-    <string name="view_module_added">添加于: %s</string>
 
     <!-- Modules -->
     <string name="modules_empty">没找到任何模块</string>
@@ -95,16 +92,14 @@
     <string name="repo_update_at">更新于: %s</string>
     <string name="repo_options_update">更新</string>
     <string name="repo_options_delete">删除</string>
-    <string name="repo_delete_dialog_desc">你确定要删除 %s?</string>
+    <string name="repo_delete_dialog_desc">你想要删除这个存储库吗?</string>
     <string name="repo_add_dialog_title">添加存储库</string>
-    <string name="repo_add_dialog_add">添加</string>
     <!-- About -->
     <string name="about_app_version">版本 %1$s (%2$s)</string>
     <string name="about_desc1">为 Magisk 和 KernelSU 提供模块存储库以及模块管理.</string>
     <string name="about_desc2">由 %s 用 ❤️ 制作</string>
 
     <!-- Dialog-->
-    <string name="dialog_attention">注意</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_ok">确定</string>
 

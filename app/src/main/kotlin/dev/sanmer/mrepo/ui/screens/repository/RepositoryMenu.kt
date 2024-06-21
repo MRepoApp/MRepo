@@ -40,13 +40,13 @@ import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.ui.utils.expandedShape
 import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
 
-val options = listOf(
+private val options = listOf(
     Option.Name to R.string.menu_sort_option_name,
     Option.UpdatedTime to R.string.menu_sort_option_updated
 )
 
 @Composable
-fun RepositoryMenu(
+internal fun RepositoryMenu(
     setMenu: (RepositoryMenuCompat) -> Unit
 ) {
     val userPreferences = LocalUserPreferences.current

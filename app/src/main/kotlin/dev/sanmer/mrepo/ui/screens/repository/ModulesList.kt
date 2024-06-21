@@ -18,7 +18,7 @@ import dev.sanmer.mrepo.viewmodel.ModuleViewModel
 import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
 
 @Composable
-fun ModulesList(
+internal fun ModulesList(
     list: List<Pair<OnlineState, OnlineModule>>,
     state: LazyListState,
     navController: NavController
