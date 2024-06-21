@@ -51,7 +51,7 @@
     <string name="repo_modules">Ilość modułów: %d</string>
     <string name="repo_options_update">Zaktualizuj</string>
     <string name="repo_options_delete">Usuń</string>
-    <string name="repo_delete_dialog_desc">Usunąć %s\?</string>
+    <string name="repo_delete_dialog_desc">Usunąć %s?</string>
     <string name="repo_add_dialog_title">Dodaj repozytorium</string>
     <string name="about_app_version">Wersja %1$s (%2$s)</string>
     <string name="about_desc1">Zarządza repozytoriami, modułami Magisk i KernelSU.</string>
