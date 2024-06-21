@@ -49,18 +49,21 @@ class ModuleViewModel @Inject constructor(
 
     var local: LocalModule? by mutableStateOf(null)
         private set
+    val localVersionCode by lazy {
+        if (notifyUpdates && installed) local!!.versionCode else Int.MAX_VALUE
+    }
 
-    private val installed get() = local?.let { it.author == online.author } ?: false
     var notifyUpdates by mutableStateOf(false)
         private set
+    private val installed by lazy {
+        local?.let { it.author == online.author } ?: false
+    }
 
-    val localVersionCode get() =
-        if (notifyUpdates && installed) local!!.versionCode else Int.MAX_VALUE
+    val versions = mutableStateListOf<Pair<RepoEntity, VersionItem>>()
     val updatableSize by derivedStateOf {
         versions.count { it.second.versionCode > localVersionCode }
     }
 
-    val versions = mutableStateListOf<Pair<RepoEntity, VersionItem>>()
 
     init {
         Timber.d("ModuleViewModel init: $moduleId")

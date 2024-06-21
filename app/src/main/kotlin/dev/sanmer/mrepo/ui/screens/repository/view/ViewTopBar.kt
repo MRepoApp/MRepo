@@ -78,10 +78,10 @@ private fun TopBarContent(
     val userPreferences = LocalUserPreferences.current
     val repositoryMenu = userPreferences.repositoryMenu
 
-    val hasLicense by remember {
+    val hasLicense by remember(module.metadata) {
         derivedStateOf { module.metadata.license.isNotBlank() }
     }
-    val hasDonate by remember {
+    val hasDonate by remember(module.metadata) {
         derivedStateOf { module.metadata.donate.isNotBlank() }
     }
 
