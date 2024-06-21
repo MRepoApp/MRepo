@@ -65,9 +65,12 @@ private fun ThemeColorItem(
     isDarkMode: Boolean,
     onChange: (Int) -> Unit
 ) {
-    val selected by remember { derivedStateOf { id == themeColor } }
+    val selected by remember(themeColor) {
+        derivedStateOf { id == themeColor }
+    }
+
     val color = Colors.getColor(id)
-    val colorScheme by remember {
+    val colorScheme by remember(isDarkMode) {
         derivedStateOf {
             when {
                 isDarkMode -> color.darkColorScheme

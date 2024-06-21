@@ -90,7 +90,7 @@ fun ModuleItem(
     val ops by remember(module.state) {
         derivedStateOf { getModuleOps(module) }
     }
-    val item by remember {
+    val item by remember(module) {
         derivedStateOf { getVersionItem(module) }
     }
 

@@ -91,7 +91,9 @@ private fun DarkModeItem(
     darkMode: DarkMode,
     onChange: (DarkMode) -> Unit
 ) {
-    val selected by remember { derivedStateOf { item.value == darkMode } }
+    val selected by remember(darkMode) {
+        derivedStateOf { item.value == darkMode }
+    }
 
     Box(
         modifier = Modifier

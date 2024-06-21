@@ -59,7 +59,7 @@ internal fun ModuleItem(
     val userPreferences = LocalUserPreferences.current
     val menu = userPreferences.modulesMenu
 
-    val versionDisplay by remember {
+    val versionDisplay by remember(module) {
         derivedStateOf { module.versionDisplay }
     }
 
