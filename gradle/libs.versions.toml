@@ -63,7 +63,7 @@ markwon-core = "io.noties.markwon:core:4.6.2"
 timber = "com.jakewharton.timber:timber:5.0.1"
 
 # Local
-sanmer-su = "dev.sanmer.su:core:0.1.0"
+sanmer-su = "dev.sanmer.su:core:+"
 
 # Dependencies of the included build-logic
 android-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
