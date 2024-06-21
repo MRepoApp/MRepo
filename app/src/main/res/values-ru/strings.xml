@@ -58,7 +58,7 @@
     <string name="settings_non_root_desc">Функциональность ограничена</string>
     <string name="repo_options_update">Обновить</string>
     <string name="repo_options_delete">Убрать</string>
-    <string name="repo_delete_dialog_desc">Вы уверены что хотите удалить %s\?</string>
+    <string name="repo_delete_dialog_desc">Вы уверены что хотите удалить %s?</string>
     <string name="repo_add_dialog_title">Добавить репозиторий</string>
     <string name="about_app_version">Версия %1$s (%2$s)</string>
     <string name="about_desc1">Предоставление репозиториев модулей и управление модулями для Magisk и KernelSU.</string>
