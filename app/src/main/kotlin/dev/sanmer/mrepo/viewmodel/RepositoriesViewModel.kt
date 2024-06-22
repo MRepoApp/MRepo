@@ -54,9 +54,10 @@ class RepositoriesViewModel @Inject constructor(
         url: String,
         onFailure: (Throwable) -> Unit
     ) {
+        val repoUrl = if (url.endsWith("/")) url else "${url}/"
         viewModelScope.launch {
             refreshing {
-                modulesRepository.getRepo(url)
+                modulesRepository.getRepo(repoUrl)
                     .onFailure {
                         Timber.e(it, "insert: $url")
                         onFailure(it)

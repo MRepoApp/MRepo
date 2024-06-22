@@ -38,8 +38,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -159,9 +161,9 @@ private fun AddDialog(
     onClose: () -> Unit,
     onAdd: (String) -> Unit
 ) {
-    var domain by remember { mutableStateOf("") }
+    var url by remember { mutableStateOf(TextFieldValue("https://", TextRange(0, 8))) }
     val onDone: () -> Unit = {
-        onAdd("https://${domain}/")
+        onAdd(url.text)
         onClose()
     }
 
@@ -171,8 +173,7 @@ private fun AddDialog(
         title = { Text(text = stringResource(id = R.string.repo_add_dialog_title)) },
         confirmButton = {
             TextButton(
-                onClick = onDone,
-                enabled = domain.isNotBlank()
+                onClick = onDone
             ) {
                 Text(text = stringResource(id = R.string.dialog_ok))
             }
@@ -188,16 +189,15 @@ private fun AddDialog(
         OutlinedTextField(
             modifier = Modifier.focusRequester(focusRequester),
             textStyle = MaterialTheme.typography.bodyLarge,
-            value = domain,
-            onValueChange = { domain = it },
-            prefix = { Text(text = "https://") },
+            value = url,
+            onValueChange = { url = it },
             singleLine = false,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions {
-                if (domain.isNotBlank()) onDone()
+                onDone()
             },
             shape = RoundedCornerShape(15.dp)
         )
