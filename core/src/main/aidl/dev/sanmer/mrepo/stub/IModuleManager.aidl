@@ -1,7 +1,4 @@
-package dev.sanmer.mrepo.stub;
-
-import dev.sanmer.mrepo.content.Module;
-import dev.sanmer.mrepo.stub.IInstallCallback;
+aimport dev.sanmer.mrepo.stub.IInstallCallback;
 import dev.sanmer.mrepo.stub.IModuleOpsCallback;
 
 interface IModuleManager {
