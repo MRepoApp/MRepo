@@ -66,7 +66,7 @@
     <string name="notification_name_download">下載服務</string>
     <string name="unknown_error">未知錯誤</string>
     <string name="view_module_cloud">雲端</string>
-    <string name="view_module_update_ignore">忽略</string>
+    <string name="view_module_update_dismissed">忽略</string>
     <string name="menu_show_updated">顯示更新時間</string>
     <string name="menu_show_icon">顯示圖示</string>
     <string name="module_new">新增</string>
@@ -89,7 +89,7 @@
     <string name="menu_pin_installed">釘選已安裝</string>
     <string name="menu_pin_updatable">釘選可更新</string>
     <string name="view_module_last_updated">最後更新</string>
-    <string name="view_module_update_notify">通知</string>
+    <string name="view_module_update_notifying">通知</string>
     <string name="repo_update_at">更新於：%s</string>
     <string name="menu_advanced_menu">進階選單</string>
 </resources>

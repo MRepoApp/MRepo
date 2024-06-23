@@ -86,7 +86,7 @@
     <string name="install_logs_save_failed">Zapis nie powiódł się: %s</string>
     <string name="install_screen_title">Instalacja</string>
     <string name="module_update">Aktualizuj</string>
-    <string name="view_module_update_notify">Powiadom</string>
-    <string name="view_module_update_ignore">Ignoruj</string>
+    <string name="view_module_update_notifying">Powiadom</string>
+    <string name="view_module_update_dismissed">Ignoruj</string>
     <string name="settings_download_path">Ścieżka pobierania</string>
 </resources>

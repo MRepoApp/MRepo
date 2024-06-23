@@ -44,8 +44,8 @@
     <string name="view_module_version">版本</string>
     <string name="view_module_last_updated">上次更新</string>
     <string name="view_module_local">本地</string>
-    <string name="view_module_update_notify">通知</string>
-    <string name="view_module_update_ignore">忽略</string>
+    <string name="view_module_update_notifying">提醒中</string>
+    <string name="view_module_update_dismissed">已忽略</string>
     <string name="view_module_provided">由 %s 提供</string>
     <string name="view_module_version_dialog_desc">是否安装或下载该版本的模块?</string>
     <string name="view_module_homepage">主页</string>

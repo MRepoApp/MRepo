@@ -49,13 +49,13 @@ class ModuleViewModel @Inject constructor(
 
     var local: LocalModule? by mutableStateOf(null)
         private set
-    val localVersionCode by lazy {
-        if (notifyUpdates && installed) local!!.versionCode else Int.MAX_VALUE
+    val localVersionCode by derivedStateOf {
+        if (isUpdatable && installed) local!!.versionCode else Int.MAX_VALUE
     }
 
-    var notifyUpdates by mutableStateOf(false)
+    var isUpdatable by mutableStateOf(false)
         private set
-    private val installed by lazy {
+    private val installed by derivedStateOf {
         local?.let { it.author == online.author } ?: false
     }
 
@@ -73,9 +73,9 @@ class ModuleViewModel @Inject constructor(
     private fun loadData() = viewModelScope.launch {
         online = localRepository.getOnlineById(moduleId).maxBy { it.versionCode }
 
-        localRepository.getLocalAndUpdatableById(moduleId)?.let { (module, update) ->
+        localRepository.getLocalAndUpdatableById(moduleId)?.let { (module, updatable) ->
             local = module
-            notifyUpdates = update
+            isUpdatable = updatable
         }
 
         versions.addAll(
@@ -91,10 +91,10 @@ class ModuleViewModel @Inject constructor(
         }
     }
 
-    fun setUpdatesTag(updatable: Boolean) {
+    fun insertUpdatable(value: Boolean) {
         viewModelScope.launch {
-            notifyUpdates = updatable
-            localRepository.insertUpdatable(moduleId, updatable)
+            isUpdatable = value
+            localRepository.insertUpdatable(moduleId, value)
         }
     }
 

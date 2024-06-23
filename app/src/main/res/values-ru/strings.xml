@@ -86,8 +86,8 @@
     <string name="install_screen_title">Установка</string>
     <string name="install_logs_saved">Логи сохранены</string>
     <string name="install_logs_save_failed">Ошибка сохранения: %s</string>
-    <string name="view_module_update_notify">Оповестить</string>
-    <string name="view_module_update_ignore">Игнорировать</string>
+    <string name="view_module_update_notifying">Оповестить</string>
+    <string name="view_module_update_dismissed">Игнорировать</string>
     <string name="setup_shizuku_desc">Требуется разрешение предоставленное через Sui или Shizuku (root)</string>
     <string name="setup_root_desc">Требуются права root предоставленные через Magisk или KernelSU</string>
     <string name="setup_non_root_desc">Не требуются права суперпользователя, доступна только функция загрузки модуля</string>

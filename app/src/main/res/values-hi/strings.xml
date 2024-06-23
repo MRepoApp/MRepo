@@ -41,7 +41,7 @@
     <string name="install_logs_save_failed">सहेजने में विफल: %s</string>
     <string name="setup_non_root_title">मूलरहित</string>
     <string name="setup_non_root_desc">\'मूल\' अनुमतियों की आवश्यकता नहीं, केवल \'भाग\' (माॅडयूल) अधिभारण क्रिया उपलब्ध</string>
-    <string name="view_module_update_ignore">उपेक्षा करें</string>
+    <string name="view_module_update_dismissed">उपेक्षा करें</string>
     <string name="page_repository">कोष</string>
     <string name="page_settings">व्यवस्थापन</string>
     <string name="repository_empty">कोष रिक्त है</string>
@@ -57,7 +57,7 @@
     <string name="view_module_cloud">दूरसंचारित</string>
     <string name="view_module_source">स्त्रोत लेख</string>
     <string name="view_module_support">सहायता</string>
-    <string name="view_module_update_notify">सूचित</string>
+    <string name="view_module_update_notifying">सूचित</string>
     <string name="view_module_version_dialog_desc">क्या आप इस भाग के इस संस्करण को अधिभारित अथवा संस्थापित करना चाहते हैं?</string>
     <string name="view_module_homepage">गृहस्थान</string>
     <string name="setup_root_desc">\'मेजिस्क\' अथवा \'कर्नल एस यू\' द्वारा \'मूल\' अनुमतियों की आवश्यकता</string>

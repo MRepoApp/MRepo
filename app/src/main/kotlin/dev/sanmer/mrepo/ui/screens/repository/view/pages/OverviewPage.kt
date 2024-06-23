@@ -42,9 +42,9 @@ internal fun OverviewPage(
     online: OnlineModule,
     item: VersionItem?,
     local: LocalModule?,
+    updatable: Boolean,
+    setUpdatable: (Boolean) -> Unit,
     isProviderAlive: Boolean,
-    notifyUpdates: Boolean,
-    setUpdatesTag: (Boolean) -> Unit,
     onInstall: (Context, VersionItem) -> Unit
 ) = Column(
     modifier = Modifier
@@ -86,8 +86,8 @@ internal fun OverviewPage(
     if (local != null) {
         LocalItem(
             local = local,
-            notifyUpdates = notifyUpdates,
-            setUpdatesTag = setUpdatesTag
+            updatable = updatable,
+            setUpdatable = setUpdatable
         )
 
         HorizontalDivider(thickness = 0.9.dp)
@@ -147,8 +147,8 @@ private fun CloudItem(
 @Composable
 private fun LocalItem(
     local: LocalModule,
-    notifyUpdates: Boolean,
-    setUpdatesTag: (Boolean) -> Unit
+    updatable: Boolean,
+    setUpdatable: (Boolean) -> Unit
 ) = Column(
     modifier = Modifier
         .padding(all = 16.dp)
@@ -177,23 +177,23 @@ private fun LocalItem(
         )
 
         ElevatedFilterChip(
-            selected = notifyUpdates,
-            onClick = { setUpdatesTag(!notifyUpdates) },
+            selected = updatable,
+            onClick = { setUpdatable(!updatable) },
             label = {
                 Text(
-                    text = stringResource(id = if (notifyUpdates) {
-                        R.string.view_module_update_ignore
+                    text = stringResource(id = if (updatable) {
+                        R.string.view_module_update_notifying
                     } else {
-                        R.string.view_module_update_notify
+                        R.string.view_module_update_dismissed
                     })
                 )
             },
             leadingIcon = {
                 Icon(
-                    painter = painterResource(id = if (notifyUpdates) {
-                        R.drawable.target_off
+                    painter = painterResource(id = if (updatable) {
+                        R.drawable.notification
                     } else {
-                        R.drawable.target
+                        R.drawable.notification_off
                     }),
                     contentDescription = null,
                     modifier = Modifier.size(FilterChipDefaults.IconSize)

@@ -56,9 +56,9 @@ fun ViewScreen(
                         online = viewModel.online,
                         item = viewModel.lastVersionItem,
                         local = viewModel.local,
-                        notifyUpdates = viewModel.notifyUpdates,
+                        updatable = viewModel.isUpdatable,
+                        setUpdatable = viewModel::insertUpdatable,
                         isProviderAlive = viewModel.isProviderAlive,
-                        setUpdatesTag = viewModel::setUpdatesTag,
                         onInstall = { context, item ->
                             viewModel.downloader(context, item, true)
                         }
