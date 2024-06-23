@@ -3,10 +3,10 @@
     <!-- Setup -->
     <string name="setup_mode">Working Mode</string>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc">Requires Root permissions provided by Magisk or KernelSU</string>
+    <string name="setup_root_desc">Requires Root permissions provided by Magisk, KernelSU or APatch</string>
     <string name="setup_shizuku_desc">Requires permission provided by Sui or Shizuku (root)</string>
     <string name="setup_non_root_title">Non-Root</string>
-    <string name="setup_non_root_desc">Not require Root permissions, only the download module function is available</string>
+    <string name="setup_non_root_desc">Not require Root permissions, only module download is available</string>
 
     <!-- Install -->
     <string name="install_screen_title">Installation</string>
@@ -64,9 +64,9 @@
 
     <!-- Settings -->
     <string name="settings_app">App</string>
-    <string name="settings_app_desc">Settings about MRepo app itself</string>
+    <string name="settings_app_desc">Settings about app itself</string>
     <string name="settings_repo">Repositories</string>
-    <string name="settings_repo_desc">Manage Magisk modules repositories</string>
+    <string name="settings_repo_desc">Manage modules repositories</string>
     <string name="settings_about">About</string>
     <!-- Root Item -->
     <string name="settings_root_access">Root Access: %s</string>
