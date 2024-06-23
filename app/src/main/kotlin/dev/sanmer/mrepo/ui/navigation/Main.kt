@@ -24,6 +24,6 @@ enum class MainScreen(
     Settings(
         route = "SettingsScreen",
         label = R.string.page_settings,
-        icon = R.drawable.settings_2
+        icon = R.drawable.settings
     )
 }
