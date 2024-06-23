@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="setup_root_title">Root</string>
-    <string name="setup_root_desc">Requer permissões root fornecidas pelo Magisk ou KernelSU</string>
+    <string name="setup_root_desc">Requer permissões root fornecidas pelo Magisk, KernelSU ou APatch</string>
     <string name="setup_non_root_title">Sem root</string>
-    <string name="setup_non_root_desc">Não requer permissões root, apenas a função do módulo de download está disponível.</string>
+    <string name="setup_non_root_desc">Não requer permissões root, apenas o download do módulo está disponível.</string>
     <string name="install_screen_title">Instalação</string>
     <string name="install_flashing">Flashando</string>
     <string name="install_done">Feito</string>
@@ -59,9 +59,9 @@
     <string name="module_download">Baixar</string>
     <string name="module_update">Atualizar</string>
     <string name="settings_app">App</string>
-    <string name="settings_app_desc">Configurações sobre o próprio app MRepo</string>
+    <string name="settings_app_desc">Configurações sobre o próprio app</string>
     <string name="settings_repo">Repositórios</string>
-    <string name="settings_repo_desc">Gerencie repositórios de módulos Magisk</string>
+    <string name="settings_repo_desc">Gerencie repositórios de módulos</string>
     <string name="settings_about">Sobre</string>
     <string name="settings_root_access">Acesso root: %s</string>
     <string name="settings_root_provider">Provedor: %s</string>
@@ -75,7 +75,7 @@
     <string name="settings_app_theme_desc">Altere o esquema de cores e o modo escuro</string>
     <string name="settings_download_path">Caminho de download</string>
     <string name="about_app_version">Versão %1$s (%2$s)</string>
-    <string name="about_desc1">Fornece repositórios de módulos e gerencia módulos para Magisk e KernelSU.</string>
+    <string name="about_desc1">Fornece repositórios de módulos e gerencia módulos para Magisk, KernelSU e APatch.</string>
     <string name="about_desc2">Feito com ❤️ por %s</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_ok">OK</string>
