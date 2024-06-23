@@ -97,7 +97,7 @@
     <string name="repo_add_dialog_title">Add Repository</string>
     <!-- About -->
     <string name="about_app_version">Version %1$s (%2$s)</string>
-    <string name="about_desc1">Provide modules repositories and manage modules for Magisk and KernelSU.</string>
+    <string name="about_desc1">Provide modules repositories and manage modules for Magisk, KernelSU and APatch.</string>
     <string name="about_desc2">Made with ❤️ by %s</string>
 
     <!-- Dialog -->

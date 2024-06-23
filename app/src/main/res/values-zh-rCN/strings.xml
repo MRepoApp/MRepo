@@ -96,7 +96,7 @@
     <string name="repo_add_dialog_title">添加存储库</string>
     <!-- About -->
     <string name="about_app_version">版本 %1$s (%2$s)</string>
-    <string name="about_desc1">为 Magisk 和 KernelSU 提供模块存储库以及模块管理.</string>
+    <string name="about_desc1">为 Magisk, KernelSU 和 APatch 提供模块存储库以及模块管理.</string>
     <string name="about_desc2">由 %s 用 ❤️ 制作</string>
 
     <!-- Dialog-->
