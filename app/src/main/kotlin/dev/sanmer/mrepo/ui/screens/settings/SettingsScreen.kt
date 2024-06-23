@@ -77,7 +77,7 @@ fun SettingsScreen(
             )
 
             SettingNormalItem(
-                icon = R.drawable.components,
+                icon = R.drawable.command,
                 title = stringResource(id = R.string.setup_mode),
                 desc = stringResource(id = when (userPreferences.workingMode) {
                     WorkingMode.Superuser -> R.string.setup_root_title

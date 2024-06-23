@@ -112,7 +112,7 @@ fun ModulesScreen(
 
             if (list.isEmpty() && !viewModel.isLoading) {
                 PageIndicator(
-                    icon = R.drawable.keyframes,
+                    icon = R.drawable.hexagons,
                     text = if (viewModel.isSearch) R.string.search_empty else R.string.modules_empty,
                 )
             }

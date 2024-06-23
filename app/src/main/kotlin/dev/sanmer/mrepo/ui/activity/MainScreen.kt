@@ -86,11 +86,7 @@ private fun BottomNav(
             NavigationBarItem(
                 icon = {
                     Icon(
-                        painter = painterResource(id = if (selected) {
-                            screen.iconFilled
-                        } else {
-                            screen.icon
-                        }),
+                        painter = painterResource(id = screen.icon),
                         contentDescription = null,
                     )
                 },
