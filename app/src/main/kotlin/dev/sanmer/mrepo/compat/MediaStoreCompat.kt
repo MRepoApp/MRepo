@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
-import android.provider.MediaStore
+import android.provider.aStore
 import android.system.Os
 import androidx.annotation.RequiresApi
 import androidx.core.net.toFile
@@ -16,17 +16,17 @@ import androidx.documentfile.provider.DocumentFile
 import java.io.File
 import java.io.IOException
 
-object MediaStoreCompat {
+object aStoreCompat {
     @RequiresApi(Build.VERSION_CODES.R)
-    fun Context.createMediaStoreUri(
+    fun Context.createaStoreUri(
         file: File,
-        collection: Uri = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL),
+        collection: Uri = aStore.Downloads.getContentUri(aStore.VOLUME_EXTERNAL),
         mimeType: String
     ): Uri {
         val entry = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-            put(MediaStore.MediaColumns.RELATIVE_PATH, file.parent)
-            put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
+            put(aStore.aColumns.DISPLAY_NAME, file.name)
+            put(aStore.aColumns.RELATIVE_PATH, file.parent)
+            put(aStore.aColumns.MIME_TYPE, mimeType)
         }
 
         return contentResolver.insert(collection, entry) ?: throw IOException("Cannot insert $file")
@@ -47,7 +47,7 @@ object MediaStoreCompat {
         mimeType: String
     ) = when {
         BuildCompat.atLeastR -> runCatching {
-            createMediaStoreUri(
+            createaStoreUri(
                 file = File(Environment.DIRECTORY_DOWNLOADS, path),
                 mimeType = mimeType
             )
@@ -79,10 +79,10 @@ object MediaStoreCompat {
         require(uri.scheme == "content") { "Uri lacks 'content' scheme: $uri" }
 
         return when {
-            uri.authority == MediaStore.AUTHORITY -> {
+            uri.authority == aStore.AUTHORITY -> {
                 contentResolver.queryString(
                     uri = uri,
-                    columnName = MediaStore.MediaColumns.OWNER_PACKAGE_NAME
+                    columnName = aStore.aColumns.OWNER_PACKAGE_NAME
                 )
             }
             else -> {
@@ -104,7 +104,7 @@ object MediaStoreCompat {
 
         return contentResolver.queryString(
             uri = uri,
-            columnName = MediaStore.MediaColumns.DISPLAY_NAME
+            columnName = aStore.aColumns.DISPLAY_NAME
         ) ?: uri.toString()
     }
 

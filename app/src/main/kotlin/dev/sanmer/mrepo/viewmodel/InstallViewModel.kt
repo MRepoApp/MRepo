@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
-import dev.sanmer.mrepo.compat.MediaStoreCompat.copyToDir
+import dev.sanmer.mrepo.compat.aStoreCompat.copyToDir
 import dev.sanmer.mrepo.compat.MediaStoreCompat.getPathForUri
 import dev.sanmer.mrepo.content.State
 import dev.sanmer.mrepo.model.local.LocalModule
