@@ -39,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
+import dev.sanmer.mrepo.compat.NetworkCompat
 import dev.sanmer.mrepo.compat.NetworkCompat.Compose.requestString
 import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.ui.utils.expandedShape
@@ -178,18 +179,31 @@ private fun ChangelogItem(url: String) {
         label = "ChangelogItem"
     ) {
         when {
-            it == null -> Loading(
+            it.isLoading -> Loading(
                 minHeight = 200.dp
             )
-            it.isSuccess -> MarkdownText(
-                text = it.getOrThrow(),
-                color = AlertDialogDefaults.textContentColor,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 18.dp)
-                    .padding(bottom = 18.dp)
-            )
+            it.isSuccess -> {
+                val changelog by remember {
+                    derivedStateOf {
+                        val text: String = it.data()
+                        if (NetworkCompat.isHTML(text)) {
+                            ""
+                        } else {
+                            text
+                        }
+                    }
+                }
+
+                MarkdownText(
+                    text = changelog,
+                    color = AlertDialogDefaults.textContentColor,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 18.dp)
+                        .padding(bottom = 18.dp)
+                )
+            }
         }
     }
 }

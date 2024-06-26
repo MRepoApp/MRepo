@@ -123,7 +123,6 @@ class ModuleViewModel @Inject constructor(
             )
 
             val listener = object : DownloadService.IDownloadListener {
-                override fun getProgress(value: Float) {}
                 override fun onSuccess() {
                     if (install) {
                         InstallActivity.start(
@@ -131,10 +130,6 @@ class ModuleViewModel @Inject constructor(
                             file = File(downloadPath, filename)
                         )
                     }
-                }
-
-                override fun onFailure(e: Throwable) {
-                    Timber.d(e)
                 }
             }
 

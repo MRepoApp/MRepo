@@ -45,16 +45,17 @@ fun LicenseContent(
         label = "LicenseContent"
     ) {
         when {
-            it == null -> Loading(
+            it.isLoading -> Loading(
                 minHeight = 200.dp
             )
             it.isSuccess -> ViewLicense(
-                license = it.getOrThrow(),
+                license = it.data(),
                 modifier = modifier
             )
             else -> Failed(
-                message = it.exceptionOrNull()?.message,
-                minHeight = 200.dp
+                message = it.error()?.message,
+                minHeight = 200.dp,
+                modifier = Modifier.padding(all = 16.dp)
             )
         }
     }

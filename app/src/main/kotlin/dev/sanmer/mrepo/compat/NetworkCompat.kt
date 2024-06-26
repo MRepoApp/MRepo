@@ -22,6 +22,7 @@ import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.create
 import timber.log.Timber
 import java.io.File
 import java.io.OutputStream
@@ -32,6 +33,8 @@ object NetworkCompat {
     private val cacheOrNull: Cache? get() = cacheDirOrNull?.let {
         Cache(File(it, "okhttp"), 10 * 1024 * 1024)
     }
+
+    val defaultJson = Json { ignoreUnknownKeys = true }
 
     fun setCacheDir(dir: File) {
         cacheDirOrNull = dir
@@ -49,7 +52,7 @@ object NetworkCompat {
             .toRegex()
             .matches(url)
 
-    fun createOkHttpClient(): OkHttpClient {
+    private fun createOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder().cache(cacheOrNull)
 
         if (BuildConfig.DEBUG) {
@@ -78,15 +81,21 @@ object NetworkCompat {
 
         return Retrofit.Builder()
             .addConverterFactory(
-                Json.asConverterFactory("application/json; charset=UTF8".toMediaType())
+                defaultJson.asConverterFactory("application/json; charset=UTF8".toMediaType())
             )
             .client(client)
     }
 
+    inline fun <reified T: Any> createApi(url: String) =
+        createRetrofit()
+            .baseUrl(url)
+            .build()
+            .create<T>()
+
     suspend fun <T> request(
         url: String,
-        get: (ResponseBody, Headers) -> T
-    ) = runRequest(get = get) {
+        converter: (ResponseBody, Headers) -> T
+    ) = runRequest(converter = converter) {
         val client = createOkHttpClient()
         val request = Request.Builder()
             .url(url)
@@ -99,31 +108,24 @@ object NetworkCompat {
     suspend fun requestString(url: String) =
         request(
             url = url,
-            get = { body, _ ->
+            converter = { body, _ ->
                 body.string()
             }
         )
 
-    suspend inline fun <reified T> requestJson(
-        url: String
-    ): Result<T> {
-        val result = request(url) { body, _ ->
-            Json.decodeFromStream<T>(body.byteStream())
-        }
-
-        if (result.isSuccess) {
-            val json = result.getOrThrow()
-            return Result.success(json)
-        }
-
-        return Result.failure(IllegalArgumentException())
-    }
+    suspend inline fun <reified T> requestJson(url: String) =
+        request(
+            url = url,
+            converter = { body, _ ->
+                defaultJson.decodeFromStream<T>(body.byteStream())
+            }
+        )
 
     suspend fun download(
         url: String,
         output: OutputStream,
         onProgress: (Float) -> Unit
-    ) = request(url) { body, headers ->
+    ) = request(url) { body, _ ->
         val buffer = ByteArray(2048)
         val input = body.byteStream()
 
@@ -142,84 +144,106 @@ object NetworkCompat {
         output.flush()
         output.close()
         input.close()
-
-        headers
     }
 
     suspend fun <T> runRequest(
-        run: () -> retrofit2.Response<T>
+        block: () -> retrofit2.Response<T>
     ): Result<T> = withContext(Dispatchers.IO) {
-        try {
-            val response = run()
-            if (response.isSuccessful) {
-                val data = response.body()
-                if (data != null) {
-                    Result.success(data)
-                }else {
-                    Result.failure(NullPointerException())
-                }
+        runCatching {
+            val response = block()
+            val data = requireNotNull(response.body())
 
-            } else {
-                val error = response.errorBody()?.string() ?: "404 Not Found"
-                if (isHTML(error)) {
-                    Result.failure(RuntimeException("404 Not Found"))
-                } else {
-                    Result.failure(RuntimeException(error))
+            when {
+                response.isSuccessful -> data
+                else -> {
+                    val error = response.errorBody()?.string() ?: "404 Not Found"
+                    if (isHTML(error)) {
+                        throw  RuntimeException("404 Not Found")
+                    } else {
+                        throw RuntimeException(error)
+                    }
                 }
-
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
     suspend fun <T> runRequest(
-        get: (ResponseBody, Headers) -> T,
-        run: () -> okhttp3.Response
+        converter: (ResponseBody, Headers) -> T,
+        block: () -> okhttp3.Response
     ): Result<T> = withContext(Dispatchers.IO) {
-        try {
-            val response = run()
-            val body = response.body
+        runCatching {
+            val response = block()
             val headers = response.headers
-            if (response.isSuccessful) {
-                if (body != null) {
-                    Result.success(get(body, headers))
-                } else {
-                    Result.failure(NullPointerException())
-                }
+            val body = requireNotNull(response.body)
 
-            } else {
-                val error = body?.string() ?: "404 Not Found"
-                if (isHTML(error)) {
-                    Result.failure(RuntimeException("404 Not Found"))
-                } else {
-                    Result.failure(RuntimeException(error))
+            when {
+                response.isSuccessful -> converter(body, headers)
+                else -> {
+                    val error = body.string()
+                    if (isHTML(error)) {
+                        throw RuntimeException("404 Not Found")
+                    } else {
+                        throw RuntimeException(error)
+                    }
                 }
-
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     object Compose {
+        data class Value(
+            private val inner: Any?,
+            private val event: Event
+        ) {
+            constructor(result: Result<Any>) : this(
+                inner = when {
+                    result.isSuccess -> result.getOrNull()
+                    result.isFailure -> result.exceptionOrNull()
+                    else -> null
+                },
+                event = when {
+                    result.isSuccess -> Event.Succeeded
+                    result.isFailure -> Event.Failed
+                    else -> Event.Loading
+                }
+            )
+
+            val isLoading by lazy { event == Event.Loading}
+            val isSuccess by lazy { event == Event.Succeeded }
+            val isFailure by lazy { event == Event.Failed }
+
+            fun <T> data() = inner as T
+            fun error() = inner as? Throwable
+
+            enum class Event {
+                Loading,
+                Succeeded,
+                Failed;
+            }
+
+            companion object {
+                fun none() = Value(null, Event.Loading)
+            }
+        }
+
         @Composable
         fun <T> runRequest(
-            get: suspend () -> Result<T>
-        ): Result<T>? {
-            var result: Result<T>? by remember { mutableStateOf(null) }
-            LaunchedEffect(true) { result = get() }
-            return result
+            block: suspend () -> Result<T>
+        ): Value {
+            var value: Value by remember { mutableStateOf(Value.none()) }
+            LaunchedEffect(true) { value = Value(block() as Result<Any>) }
+            return value
         }
 
         @Composable
         fun requestString(url: String) = runRequest(
-            get = { NetworkCompat.requestString(url) }
+            block = { NetworkCompat.requestString(url) }
         )
 
         @Composable
         inline fun <reified T> requestJson(url: String) = runRequest(
-            get = { NetworkCompat.requestJson<T>(url) }
+            block = { NetworkCompat.requestJson<T>(url) }
         )
     }
 }

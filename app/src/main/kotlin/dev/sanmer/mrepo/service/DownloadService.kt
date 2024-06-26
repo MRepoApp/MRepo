@@ -87,6 +87,30 @@ class DownloadService : LifecycleService() {
             val downloadPath = userPreferences.downloadPath
             val file = File(downloadPath, item.filename)
 
+            val listener = object : IDownloadListener {
+                override fun getProgress(value: Float) {
+                    listeners[item]?.getProgress(value)
+                    progressFlow.value = item to value
+                }
+
+                override fun onSuccess() {
+                    listeners[item]?.onSuccess()
+                    progressFlow.value = item to 0f
+
+                    onDownloadSucceeded(item)
+                    tasks.remove(item)
+                }
+
+                override fun onFailure(e: Throwable) {
+                    listeners[item]?.onFailure(e)
+                    progressFlow.value = item to 0f
+
+                    Timber.e(e)
+                    onDownloadFailed(item, e.message)
+                    tasks.remove(item)
+                }
+            }
+
             val output = try {
                 val uri = createDownloadUri(
                     path = file.toRelativeString(Const.PUBLIC_DOWNLOADS),
@@ -94,40 +118,15 @@ class DownloadService : LifecycleService() {
                 )
                 checkNotNull(contentResolver.openOutputStream(uri))
             } catch (e: Throwable) {
-                onDownloadFailed(item, e.message)
+                listener.onFailure(e)
                 return@launch
-            }
-
-            val listener = object : IDownloadListener {
-                override fun getProgress(value: Float) {
-                    progressFlow.value = item to value
-                    listeners[item]?.getProgress(value)
-                }
-
-                override fun onSuccess() {
-                    onDownloadSucceeded(item)
-
-                    progressFlow.value = item to 0f
-                    listeners[item]?.onSuccess()
-                    tasks.remove(item)
-                }
-
-                override fun onFailure(e: Throwable) {
-                    onDownloadFailed(item, e.message)
-
-                    progressFlow.value = item to 0f
-                    listeners[item]?.onFailure(e)
-                    tasks.remove(item)
-                }
             }
 
             tasks.add(item)
             NetworkCompat.download(
                 url = item.url,
                 output = output,
-                onProgress = {
-                    listener.getProgress(it)
-                }
+                onProgress = listener::getProgress
             ).onSuccess {
                 listener.onSuccess()
             }.onFailure {
@@ -147,7 +146,7 @@ class DownloadService : LifecycleService() {
             .setProgress(100, (progress * 100).toInt(), false)
             .build()
 
-        notify(item.taskId, notification)
+        notify(item.id, notification)
     }
 
     private fun onDownloadSucceeded(item: TaskItem) {
@@ -158,7 +157,7 @@ class DownloadService : LifecycleService() {
             .setSilent(true)
             .build()
 
-        notify(item.taskId, notification)
+        notify(item.id, notification)
     }
 
     private fun onDownloadFailed(item: TaskItem, message: String?) {
@@ -168,7 +167,7 @@ class DownloadService : LifecycleService() {
             .setContentText(message ?: getString(R.string.unknown_error))
             .build()
 
-        notify(item.taskId, notification)
+        notify(item.id, notification)
     }
 
     private fun setForeground() {
@@ -205,29 +204,29 @@ class DownloadService : LifecycleService() {
 
     @Parcelize
     data class TaskItem(
+        val id: Int = System.currentTimeMillis().toInt(),
         val key: String,
         val url: String,
         val filename: String,
         val title: String?,
         val desc: String?,
-        val taskId: Int = System.currentTimeMillis().toInt(),
     ) : Parcelable {
         companion object {
             fun empty() = TaskItem(
+                id = -1,
                 key = "",
                 url = "",
                 filename = "",
                 title = null,
                 desc = null,
-                taskId = -1
             )
         }
     }
 
     interface IDownloadListener {
-        fun getProgress(value: Float)
-        fun onSuccess()
-        fun onFailure(e: Throwable)
+        fun getProgress(value: Float) {}
+        fun onSuccess() {}
+        fun onFailure(e: Throwable) {}
     }
 
     companion object {

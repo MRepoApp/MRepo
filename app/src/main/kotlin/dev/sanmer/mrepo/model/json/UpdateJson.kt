@@ -4,7 +4,6 @@ import dev.sanmer.mrepo.compat.NetworkCompat
 import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.utils.Utils
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 
 @Serializable
@@ -37,18 +36,13 @@ data class UpdateJson(
             if (!NetworkCompat.isUrl(url)) return null
 
             val result = NetworkCompat.request(url) { body, headers ->
-                Json.decodeFromStream<UpdateJson>(body.byteStream()) to headers
+                val json = NetworkCompat.defaultJson.decodeFromStream<UpdateJson>(body.byteStream())
+                val lastModified = headers.getInstant("Last-Modified")?.toEpochMilli()
+
+                json.toItemOrNull(lastModified ?: System.currentTimeMillis())
             }
 
-            return when {
-                result.isSuccess -> {
-                    val (json, headers) = result.getOrThrow()
-                    val lastModified = headers.getInstant("Last-Modified")?.toEpochMilli()
-                    val timestamp = lastModified ?: System.currentTimeMillis()
-                    json.toItemOrNull(timestamp)
-                }
-                else -> null
-            }
+            return result.getOrNull()
         }
     }
 }

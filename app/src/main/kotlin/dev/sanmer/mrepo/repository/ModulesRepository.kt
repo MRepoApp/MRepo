@@ -45,7 +45,7 @@ class ModulesRepository @Inject constructor(
 
     suspend fun getRepo(repo: RepoEntity) =
         runRequest {
-            val api = IRepoManager.build(repo.url)
+            val api = IRepoManager.create(repo.url)
             api.modules.execute()
         }.onSuccess {
             localRepository.updateRepo(repo, it)
