@@ -20,17 +20,6 @@ data class OnlineModule(
         Utils.getVersionDisplay(version, versionCode)
     }
 
-    override fun equals(other: Any?): Boolean {
-        return when (other) {
-            is OnlineModule -> id == other.id
-            else -> false
-        }
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
-
     @Serializable
     data class Metadata(
         val license: String = "",
