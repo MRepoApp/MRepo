@@ -95,7 +95,7 @@ private fun ViewLicense(
                 )
             }
 
-            if (license.hasLabel()) {
+            if (license.hasLabel) {
                 LabelsItem(license = license)
             }
         }

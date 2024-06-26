@@ -233,8 +233,7 @@ class DownloadService : LifecycleService() {
     companion object {
         private const val GROUP_KEY = "DOWNLOAD_SERVICE_GROUP_KEY"
         private const val EXTRA_TASK = "dev.sanmer.mrepo.extra.TASK"
-        private val Intent.taskItemOrNull: TaskItem? get() =
-            parcelable(EXTRA_TASK)
+        private val Intent.taskItemOrNull: TaskItem? get() = parcelable(EXTRA_TASK)
 
         private val listeners = hashMapOf<TaskItem, IDownloadListener>()
         private val progressFlow = MutableStateFlow(TaskItem.empty() to 0f)

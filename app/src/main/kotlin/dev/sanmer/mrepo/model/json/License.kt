@@ -11,5 +11,7 @@ data class License(
     val isOsiApproved: Boolean,
     val isFsfLibre: Boolean = false,
 ) {
-    fun hasLabel() = isFsfLibre || isOsiApproved
+    val hasLabel by lazy {
+        isFsfLibre || isOsiApproved
+    }
 }

@@ -141,9 +141,7 @@ object MediaStoreCompat {
         val tmp = dir.resolve(getDisplayNameForUri(uri))
 
         contentResolver.openInputStream(uri)?.buffered()?.use { input ->
-            tmp.outputStream().use { output ->
-                input.copyTo(output)
-            }
+            tmp.outputStream().use(input::copyTo)
         }
 
         return tmp

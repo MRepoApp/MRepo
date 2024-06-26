@@ -25,7 +25,7 @@ data class VersionItemEntity(
         id: String,
         original: VersionItem,
     ) : this(
-        repoUrl= repoUrl,
+        repoUrl = repoUrl,
         id = id,
         timestamp = original.timestamp,
         version = original.version,
@@ -35,7 +35,7 @@ data class VersionItemEntity(
     )
 
     fun toJson() = VersionItem(
-        repoUrl= repoUrl,
+        repoUrl = repoUrl,
         timestamp = timestamp,
         version = version,
         versionCode = versionCode,

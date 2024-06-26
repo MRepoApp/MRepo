@@ -17,14 +17,15 @@ import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.stub.IInstallCallback
+import dev.sanmer.mrepo.utils.extensions.now
 import dev.sanmer.mrepo.utils.extensions.tmpDir
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
 import java.io.File
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -81,12 +82,6 @@ class InstallViewModel @Inject constructor(
 
         console.add("- Copying zip to temp directory")
         val tmpFile = context.copyToDir(uri, context.tmpDir)
-        val cr = context.contentResolver
-        cr.openInputStream(uri)?.use { input ->
-            tmpFile.outputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
 
         mm.getModuleInfo(tmpFile.path)?.let {
             Timber.d("module = $it")
