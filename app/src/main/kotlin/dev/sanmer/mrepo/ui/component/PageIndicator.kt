@@ -100,8 +100,10 @@ fun PageIndicator(
 
 @Composable
 fun Loading(
+    modifier: Modifier = Modifier,
     minHeight: Dp? = null
 ) = PageIndicator(
+    modifier = modifier,
     icon = {
         CircularProgressIndicator(
             modifier = Modifier.size(50.dp),
@@ -122,10 +124,12 @@ fun Loading(
 @Composable
 fun Failed(
     message: String?,
+    modifier: Modifier = Modifier,
     minHeight: Dp? = null
 ) = PageIndicator(
     icon = R.drawable.alert_triangle,
     text = message ?: stringResource(id = R.string.unknown_error),
+    modifier = modifier,
     minHeight = minHeight
 )
 
