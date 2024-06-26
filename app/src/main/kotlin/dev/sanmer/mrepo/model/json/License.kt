@@ -1,8 +1,8 @@
 package dev.sanmer.mrepo.model.json
 
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class License(
     val licenseText: String,
     val name: String,

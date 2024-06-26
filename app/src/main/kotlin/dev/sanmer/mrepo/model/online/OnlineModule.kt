@@ -1,15 +1,15 @@
 package dev.sanmer.mrepo.model.online
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import dev.sanmer.mrepo.utils.Utils
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class OnlineModule(
     val id: String,
     val name: String,
     val version: String,
-    @Json(name = "version_code")
+    @SerialName("version_code")
     val versionCode: Int,
     val author: String,
     val description: String,
@@ -31,7 +31,7 @@ data class OnlineModule(
         return id.hashCode()
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class Metadata(
         val license: String = "",
         val homepage: String = "",

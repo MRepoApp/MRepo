@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.self.hilt)
     alias(libs.plugins.self.room)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.protobuf)
 }
 
@@ -134,15 +134,12 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.protobuf.kotlin.lite)
+    implementation(libs.square.retrofit)
+    implementation(libs.square.retrofit.kotlinxSerialization)
+    implementation(libs.square.okhttp)
+    implementation(libs.square.logging.interceptor)
     implementation(libs.markwon.core)
     implementation(libs.timber)
-
-    implementation(libs.square.retrofit)
-    implementation(libs.square.retrofit.moshi)
-    implementation(libs.square.okhttp)
-    implementation(libs.square.okhttp.dnsoverhttps)
-    implementation(libs.square.logging.interceptor)
-    implementation(libs.square.moshi)
-    ksp(libs.square.moshi.kotlin)
 }

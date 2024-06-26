@@ -1,17 +1,18 @@
 package dev.sanmer.mrepo.model.online
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class VersionItem(
-    @Json(ignore = true)
+    @Transient
     val repoUrl: String = "",
     val timestamp: Long,
     val version: String,
-    @Json(name = "version_code")
+    @SerialName("version_code")
     val versionCode: Int,
-    @Json(name = "zip_url")
+    @SerialName("zip_url")
     val zipUrl: String,
     val changelog: String
 )

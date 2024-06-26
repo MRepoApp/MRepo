@@ -1,13 +1,13 @@
 package dev.sanmer.mrepo.model.json
 
-import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.adapter
 import dev.sanmer.mrepo.compat.NetworkCompat
 import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.utils.Utils
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class UpdateJson(
     val version: String,
     val versionCode: Int,
@@ -37,21 +37,15 @@ data class UpdateJson(
             if (!NetworkCompat.isUrl(url)) return null
 
             val result = NetworkCompat.request(url) { body, headers ->
-                val adapter = Moshi.Builder()
-                    .build()
-                    .adapter<UpdateJson>()
-
-                adapter.fromJson(body.string()) to headers
+                Json.decodeFromStream<UpdateJson>(body.byteStream()) to headers
             }
 
             return when {
                 result.isSuccess -> {
                     val (json, headers) = result.getOrThrow()
-                    json?.let {
-                        val lastModified = headers.getInstant("Last-Modified")?.toEpochMilli()
-                        val timestamp = lastModified ?: System.currentTimeMillis()
-                        json.toItemOrNull(timestamp)
-                    }
+                    val lastModified = headers.getInstant("Last-Modified")?.toEpochMilli()
+                    val timestamp = lastModified ?: System.currentTimeMillis()
+                    json.toItemOrNull(timestamp)
                 }
                 else -> null
             }

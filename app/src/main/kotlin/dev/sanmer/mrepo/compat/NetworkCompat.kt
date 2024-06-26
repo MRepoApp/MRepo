@@ -6,21 +6,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.adapter
 import dev.sanmer.mrepo.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
 import okhttp3.Headers
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import timber.log.Timber
 import java.io.File
 import java.io.OutputStream
@@ -76,7 +77,9 @@ object NetworkCompat {
         val client = createOkHttpClient()
 
         return Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(
+                Json.asConverterFactory("application/json; charset=UTF8".toMediaType())
+            )
             .client(client)
     }
 
@@ -105,16 +108,12 @@ object NetworkCompat {
         url: String
     ): Result<T> {
         val result = request(url) { body, _ ->
-            val adapter = Moshi.Builder()
-                .build()
-                .adapter<T>()
-
-            adapter.fromJson(body.string())
+            Json.decodeFromStream<T>(body.byteStream())
         }
 
         if (result.isSuccess) {
             val json = result.getOrThrow()
-            if (json != null) return Result.success(json)
+            return Result.success(json)
         }
 
         return Result.failure(IllegalArgumentException())

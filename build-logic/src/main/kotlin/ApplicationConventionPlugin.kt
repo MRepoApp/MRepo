@@ -41,6 +41,7 @@ class ApplicationConventionPlugin : Plugin<Project> {
                 languageSettings {
                     optIn("kotlin.ExperimentalStdlibApi")
                     optIn("kotlinx.coroutines.FlowPreview")
+                    optIn("kotlinx.serialization.ExperimentalSerializationApi")
                 }
             }
         }
