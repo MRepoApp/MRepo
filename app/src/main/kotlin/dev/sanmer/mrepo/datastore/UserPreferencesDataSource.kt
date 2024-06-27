@@ -1,13 +1,17 @@
 package dev.sanmer.mrepo.datastore
 
 import androidx.datastore.core.DataStore
+import dev.sanmer.mrepo.datastore.model.DarkMode
+import dev.sanmer.mrepo.datastore.model.ModulesMenu
+import dev.sanmer.mrepo.datastore.model.RepositoryMenu
+import dev.sanmer.mrepo.datastore.model.UserPreferences
+import dev.sanmer.mrepo.datastore.model.WorkingMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
 import javax.inject.Inject
 
 class UserPreferencesDataSource @Inject constructor(
-    private val userPreferences: DataStore<UserPreferencesCompat>
+    private val userPreferences: DataStore<UserPreferences>
 ) {
     val data get() = userPreferences.data
 
@@ -43,7 +47,7 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setDownloadPath(value: File) = withContext(Dispatchers.IO) {
+    suspend fun setDownloadPath(value: String) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
             it.copy(
                 downloadPath = value
@@ -51,7 +55,7 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setRepositoryMenu(value: RepositoryMenuCompat) = withContext(Dispatchers.IO) {
+    suspend fun setRepositoryMenu(value: RepositoryMenu) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
             it.copy(
                 repositoryMenu = value
@@ -59,7 +63,7 @@ class UserPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun setModulesMenu(value: ModulesMenuCompat) = withContext(Dispatchers.IO) {
+    suspend fun setModulesMenu(value: ModulesMenu) = withContext(Dispatchers.IO) {
         userPreferences.updateData {
             it.copy(
                 modulesMenu = value

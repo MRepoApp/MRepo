@@ -29,8 +29,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.datastore.Option
-import dev.sanmer.mrepo.datastore.RepositoryMenuCompat
+import dev.sanmer.mrepo.datastore.model.Option
+import dev.sanmer.mrepo.datastore.model.RepositoryMenu
 import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.ui.component.MenuChip
 import dev.sanmer.mrepo.ui.component.Segment
@@ -47,7 +47,7 @@ private val options = listOf(
 
 @Composable
 internal fun RepositoryMenu(
-    setMenu: (RepositoryMenuCompat) -> Unit
+    setMenu: (RepositoryMenu) -> Unit
 ) {
     val userPreferences = LocalUserPreferences.current
     var open by rememberSaveable { mutableStateOf(false) }
@@ -73,8 +73,8 @@ internal fun RepositoryMenu(
 @Composable
 private fun BottomSheet(
     onClose: () -> Unit,
-    menu: RepositoryMenuCompat,
-    setMenu: (RepositoryMenuCompat) -> Unit
+    menu: RepositoryMenu,
+    setMenu: (RepositoryMenu) -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),

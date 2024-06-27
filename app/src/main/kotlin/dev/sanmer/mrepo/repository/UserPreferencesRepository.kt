@@ -1,11 +1,10 @@
 package dev.sanmer.mrepo.repository
 
-import dev.sanmer.mrepo.datastore.DarkMode
 import dev.sanmer.mrepo.datastore.UserPreferencesDataSource
-import dev.sanmer.mrepo.datastore.WorkingMode
-import dev.sanmer.mrepo.datastore.ModulesMenuCompat
-import dev.sanmer.mrepo.datastore.RepositoryMenuCompat
-import java.io.File
+import dev.sanmer.mrepo.datastore.model.DarkMode
+import dev.sanmer.mrepo.datastore.model.ModulesMenu
+import dev.sanmer.mrepo.datastore.model.RepositoryMenu
+import dev.sanmer.mrepo.datastore.model.WorkingMode
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,9 +22,9 @@ class UserPreferencesRepository @Inject constructor(
 
     suspend fun setDeleteZipFile(value: Boolean) = userPreferencesDataSource.setDeleteZipFile(value)
 
-    suspend fun setDownloadPath(value: File) = userPreferencesDataSource.setDownloadPath(value)
+    suspend fun setDownloadPath(value: String) = userPreferencesDataSource.setDownloadPath(value)
 
-    suspend fun setRepositoryMenu(value: RepositoryMenuCompat) = userPreferencesDataSource.setRepositoryMenu(value)
+    suspend fun setRepositoryMenu(value: RepositoryMenu) = userPreferencesDataSource.setRepositoryMenu(value)
 
-    suspend fun setModulesMenu(value: ModulesMenuCompat) = userPreferencesDataSource.setModulesMenu(value)
+    suspend fun setModulesMenu(value: ModulesMenu) = userPreferencesDataSource.setModulesMenu(value)
 }

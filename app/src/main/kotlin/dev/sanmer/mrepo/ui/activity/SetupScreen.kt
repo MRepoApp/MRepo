@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.datastore.WorkingMode
+import dev.sanmer.mrepo.datastore.model.WorkingMode
 import dev.sanmer.mrepo.ui.screens.settings.workingmode.WorkingModeItem
 
 @Composable

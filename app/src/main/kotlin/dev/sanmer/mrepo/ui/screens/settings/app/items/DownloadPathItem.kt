@@ -20,32 +20,34 @@ import java.io.File
 
 @Composable
 internal fun DownloadPathItem(
-    downloadPath: File,
-    onChange: (File) -> Unit
+    downloadPath: String,
+    onChange: (String) -> Unit
 ) {
     var edit by remember { mutableStateOf(false) }
     if (edit) EditDialog(
         path = downloadPath,
         onClose = { edit = false },
-        onConfirm = { if (it != downloadPath) onChange(it) }
+        onConfirm = onChange
     )
 
     SettingNormalItem(
         icon = R.drawable.files,
         title = stringResource(id = R.string.settings_download_path),
-        desc = downloadPath.absolutePath,
+        desc = downloadPath,
         onClick = { edit = true }
     )
 }
 
 @Composable
 private fun EditDialog(
-    path : File,
+    path: String,
     onClose: () -> Unit,
-    onConfirm: (File) -> Unit
+    onConfirm: (String) -> Unit
 ) {
     var name by remember {
-        mutableStateOf(path.toRelativeString(Const.PUBLIC_DOWNLOADS))
+        mutableStateOf(
+            File(path).toRelativeString(Const.PUBLIC_DOWNLOADS)
+        )
     }
 
     TextFieldDialog(
@@ -55,8 +57,9 @@ private fun EditDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    val new = File(Const.PUBLIC_DOWNLOADS, name.trim())
-                    onConfirm(new)
+                    onConfirm(
+                        File(Const.PUBLIC_DOWNLOADS, name.trim()).path
+                    )
                     onClose()
                 },
             ) {

@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.self.room)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.protobuf)
 }
 
 val baseVersionName = "2.5.0-beta02"
@@ -99,22 +98,6 @@ android {
     }
 }
 
-protobuf {
-    protoc {
-        artifact = libs.protobuf.protoc.get().toString()
-    }
-
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                register("java") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
 dependencies {
     implementation(projects.core)
     implementation(libs.sanmer.su)
@@ -135,7 +118,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.protobuf.kotlin.lite)
+    implementation(libs.kotlinx.serialization.protobuf)
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.kotlinxSerialization)
     implementation(libs.square.okhttp)

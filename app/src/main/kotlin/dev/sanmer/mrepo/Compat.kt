@@ -3,7 +3,7 @@ package dev.sanmer.mrepo
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import dev.sanmer.mrepo.datastore.WorkingMode
+import dev.sanmer.mrepo.datastore.model.WorkingMode
 import dev.sanmer.mrepo.stub.IModuleManager
 import dev.sanmer.su.IServiceManager
 import dev.sanmer.su.ServiceManagerCompat

@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
-import dev.sanmer.mrepo.datastore.ModulesMenuCompat
-import dev.sanmer.mrepo.datastore.Option
+import dev.sanmer.mrepo.datastore.model.ModulesMenu
+import dev.sanmer.mrepo.datastore.model.Option
 import dev.sanmer.mrepo.model.json.UpdateJson
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.local.State
@@ -166,7 +166,7 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
-    fun setModulesMenu(value: ModulesMenuCompat) {
+    fun setModulesMenu(value: ModulesMenu) {
         viewModelScope.launch {
             userPreferencesRepository.setModulesMenu(value)
         }

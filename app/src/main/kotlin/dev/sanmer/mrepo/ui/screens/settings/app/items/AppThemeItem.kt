@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.datastore.DarkMode
+import dev.sanmer.mrepo.datastore.model.DarkMode
 import dev.sanmer.mrepo.ui.component.SettingNormalItem
 import dev.sanmer.mrepo.ui.utils.expandedShape
 

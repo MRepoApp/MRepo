@@ -2,14 +2,13 @@ package dev.sanmer.mrepo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.sanmer.mrepo.Compat
-import dev.sanmer.mrepo.datastore.DarkMode
-import dev.sanmer.mrepo.datastore.WorkingMode
-import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sanmer.mrepo.Compat
+import dev.sanmer.mrepo.datastore.model.DarkMode
+import dev.sanmer.mrepo.datastore.model.WorkingMode
+import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,7 +50,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun setDownloadPath(value: File) {
+    fun setDownloadPath(value: String) {
         viewModelScope.launch {
             userPreferencesRepository.setDownloadPath(value)
         }

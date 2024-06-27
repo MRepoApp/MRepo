@@ -18,9 +18,9 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanmer.mrepo.Compat
 import dev.sanmer.mrepo.app.Const
-import dev.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
-import dev.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isSetup
-import dev.sanmer.mrepo.datastore.WorkingMode
+import dev.sanmer.mrepo.datastore.model.WorkingMode
+import dev.sanmer.mrepo.datastore.model.WorkingMode.Companion.isRoot
+import dev.sanmer.mrepo.datastore.model.WorkingMode.Companion.isSetup
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences

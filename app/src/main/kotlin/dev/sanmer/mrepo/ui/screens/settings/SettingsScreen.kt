@@ -19,9 +19,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.BuildConfig
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isNonRoot
-import dev.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
-import dev.sanmer.mrepo.datastore.WorkingMode
+import dev.sanmer.mrepo.datastore.model.WorkingMode
+import dev.sanmer.mrepo.datastore.model.WorkingMode.Companion.isNonRoot
+import dev.sanmer.mrepo.datastore.model.WorkingMode.Companion.isRoot
 import dev.sanmer.mrepo.ui.component.SettingNormalItem
 import dev.sanmer.mrepo.ui.component.TopAppBarTitle
 import dev.sanmer.mrepo.ui.navigation.graphs.SettingsScreen

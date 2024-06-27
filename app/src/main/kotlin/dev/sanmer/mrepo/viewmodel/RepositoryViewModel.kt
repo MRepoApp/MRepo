@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sanmer.mrepo.datastore.Option
-import dev.sanmer.mrepo.datastore.RepositoryMenuCompat
+import dev.sanmer.mrepo.datastore.model.Option
+import dev.sanmer.mrepo.datastore.model.RepositoryMenu
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.repository.LocalRepository
@@ -135,7 +135,7 @@ class RepositoryViewModel @Inject constructor(
         keyFlow.value = ""
     }
 
-    fun setRepositoryMenu(value: RepositoryMenuCompat) {
+    fun setRepositoryMenu(value: RepositoryMenu) {
         viewModelScope.launch {
             userPreferencesRepository.setRepositoryMenu(value)
         }

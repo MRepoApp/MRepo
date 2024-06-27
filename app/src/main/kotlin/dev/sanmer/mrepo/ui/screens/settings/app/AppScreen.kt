@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
+import dev.sanmer.mrepo.datastore.model.WorkingMode.Companion.isRoot
 import dev.sanmer.mrepo.ui.component.NavigateUpTopBar
 import dev.sanmer.mrepo.ui.component.SettingSwitchItem
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences

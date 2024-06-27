@@ -20,7 +20,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import dev.sanmer.mrepo.datastore.UserPreferencesCompat.Companion.isRoot
+import dev.sanmer.mrepo.datastore.model.WorkingMode.Companion.isRoot
 import dev.sanmer.mrepo.ui.navigation.MainScreen
 import dev.sanmer.mrepo.ui.navigation.graphs.modulesScreen
 import dev.sanmer.mrepo.ui.navigation.graphs.repositoryScreen

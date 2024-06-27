@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.datastore.WorkingMode
+import dev.sanmer.mrepo.datastore.model.WorkingMode
 import dev.sanmer.mrepo.ui.component.NavigateUpTopBar
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.viewmodel.SettingsViewModel

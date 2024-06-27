@@ -33,7 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.datastore.DarkMode
+import dev.sanmer.mrepo.datastore.model.DarkMode
 
 private enum class DarkModeItem(
     val value: DarkMode,
