@@ -6,11 +6,11 @@ plugins {
 android {
     namespace = "dev.sanmer.mrepo.core"
 
-    defaultConfig {
-        consumerProguardFile("proguard-rules.pro")
-    }
-
     buildFeatures {
         aidl = true
     }
+}
+
+dependencies {
+    api(libs.sanmer.su)
 }

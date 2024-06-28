@@ -1,34 +1,29 @@
 package dev.sanmer.mrepo
 
-import dev.sanmer.mrepo.content.Module
+import android.os.IBinder
 import dev.sanmer.mrepo.impl.APatchModuleManagerImpl
 import dev.sanmer.mrepo.impl.KernelSUModuleManagerImpl
 import dev.sanmer.mrepo.impl.MagiskModuleManagerImpl
 import dev.sanmer.mrepo.impl.Shell.exec
-import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleManager
-import dev.sanmer.mrepo.stub.IModuleOpsCallback
+import dev.sanmer.su.IService
+import dev.sanmer.su.IServiceManager
+import dev.sanmer.su.ServiceManagerCompat.delegate
 
-class ModuleManager : IModuleManager.Stub() {
-    private val original by lazy {
-        when {
-            "which magisk".exec().isSuccess -> MagiskModuleManagerImpl()
-            "which ksud".exec().isSuccess -> KernelSUModuleManagerImpl()
-            "which apd".exec().isSuccess -> APatchModuleManagerImpl()
-            else -> throw IllegalArgumentException("Unsupported platform")
-        }
+class ModuleManager : IService {
+    override val name = "module"
+
+    override fun create(service: IServiceManager): IBinder = when {
+        "which magisk".exec().isSuccess -> MagiskModuleManagerImpl()
+        "which ksud".exec().isSuccess -> KernelSUModuleManagerImpl()
+        "which apd".exec().isSuccess -> APatchModuleManagerImpl()
+        else -> throw IllegalArgumentException("Unsupported platform (${service.seLinuxContext})")
     }
 
-    override fun getVersion(): String = original.version
-    override fun getVersionCode(): Int = original.versionCode
-    override fun getPlatform(): String = original.platform
-    override fun getModules(): List<Module> = original.modules
-    override fun getModuleById(id: String): Module? = original.getModuleById(id)
-    override fun getModuleInfo(path: String): Module? = original.getModuleInfo(path)
-    override fun enable(id: String, callback: IModuleOpsCallback?) = original.enable(id, callback)
-    override fun disable(id: String, callback: IModuleOpsCallback?) = original.disable(id, callback)
-    override fun remove(id: String, callback: IModuleOpsCallback?) = original.remove(id, callback)
-    override fun install(path: String, callback: IInstallCallback?) = original.install(path, callback)
-    override fun deleteOnExit(path: String): Boolean = original.deleteOnExit(path)
-    override fun reboot() = original.reboot()
+    companion object {
+        fun delegate(service: IServiceManager): IModuleManager =
+            IModuleManager.Stub.asInterface(
+                service.delegate(ModuleManager::class.java)
+            )
+    }
 }
