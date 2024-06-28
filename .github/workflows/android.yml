@@ -14,8 +14,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: 'recursive'
           fetch-depth: 0
+
+      - name: Checkout compat
+        uses: actions/checkout@v4
+        with:
+          repository: SanmerApps/ServiceManagerCompat
+          path: compat
 
       - name: Set up signing key
         if: github.ref == 'refs/heads/main'
