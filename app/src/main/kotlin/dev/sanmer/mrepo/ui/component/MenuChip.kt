@@ -4,8 +4,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -14,8 +12,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.sanmer.mrepo.R
 
 @Composable
 fun MenuChip(
@@ -38,7 +38,7 @@ fun MenuChip(
     trailingIcon = {
         if (selected) {
             Icon(
-                imageVector = Icons.Filled.Done,
+                painter = painterResource(id = R.drawable.check),
                 contentDescription = null,
                 modifier = Modifier.size(FilterChipDefaults.IconSize)
             )
