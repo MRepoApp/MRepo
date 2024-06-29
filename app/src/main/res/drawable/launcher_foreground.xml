@@ -11,31 +11,31 @@
           android:pathData="M12,3l8,4.5l0,9l-8,4.5l-8,-4.5l0,-9l8,-4.5"
           android:strokeLineJoin="round"
           android:strokeWidth="2"
-          android:strokeColor="#ffff"
+          android:strokeColor="@color/launcher_tint"
           android:strokeLineCap="round"/>
       <path
           android:pathData="M12,12l8,-4.5"
           android:strokeLineJoin="round"
           android:strokeWidth="2"
-          android:strokeColor="#ffff"
+          android:strokeColor="@color/launcher_tint"
           android:strokeLineCap="round"/>
       <path
           android:pathData="M12,12l0,9"
           android:strokeLineJoin="round"
           android:strokeWidth="2"
-          android:strokeColor="#ffff"
+          android:strokeColor="@color/launcher_tint"
           android:strokeLineCap="round"/>
       <path
           android:pathData="M12,12l-8,-4.5"
           android:strokeLineJoin="round"
           android:strokeWidth="2"
-          android:strokeColor="#ffff"
+          android:strokeColor="@color/launcher_tint"
           android:strokeLineCap="round"/>
       <path
           android:pathData="M16,5.25l-8,4.5"
           android:strokeLineJoin="round"
           android:strokeWidth="2"
-          android:strokeColor="#ffff"
+          android:strokeColor="@color/launcher_tint"
           android:strokeLineCap="round"/>
   </group>
 </vector>

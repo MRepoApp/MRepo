@@ -68,8 +68,8 @@ fun AboutScreen(
             Logo(
                 icon = R.drawable.launcher_outline,
                 modifier = Modifier.size(65.dp),
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 fraction = 0.7f
             )
 
