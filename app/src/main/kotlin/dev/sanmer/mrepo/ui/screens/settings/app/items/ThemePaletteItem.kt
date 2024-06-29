@@ -2,6 +2,7 @@ package dev.sanmer.mrepo.ui.screens.settings.app.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -83,11 +84,11 @@ private fun ThemeColorItem(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .clickable(
-                onClick = { onChange(id) }
+                onClick = { onChange(id) },
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
             )
-            .background(
-                color = colorScheme.surfaceColorAtElevation(3.dp)
-            )
+            .background(color = colorScheme.surfaceColorAtElevation(6.dp))
             .size(60.dp),
         contentAlignment = Alignment.Center
     ) {

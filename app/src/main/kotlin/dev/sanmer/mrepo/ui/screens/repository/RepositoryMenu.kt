@@ -21,7 +21,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +52,7 @@ internal fun RepositoryMenu(
     setHomepage: () -> Unit,
 ) {
     val userPreferences = LocalUserPreferences.current
-    var open by rememberSaveable { mutableStateOf(false) }
+    var open by remember { mutableStateOf(false) }
 
     IconButton(
         onClick = { open = true }
@@ -85,7 +85,9 @@ private fun BottomSheet(
     onDismissRequest = onClose,
     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     shape = BottomSheetDefaults.expandedShape(15.dp),
-    windowInsets = WindowInsets.navigationBars
+    windowInsets = WindowInsets.navigationBars,
+    containerColor = MaterialTheme.colorScheme.surface,
+    tonalElevation = 0.dp
 ) {
     Text(
         text = stringResource(id = R.string.menu_advanced_menu),

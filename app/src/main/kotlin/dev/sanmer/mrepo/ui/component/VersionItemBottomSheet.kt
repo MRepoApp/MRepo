@@ -63,6 +63,8 @@ fun VersionItemBottomSheet(
         sheetState = state,
         shape = BottomSheetDefaults.expandedShape(15.dp),
         windowInsets = WindowInsets.navigationBars,
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 0.dp,
         dragHandle = {
             if (hasChangelog) {
                 BottomSheetDefaults.DragHandle()
