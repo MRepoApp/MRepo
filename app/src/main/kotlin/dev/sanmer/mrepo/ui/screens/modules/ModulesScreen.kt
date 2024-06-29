@@ -83,6 +83,7 @@ fun ModulesScreen(
                 onOpenSearch = viewModel::openSearch,
                 onCloseSearch = viewModel::closeSearch,
                 setMenu = viewModel::setModulesMenu,
+                setHomepage = viewModel::setHomepage,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -137,6 +138,7 @@ private fun TopBar(
     onOpenSearch: () -> Unit,
     onCloseSearch: () -> Unit,
     setMenu: (ModulesMenu) -> Unit,
+    setHomepage: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     var query by remember { mutableStateOf("") }
@@ -167,7 +169,8 @@ private fun TopBar(
             }
 
             ModulesMenu(
-                setMenu = setMenu
+                setMenu = setMenu,
+                setHomepage = setHomepage
             )
         }
     )

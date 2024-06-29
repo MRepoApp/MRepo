@@ -112,6 +112,7 @@
     <string name="menu_descending">Descending</string>
     <string name="menu_pin_enabled">Pin Enabled</string>
     <string name="menu_show_updated">Show Updated Time</string>
+    <string name="menu_set_homepage">Set as Homepage</string>
 
     <!-- Message -->
     <string name="message_download_success">Download successful</string>

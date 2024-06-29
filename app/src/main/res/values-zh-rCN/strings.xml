@@ -111,6 +111,7 @@
     <string name="menu_descending">降序</string>
     <string name="menu_pin_enabled">置顶已启用</string>
     <string name="menu_show_updated">显示更新时间</string>
+    <string name="menu_set_homepage">设置为主页</string>
 
     <!-- Message -->
     <string name="message_download_success">下载成功</string>
