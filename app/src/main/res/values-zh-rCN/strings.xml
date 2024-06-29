@@ -76,6 +76,8 @@
     <!-- Non Root Item -->
     <string name="settings_non_root_desc">功能受到限制</string>
     <!-- App -->
+    <string name="settings_language">语言</string>
+    <string name="settings_language_system">系统默认</string>
     <string name="settings_app_theme">主题</string>
     <string name="settings_app_theme_desc">更改主题配色和深色模式</string>
     <string name="settings_download_path">下载路径</string>

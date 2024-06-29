@@ -77,6 +77,8 @@
     <!-- Non Root Item -->
     <string name="settings_non_root_desc">Functionality is limited</string>
     <!-- App -->
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system">System default</string>
     <string name="settings_app_theme">App Theme</string>
     <string name="settings_app_theme_desc">Change color scheme and night mode</string>
     <string name="settings_download_path">Download Path</string>
