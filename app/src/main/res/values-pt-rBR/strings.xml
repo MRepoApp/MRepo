@@ -92,4 +92,7 @@
     <string name="search_empty">Lista vazia</string>
     <string name="search_placeholder">Pesquisar…</string>
     <string name="unknown_error">Erro desconhecido</string>
+    <string name="settings_language">Idioma</string>
+    <string name="menu_set_homepage">Definir como página inicial</string>
+    <string name="settings_language_system">Padrão do sistema</string>
 </resources>
