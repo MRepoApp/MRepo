@@ -2,6 +2,7 @@ package dev.sanmer.mrepo.datastore
 
 import androidx.datastore.core.DataStore
 import dev.sanmer.mrepo.datastore.model.DarkMode
+import dev.sanmer.mrepo.datastore.model.Homepage
 import dev.sanmer.mrepo.datastore.model.ModulesMenu
 import dev.sanmer.mrepo.datastore.model.RepositoryMenu
 import dev.sanmer.mrepo.datastore.model.UserPreferences
@@ -51,6 +52,14 @@ class UserPreferencesDataSource @Inject constructor(
         userPreferences.updateData {
             it.copy(
                 downloadPath = value
+            )
+        }
+    }
+
+    suspend fun setHomepage(value: Homepage) = withContext(Dispatchers.IO) {
+        userPreferences.updateData {
+            it.copy(
+                homepage = value
             )
         }
     }

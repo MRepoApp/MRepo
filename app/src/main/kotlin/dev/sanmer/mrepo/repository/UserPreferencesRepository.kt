@@ -2,6 +2,7 @@ package dev.sanmer.mrepo.repository
 
 import dev.sanmer.mrepo.datastore.UserPreferencesDataSource
 import dev.sanmer.mrepo.datastore.model.DarkMode
+import dev.sanmer.mrepo.datastore.model.Homepage
 import dev.sanmer.mrepo.datastore.model.ModulesMenu
 import dev.sanmer.mrepo.datastore.model.RepositoryMenu
 import dev.sanmer.mrepo.datastore.model.WorkingMode
@@ -23,6 +24,8 @@ class UserPreferencesRepository @Inject constructor(
     suspend fun setDeleteZipFile(value: Boolean) = userPreferencesDataSource.setDeleteZipFile(value)
 
     suspend fun setDownloadPath(value: String) = userPreferencesDataSource.setDownloadPath(value)
+
+    suspend fun setHomepage(value: Homepage) = userPreferencesDataSource.setHomepage(value)
 
     suspend fun setRepositoryMenu(value: RepositoryMenu) = userPreferencesDataSource.setRepositoryMenu(value)
 

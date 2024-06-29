@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
+import dev.sanmer.mrepo.datastore.model.Homepage
 import dev.sanmer.mrepo.datastore.model.ModulesMenu
 import dev.sanmer.mrepo.datastore.model.Option
 import dev.sanmer.mrepo.ui.component.MenuChip
@@ -42,7 +43,8 @@ private val options = listOf(
 
 @Composable
 internal fun ModulesMenu(
-    setMenu: (ModulesMenu) -> Unit
+    setMenu: (ModulesMenu) -> Unit,
+    setHomepage: () -> Unit,
 ) {
     val userPreferences = LocalUserPreferences.current
     var open by rememberSaveable { mutableStateOf(false) }
@@ -59,7 +61,9 @@ internal fun ModulesMenu(
             BottomSheet(
                 onClose = { open = false },
                 menu = userPreferences.modulesMenu,
-                setMenu = setMenu
+                setMenu = setMenu,
+                isHomepage = userPreferences.homepage == Homepage.Modules,
+                setHomepage = setHomepage
             )
         }
     }
@@ -69,7 +73,9 @@ internal fun ModulesMenu(
 private fun BottomSheet(
     onClose: () -> Unit,
     menu: ModulesMenu,
-    setMenu: (ModulesMenu) -> Unit
+    setMenu: (ModulesMenu) -> Unit,
+    isHomepage: Boolean,
+    setHomepage: () -> Unit
 ) = ModalBottomSheet(
     onDismissRequest = onClose,
     sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -134,6 +140,12 @@ private fun BottomSheet(
                 selected = menu.showUpdatedTime,
                 onClick = { setMenu(menu.copy(showUpdatedTime = !menu.showUpdatedTime)) },
                 label = { Text(text = stringResource(id = R.string.menu_show_updated)) }
+            )
+
+            MenuChip(
+                selected = isHomepage,
+                onClick = setHomepage,
+                label = { Text(text = stringResource(id = R.string.menu_set_homepage)) }
             )
         }
     }

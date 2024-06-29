@@ -60,6 +60,7 @@ fun RepositoryScreen(
                 onOpenSearch = viewModel::openSearch,
                 onCloseSearch = viewModel::closeSearch,
                 setMenu = viewModel::setRepositoryMenu,
+                setHomepage = viewModel::setHomepage,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -95,6 +96,7 @@ private fun TopBar(
     onOpenSearch: () -> Unit,
     onCloseSearch: () -> Unit,
     setMenu: (RepositoryMenu) -> Unit,
+    setHomepage: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     var query by remember { mutableStateOf("") }
@@ -125,7 +127,8 @@ private fun TopBar(
             }
 
             RepositoryMenu(
-                setMenu = setMenu
+                setMenu = setMenu,
+                setHomepage = setHomepage
             )
         }
     )

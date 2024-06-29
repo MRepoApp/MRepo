@@ -1,6 +1,8 @@
 package dev.sanmer.mrepo.ui.activity
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +22,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import dev.sanmer.mrepo.datastore.model.Homepage
 import dev.sanmer.mrepo.datastore.model.WorkingMode.Companion.isRoot
 import dev.sanmer.mrepo.ui.navigation.MainScreen
 import dev.sanmer.mrepo.ui.navigation.graphs.modulesScreen
@@ -30,8 +33,17 @@ import dev.sanmer.mrepo.ui.utils.navigatePopUpTo
 
 @Composable
 fun MainScreen() {
-    val userPreferences = LocalUserPreferences.current
     val navController = rememberNavController()
+
+    val userPreferences = LocalUserPreferences.current
+    val startDestination by remember {
+        derivedStateOf {
+            when (userPreferences.currentHomepage) {
+                Homepage.Repository -> MainScreen.Repository.route
+                Homepage.Modules -> MainScreen.Modules.route
+            }
+        }
+    }
 
     Scaffold(
         bottomBar = {
@@ -39,12 +51,13 @@ fun MainScreen() {
                 navController = navController,
                 isRoot = userPreferences.workingMode.isRoot
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.navigationBars
     ) {
         NavHost(
-            modifier = Modifier.padding(bottom = it.calculateBottomPadding()),
+            modifier = Modifier.padding(it),
             navController = navController,
-            startDestination = MainScreen.Repository.route
+            startDestination = startDestination
         ) {
             repositoryScreen(
                 navController = navController

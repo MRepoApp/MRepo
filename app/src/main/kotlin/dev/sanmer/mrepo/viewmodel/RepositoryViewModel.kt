@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sanmer.mrepo.datastore.model.Homepage
 import dev.sanmer.mrepo.datastore.model.Option
 import dev.sanmer.mrepo.datastore.model.RepositoryMenu
 import dev.sanmer.mrepo.model.local.LocalModule
@@ -139,7 +140,13 @@ class RepositoryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun createOnlineState(
+    fun setHomepage() {
+        viewModelScope.launch {
+            userPreferencesRepository.setHomepage(Homepage.Repository)
+        }
+    }
+
+    private fun createOnlineState(
         online: OnlineModule,
         locals: List<Pair<LocalModule, Boolean>>
     ): Pair<OnlineState, OnlineModule> {
