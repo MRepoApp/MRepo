@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import java.time.Instant
 
 plugins {
     alias(libs.plugins.self.application)
@@ -69,7 +70,9 @@ android {
 
         all {
             signingConfig = releaseSigning
-            buildConfigField("Boolean", "IS_DEV_VERSION", isDevVersion.toString())
+
+            buildConfigField("boolean", "IS_DEV_VERSION", isDevVersion.toString())
+            buildConfigField("long", "BUILD_TIME", Instant.now().toEpochMilli().toString())
         }
     }
 
