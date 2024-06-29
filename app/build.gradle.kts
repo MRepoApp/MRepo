@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-val baseVersionName = "2.5.0-beta02"
+val baseVersionName = "2.5.0-beta03"
 val isDevVersion get() = exec("git tag --contains HEAD").isEmpty()
 val verNameSuffix get() = if (isDevVersion) ".dev" else ""
 
