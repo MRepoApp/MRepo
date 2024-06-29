@@ -2,6 +2,7 @@ package dev.sanmer.mrepo.impl
 
 import dev.sanmer.mrepo.content.Module
 import dev.sanmer.mrepo.content.State
+import dev.sanmer.mrepo.content.ThrowableWrapper.Companion.warp
 import dev.sanmer.mrepo.impl.Shell.exec
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleManager
@@ -16,8 +17,7 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
     }
 
     private val mVersionCode by lazy {
-        "su -V".exec().getOrDefault("-1")
-            .toIntOr(-1)
+        "su -V".exec().getOrDefault("").toIntOr(-1)
     }
 
     override fun getVersion(): String {
@@ -30,13 +30,13 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
 
     override fun getModules() = modulesDir.listFiles()
         .orEmpty()
-        .mapNotNull { dir ->
-            readProps(dir)?.toModule(dir)
+        .mapNotNull { moduleDir ->
+            readProps(moduleDir)?.toModule(moduleDir)
         }
 
     override fun getModuleById(id: String): Module? {
-        val dir = modulesDir.resolve(id)
-        return readProps(dir)?.toModule(dir)
+        val moduleDir = File(modulesDir, id)
+        return readProps(moduleDir)?.toModule(moduleDir)
     }
 
     override fun getModuleInfo(path: String): Module? {
@@ -53,7 +53,6 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
 
     override fun deleteOnExit(path: String) = with(File(path)) {
         when {
-            !exists() -> false
             isFile -> delete()
             isDirectory -> deleteRecursively()
             else -> false
@@ -75,7 +74,7 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
         }
 
     private fun readProps(moduleDir: File) =
-        moduleDir.resolve(PROP_FILE).let {
+        File(moduleDir, PROP_FILE).let {
             when {
                 it.exists() -> readProps(it.readText())
                 else -> null
@@ -83,15 +82,15 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
         }
 
     private fun readState(moduleDir: File): State {
-        moduleDir.resolve("remove").apply {
+        File(moduleDir, "remove").apply {
             if (exists()) return State.Remove
         }
 
-        moduleDir.resolve("disable").apply {
+        File(moduleDir, "disable").apply {
             if (exists()) return State.Disable
         }
 
-        moduleDir.resolve("update").apply {
+        File(moduleDir, "update").apply {
             if (exists()) return State.Update
         }
 
@@ -100,7 +99,7 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
 
     private fun readLastUpdated(moduleDir: File): Long {
         MODULE_FILES.forEach { filename ->
-            val file = moduleDir.resolve(filename)
+            val file = File(moduleDir, filename)
             if (file.exists()) {
                 return file.lastModified()
             }
@@ -110,11 +109,11 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
     }
 
     private fun Map<String, String>.toModule(
-        dir: File
+        moduleDir: File
     ) = toModule(
-        path = dir.name,
-        state = readState(dir),
-        lastUpdated = readLastUpdated(dir)
+        path = moduleDir.name,
+        state = readState(moduleDir),
+        lastUpdated = readLastUpdated(moduleDir)
     )
 
     private fun Map<String, String>.toModule(
@@ -125,7 +124,7 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
         id = getOrDefault("id", path),
         name = getOrDefault("name", path),
         version = getOrDefault("version", ""),
-        versionCode = getOrDefault("versionCode", "-1").toIntOr(-1),
+        versionCode = getOrDefault("versionCode", "").toIntOr(-1),
         author = getOrDefault("author", ""),
         description = getOrDefault("description", ""),
         updateJson = getOrDefault("updateJson", ""),
@@ -134,9 +133,7 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
     )
 
     private fun String.toIntOr(defaultValue: Int) =
-        runCatching {
-            toInt()
-        }.getOrDefault(defaultValue)
+        runCatching { toInt() }.getOrDefault(defaultValue)
 
     internal fun install(cmd: String, path: String, callback: IInstallCallback?) {
         if (callback == null) {
@@ -144,19 +141,14 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
             return
         }
 
-        val result = cmd.exec(
+        cmd.exec(
             stdout = callback::onStdout,
             stderr = callback::onStderr
-        )
-
-        when {
-            result.isSuccess -> {
-                val module = getModuleInfo(path)
-                callback.onSuccess(module)
-            }
-            else -> {
-                callback.onFailure()
-            }
+        ).onSuccess {
+            val module = getModuleInfo(path)
+            callback.onSuccess(module)
+        }.onFailure {
+            callback.onFailure(it.warp())
         }
     }
 

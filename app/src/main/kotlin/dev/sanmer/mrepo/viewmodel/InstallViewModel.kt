@@ -13,6 +13,7 @@ import dev.sanmer.mrepo.Compat
 import dev.sanmer.mrepo.compat.MediaStoreCompat.copyToDir
 import dev.sanmer.mrepo.compat.MediaStoreCompat.getPathForUri
 import dev.sanmer.mrepo.content.State
+import dev.sanmer.mrepo.content.ThrowableWrapper
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
@@ -118,8 +119,9 @@ class InstallViewModel @Inject constructor(
                 }
             }
 
-            override fun onFailure() {
+            override fun onFailure(error: ThrowableWrapper) {
                 event = Event.Failed
+                Timber.e(error.original)
             }
         }
 

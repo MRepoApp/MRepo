@@ -1,10 +1,11 @@
 package dev.sanmer.mrepo.stub;
 
 import dev.sanmer.mrepo.content.Module;
+import dev.sanmer.mrepo.content.ThrowableWrapper;
 
 oneway interface IInstallCallback {
     void onStdout(String msg);
     void onStderr(String msg);
     void onSuccess(in Module module);
-    void onFailure();
+    void onFailure(in ThrowableWrapper error);
 }

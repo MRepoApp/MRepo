@@ -1,10 +1,12 @@
 package dev.sanmer.mrepo.impl
 
 import dev.sanmer.mrepo.Platform
+import dev.sanmer.mrepo.content.ThrowableWrapper.Companion.warp
 import dev.sanmer.mrepo.impl.Shell.exec
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleOpsCallback
 import java.io.File
+import java.io.FileNotFoundException
 
 internal class KernelSUModuleManagerImpl : BaseModuleManagerImpl() {
     override fun getPlatform(): String {
@@ -46,14 +48,14 @@ internal class KernelSUModuleManagerImpl : BaseModuleManagerImpl() {
     private fun moduleOps(cmd: String, id: String, callback: IModuleOpsCallback?) {
         val moduleDir = File(modulesDir, id)
         if (!moduleDir.exists()) {
-            callback?.onFailure(id, null)
+            callback?.onFailure(id, FileNotFoundException(moduleDir.path).warp())
             return
         }
 
         cmd.exec().onSuccess {
             callback?.onSuccess(id)
         }.onFailure {
-            callback?.onFailure(id, it.message)
+            callback?.onFailure(id, it.warp())
         }
     }
 }

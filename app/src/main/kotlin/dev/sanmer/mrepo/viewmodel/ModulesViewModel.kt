@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
+import dev.sanmer.mrepo.content.ThrowableWrapper
 import dev.sanmer.mrepo.datastore.model.Homepage
 import dev.sanmer.mrepo.datastore.model.ModulesMenu
 import dev.sanmer.mrepo.datastore.model.Option
@@ -70,9 +71,9 @@ class ModulesViewModel @Inject constructor(
             }
         }
 
-        override fun onFailure(id: String, msg: String?) {
+        override fun onFailure(id: String, error: ThrowableWrapper) {
             opsTasks.remove(id)
-            Timber.w("onFailure<$id>: $msg")
+            Timber.e(error.original)
         }
     }
 
