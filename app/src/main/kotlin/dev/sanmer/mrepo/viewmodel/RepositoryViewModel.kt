@@ -111,14 +111,12 @@ class RepositoryViewModel @Inject constructor(
         when (option) {
             Option.Name -> compareByDescending { it.second.name.lowercase() }
             Option.UpdatedTime -> compareBy { it.first.lastUpdated }
-            else -> compareByDescending { null }
         }
 
     } else {
         when (option) {
             Option.Name -> compareBy { it.second.name.lowercase() }
             Option.UpdatedTime -> compareByDescending { it.first.lastUpdated }
-            else -> compareByDescending { null }
         }
     }
 
