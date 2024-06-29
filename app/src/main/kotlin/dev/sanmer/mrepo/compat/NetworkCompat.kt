@@ -151,19 +151,16 @@ object NetworkCompat {
     ): Result<T> = withContext(Dispatchers.IO) {
         runCatching {
             val response = block()
-            val data = requireNotNull(response.body())
-
-            when {
-                response.isSuccessful -> data
-                else -> {
-                    val error = response.errorBody()?.string() ?: "404 Not Found"
-                    if (isHTML(error)) {
-                        throw  RuntimeException("404 Not Found")
-                    } else {
-                        throw RuntimeException(error)
-                    }
+            require(response.isSuccessful) {
+                val error = response.errorBody()?.string()
+                if (error?.let(::isHTML) == false) {
+                    error
+                } else {
+                    "status = ${response.code()}"
                 }
             }
+
+            requireNotNull(response.body())
         }
     }
 
@@ -173,20 +170,17 @@ object NetworkCompat {
     ): Result<T> = withContext(Dispatchers.IO) {
         runCatching {
             val response = block()
-            val headers = response.headers
             val body = requireNotNull(response.body)
-
-            when {
-                response.isSuccessful -> converter(body, headers)
-                else -> {
-                    val error = body.string()
-                    if (isHTML(error)) {
-                        throw RuntimeException("404 Not Found")
-                    } else {
-                        throw RuntimeException(error)
-                    }
+            require(response.isSuccessful) {
+                val error = body.string()
+                if (!isHTML(error)) {
+                    error
+                } else {
+                    "status = ${response.code}"
                 }
             }
+
+            converter(body, response.headers)
         }
     }
 
