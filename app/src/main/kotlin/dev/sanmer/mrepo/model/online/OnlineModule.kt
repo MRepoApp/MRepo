@@ -1,6 +1,6 @@
 package dev.sanmer.mrepo.model.online
 
-import dev.sanmer.mrepo.utils.Utils
+import dev.sanmer.mrepo.utils.StrUtil
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,7 +17,7 @@ data class OnlineModule(
     val versions: List<VersionItem>,
 ) {
     val versionDisplay by lazy {
-        Utils.getVersionDisplay(version, versionCode)
+        StrUtil.getVersionDisplay(version, versionCode)
     }
 
     @Serializable

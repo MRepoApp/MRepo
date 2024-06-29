@@ -21,7 +21,7 @@ import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.service.DownloadService
 import dev.sanmer.mrepo.ui.activity.InstallActivity
 import dev.sanmer.mrepo.ui.navigation.graphs.RepositoryScreen
-import dev.sanmer.mrepo.utils.Utils
+import dev.sanmer.mrepo.utils.StrUtil
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -107,7 +107,7 @@ class ModuleViewModel @Inject constructor(
             val userPreferences = userPreferencesRepository.data.first()
             val downloadPath = userPreferences.downloadPath
 
-            val filename = Utils.getFilename(
+            val filename = StrUtil.getFilename(
                 name = online.name,
                 version = item.version,
                 versionCode = item.versionCode,

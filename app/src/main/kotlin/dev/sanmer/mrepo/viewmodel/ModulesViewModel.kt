@@ -22,7 +22,7 @@ import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.service.DownloadService
 import dev.sanmer.mrepo.stub.IModuleOpsCallback
 import dev.sanmer.mrepo.ui.activity.InstallActivity
-import dev.sanmer.mrepo.utils.Utils
+import dev.sanmer.mrepo.utils.StrUtil
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -246,7 +246,7 @@ class ModulesViewModel @Inject constructor(
             val userPreferences = userPreferencesRepository.data.first()
             val downloadPath = userPreferences.downloadPath
 
-            val filename = Utils.getFilename(
+            val filename = StrUtil.getFilename(
                 name = module.name,
                 version = item.version,
                 versionCode = item.versionCode,

@@ -2,7 +2,7 @@ package dev.sanmer.mrepo.model.json
 
 import dev.sanmer.mrepo.compat.NetworkCompat
 import dev.sanmer.mrepo.model.online.VersionItem
-import dev.sanmer.mrepo.utils.Utils
+import dev.sanmer.mrepo.utils.StrUtil
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.decodeFromStream
 
@@ -24,7 +24,7 @@ data class UpdateJson(
 
         return VersionItem(
             timestamp = timestamp,
-            version = Utils.getVersionDisplay(version, versionCode),
+            version = StrUtil.getVersionDisplay(version, versionCode),
             versionCode = versionCode,
             zipUrl = zipUrl,
             changelog = changelog

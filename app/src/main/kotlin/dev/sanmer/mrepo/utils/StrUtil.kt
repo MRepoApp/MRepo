@@ -1,6 +1,6 @@
 package dev.sanmer.mrepo.utils
 
-object Utils {
+object StrUtil {
     fun getVersionDisplay(version: String, versionCode: Int): String {
         val included = "\\(.*?${versionCode}.*?\\)".toRegex()
             .containsMatchIn(version)
