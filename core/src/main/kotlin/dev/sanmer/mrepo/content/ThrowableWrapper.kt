@@ -8,6 +8,6 @@ data class ThrowableWrapper(
     val original: Throwable
 ) : Parcelable {
     companion object {
-        fun Throwable.warp() = ThrowableWrapper(this)
+        fun Throwable.wrap() = ThrowableWrapper(this)
     }
 }

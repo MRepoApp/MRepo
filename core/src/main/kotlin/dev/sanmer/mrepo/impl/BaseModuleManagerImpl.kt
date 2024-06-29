@@ -2,7 +2,7 @@ package dev.sanmer.mrepo.impl
 
 import dev.sanmer.mrepo.content.Module
 import dev.sanmer.mrepo.content.State
-import dev.sanmer.mrepo.content.ThrowableWrapper.Companion.warp
+import dev.sanmer.mrepo.content.ThrowableWrapper.Companion.wrap
 import dev.sanmer.mrepo.impl.Shell.exec
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleManager
@@ -148,7 +148,7 @@ internal abstract class BaseModuleManagerImpl : IModuleManager.Stub() {
             val module = getModuleInfo(path)
             callback.onSuccess(module)
         }.onFailure {
-            callback.onFailure(it.warp())
+            callback.onFailure(it.wrap())
         }
     }
 
