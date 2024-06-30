@@ -2,10 +2,10 @@ package dev.sanmer.mrepo.impl
 
 import dev.sanmer.mrepo.content.Module
 import dev.sanmer.mrepo.content.State
-import dev.sanmer.mrepo.content.ThrowableWrapper.Companion.wrap
 import dev.sanmer.mrepo.impl.Shell.exec
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleManager
+import dev.sanmer.su.wrap.ThrowableWrapper.Companion.wrap
 import java.io.File
 import java.util.zip.ZipFile
 

@@ -1,6 +1,6 @@
 package dev.sanmer.mrepo.stub;
 
-import dev.sanmer.mrepo.content.ThrowableWrapper;
+import dev.sanmer.su.wrap.ThrowableWrapper;
 
 oneway interface IModuleOpsCallback {
     void onSuccess(String id);

@@ -7,6 +7,7 @@ import dev.sanmer.mrepo.datastore.model.WorkingMode
 import dev.sanmer.mrepo.stub.IModuleManager
 import dev.sanmer.su.IServiceManager
 import dev.sanmer.su.ServiceManagerCompat
+import dev.sanmer.su.ServiceManagerCompat.addService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
@@ -24,7 +25,11 @@ object Compat {
     val isAliveFlow get() = _isAliveFlow.asStateFlow()
 
     val moduleManager: IModuleManager by lazy {
-        ModuleManager.delegate(mService)
+        IModuleManager.Stub.asInterface(
+            mService.addService(
+                ModuleManager::class.java
+            )
+        )
     }
 
     private fun state(): Boolean {
@@ -44,7 +49,7 @@ object Compat {
             }
 
             state()
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Timber.e(e)
 
             mServiceOrNull = null

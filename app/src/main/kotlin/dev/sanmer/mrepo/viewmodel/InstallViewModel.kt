@@ -13,13 +13,13 @@ import dev.sanmer.mrepo.Compat
 import dev.sanmer.mrepo.compat.MediaStoreCompat.copyToDir
 import dev.sanmer.mrepo.compat.MediaStoreCompat.getPathForUri
 import dev.sanmer.mrepo.content.State
-import dev.sanmer.mrepo.content.ThrowableWrapper
 import dev.sanmer.mrepo.model.local.LocalModule
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.utils.extensions.now
 import dev.sanmer.mrepo.utils.extensions.tmpDir
+import dev.sanmer.su.wrap.ThrowableWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

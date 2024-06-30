@@ -1,10 +1,10 @@
 package dev.sanmer.mrepo.impl
 
 import dev.sanmer.mrepo.Platform
-import dev.sanmer.mrepo.content.ThrowableWrapper.Companion.wrap
 import dev.sanmer.mrepo.impl.Shell.exec
 import dev.sanmer.mrepo.stub.IInstallCallback
 import dev.sanmer.mrepo.stub.IModuleOpsCallback
+import dev.sanmer.su.wrap.ThrowableWrapper.Companion.wrap
 import java.io.File
 import java.io.FileNotFoundException
 

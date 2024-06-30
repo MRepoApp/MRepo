@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanmer.mrepo.Compat
-import dev.sanmer.mrepo.content.ThrowableWrapper
 import dev.sanmer.mrepo.datastore.model.Homepage
 import dev.sanmer.mrepo.datastore.model.ModulesMenu
 import dev.sanmer.mrepo.datastore.model.Option
@@ -25,6 +24,7 @@ import dev.sanmer.mrepo.service.DownloadService
 import dev.sanmer.mrepo.stub.IModuleOpsCallback
 import dev.sanmer.mrepo.ui.activity.InstallActivity
 import dev.sanmer.mrepo.utils.StrUtil
+import dev.sanmer.su.wrap.ThrowableWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
