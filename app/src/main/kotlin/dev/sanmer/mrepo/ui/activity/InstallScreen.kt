@@ -21,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -91,19 +90,13 @@ fun InstallScreen(
         scope.launch {
             viewModel.writeLogsTo(context, uri)
                 .onSuccess {
-                    val message = context.getString(R.string.install_logs_saved)
                     snackbarHostState.showSnackbar(
-                        message = message,
-                        duration = SnackbarDuration.Short
+                        message = context.getString(R.string.install_logs_saved)
                     )
                 }.onFailure {
-                    val message = context.getString(
-                        R.string.install_logs_save_failed,
-                        it.message ?: context.getString(R.string.unknown_error)
-                    )
+                    val message = it.message ?: context.getString(R.string.unknown_error)
                     snackbarHostState.showSnackbar(
-                        message = message,
-                        duration = SnackbarDuration.Short
+                        message = context.getString(R.string.install_logs_save_failed, message)
                     )
                 }
         }
@@ -115,6 +108,7 @@ fun InstallScreen(
                 when (it.key) {
                     Key.VolumeUp,
                     Key.VolumeDown -> viewModel.event.isInstalling
+
                     else -> false
                 }
             }
@@ -164,10 +158,6 @@ private fun Console(
     state: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    LaunchedEffect(list.size) {
-        state.animateScrollToItem(list.size)
-    }
-
     LazyColumn(
         state = state,
         modifier = modifier
@@ -182,6 +172,10 @@ private fun Console(
                 )
             )
         }
+    }
+
+    LaunchedEffect(list.size) {
+        state.scrollToItem(list.size)
     }
 }
 
