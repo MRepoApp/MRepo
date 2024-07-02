@@ -146,7 +146,7 @@ class DownloadService : LifecycleService() {
             .setProgress(100, (progress * 100).toInt(), false)
             .build()
 
-        notify(item.id, notification)
+        notify(item.key, notification)
     }
 
     private fun onDownloadSucceeded(item: TaskItem) {
@@ -157,7 +157,7 @@ class DownloadService : LifecycleService() {
             .setSilent(true)
             .build()
 
-        notify(item.id, notification)
+        notify(item.key, notification)
     }
 
     private fun onDownloadFailed(item: TaskItem, message: String?) {
@@ -167,7 +167,7 @@ class DownloadService : LifecycleService() {
             .setContentText(message ?: getString(R.string.unknown_error))
             .build()
 
-        notify(item.id, notification)
+        notify(item.key, notification)
     }
 
     private fun setForeground() {
@@ -204,8 +204,7 @@ class DownloadService : LifecycleService() {
 
     @Parcelize
     data class TaskItem(
-        val id: Int = System.currentTimeMillis().toInt(),
-        val key: String,
+        val key: Int,
         val url: String,
         val filename: String,
         val title: String?,
@@ -213,8 +212,7 @@ class DownloadService : LifecycleService() {
     ) : Parcelable {
         companion object {
             fun empty() = TaskItem(
-                id = -1,
-                key = "",
+                key = -1,
                 url = "",
                 filename = "",
                 title = null,
@@ -237,7 +235,7 @@ class DownloadService : LifecycleService() {
         private val listeners = hashMapOf<TaskItem, IDownloadListener>()
         private val progressFlow = MutableStateFlow(TaskItem.empty() to 0f)
 
-        fun getProgressByKey(key: String): Flow<Float>  {
+        fun getProgressByKey(key: Int): Flow<Float>  {
             return progressFlow.filter { (item, _) ->
                 item.key == key
             }.map { (_, progress) ->
@@ -265,8 +263,6 @@ class DownloadService : LifecycleService() {
 
                     listeners[task] = listener
                     context.startService(intent)
-                } else {
-                    Timber.w("notGranted: $state")
                 }
             }
         }

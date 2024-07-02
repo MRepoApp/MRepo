@@ -196,7 +196,7 @@ class ModulesViewModel @Inject constructor(
             )
 
             val task = DownloadService.TaskItem(
-                key = item.toString(),
+                key = item.hashCode(),
                 url = item.zipUrl,
                 filename = filename,
                 title = module.name,
@@ -292,6 +292,6 @@ class ModulesViewModel @Inject constructor(
         val change: () -> Unit = {},
         val version: VersionItem? = null,
         val updatable: Boolean = version?.let { it.versionCode > original.versionCode } == true,
-        val progress: Flow<Float> = DownloadService.getProgressByKey(version.toString()),
+        val progress: Flow<Float> = DownloadService.getProgressByKey(version.hashCode()),
     )
 }

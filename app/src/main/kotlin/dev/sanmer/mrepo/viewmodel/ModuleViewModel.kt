@@ -115,7 +115,7 @@ class ModuleViewModel @Inject constructor(
             )
 
             val task = DownloadService.TaskItem(
-                key = item.toString(),
+                key = item.hashCode(),
                 url = item.zipUrl,
                 filename = filename,
                 title = online.name,
@@ -142,7 +142,7 @@ class ModuleViewModel @Inject constructor(
     }
 
     fun getProgress(item: VersionItem) =
-        DownloadService.getProgressByKey(item.toString())
+        DownloadService.getProgressByKey(item.hashCode())
 
     companion object {
         fun putModuleId(module: OnlineModule) =
