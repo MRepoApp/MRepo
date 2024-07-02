@@ -1,5 +1,5 @@
 # MRepo
-[![release](https://img.shields.io/github/v/release/MRepoApp/MRepo?label=release&color=red)](https://github.com/MRepoApp/MRepo/releases) [![download](https://shields.io/github/downloads/MRepoApp/MRepo/total?label=download)](https://github.com/MRepoApp/MRepo/releases/latest) [![follow](https://img.shields.io/badge/Telegram-blue.svg?label=follow)](https://t.me/mrepo_news) [![translated](https://weblate.sanmer.app/widgets/mrepo/-/svg-badge.svg)](https://weblate.sanmer.app/engage/mrepo/)
+[![release](https://img.shields.io/github/v/release/MRepoApp/MRepo?label=release&color=red)](https://github.com/MRepoApp/MRepo/releases) [![download](https://shields.io/github/downloads/MRepoApp/MRepo/total?label=download)](https://github.com/MRepoApp/MRepo/releases/latest)
 
 MRepo is an Android app that helps manage your own modules repository.
 
