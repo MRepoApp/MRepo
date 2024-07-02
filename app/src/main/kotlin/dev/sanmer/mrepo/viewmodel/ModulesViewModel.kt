@@ -25,6 +25,7 @@ import dev.sanmer.mrepo.stub.IModuleOpsCallback
 import dev.sanmer.mrepo.ui.activity.InstallActivity
 import dev.sanmer.mrepo.utils.StrUtil
 import dev.sanmer.su.wrap.ThrowableWrapper
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -53,8 +54,8 @@ class ModulesViewModel @Inject constructor(
         private set
     private val keyFlow = MutableStateFlow("")
 
-    private val cacheFlow = MutableStateFlow(listOf<LocalModule>())
-    private val localFlow = MutableStateFlow(listOf<LocalModule>())
+    private val cacheFlow = MutableStateFlow(listOf<ModuleWrapper>())
+    private val localFlow = MutableStateFlow(listOf<ModuleWrapper>())
     val local get() = localFlow.asStateFlow()
 
     var isLoading by mutableStateOf(true)
@@ -65,9 +66,9 @@ class ModulesViewModel @Inject constructor(
     private val opsTasks = mutableStateListOf<String>()
     private val opsCallback = object : IModuleOpsCallback.Stub() {
         override fun onSuccess(id: String) {
+            opsTasks.remove(id)
             viewModelScope.launch {
                 modulesRepository.getLocal(id)
-                opsTasks.remove(id)
             }
         }
 
@@ -96,15 +97,16 @@ class ModulesViewModel @Inject constructor(
         combine(
             localRepository.getLocalAllAsFlow(),
             modulesMenu
-        ) { list, menu ->
-            cacheFlow.value = list.sortedWith(
+        ) { local, menu ->
+            cacheFlow.value = local.sortedWith(
                 comparator(menu.option, menu.descending)
-            ).let { v ->
-                if (menu.pinEnabled) {
-                    v.sortedByDescending { it.state == State.Enable }
-                } else {
-                    v
+            ).let { list ->
+                when {
+                    menu.pinEnabled -> list.sortedByDescending { it.state == State.Enable }
+                    else -> list
                 }
+            }.map {
+                it.wrap()
             }
 
             isLoading = false
@@ -118,13 +120,12 @@ class ModulesViewModel @Inject constructor(
             cacheFlow
         ) { key, source ->
             localFlow.value = source
-                .filter {
-                    if (key.isNotBlank()) {
-                        it.name.contains(key, ignoreCase = true)
-                                || it.author.contains(key, ignoreCase = true)
-                                || it.description.contains(key, ignoreCase = true)
-                    } else {
-                        true
+                .filter { module ->
+                    when {
+                        key.isBlank() -> true
+                        else -> module.original.name.contains(key, ignoreCase = true)
+                                || module.original.author.contains(key, ignoreCase = true)
+                                || module.original.description.contains(key, ignoreCase = true)
                     }
                 }
 
@@ -139,7 +140,6 @@ class ModulesViewModel @Inject constructor(
             Option.Name -> compareByDescending { it.name.lowercase() }
             Option.UpdatedTime -> compareBy { it.lastUpdated }
         }
-
     } else {
         when (option) {
             Option.Name -> compareBy { it.name.lowercase() }
@@ -176,70 +176,6 @@ class ModulesViewModel @Inject constructor(
         viewModelScope.launch {
             userPreferencesRepository.setHomepage(Homepage.Modules)
         }
-    }
-
-    fun createModuleOps(module: LocalModule) = when (module.state) {
-        State.Enable -> ModuleOps(
-            isOpsRunning = opsTasks.contains(module.id),
-            toggle = {
-                opsTasks.add(module.id)
-                mm.disable(module.id, opsCallback)
-            },
-            change = {
-                opsTasks.add(module.id)
-                mm.remove(module.id, opsCallback)
-            }
-        )
-
-        State.Disable -> ModuleOps(
-            isOpsRunning = opsTasks.contains(module.id),
-            toggle = {
-                opsTasks.add(module.id)
-                mm.enable(module.id, opsCallback)
-            },
-            change = {
-                opsTasks.add(module.id)
-                mm.remove(module.id, opsCallback)
-            }
-        )
-
-        State.Remove -> ModuleOps(
-            isOpsRunning = opsTasks.contains(module.id),
-            toggle = {},
-            change = {
-                opsTasks.add(module.id)
-                mm.enable(module.id, opsCallback)
-            }
-        )
-
-        State.Update -> ModuleOps(
-            isOpsRunning = opsTasks.contains(module.id),
-            toggle = {},
-            change = {}
-        )
-    }
-
-    fun getVersionItem(module: LocalModule): VersionItem? {
-        viewModelScope.launch {
-            if (!localRepository.isUpdatable(module.id)) {
-                versionItems.remove(module.id)
-                return@launch
-            }
-
-            if (versionItems.containsKey(module.id)) {
-                return@launch
-            }
-
-            val versionItem = if (module.updateJson.isNotBlank()) {
-                UpdateJson.load(module.updateJson)
-            } else {
-                localRepository.getVersionById(module.id).maxByOrNull { it.versionCode }
-            }
-
-            versionItems[module.id] = versionItem
-        }
-
-        return versionItems[module.id]
     }
 
     fun downloader(
@@ -286,12 +222,76 @@ class ModulesViewModel @Inject constructor(
         }
     }
 
-    fun getProgress(item: VersionItem?) =
-        DownloadService.getProgressByKey(item.toString())
+    private fun getVersionItem(module: LocalModule): VersionItem? {
+        viewModelScope.launch {
+            if (!localRepository.isUpdatable(module.id)) {
+                versionItems.remove(module.id)
+                return@launch
+            }
 
-    data class ModuleOps(
-        val isOpsRunning: Boolean,
-        val toggle: (Boolean) -> Unit,
-        val change: () -> Unit
+            if (versionItems.containsKey(module.id)) {
+                return@launch
+            }
+
+            val versionItem = if (module.updateJson.isNotBlank()) {
+                UpdateJson.load(module.updateJson)
+            } else {
+                localRepository.getVersionById(module.id).maxByOrNull { it.versionCode }
+            }
+
+            versionItems[module.id] = versionItem
+        }
+
+        return versionItems[module.id]
+    }
+
+    private fun LocalModule.wrap() = when (state) {
+        State.Enable -> ModuleWrapper(
+            original = this,
+            isOpsRunning = opsTasks.contains(id),
+            toggle = {
+                opsTasks.add(id)
+                mm.disable(id, opsCallback)
+            },
+            change = {
+                opsTasks.add(id)
+                mm.remove(id, opsCallback)
+            },
+            version = getVersionItem(this)
+        )
+        State.Disable -> ModuleWrapper(
+            original = this,
+            isOpsRunning = opsTasks.contains(id),
+            toggle = {
+                opsTasks.add(id)
+                mm.enable(id, opsCallback)
+            },
+            change = {
+                opsTasks.add(id)
+                mm.remove(id, opsCallback)
+            },
+            version = getVersionItem(this)
+        )
+        State.Remove -> ModuleWrapper(
+            original = this,
+            isOpsRunning = opsTasks.contains(id),
+            change = {
+                opsTasks.add(id)
+                mm.enable(id, opsCallback)
+            }
+        )
+        State.Update -> ModuleWrapper(
+            original = this
+        )
+    }
+
+    data class ModuleWrapper(
+        val original: LocalModule,
+        val isOpsRunning: Boolean = false,
+        val toggle: (Boolean) -> Unit = {},
+        val change: () -> Unit = {},
+        val version: VersionItem? = null,
+        val updatable: Boolean = version?.let { it.versionCode > original.versionCode } == true,
+        val progress: Flow<Float> = DownloadService.getProgressByKey(version.toString()),
     )
 }

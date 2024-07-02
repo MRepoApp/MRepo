@@ -122,9 +122,6 @@ fun ModulesScreen(
                 list = list,
                 state = listState,
                 isProviderAlive = viewModel.isProviderAlive,
-                getModuleOps = viewModel::createModuleOps,
-                getVersionItem = viewModel::getVersionItem,
-                getProgress = viewModel::getProgress,
                 onDownload = viewModel::downloader
             )
         }

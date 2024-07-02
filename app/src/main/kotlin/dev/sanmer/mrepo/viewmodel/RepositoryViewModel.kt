@@ -1,6 +1,5 @@
 package dev.sanmer.mrepo.viewmodel
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +14,7 @@ import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.repository.LocalRepository
 import dev.sanmer.mrepo.repository.ModulesRepository
 import dev.sanmer.mrepo.repository.UserPreferencesRepository
+import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.ModuleWrapper.Companion.wrap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -37,8 +37,8 @@ class RepositoryViewModel @Inject constructor(
         private set
     private val keyFlow = MutableStateFlow("")
 
-    private val cacheFlow = MutableStateFlow(listOf<Pair<OnlineState, OnlineModule>>())
-    private val onlineFlow = MutableStateFlow(listOf<Pair<OnlineState, OnlineModule>>())
+    private val cacheFlow = MutableStateFlow(listOf<ModuleWrapper>())
+    private val onlineFlow = MutableStateFlow(listOf<ModuleWrapper>())
     val online get() = onlineFlow.asStateFlow()
 
     var isLoading by mutableStateOf(true)
@@ -64,20 +64,18 @@ class RepositoryViewModel @Inject constructor(
             repositoryMenu
         ) { online, local, menu ->
             cacheFlow.value = online.map {
-                createOnlineState(it, local)
+                it.wrap(local)
             }.sortedWith(
                 comparator(menu.option, menu.descending)
-            ).let { v ->
-                val a = if (menu.pinInstalled) {
-                    v.sortedByDescending { it.first.installed }
-                } else {
-                    v
+            ).let { list ->
+                val listNew = when {
+                    menu.pinInstalled -> list.sortedByDescending { it.installed }
+                    else -> list
                 }
 
-                if (menu.pinUpdatable) {
-                    a.sortedByDescending { it.first.updatable }
-                } else {
-                    a
+                when {
+                    menu.pinUpdatable -> listNew.sortedByDescending { it.updatable }
+                    else -> list
                 }
             }
 
@@ -92,13 +90,12 @@ class RepositoryViewModel @Inject constructor(
             cacheFlow
         ) { key, source ->
             onlineFlow.value = source
-                .filter { (_, m) ->
-                    if (key.isNotBlank()) {
-                        m.name.contains(key, ignoreCase = true)
-                                || m.author.contains(key, ignoreCase = true)
-                                || m.description.contains(key, ignoreCase = true)
-                    } else {
-                        true
+                .filter { module ->
+                    when {
+                        key.isBlank() -> true
+                        else -> module.original.name.contains(key, ignoreCase = true)
+                                || module.original.author.contains(key, ignoreCase = true)
+                                || module.original.description.contains(key, ignoreCase = true)
                     }
                 }
 
@@ -108,16 +105,15 @@ class RepositoryViewModel @Inject constructor(
     private fun comparator(
         option: Option,
         descending: Boolean
-    ): Comparator<Pair<OnlineState, OnlineModule>> = if (descending) {
+    ): Comparator<ModuleWrapper> = if (descending) {
         when (option) {
-            Option.Name -> compareByDescending { it.second.name.lowercase() }
-            Option.UpdatedTime -> compareBy { it.first.lastUpdated }
+            Option.Name -> compareByDescending { it.original.name.lowercase() }
+            Option.UpdatedTime -> compareBy { it.lastUpdated }
         }
-
     } else {
         when (option) {
-            Option.Name -> compareBy { it.second.name.lowercase() }
-            Option.UpdatedTime -> compareByDescending { it.first.lastUpdated }
+            Option.Name -> compareBy { it.original.name.lowercase() }
+            Option.UpdatedTime -> compareByDescending { it.lastUpdated }
         }
     }
 
@@ -146,37 +142,37 @@ class RepositoryViewModel @Inject constructor(
         }
     }
 
-    private fun createOnlineState(
-        online: OnlineModule,
-        locals: List<Pair<LocalModule, Boolean>>
-    ): Pair<OnlineState, OnlineModule> {
-        var installed = false
-        var updatable = false
-
-        locals.firstOrNull { it.first.id == online.id }?.let { (local, isUpdatable) ->
-            installed = local.author == online.author
-            updatable = (local.versionCode < online.versionCode) && isUpdatable
-        }
-
-        val state = OnlineState(
-            installed = installed,
-            updatable = updatable,
-            hasLicense = online.metadata.license.isNotBlank(),
-            lastUpdated = online.versions.firstOrNull()?.timestamp ?: 0L
-        )
-
-        return state to online
-    }
-
-    @Immutable
-    data class OnlineState(
+    data class ModuleWrapper(
+        val original: OnlineModule,
         val installed: Boolean,
         val updatable: Boolean,
         val hasLicense: Boolean,
         val lastUpdated: Long
     ) {
         companion object {
-            fun example() = OnlineState(
+
+            fun OnlineModule.wrap(
+                locals: List<Pair<LocalModule, Boolean>>
+            ): ModuleWrapper {
+                var installed = false
+                var updatable = false
+
+                locals.firstOrNull { it.first.id == id }?.let { (local, isUpdatable) ->
+                    installed = local.author == author
+                    updatable = (local.versionCode < versionCode) && isUpdatable
+                }
+
+                return ModuleWrapper(
+                    original = this,
+                    installed = installed,
+                    updatable = updatable,
+                    hasLicense = metadata.license.isNotBlank(),
+                    lastUpdated = versions.maxBy { it.versionCode }.timestamp
+                )
+            }
+
+            fun example() = ModuleWrapper(
+                original = OnlineModule.example(),
                 installed = true,
                 updatable = false,
                 hasLicense = true,

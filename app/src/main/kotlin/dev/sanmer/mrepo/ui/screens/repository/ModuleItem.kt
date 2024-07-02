@@ -21,17 +21,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.sanmer.mrepo.R
-import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.ui.component.LabelItem
 import dev.sanmer.mrepo.ui.component.Logo
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.utils.extensions.toDate
-import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
+import dev.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
 internal fun ModuleItem(
-    module: OnlineModule,
-    state: OnlineState,
+    module: RepositoryViewModel.ModuleWrapper,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
     enabled: Boolean = true
@@ -63,7 +61,7 @@ internal fun ModuleItem(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = module.name,
+                text = module.original.name,
                 style = MaterialTheme.typography.titleSmall
                     .copy(fontWeight = FontWeight.Bold),
                 maxLines = 2,
@@ -73,14 +71,14 @@ internal fun ModuleItem(
             Spacer(modifier = Modifier.height(2.dp))
 
             Text(
-                text = module.author,
+                text = module.original.author,
                 style = MaterialTheme.typography.bodyMedium.copy(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
 
             Text(
-                text = module.versionDisplay,
+                text = module.original.versionDisplay,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.outline
             )
@@ -88,7 +86,7 @@ internal fun ModuleItem(
             if (menu.showUpdatedTime) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = stringResource(id = R.string.module_update_at, state.lastUpdated.toDate()),
+                    text = stringResource(id = R.string.module_update_at, module.lastUpdated.toDate()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline
                 )
@@ -100,16 +98,16 @@ internal fun ModuleItem(
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 if (menu.showLicense) {
-                    LabelItem(text = module.metadata.license)
+                    LabelItem(text = module.original.metadata.license)
                 }
 
                 when {
-                    state.updatable -> LabelItem(
+                    module.updatable -> LabelItem(
                         text = stringResource(id = R.string.module_new),
                         containerColor = MaterialTheme.colorScheme.error,
                         contentColor = MaterialTheme.colorScheme.onError
                     )
-                    state.installed -> LabelItem(
+                    module.installed -> LabelItem(
                         text = stringResource(id = R.string.module_installed)
                     )
                 }

@@ -11,17 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
 import dev.sanmer.mrepo.ui.utils.navigateSingleTopTo
 import dev.sanmer.mrepo.viewmodel.ModuleViewModel
-import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
+import dev.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 @Composable
 internal fun ModulesList(
-    list: List<Pair<OnlineState, OnlineModule>>,
     state: LazyListState,
-    navController: NavController
+    navController: NavController,
+    list: List<RepositoryViewModel.ModuleWrapper>,
 ) = Box(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -32,14 +31,13 @@ internal fun ModulesList(
     ) {
         items(
             items = list,
-            key = { it.second.id }
-        ) { (state, module) ->
+            key = { it.original.id }
+        ) { module ->
             ModuleItem(
                 module = module,
-                state = state,
                 onClick = {
                     navController.navigateSingleTopTo(
-                        ModuleViewModel.putModuleId(module)
+                        ModuleViewModel.putModuleId(module.original)
                     )
                 }
             )

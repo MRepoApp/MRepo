@@ -32,14 +32,13 @@ import dev.sanmer.mrepo.R
 import dev.sanmer.mrepo.datastore.model.Homepage
 import dev.sanmer.mrepo.datastore.model.Option
 import dev.sanmer.mrepo.datastore.model.RepositoryMenu
-import dev.sanmer.mrepo.model.online.OnlineModule
 import dev.sanmer.mrepo.ui.component.MenuChip
 import dev.sanmer.mrepo.ui.component.Segment
 import dev.sanmer.mrepo.ui.component.SegmentedButtons
 import dev.sanmer.mrepo.ui.component.SegmentedButtonsDefaults
 import dev.sanmer.mrepo.ui.providable.LocalUserPreferences
 import dev.sanmer.mrepo.ui.utils.expandedShape
-import dev.sanmer.mrepo.viewmodel.RepositoryViewModel.OnlineState
+import dev.sanmer.mrepo.viewmodel.RepositoryViewModel
 
 private val options = listOf(
     Option.Name to R.string.menu_sort_option_name,
@@ -106,8 +105,7 @@ private fun BottomSheet(
             border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.outline)
         ) {
             ModuleItem(
-                module = OnlineModule.example(),
-                state = OnlineState.example(),
+                module = RepositoryViewModel.ModuleWrapper.example(),
                 enabled = false
             )
         }

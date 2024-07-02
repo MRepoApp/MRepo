@@ -16,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,16 +35,12 @@ import dev.sanmer.mrepo.model.online.VersionItem
 import dev.sanmer.mrepo.ui.component.VersionItemBottomSheet
 import dev.sanmer.mrepo.ui.component.scrollbar.VerticalFastScrollbar
 import dev.sanmer.mrepo.viewmodel.ModulesViewModel
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 internal fun ModulesList(
-    list: List<LocalModule>,
     state: LazyListState,
+    list: List<ModulesViewModel.ModuleWrapper>,
     isProviderAlive: Boolean,
-    getModuleOps: (LocalModule) -> ModulesViewModel.ModuleOps,
-    getVersionItem: (LocalModule) -> VersionItem?,
-    getProgress: (VersionItem?) -> Flow<Float>,
     onDownload: (Context, LocalModule, VersionItem, Boolean) -> Unit
 ) = Box(
     modifier = Modifier.fillMaxSize()
@@ -58,14 +53,11 @@ internal fun ModulesList(
     ) {
         items(
             items = list,
-            key = { it.id }
+            key = { it.original.id }
         ) { module ->
             ModuleItem(
                 module = module,
                 isProviderAlive = isProviderAlive,
-                getModuleOps = getModuleOps,
-                getVersionItem = getVersionItem,
-                getProgress = getProgress,
                 onDownload = onDownload
             )
         }
@@ -79,64 +71,53 @@ internal fun ModulesList(
 
 @Composable
 fun ModuleItem(
-    module: LocalModule,
+    module: ModulesViewModel.ModuleWrapper,
     isProviderAlive: Boolean,
-    getModuleOps: (LocalModule) -> ModulesViewModel.ModuleOps,
-    getVersionItem: (LocalModule) -> VersionItem?,
-    getProgress: (VersionItem?) -> Flow<Float>,
     onDownload: (Context, LocalModule, VersionItem, Boolean) -> Unit
 ) {
     val context = LocalContext.current
-    val ops by remember(module.state) {
-        derivedStateOf { getModuleOps(module) }
-    }
-    val item by remember(module) {
-        derivedStateOf { getVersionItem(module) }
-    }
-
-    val progress by getProgress(item).collectAsStateWithLifecycle(initialValue = 0f)
+    val progress by module.progress.collectAsStateWithLifecycle(initialValue = 0f)
 
     var open by remember { mutableStateOf(false) }
-    if (open && item != null) {
+    if (open && module.updatable) {
         VersionItemBottomSheet(
             isUpdate = true,
-            item = item!!,
+            item = checkNotNull(module.version),
             isProviderAlive = isProviderAlive,
             onClose = { open = false },
-            onDownload = { onDownload(context, module, item!!, it) }
+            onDownload = { onDownload(context, module.original, module.version, it) }
         )
     }
 
     ModuleItem(
-        module = module,
+        module = module.original,
         progress = progress,
-        indeterminate = ops.isOpsRunning,
-        alpha = when (module.state) {
+        indeterminate = module.isOpsRunning,
+        alpha = when (module.original.state) {
             State.Disable, State.Remove -> 0.5f
             else -> 1f
         },
-        decoration = when (module.state) {
+        decoration = when (module.original.state) {
             State.Remove -> TextDecoration.LineThrough
             else -> TextDecoration.None
         },
         switch = {
             Switch(
-                checked = module.state == State.Enable,
-                onCheckedChange = ops.toggle,
+                checked = module.original.state == State.Enable,
+                onCheckedChange = module.toggle,
                 enabled = isProviderAlive
             )
         },
         indicator = {
-            when (module.state) {
+            when (module.original.state) {
                 State.Remove -> StateIndicator(R.drawable.trash)
                 State.Update -> StateIndicator(R.drawable.device_mobile_down)
                 else -> {}
             }
         },
         trailingButton = {
-            item?.let {
+            if (module.updatable) {
                 UpdateButton(
-                    enabled = it.versionCode > module.versionCode,
                     onClick = { open = true }
                 )
 
@@ -144,9 +125,9 @@ fun ModuleItem(
             }
 
             RemoveOrRestore(
-                module = module,
+                module = module.original,
                 enabled = isProviderAlive,
-                onClick = ops.change
+                onClick = module.change
             )
         }
     )
@@ -154,11 +135,9 @@ fun ModuleItem(
 
 @Composable
 private fun UpdateButton(
-    enabled: Boolean,
     onClick: () -> Unit
 ) = FilledTonalButton(
     onClick = onClick,
-    enabled = enabled,
     contentPadding = PaddingValues(horizontal = 12.dp)
 ) {
     Icon(

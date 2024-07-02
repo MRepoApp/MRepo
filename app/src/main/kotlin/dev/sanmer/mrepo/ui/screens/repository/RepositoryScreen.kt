@@ -81,9 +81,9 @@ fun RepositoryScreen(
             }
 
             ModulesList(
-                list = list,
                 state = listState,
-                navController = navController
+                navController = navController,
+                list = list
             )
         }
     }
